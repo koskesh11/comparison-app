@@ -256,6 +256,15 @@ credible for P1).
 - E5 is the largest and least certain item (review #15); kept in scope by the user's decision, gated by the
   spike.
 
+## Key functions (user, 2026-10-22, later phases) — override earlier "not in scope"
+1. Build from zero by budget tier (league starter, low, mid, high, mirror): numbers from poe.ninja and PoB's
+   "Trade for items" → tasks/011. Reverses "NOT in scope: generating builds from scratch" for a later phase.
+2. Guide check: compare a player's build with the content creator's and give interaction-aware hints to fix
+   it → tasks/010 (builds on task 002's diff-and-test engine and E6 imports). This is why the interactions
+   department is central.
+Both start with the orchestrator's /plan-ceo-review step. Current phases P0-P3 are their foundations
+(detectors, change vocabulary, model estimates, imports, trade spike).
+
 ## Review outputs
 
 ### NOT in scope
