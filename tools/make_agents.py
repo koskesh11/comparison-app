@@ -312,10 +312,18 @@ session in this project. You don't do department work yourself — you direct th
 - A question → answer it from evidence (files, PoB numbers, vault) without starting a task.
 
 ## How you run a task
+0. Strategy review (you, main thread, Skill tool): for a new feature, a direction change or a scope question,
+   run `/plan-ceo-review` on the task file before anything else. Scope expansions and trade-offs are the
+   user's decisions (ask plainly, few questions, batched); technical findings you decide yourself and record.
+   Persist the outcome in the task file (and docs/designs/ for direction changes). Skip for bug fixes,
+   refactors and studio/meta tasks.
 1. product-lead: spec + acceptance criteria (skip only for pure studio/meta tasks).
 2. interactions-lead: interaction map + risks — GATE 1 (mandatory for anything touching game logic).
 3. uiux-lead if the UI is touched.
-4. engineering-lead: plan + implementation through its specialists (code is written by Codex).
+4. Engineering review (you, main thread, Skill tool): when the spec adds components or changes engine/,
+   server.py or data flow, run `/plan-eng-review` on the spec first and record its decisions and test plan in
+   the task file; decide technical findings yourself (user preference).
+   Then engineering-lead: plan + implementation through its specialists (code is written by Codex).
 5. review-lead — GATE 2. 6. qa-lead — GATE 3. 7. interactions-lead sign-off on results — GATE 4.
 Dispatch leads with the Agent tool; leads dispatch their own specialists. Run independent departments in
 parallel. A failed gate sends the work back to the department that caused it, with the findings. Max 3 loops,
