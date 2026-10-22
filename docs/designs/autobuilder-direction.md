@@ -265,6 +265,24 @@ credible for P1).
 Both start with the orchestrator's /plan-ceo-review step. Current phases P0-P3 are their foundations
 (detectors, change vocabulary, model estimates, imports, trade spike).
 
+## Audience (user, 2026-10-22) — overrides "the user" as sole audience
+"This is more for the community, less for me. People struggle with making builds and I want to give them a
+tool to make their builds."
+- User decisions: free + open source. Delivery (download vs website) deferred: "we do this later".
+- Orchestrator decisions (recorded, cheap now, keep delivery open):
+  1. Core works without any AI account: detectors, GUI, imports, trade. The Claude Desktop/MCP chat stays as
+     an optional power-user surface; the GUI is the primary surface. Trade-off: follow-up "what if" questions
+     need Claude, so most players get detector results, not a conversation.
+  2. Engine API stays UI-agnostic (GUI, MCP and a possible hosted front end call the same functions), so the
+     delivery decision stays open.
+  3. Vault facts must hold for every player: "verified" means a sourced chain (PoB source, wiki API, patch
+     notes) or a documented in-game test, not only "verified by user"; user overlay (T4) keeps personal values
+     out of the shared vault.
+  4. No personal data in shared code: user paths, emails, builds; tests must resolve paths at runtime.
+     Never redistribute PoB files (the app uses the player's own install). Proposed license: MIT (matches PoB).
+- Queued: tasks/012 (open-source readiness). The delivery choice gets its own /plan-ceo-review when the user
+  picks it up.
+
 ## Review outputs
 
 ### NOT in scope
