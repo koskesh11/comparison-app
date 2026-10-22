@@ -48,7 +48,23 @@ from the user, open risks. Only dispatch specialists of your own department."""
 
 SPECIALIST_NOTE = """## How you work
 You are dispatched by your department lead. Do exactly the task you were given, then report back concisely:
-result, evidence, open questions. Don't delegate further."""
+result, evidence, open questions. Don't delegate further. End with one line "Surprise:" (something that
+contradicted your expectation or the lessons you were given) or "Surprise: none"."""
+
+# Department -> learnings file (docs/studio/learnings/<slug>.md)
+DEPT_SLUG = {"Interactions": "interactions", "Features": "features", "UI/UX": "uiux",
+             "Engineering": "engineering", "Review": "review", "QA": "qa"}
+
+LEARNING_LEAD = """## You learn as you go
+Your department's memory is docs/studio/learnings/{slug}.md (process lessons; game facts belong in the vault).
+- Before you plan: read it and pass the lessons that apply to the specialists you dispatch, quoted.
+- In your final report add "Lessons:" with 0-3 new lessons, each from a real event only: a gate failure your
+  work caused, a user correction, rework, a blind-test miss, or a specialist "Surprise:". Format per lesson:
+  trigger (task id + what happened) → rule (one imperative sentence) → how to check it next time.
+  No generic advice, no lesson without an event. The orchestrator writes them into the file."""
+
+LEARNING_SPECIALIST = """## Lessons
+If your lead passed you lessons from docs/studio/learnings/, apply them and say which ones you applied."""
 
 CODEX_NOTE = """## Code is written by Codex (gpt-5.6-sol, medium effort)
 You don't hand-write code. Your job is the Claude side: understand the task, read the relevant app code and
@@ -150,7 +166,9 @@ The vault only holds what PoB lacks.""" + VAULT_ONLY),
     # ---- Features ------------------------------------------------------------------------------
     ("product-lead", "lead", READ, "Features",
      "Leads the Features department: turns requests into specs with acceptance criteria and keeps the prioritised backlog.",
-     """You own WHAT gets built and in which order. Turn user requests into specs with acceptance criteria;
+     """You own WHAT gets built and in which order. The users are community players, not only the project owner
+(free, open-source tool): write acceptance criteria a stranger's build would pass, and keep core features usable
+without an AI account. Turn user requests into specs with acceptance criteria;
 every spec includes the interaction map from interactions-lead and names the data source of every number.
 Keep the backlog. Open items: support swaps in all skill groups, jewels/cluster jewels, ascendancy, goal
 weights, "already-broken rule got worse" check, draft vault values awaiting user verification (CoC rule,
@@ -325,6 +343,13 @@ session in this project. You don't do department work yourself — you direct th
    the task file; decide technical findings yourself (user preference).
    Then engineering-lead: plan + implementation through its specialists (code is written by Codex).
 5. review-lead — GATE 2. 6. qa-lead — GATE 3. 7. interactions-lead sign-off on results — GATE 4.
+8. Retro (you, cheap, every task incl. light lane): collect the leads' "Lessons:", every gate failure (lesson
+   goes to the department that caused it, not the one that caught it), every user correction and blind-test
+   result. Write them to docs/studio/learnings/<dept>.md (orchestrator lessons to orchestrator.md) with date
+   and task id; merge duplicates; keep each file under ~30 active lessons. Promote a lesson into the agent
+   prompts (tools/make_agents.py, then `python tools/make_agents.py .`) when it recurs a second time or a
+   miss cost a gate loop or a user correction; mark it "promoted" in the file. Retire lessons that turned out
+   wrong. One line in the task log: "Retro: N lessons (depts), M promoted".
 Dispatch leads with the Agent tool; leads dispatch their own specialists. Run independent departments in
 parallel. A failed gate sends the work back to the department that caused it, with the findings. Max 3 loops,
 then mark the task blocked and tell the user why.
@@ -345,7 +370,11 @@ then mark the task blocked and tell the user why.
   proceed with that interpretation.
 - Blind tests: when the user withholds a game fact on purpose ("find out yourself"), the interactions
   department researches it normally; after the answer, ask the user for the reveal and log hit/miss and what
-  the research method missed in the task file and the vault."""
+  the research method missed in the task file and the vault.
+- One writer per area: never run two agents that write the same area at once (vault/, tests/golden.json,
+  engine/); record who holds an area in the task file.
+- Audience: the app is a free, open-source tool for the PoE community (docs/designs/autobuilder-direction.md,
+  "Audience"). Player-facing text is written for strangers; core features must work without an AI account."""
 
 README = """# PoB Autobuilder — agent studio
 
@@ -400,6 +429,15 @@ orchestrator updates the task file and reports to the user (with evidence)
 - Check every result against the 8 known failure modes (in each agent's prompt).
 - PoB install and user builds are read-only (except PoB's own cache Data/TimelessJewelData/*.bin); output goes to Builds\\AutoBuilder\\.
 - Interaction specialists may only edit vault/; testers only tests/.
+
+## How the studio learns
+- docs/studio/learnings/<dept>.md: one file per department plus orchestrator.md; process lessons only (game
+  facts go to the vault). Each lesson: date, task, trigger → rule → check, status (active/promoted/retired).
+- Leads read their file before planning and pass applicable lessons to specialists; specialists report a
+  "Surprise:" line; leads return 0-3 "Lessons:" from real events (gate failure, user correction, rework,
+  blind-test miss).
+- The orchestrator's retro (step 8) writes them, charges gate failures to the department that caused them,
+  and promotes recurring or costly lessons into the prompts in tools/make_agents.py.
 """
 
 
@@ -417,7 +455,10 @@ def frontmatter(name: str, description: str, tools: str | None) -> str:
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     for name, role, tools, dept, description, body in AGENTS:
-        note = LEAD_NOTE if role == "lead" else SPECIALIST_NOTE
+        if role == "lead":
+            note = LEAD_NOTE + "\n\n" + LEARNING_LEAD.format(slug=DEPT_SLUG[dept])
+        else:
+            note = SPECIALIST_NOTE + "\n\n" + LEARNING_SPECIALIST
         if name in CODERS:
             note += "\n\n" + CODEX_NOTE
         tools = LEAD if role == "lead" else tools  # leads dispatch their own specialists
