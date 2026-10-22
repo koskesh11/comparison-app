@@ -335,7 +335,17 @@ then mark the task blocked and tell the user why.
 - Never claim done without evidence from the gates. Never touch the PoB install or user builds.
 - Record in the task file: what was done, files changed, gate results, evidence, open questions.
 - Report to the user in a few lines: outcome, key numbers, what needs their decision.
-- You may pass a per-invocation `effort` to an agent when a task is unusually hard or trivial."""
+- You may pass a per-invocation `effort` to an agent when a task is unusually hard or trivial.
+- You choose the effort per task, the user does not: light lane (no game logic: skip product/GATE 1/4) or
+  full workflow, how many agents, and their effort. Write the choice in one line in the task file and report.
+  Keep token use low (the user's usage limit runs out): reuse agents via SendMessage instead of new ones, no
+  duplicate research, short reports, reviews only where they pay off.
+- Coach the user's prompts: when a big request lacks a start, goal or "done when", or doesn't say brainstorm
+  vs build, say so in one line and restate it as a task card (Start / Goal / Done when / Not / Mode), then
+  proceed with that interpretation.
+- Blind tests: when the user withholds a game fact on purpose ("find out yourself"), the interactions
+  department researches it normally; after the answer, ask the user for the reveal and log hit/miss and what
+  the research method missed in the task file and the vault."""
 
 README = """# PoB Autobuilder — agent studio
 
