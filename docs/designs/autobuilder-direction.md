@@ -321,3 +321,78 @@ Synthesized from this review's findings (JSONL artifact skipped: jq not installe
 - [ ] **T9 (P2, human ~2d / CC ~1h)** — engine/gui — structured run log + diagnostics view (no credentials). Surfaced by: 8A. Verify: grep logs for secrets = none.
 - [ ] **T10 (P2, human ~3d / CC ~2h)** — vault/gui — user overlay outside git, source/confidence fields, GUI-only mark verified. Surfaced by: T3, T4, E1-min.
 - [ ] **T11 (P2, human ~3d / CC ~2h)** — detectors — interface (findings contract incl. no-change findings, stable IDs) + quality gate on ~5 builds. Surfaced by: T5 + open risks.
+
+## Eng review decisions (P0/P1, 2026-10-22; user delegated: "decide on your own")
+Scope: P1 slimmed to engine trust + safety. Change vocabulary + audit.lua split move to P1.5 (before detector
+migration); user overlay + source/confidence fields + mark verified move to P3 (before model estimates).
+- Engine pool (server.py, pobhost.py): 2 PobEngine instances created at server start and reused; each with its
+  own userdata folder (GetUserPath per engine, pob_headless.lua:13); lua_close on shutdown and when an engine
+  is replaced after a failed change. Jobs keep report + source build sha256 + suggestions only, never the
+  engine (today server.py:57 retains every engine; pobhost.py:27 opens one per audit and never closes it).
+- Apply (optimize.py:39, :53-54): compare the source file's sha256 with the audited one → StaleAudit if
+  changed; never overwrite: save as "<name> (optimized N).xml".
+- API token (server.py:21): random token at startup in engine/userdata/api-token, injected into the served
+  GUI page, read by MCP from the file; Host must be 127.0.0.1:8765 or localhost:8765; Origin absent or same.
+- Errors: replace the catch-alls (server.py:59, :138) with named errors (InvalidRequest 400, Unauthorized 401,
+  StaleAudit 409, EngineError 500 with Lua traceback); every error logged with job id and build path.
+- Lua errors carry a stack trace: pobhost.run executes chunks through xpcall(debug.traceback).
+- Determinism: explicit tie-breakers (gain, then node id / gem name) in every ranking (tree_search, support
+  swaps, gem levels, branches) and sorted keys before JSON in audit.lua; never rely on Lua pairs() order.
+  (No Python set iteration exists in engine/; the likely cause is ties ordered by Lua tables, confidence 6/10.)
+- requirements.txt pinning PyYAML (the only third-party import: models.py, obtainability.py, vault.py).
+- Run log: stdlib logging, JSON lines in engine/userdata/logs/run-YYYYMMDD.jsonl, redaction filter for token
+  and POESESSID patterns, 14-day retention.
+
+### Test coverage (P0/P1 code paths)
+```
+CODE PATH                                       STATUS
+optimize.apply_changes  stale source hash       [GAP] → test_apply_stale_audit
+                        target exists            [GAP] → test_apply_never_overwrites
+server Handler          no/invalid token        [GAP] → test_api_requires_token
+                        foreign Origin/Host      [GAP] → test_api_rejects_foreign_origin
+EnginePool              reuse + close            [GAP] → test_engine_pool_reuse_and_close (flat over 20 loads)
+                        reload after LuaError    [GAP] → test_engine_reload_after_error
+audit ranking           determinism              [GAP] → test_v4_audit_deterministic (10 runs identical)
+run log                 redaction                [GAP] → test_log_redacts_secrets
+requirements            fresh install            [GAP] → manual: fresh venv + unittest
+golden numbers          unchanged                [★★★ TESTED] tests/test_golden.py
+COVERAGE: 1/10 paths tested today → all 9 gaps become tests in P0/P1
+```
+Test plan for QA: ~/.gstack/projects/pob-autobuilder/7800x3D-main-eng-review-test-plan-20261022.md
+
+### Failure modes (new paths)
+| Path | Failure | Test | Handling | User sees |
+|---|---|---|---|---|
+| apply | build edited after audit | new | StaleAudit | "Build changed since audit; re-run" |
+| apply | target exists | new | suffix | saved path |
+| API | missing token / foreign origin | new | 401/403 | refused |
+| engine | Lua error mid-change | new | reload engine | "engine error: <trace summary>" |
+| engine pool | both engines busy | P2 | job queued | "busy, job <id>" |
+No critical gaps remain once these tests land.
+
+### Parallelization
+Lane A (engine/: pool, determinism, apply, errors) sequential, shared files. Lane B (repo root:
+requirements.txt) independent. Lane C (server.py token + run log) shares engine/server.py with lane A → after A.
+Sequential implementation recommended; only requirements.txt can run in parallel.
+
+### NOT in scope (this eng review)
+- P2+ (MCP, two-engine scheduling under load, history) beyond the pool foundation; P3 overlay/labels; trade.
+
+### What already exists
+- tests/golden.json + test_golden.py (baseline), engine/filesearch.lua (A0), server.py path guard,
+  optimize.check_conflicts.
+
+## GSTACK REVIEW REPORT
+
+| Review | Trigger | Why | Runs | Status | Findings |
+|--------|---------|-----|------|--------|----------|
+| CEO Review | `/plan-ceo-review` | Scope & strategy | 1 | issues_open | 8 proposals, 7 accepted, 1 deferred |
+| Codex Review | `/codex review` | Independent 2nd opinion | 1 | issues_found | 19 findings at CEO stage, 8 tensions accepted |
+| Eng Review | `/plan-eng-review` | Architecture & tests (required) | 1 | clean | 9 issues, 0 critical gaps (all decided, tests planned) |
+| Design Review | `/plan-design-review` | UI/UX gaps | 0 | — | — |
+| DX Review | `/plan-devex-review` | Developer experience gaps | 0 | — | — |
+
+- **CROSS-MODEL:** Codex's engine-lifecycle, apply-race and determinism points are folded into these decisions.
+- **VERDICT:** ENG CLEARED for P0/P1 — ready to implement. Design review recommended before the P3 GUI work.
+
+NO UNRESOLVED DECISIONS
