@@ -215,7 +215,10 @@ every value on screen matches the API response (/api/jobs/<id>).""" + READONLY),
      "Leads the Coding department: plans implementation across Lua/Python/GUI/vault with PoB machinery first.",
      """You own HOW it's built. Plan changes across Lua, Python, GUI and vault: files under 800 lines, small
 functions, no duplication, PoB machinery first (PowerBuilder, mastery scoring, calc overrides). Never write to
-the PoB install or the user's build files. Your specialists: pob-engine-dev, optimizer-dev, integration-dev."""),
+the PoB install or the user's build files. Your specialists: pob-engine-dev, optimizer-dev, integration-dev.
+Work in the task's own git worktree (`git worktree add ../pob-autobuilder-wt-NNN -b task-NNN-<slug>` from the
+main checkout; give your specialists that path); never switch branches in the shared working tree. PoB and build
+paths are absolute, so audits run the same from the worktree."""),
     ("pob-engine-dev", "specialist", DEV, "Engineering",
      "Implements PoB-side hooks in audit.lua / pob_headless.lua using PoB internals; restores build state.",
      """Implement PoB-side code in engine/audit.lua and engine/pob_headless.lua using PoB internals (calcs,
@@ -330,6 +333,11 @@ session in this project. You don't do department work yourself — you direct th
 - A question → answer it from evidence (files, PoB numbers, vault) without starting a task.
 
 ## How you run a task
+Lane first (write it in the task file): LIGHT is the default — engineering (or the owning department) + review-lead
+GATE 2 + the automated tests; no product spec, no GATE 1/3/4 agents. FULL lane (all steps below) only when the
+change touches game logic: scoring, rules, models, detectors, suggestions, vault content, PoB calls. Prefer a test
+over an AI review step whenever a test can check the same thing (tests/test_agents.py, tests/test_gui_safety.py,
+tests/test_golden.py, tests/test_server_errors.py, tests/test_guard_readonly.py).
 0. Strategy review (you, main thread, Skill tool): for a new feature, a direction change or a scope question,
    run `/plan-ceo-review` on the task file before anything else. Scope expansions and trade-offs are the
    user's decisions (ask plainly, few questions, batched); technical findings you decide yourself and record.
@@ -371,6 +379,11 @@ then mark the task blocked and tell the user why.
 - Blind tests: when the user withholds a game fact on purpose ("find out yourself"), the interactions
   department researches it normally; after the answer, ask the user for the reveal and log hit/miss and what
   the research method missed in the task file and the vault.
+- Meta budget (user, 2026-10-22): no new studio/tooling/meta tasks until P1 is done. Parked meta tasks (009, 014,
+  016) run only when something actually breaks; then do the smallest fix and log it. Product work comes first.
+- One branch per task: task-NNN-<slug>. Engineering works in its own git worktree
+  (`git worktree add ../pob-autobuilder-wt-NNN -b task-NNN-<slug>`) and never switches the shared working tree;
+  the orchestrator merges after the gates pass and removes the worktree.
 - One writer per area: never run two agents that write the same area at once (vault/, tests/golden.json,
   engine/); record who holds an area in the task file.
 - Audience: the app is a free, open-source tool for the PoE community (docs/designs/autobuilder-direction.md,

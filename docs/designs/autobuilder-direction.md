@@ -237,6 +237,12 @@ run on v4 ≤ 60 s with progress shown; trade excluded from the budget. No "one 
 Effort is re-estimated per phase after P0; the earlier per-phase session counts are withdrawn (Codex: not
 credible for P1).
 
+**Override (user, 2026-10-22): guide check MVP right after P1** (before P1.5). Scope: player build + guide build,
+both as pobb.in links from real guides; diff gems/links, tree, gear, config; test each difference on the player's
+build in PoB; rank by impact with the PoB modifier source as the reason. Pulls only the pobb.in import forward
+from P4 (E6); poe.ninja characters, detectors and model estimates stay in later phases. Owner: task 010. Goal:
+first outside feedback from players. Meta budget: no new studio/tooling tasks until P1 is done.
+
 ## Open risks from the outside voice (recorded, not yet decided)
 - Finding contract needs: findings without changes (warnings, blind spots), stable ID rules, schema version,
   preconditions, deduplication.
