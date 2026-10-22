@@ -1,0 +1,4649 @@
+{
+ "schema": 1,
+ "meta": {
+  "pinnedAt": "2026-10-22T01:22:01",
+  "pinnedBy": "tests/pin_golden.py",
+  "python": "3.14.6",
+  "offlineLeague": "Allflame",
+  "note": "A = Auditor with the user's settings (include_drafts, leave-out, scenario, vault models); B = raw PoB as saved (load_build + audit.lua evaluateJSON, no models/scenario/leave-out). engineFiles/vault hashes are for telling an engine change from a vault change.",
+  "engineFiles": {
+   "_SimpleGraphic.def.lua": "2f6b31b71ee2e474daed9a5d70c156a480675eeea126ff3c19edf41583a73e67",
+   "audit.lua": "c2acc5f40ea9415e708b38834358199131ca137d2f99494069f808d766f075e1",
+   "audit.py": "eddb67ee462bf03b6aa940ad82cf0733ecfd0780c3893afd7636e8f701305c05",
+   "build_settings.py": "ae498a9cd948eb30bb4810ba517400543c6fb877408a8da10ce60a45721b3fac",
+   "filesearch.lua": "b4adef0fc6ffbea9574c595d91da8f6413b5fad735a0d94759b44cc7d71420f1",
+   "HeadlessWrapper.upstream.lua": "a9baa73128e54a6781d795d50add3f17d956a011fc1daaf97134b071eef40238",
+   "models.py": "0bf8d8b90df55113c20b001e6e53e29f8cb7dcc682bf0f9614dff8211302b8e0",
+   "obtainability.py": "280b5143f759bb982f4e12f5e0af81a3e8f60d95020dbedfda9793cd322750f9",
+   "optimize.py": "9fef09f61bd3a23f80d6ce14c4e9005227a9f59b8c7b81df65383cc4f414aeb3",
+   "pob_headless.lua": "3706323ee4342ae19a159a286e5245494316834475c6f8276709eca3138d77b5",
+   "pobhost.py": "7f4f4156169f25227d577d610915bd9ec54a722c347ef911aa099416d43a8c49",
+   "rules.py": "b49526915ce738ffe215440d7b480c1d2ac2bfb518201e53c2f533d69ab5ad29",
+   "server.py": "83b17ae55daf4c6d6fdcee8cb3505e261215c603312f827267c2a137cf595d99",
+   "tree_search.py": "e1f2bed2280bc002c1a000e3c03fe90f0b91182fac7bf75830f7cfcfc4ce030a",
+   "vault.py": "f969ddf3dcc766638deb80ca8a728dcb72ec85be2e1a700430440c8c8746b751"
+  }
+ },
+ "tolerances": {},
+ "inputs": {
+  "audit:EK": {
+   "path": "C:\\Users\\7800x3D\\Documents\\Path of Building\\Builds\\3.29\\Ninja Builds\\CoC EK Assa.xml",
+   "size": 46759,
+   "sha256": "f730704b967270f8692db0e4cef54519645c2ba14b9b2c9bb8efbb9759d77ac1"
+  },
+  "audit:Worb": {
+   "path": "C:\\Users\\7800x3D\\Documents\\Path of Building\\Builds\\3.29\\Worb.xml",
+   "size": 41361,
+   "sha256": "1b20e5ad2e02b5796838f8b4ee8f50b459c78fba130b632e20312847b76dd994"
+  },
+  "raw:v1": {
+   "path": "C:\\Users\\7800x3D\\Documents\\Path of Building\\Builds\\AutoBuilder\\FR CoC Occu Three Dragons.xml",
+   "size": 57241,
+   "sha256": "23e321c1b41261ec9e15ab2324ff6b7199d3df14d168c374d386a2a7f0f6ab53"
+  },
+  "raw:v2": {
+   "path": "C:\\Users\\7800x3D\\Documents\\Path of Building\\Builds\\AutoBuilder\\FR CoC Occu Three Dragons v2.xml",
+   "size": 57262,
+   "sha256": "12c4dce2b78312f000595f7957543295248ad046688e77054a03574db497d12a"
+  },
+  "raw:v3": {
+   "path": "C:\\Users\\7800x3D\\Documents\\Path of Building\\Builds\\AutoBuilder\\FR CoC Occu Three Dragons v3.xml",
+   "size": 57282,
+   "sha256": "66538be62e6bd1417207b4453b9da8a96da9ddf475dea1ecc852d78045d45c91"
+  },
+  "raw:v4": {
+   "path": "C:\\Users\\7800x3D\\Documents\\Path of Building\\Builds\\AutoBuilder\\FR CoC Occu Three Dragons v4.xml",
+   "size": 58784,
+   "sha256": "e4c45dd355bdb50e3da134651bbaaf9798cb30a8dc1c86918bd1df7edd64a1bb"
+  },
+  "raw:source": {
+   "path": "C:\\Users\\7800x3D\\Documents\\Path of Building\\Builds\\3.26\\CoC\\FR CoC Occu No Mirror Helm.xml",
+   "size": 55639,
+   "sha256": "3433532ef11b3bd6fc7fce3f9bcc96f3fad1e8ac7b88d28c7fa3a3afc9ec11cf"
+  },
+  "raw:EK": {
+   "path": "C:\\Users\\7800x3D\\Documents\\Path of Building\\Builds\\3.29\\Ninja Builds\\CoC EK Assa.xml",
+   "size": 46759,
+   "sha256": "f730704b967270f8692db0e4cef54519645c2ba14b9b2c9bb8efbb9759d77ac1"
+  },
+  "raw:Worb": {
+   "path": "C:\\Users\\7800x3D\\Documents\\Path of Building\\Builds\\3.29\\Worb.xml",
+   "size": 41361,
+   "sha256": "1b20e5ad2e02b5796838f8b4ee8f50b459c78fba130b632e20312847b76dd994"
+  }
+ },
+ "vault": {
+  "Rules/Attribute requirements must be met.md": "b74481b149d38a6aebc2e87c6810bcb551a1ea5b0f3860062a666dcecd52a80a",
+  "Rules/CoC requires 100% crit and hit.md": "6b721a0246be42396224ea87c27f05cbab402264c731715910d61a643c175258",
+  "Rules/Mastery needs a notable in its cluster.md": "cad4695bea06c595f9c719463992a14e3e0f9a669a9c41fefff6fc1b5d5e1950",
+  "Rules/Models round down.md": "d158be87c51ed09a85823503dfcf3ef4159476c417e0df49f5662e2348c351c6",
+  "Rules/Reservation must fit the pool.md": "d01c34bdbab270b059c6cf5e61779f7da7dbdcaf40379982aa4d31684d805063",
+  "Rules/Total skill cost must be sustainable.md": "fb4d2ca957ddf4c9d64c66196e973e9be635c34757007402ad6b94531bd07e3a",
+  "Rules/Trigger attack stays at cheapest level.md": "2c2aa5665207ada926effffea44a76b373a61352113328eb69cf65af381e6261",
+  "Rules/Trigger attack under the CoC cap.md": "c9e12c156848fa22f31befcf82c430c2a180ac15c06c7a55205fd5612213f209",
+  "Models/Fireball explosion overlap.md": "8b9b91eef471c4f9983377b7c1da1fb69ba635d511869157e966908b20c42110",
+  "Models/Own shock effect.md": "e5928199ccc6b876265ab471a87e2bafb8202de66f0f09272e4cd34ad23474ec",
+  "Models/Projectiles hitting a single target.md": "5d3a175e1300ccc978237555f80b1227a55a3c7d58d3cc992d8e321cbfdaa937",
+  "Models/Winter Orb projectile overlap.md": "b5cb7055b674caa53697acf86cad030e6ee1f4e08d9c622557eba83a5d761bff",
+  "Scenarios/Mapping.md": "98c3f4c0c3b96a0abc3b7cfb84d3ba63870e10272970bd7e612c9512d22b7750",
+  "Scenarios/Pinnacle Boss.md": "8363d7ee365078a3f992812e1955f2dcf5966f318767d9a638195a26cd294236",
+  "Gaps/Foulborn The Three Dragons.md": "2c28e10af3c849345543e0ac21ab7e4343f580004c47f0b85e6370adf4c06f94",
+  "Gaps/Mageblood flasks.md": "f831334c50fb7c0b8e5784ed44dc51bc3cfa9cdf2fb5886cc1baeb4af1e5b563",
+  "Gaps/Mods PoB can't value.md": "87ffde88eedf007290657c642d02e77207a01dabf5f18014a9bb8db20fabb1af",
+  "Gaps/Unobtainable gems.md": "2e64b40b90cabb79a8b3aa10f8ef9f329666114e814d9a7d1083d92b2ffafcc7"
+ },
+ "audit": {
+  "EK": {
+   "settings": {
+    "file": "3.29/Ninja Builds/CoC EK Assa.xml",
+    "disabledSkills": [],
+    "scenario": "Pinnacle Boss",
+    "includeDrafts": true
+   },
+   "snapshot": {
+    "summary": {
+     "ascendancy": "Assassin",
+     "buildName": "CoC EK Assa",
+     "className": "Shadow",
+     "level": 95,
+     "mainSkill": "Ethereal Knives",
+     "pobVersion": "2.67.2-16de4b82d",
+     "stats": {
+      "ChaosResist": -43,
+      "ColdResist": 75,
+      "CombinedDPS": 15084434.170505,
+      "CritChance": 100,
+      "EnergyShield": 5189,
+      "FireResist": 75,
+      "FullDPS": 15136639.020573,
+      "HitChance": 100,
+      "Life": 1,
+      "LightningResist": 76,
+      "Mana": 1201,
+      "PhysicalMaximumHitTaken": 7538,
+      "Speed": 8.9297208,
+      "TotalDPS": 7728444.6756092,
+      "TotalDotDPS": 0,
+      "TotalEHP": 145258.59276091
+     }
+    },
+    "disabledSkills": [],
+    "dpsAfterLeaveOut": 15136639.020573,
+    "scenario": {
+     "name": "Pinnacle Boss",
+     "config": {
+      "multiplierChannelling": 3
+     }
+    },
+    "rules": {
+     "active": [
+      "Attribute requirements must be met",
+      "CoC requires 100% crit and hit",
+      "Mastery needs a notable in its cluster",
+      "Models round down",
+      "Reservation must fit the pool",
+      "Total skill cost must be sustainable",
+      "Trigger attack stays at cheapest level",
+      "Trigger attack under the CoC cap"
+     ],
+     "skipped": [],
+     "currentViolations": []
+    },
+    "modelsLoaded": [
+     "Winter Orb projectile overlap"
+    ],
+    "models": [],
+    "base": {
+     "dps": 15136639.020573,
+     "ehp": 145258.59276091,
+     "physMaxHit": 7538,
+     "manaMargin": 21.902625599999993
+    },
+    "dpsBreakdown": [
+     {
+      "label": "PoB, your file as saved",
+      "dps": 15136639.020573
+     },
+     {
+      "label": "Scenario Pinnacle Boss: multiplierChannelling=3",
+      "dps": 15136639.020573
+     }
+    ],
+    "kpiSources": {
+     "ehp": [
+      {
+       "label": "PoB Total EHP (enemy hits until death, all layers)",
+       "value": 145258.59276091
+      },
+      {
+       "label": "Life",
+       "value": 1
+      },
+      {
+       "label": "Energy Shield",
+       "value": 5189
+      },
+      {
+       "label": "Armour",
+       "value": 658
+      },
+      {
+       "label": "Evasion",
+       "value": 14082
+      },
+      {
+       "label": "Block / Spell block %",
+       "value": "78 / 78"
+      }
+     ],
+     "physMaxHit": [
+      {
+       "label": "PoB max physical hit you survive",
+       "value": 7538
+      },
+      {
+       "label": "Phys damage reduction %",
+       "value": "23"
+      },
+      {
+       "label": "Life + ES pool",
+       "value": 5190
+      }
+     ],
+     "manaMargin": [
+      {
+       "label": "Mana regen (PoB)",
+       "value": 209.4
+      },
+      {
+       "label": "Ethereal Knives cost",
+       "value": -160.7349744
+      },
+      {
+       "label": "Cyclone cost",
+       "value": -26.7624
+      },
+      {
+       "label": "= margin per second",
+       "value": 21.902625599999993
+      }
+     ]
+    },
+    "reservation": {
+     "life": 1,
+     "lifeUnreserved": 1,
+     "mana": 1201,
+     "manaUnreserved": 107,
+     "skills": [
+      {
+       "amount": 355,
+       "name": "Pride",
+       "percent": 29.49,
+       "pool": "Mana"
+      },
+      {
+       "amount": 195,
+       "name": "Flesh and Stone",
+       "percent": 16.18,
+       "pool": "Mana"
+      },
+      {
+       "amount": 195,
+       "name": "Tempest Shield",
+       "percent": 16.18,
+       "pool": "Mana"
+      },
+      {
+       "amount": 195,
+       "name": "Herald of Purity",
+       "percent": 16.18,
+       "pool": "Mana"
+      },
+      {
+       "amount": 156,
+       "name": "Clarity",
+       "pool": "Mana"
+      }
+     ]
+    },
+    "skills": [
+     "Ethereal Knives",
+     "Cyclone"
+    ],
+    "ctx": {
+     "skills": [
+      {
+       "name": "Ethereal Knives",
+       "isMain": true,
+       "isAttack": false,
+       "count": 1,
+       "out": {
+        "Armour": 658,
+        "BleedAvoidChance": 100,
+        "BlockChance": 78,
+        "ChillChance": 100,
+        "ChillChanceOnCrit": 100,
+        "ChillChanceOnHit": 100,
+        "CombinedDPS": 15084434.170505,
+        "CritChance": 100,
+        "Dex": 181,
+        "ESCost": 0,
+        "EnergyShield": 5189,
+        "Evasion": 14082,
+        "FreezeAvoidChance": 100,
+        "FreezeChance": 100,
+        "FreezeChanceOnCrit": 100,
+        "FullDPS": 15136639.020573,
+        "HitChance": 100,
+        "IgniteAvoidChance": 47,
+        "IgniteChanceOnCrit": 100,
+        "Int": 362,
+        "Life": 1,
+        "LifeCost": 0,
+        "LifeUnreserved": 1,
+        "ManaCost": 18,
+        "ManaCostPayablePool": 107,
+        "ManaPerSecondCost": 160.7349744,
+        "ManaRegenRecovery": 209.4,
+        "ManaUnreserved": 107,
+        "PhysicalDamageReduction": 23,
+        "PhysicalMaximumHitTaken": 7538,
+        "ProjectileCount": 17,
+        "ReqDex": 173,
+        "ReqInt": 224,
+        "ReqStr": 155,
+        "SelfBleedDuration": 100,
+        "SelfBleedEffect": 100,
+        "SelfChillDuration": 100,
+        "SelfChillEffect": 50,
+        "SelfFreezeDuration": 100,
+        "SelfFreezeEffect": 100,
+        "SelfIgniteDuration": 40,
+        "SelfIgniteEffect": 100,
+        "SelfPoisonDuration": 100,
+        "SelfPoisonEffect": 100,
+        "SelfShockDuration": 100,
+        "SelfShockEffect": 100,
+        "ShockAvoidChance": 100,
+        "ShockChance": 100,
+        "ShockChanceOnCrit": 100,
+        "SpellBlockChance": 78,
+        "Str": 179,
+        "TotalEHP": 145258.59276091
+       },
+       "models": []
+      },
+      {
+       "name": "Cyclone",
+       "isMain": false,
+       "isAttack": true,
+       "count": 1,
+       "out": {
+        "AreaOfEffectRadius": 16,
+        "Armour": 658,
+        "BleedAvoidChance": 100,
+        "BlockChance": 78,
+        "CombinedDPS": 64084.814715575,
+        "CritChance": 100,
+        "Dex": 181,
+        "ESCost": 0,
+        "EnergyShield": 5189,
+        "Evasion": 14082,
+        "FreezeAvoidChance": 100,
+        "FreezeChance": 100,
+        "FullDPS": 15136639.020573,
+        "HitChance": 100,
+        "IgniteAvoidChance": 47,
+        "Int": 362,
+        "Life": 1,
+        "LifeCost": 0,
+        "LifeUnreserved": 1,
+        "ManaCost": 3,
+        "ManaCostPayablePool": 107,
+        "ManaPerSecondCost": 26.7624,
+        "ManaRegenRecovery": 209.4,
+        "ManaUnreserved": 107,
+        "PhysicalDamageReduction": 23,
+        "PhysicalMaximumHitTaken": 7538,
+        "ReqDex": 173,
+        "ReqInt": 224,
+        "ReqStr": 155,
+        "SelfBleedDuration": 100,
+        "SelfBleedEffect": 100,
+        "SelfChillDuration": 100,
+        "SelfChillEffect": 50,
+        "SelfFreezeDuration": 100,
+        "SelfFreezeEffect": 100,
+        "SelfIgniteDuration": 40,
+        "SelfIgniteEffect": 100,
+        "SelfPoisonDuration": 100,
+        "SelfPoisonEffect": 100,
+        "SelfShockDuration": 100,
+        "SelfShockEffect": 100,
+        "ShockAvoidChance": 100,
+        "ShockChance": 100,
+        "SpellBlockChance": 78,
+        "Str": 179,
+        "TotalEHP": 145258.59276091
+       },
+       "models": []
+      }
+     ],
+     "supports": [
+      "SupportIncreasedCriticalStrikes",
+      "SupportIncreasedCriticalDamage",
+      "SupportBrutality",
+      "SupportCastOnCriticalStrike"
+     ],
+     "keystones": [
+      "Chaos Inoculation",
+      "Inner Conviction"
+     ]
+    },
+    "keys": [
+     "AreaOfEffectRadius",
+     "Armour",
+     "BleedAvoidChance",
+     "BlockChance",
+     "ChillChance",
+     "ChillChanceOnCrit",
+     "ChillChanceOnHit",
+     "CombinedDPS",
+     "CritChance",
+     "Dex",
+     "ESCost",
+     "EnergyShield",
+     "Evasion",
+     "FreezeAvoidChance",
+     "FreezeChance",
+     "FreezeChanceOnCrit",
+     "FullDPS",
+     "HitChance",
+     "IgniteAvoidChance",
+     "IgniteChanceOnCrit",
+     "Int",
+     "Life",
+     "LifeCost",
+     "LifeUnreserved",
+     "ManaCost",
+     "ManaCostPayablePool",
+     "ManaPerSecondCost",
+     "ManaRegenRecovery",
+     "ManaUnreserved",
+     "PhysicalDamageReduction",
+     "PhysicalMaximumHitTaken",
+     "ProjectileCount",
+     "ReqDex",
+     "ReqInt",
+     "ReqStr",
+     "SelfBleedDuration",
+     "SelfBleedEffect",
+     "SelfChillDuration",
+     "SelfChillEffect",
+     "SelfFreezeDuration",
+     "SelfFreezeEffect",
+     "SelfIgniteDuration",
+     "SelfIgniteEffect",
+     "SelfPoisonDuration",
+     "SelfPoisonEffect",
+     "SelfShockDuration",
+     "SelfShockEffect",
+     "ShockAvoidChance",
+     "ShockChance",
+     "ShockChanceOnCrit",
+     "SpellBlockChance",
+     "Str",
+     "TotalEHP"
+    ],
+    "capabilityKeys": [
+     "BleedAvoidChance",
+     "ChillChance",
+     "ChillChanceOnCrit",
+     "ChillChanceOnHit",
+     "FreezeAvoidChance",
+     "FreezeChance",
+     "FreezeChanceOnCrit",
+     "IgniteAvoidChance",
+     "IgniteChanceOnCrit",
+     "SelfBleedDuration",
+     "SelfBleedEffect",
+     "SelfChillDuration",
+     "SelfChillEffect",
+     "SelfFreezeDuration",
+     "SelfFreezeEffect",
+     "SelfIgniteDuration",
+     "SelfIgniteEffect",
+     "SelfPoisonDuration",
+     "SelfPoisonEffect",
+     "SelfShockDuration",
+     "SelfShockEffect",
+     "ShockAvoidChance",
+     "ShockChance",
+     "ShockChanceOnCrit"
+    ],
+    "equipped": [
+     "Alchemist's Quicksilver Flask of the Kakapo",
+     "Armageddon Stinger",
+     "Badge of the Brotherhood",
+     "Behemoth Bliss",
+     "Behemoth Hope",
+     "Cataclysm Shroud",
+     "Cataclysm Stone",
+     "Circle of Guilt",
+     "Condensed Eternal Life Flask of Sealing",
+     "Darkness Enthroned",
+     "Dread Dome",
+     "Entropic Devastation",
+     "Examiner's Jade Flask of the Ibex",
+     "Foe Ward",
+     "Forbidden Flame",
+     "Forbidden Flesh",
+     "Grim Iridescence",
+     "Honour Desire",
+     "Militant Faith",
+     "Morbid Orb",
+     "Onslaught Twirl",
+     "Phoenix Mark",
+     "Quartz Wand",
+     "Ralakesh's Impatience",
+     "Reckless Defence",
+     "Soul Splinter",
+     "Surgeon's Quartz Flask of the Catfish",
+     "Surgeon's Stibnite Flask of the Cheetah",
+     "Watcher's Eye"
+    ],
+    "configAfterSetup": {
+     "ChanceToIgnoreEnemyPhysicalDamageReductionMode": "AVERAGE",
+     "ConcPathBypassCD": true,
+     "DisableEHPGainOnBlock": true,
+     "FlickerStrikeBypassCD": true,
+     "GamblesprintMovementSpeed": 30,
+     "VigilantStrikeBypassCD": true,
+     "bandit": "Eramir",
+     "bloodsoakedBannerStages": 1,
+     "buffElusive": true,
+     "channellingCycloneCheck": true,
+     "conditionChampionIntimidate": true,
+     "conditionCorruptingCryStages": 1,
+     "conditionEnemyChilled": true,
+     "conditionEnemyIgnited": true,
+     "conditionSacrificeMinion": true,
+     "doomBlastSource": "vixen",
+     "enemyIsBoss": "Pinnacle",
+     "enemySizePreset": "Medium",
+     "maniaDebuffsCount": 15,
+     "meatShieldEnemyNearYou": true,
+     "multiplierChannelling": 3,
+     "pantheonMajorGod": "TheBrineKing",
+     "pantheonMinorGod": "Abberath",
+     "plagueBearerState": "INC",
+     "presetBossSkills": "None",
+     "prideEffect": "MAX",
+     "raiseSpectreEnableBuffs": true,
+     "raiseSpectreEnableCurses": true,
+     "repeatMode": "AVERAGE",
+     "resistancePenalty": -60,
+     "resourceGainMode": "AVERAGE",
+     "summonElementalRelicEnableAngerAura": true,
+     "summonElementalRelicEnableHatredAura": true,
+     "summonElementalRelicEnableWrathAura": true,
+     "targetBrandedEnemy": true,
+     "touchedDebuffsCount": 10,
+     "useEnduranceCharges": true,
+     "usePowerCharges": true
+    }
+   }
+  },
+  "Worb": {
+   "settings": {
+    "file": "3.29/Worb.xml",
+    "disabledSkills": [
+     "Aspect of the Brine King"
+    ],
+    "scenario": "Pinnacle Boss",
+    "includeDrafts": true
+   },
+   "snapshot": {
+    "summary": {
+     "ascendancy": "Elementalist",
+     "buildName": "Worb",
+     "className": "Witch",
+     "level": 98,
+     "mainSkill": "Winter Orb",
+     "pobVersion": "2.67.2-16de4b82d",
+     "stats": {
+      "ChaosResist": 63,
+      "ColdResist": 75,
+      "CombinedDPS": 1435203.8291955,
+      "CritChance": 93.39,
+      "EnergyShield": 2318,
+      "FireResist": 75,
+      "FullDPS": 7176019.1459774,
+      "HitChance": 100,
+      "Life": 4306,
+      "LightningResist": 75,
+      "Mana": 1359,
+      "PhysicalMaximumHitTaken": 16310,
+      "Speed": 9.568,
+      "TotalDPS": 1435203.8291955,
+      "TotalDotDPS": 0,
+      "TotalEHP": 76836.938890095
+     }
+    },
+    "disabledSkills": [
+     "Aspect of the Brine King"
+    ],
+    "dpsAfterLeaveOut": 6717487.5711546,
+    "scenario": {
+     "name": "Pinnacle Boss",
+     "config": {
+      "multiplierChannelling": 3
+     }
+    },
+    "rules": {
+     "active": [
+      "Attribute requirements must be met",
+      "CoC requires 100% crit and hit",
+      "Mastery needs a notable in its cluster",
+      "Models round down",
+      "Reservation must fit the pool",
+      "Total skill cost must be sustainable",
+      "Trigger attack stays at cheapest level",
+      "Trigger attack under the CoC cap"
+     ],
+     "skipped": [],
+     "currentViolations": []
+    },
+    "modelsLoaded": [
+     "Winter Orb projectile overlap"
+    ],
+    "models": [
+     {
+      "model": "Winter Orb projectile overlap",
+      "multiplier": 4,
+      "expected": 4.42,
+      "range": [
+       4,
+       5
+      ],
+      "pobCount": 5
+     }
+    ],
+    "base": {
+     "dps": 8616984.6493376,
+     "ehp": 76836.938890095,
+     "physMaxHit": 16310,
+     "manaMargin": -2.2879999999999825
+    },
+    "dpsBreakdown": [
+     {
+      "label": "PoB, your file as saved",
+      "dps": 7176019.1459774
+     },
+     {
+      "label": "Leaving out Aspect of the Brine King",
+      "dps": 6717487.5711546
+     },
+     {
+      "label": "Scenario Pinnacle Boss: multiplierChannelling=3",
+      "dps": 10771230.811672
+     },
+     {
+      "label": "Model: Winter Orb projectile overlap: 4 hits (expected 4.42, rounded down; range 4-5) replaces your PoB count 5",
+      "dps": 8616984.6493376
+     }
+    ],
+    "kpiSources": {
+     "ehp": [
+      {
+       "label": "PoB Total EHP (enemy hits until death, all layers)",
+       "value": 76836.938890095
+      },
+      {
+       "label": "Life",
+       "value": 4306
+      },
+      {
+       "label": "Energy Shield",
+       "value": 2318
+      },
+      {
+       "label": "Armour",
+       "value": 4715
+      },
+      {
+       "label": "Evasion",
+       "value": 1482
+      },
+      {
+       "label": "Block / Spell block %",
+       "value": "44 / 57"
+      }
+     ],
+     "physMaxHit": [
+      {
+       "label": "PoB max physical hit you survive",
+       "value": 16310
+      },
+      {
+       "label": "Phys damage reduction %",
+       "value": "37"
+      },
+      {
+       "label": "Life + ES pool",
+       "value": 6624
+      }
+     ],
+     "manaMargin": [
+      {
+       "label": "Mana regen (PoB)",
+       "value": 150.8
+      },
+      {
+       "label": "Winter Orb cost",
+       "value": -153.088
+      },
+      {
+       "label": "= margin per second",
+       "value": -2.2879999999999825
+      }
+     ]
+    },
+    "reservation": {
+     "life": 4306,
+     "lifeUnreserved": 4306,
+     "mana": 1359,
+     "manaUnreserved": -158,
+     "skills": [
+      {
+       "amount": 304,
+       "name": "Tempest Shield",
+       "percent": 22.32,
+       "pool": "Mana"
+      },
+      {
+       "amount": 304,
+       "name": "Herald of Ice",
+       "percent": 22.32,
+       "pool": "Mana"
+      },
+      {
+       "amount": 304,
+       "name": "Arctic Armour",
+       "percent": 22.32,
+       "pool": "Mana"
+      },
+      {
+       "amount": 304,
+       "name": "Flesh and Stone",
+       "percent": 22.32,
+       "pool": "Mana"
+      },
+      {
+       "amount": 304,
+       "name": "Aspect of the Brine King",
+       "percent": 22.32,
+       "pool": "Mana"
+      }
+     ]
+    },
+    "skills": [
+     "Winter Orb"
+    ],
+    "ctx": {
+     "skills": [
+      {
+       "name": "Winter Orb",
+       "isMain": true,
+       "isAttack": false,
+       "count": 5,
+       "out": {
+        "AreaOfEffectRadius": 26,
+        "Armour": 4715,
+        "BlockChance": 44,
+        "ChillChance": 100,
+        "ChillChanceOnCrit": 100,
+        "ChillChanceOnHit": 100,
+        "ChillDuration": 3.4,
+        "ChillEffectMod": 1.2,
+        "CombinedDPS": 8616984.6493372,
+        "CritChance": 93.39,
+        "Dex": 123,
+        "ESCost": 0,
+        "EnergyShield": 2318,
+        "Evasion": 1482,
+        "FreezeAvoidChance": 100,
+        "FreezeChance": 100,
+        "FreezeChanceOnCrit": 100,
+        "FreezeChanceOnHit": 100,
+        "FreezeDurationMod": 2.4,
+        "FullDPS": 8616984.6493376,
+        "HitChance": 100,
+        "IgniteChanceOnCrit": 100,
+        "IgniteChanceOnHit": 10,
+        "Int": 349,
+        "Life": 4306,
+        "LifeCost": 0,
+        "LifeUnreserved": 4306,
+        "ManaCost": 16,
+        "ManaCostPayablePool": 145,
+        "ManaPerSecondCost": 153.088,
+        "ManaRegenRecovery": 150.8,
+        "ManaUnreserved": 145,
+        "PhysicalDamageReduction": 37,
+        "PhysicalMaximumHitTaken": 16310,
+        "ProjectileCount": 6,
+        "ReqDex": 111,
+        "ReqInt": 173,
+        "ReqStr": 173,
+        "SelfBleedDuration": 100,
+        "SelfBleedEffect": 100,
+        "SelfChillDuration": 75,
+        "SelfChillEffect": 50,
+        "SelfFreezeDuration": 75,
+        "SelfFreezeEffect": 100,
+        "SelfIgniteDuration": 75,
+        "SelfIgniteEffect": 100,
+        "SelfPoisonDuration": 100,
+        "SelfPoisonEffect": 100,
+        "SelfShockDuration": 75,
+        "SelfShockEffect": 100,
+        "ShockAvoidChance": 100,
+        "ShockChance": 100,
+        "ShockChanceOnCrit": 100,
+        "ShockChanceOnHit": 100,
+        "ShockDuration": 3.4,
+        "ShockEffectMod": 1.8,
+        "SpellBlockChance": 57,
+        "Str": 179,
+        "TotalEHP": 76836.938890095
+       },
+       "models": [
+        {
+         "model": "Winter Orb projectile overlap",
+         "multiplier": 4,
+         "expected": 4.42,
+         "range": [
+          4,
+          5
+         ],
+         "pobCount": 5
+        }
+       ]
+      }
+     ],
+     "supports": [
+      "SupportIncreasedCriticalStrikes",
+      "SupportFocusedChannelling",
+      "SupportArcaneSurge",
+      "SupportInfusedChannelling",
+      "SupportIncreasedCriticalDamage"
+     ],
+     "keystones": [
+      "Bitter Frost"
+     ]
+    },
+    "keys": [
+     "AreaOfEffectRadius",
+     "Armour",
+     "BlockChance",
+     "ChillChance",
+     "ChillChanceOnCrit",
+     "ChillChanceOnHit",
+     "ChillDuration",
+     "ChillEffectMod",
+     "CombinedDPS",
+     "CritChance",
+     "Dex",
+     "ESCost",
+     "EnergyShield",
+     "Evasion",
+     "FreezeAvoidChance",
+     "FreezeChance",
+     "FreezeChanceOnCrit",
+     "FreezeChanceOnHit",
+     "FreezeDurationMod",
+     "FullDPS",
+     "HitChance",
+     "IgniteChanceOnCrit",
+     "IgniteChanceOnHit",
+     "Int",
+     "Life",
+     "LifeCost",
+     "LifeUnreserved",
+     "ManaCost",
+     "ManaCostPayablePool",
+     "ManaPerSecondCost",
+     "ManaRegenRecovery",
+     "ManaUnreserved",
+     "PhysicalDamageReduction",
+     "PhysicalMaximumHitTaken",
+     "ProjectileCount",
+     "ReqDex",
+     "ReqInt",
+     "ReqStr",
+     "SelfBleedDuration",
+     "SelfBleedEffect",
+     "SelfChillDuration",
+     "SelfChillEffect",
+     "SelfFreezeDuration",
+     "SelfFreezeEffect",
+     "SelfIgniteDuration",
+     "SelfIgniteEffect",
+     "SelfPoisonDuration",
+     "SelfPoisonEffect",
+     "SelfShockDuration",
+     "SelfShockEffect",
+     "ShockAvoidChance",
+     "ShockChance",
+     "ShockChanceOnCrit",
+     "ShockChanceOnHit",
+     "ShockDuration",
+     "ShockEffectMod",
+     "SpellBlockChance",
+     "Str",
+     "TotalEHP"
+    ],
+    "capabilityKeys": [
+     "ChillChance",
+     "ChillChanceOnCrit",
+     "ChillChanceOnHit",
+     "ChillDuration",
+     "ChillEffectMod",
+     "FreezeAvoidChance",
+     "FreezeChance",
+     "FreezeChanceOnCrit",
+     "FreezeChanceOnHit",
+     "FreezeDurationMod",
+     "IgniteChanceOnCrit",
+     "IgniteChanceOnHit",
+     "SelfBleedDuration",
+     "SelfBleedEffect",
+     "SelfChillDuration",
+     "SelfChillEffect",
+     "SelfFreezeDuration",
+     "SelfFreezeEffect",
+     "SelfIgniteDuration",
+     "SelfIgniteEffect",
+     "SelfPoisonDuration",
+     "SelfPoisonEffect",
+     "SelfShockDuration",
+     "SelfShockEffect",
+     "ShockAvoidChance",
+     "ShockChance",
+     "ShockChanceOnCrit",
+     "ShockChanceOnHit",
+     "ShockDuration",
+     "ShockEffectMod"
+    ],
+    "equipped": [
+     "Ample Silver Flask of Counterpoise",
+     "Doom Road",
+     "Empyrean Guardian",
+     "Endless Quicksilver Flask of the Hare",
+     "Eye of Malice",
+     "Flagellant's Diamond Flask of Piercing",
+     "Flagellant's Gold Flask of Craft",
+     "Frightened Divine Life Flask of Sealing",
+     "Gloom Mitts",
+     "Glyph Rosary",
+     "Havoc Leash",
+     "Humming Goat's Horn of Needling",
+     "Mystic Refractor",
+     "Sol Bite",
+     "Stalwart Hypnotic Eye Jewel of Phasing",
+     "Tempest Grip",
+     "The Light of Meaning",
+     "The Taming",
+     "Vengeance Chant"
+    ],
+    "configAfterSetup": {
+     "ChanceToIgnoreEnemyPhysicalDamageReductionMode": "AVERAGE",
+     "ConcPathBypassCD": true,
+     "FlickerStrikeBypassCD": true,
+     "GamblesprintMovementSpeed": 30,
+     "VigilantStrikeBypassCD": true,
+     "bandit": "None",
+     "bloodSandStance": "SAND",
+     "bloodsoakedBannerStages": 1,
+     "buffArcaneSurge": true,
+     "conditionChampionIntimidate": true,
+     "conditionCorruptingCryStages": 1,
+     "conditionEnemyChilled": true,
+     "conditionEnemyChilledEffect": 30,
+     "conditionEnemyColdExposure": true,
+     "conditionEnemyFrozen": true,
+     "conditionEnemyShocked": true,
+     "conditionLeeching": true,
+     "conditionSacrificeMinion": true,
+     "conditionShockEffect": 57,
+     "conditionShockedEnemyRecently": true,
+     "doomBlastSource": "vixen",
+     "enemyIsBoss": "Pinnacle",
+     "enemySizePreset": "Medium",
+     "infusedChannellingInfusion": true,
+     "maniaDebuffsCount": 15,
+     "multiplierChannelling": 3,
+     "multiplierFrozenByYouSeconds": 24,
+     "pantheonMajorGod": "TheBrineKing",
+     "pantheonMinorGod": "Ryslatha",
+     "plagueBearerState": "INC",
+     "presetBossSkills": "None",
+     "raiseSpectreEnableBuffs": true,
+     "raiseSpectreEnableCurses": true,
+     "repeatMode": "AVERAGE",
+     "resistancePenalty": -60,
+     "resourceGainMode": "AVERAGE",
+     "summonElementalRelicEnableAngerAura": true,
+     "summonElementalRelicEnableHatredAura": true,
+     "summonElementalRelicEnableWrathAura": true,
+     "summonLightningGolemEnableWrath": true,
+     "targetBrandedEnemy": true,
+     "touchedDebuffsCount": 10,
+     "useFrenzyCharges": true,
+     "usePowerCharges": true
+    }
+   }
+  }
+ },
+ "raw": {
+  "v1": {
+   "file": "AutoBuilder/FR CoC Occu Three Dragons.xml",
+   "snapshot": {
+    "summary": {
+     "ascendancy": "Occultist",
+     "buildName": "FR CoC Occu Three Dragons",
+     "className": "Witch",
+     "level": 99,
+     "mainSkill": "Cyclone",
+     "pobVersion": "2.67.2-16de4b82d",
+     "stats": {
+      "ChaosResist": 0,
+      "ColdResist": 89,
+      "CombinedDPS": 222191.0927977,
+      "CritChance": 100,
+      "EnergyShield": 17116,
+      "FireResist": 89,
+      "FullDPS": 5493311.7606287,
+      "HitChance": 100,
+      "Life": 1,
+      "LightningResist": 89,
+      "Mana": 523,
+      "PhysicalMaximumHitTaken": 33307,
+      "Speed": 10.032,
+      "TotalDPS": 222191.0927977,
+      "TotalDotDPS": 0,
+      "TotalEHP": 273342.00327521
+     }
+    },
+    "mainGroup": {
+     "index": 1,
+     "label": "Cyclone, Forbidden Rite of Soul Sacrifice",
+     "mainActiveSkill": 1
+    },
+    "mainOutput": {
+     "ChaosResist": 0,
+     "ColdResist": 89,
+     "CombinedDPS": 222191.0927977,
+     "CritChance": 100,
+     "ESCost": 6,
+     "ESPerSecondCost": 60.192,
+     "EnergyShield": 17116,
+     "EnergyShieldRecharge": 11876,
+     "EnergyShieldRegenRecovery": 2250.6,
+     "FireResist": 89,
+     "FullDPS": 5493311.7606287,
+     "HitChance": 100,
+     "Life": 1,
+     "LifeCost": 0,
+     "LifePerSecondCost": 0,
+     "LifeRegenRecovery": 0,
+     "LifeUnreserved": 1,
+     "LightningResist": 89,
+     "Mana": 523,
+     "ManaCost": 0,
+     "ManaPerSecondCost": 0,
+     "ManaRegenRecovery": 14.3,
+     "ManaUnreserved": 6,
+     "PhysicalMaximumHitTaken": 33307,
+     "Speed": 10.032,
+     "TotalDPS": 222191.0927977,
+     "TotalEHP": 273342.00327521
+    },
+    "skills": [
+     {
+      "name": "Cyclone",
+      "isMain": true,
+      "isAttack": true,
+      "count": 1,
+      "part": null,
+      "partIndex": null,
+      "partCalcs": null,
+      "partCount": 0,
+      "out": {
+       "ChaosResist": 0,
+       "ColdResist": 89,
+       "CombinedDPS": 222191.0927977,
+       "CritChance": 100,
+       "ESCost": 6,
+       "ESPerSecondCost": 60.192,
+       "EnergyShield": 17116,
+       "EnergyShieldRecharge": 11876,
+       "EnergyShieldRegenRecovery": 2250.6,
+       "FireResist": 89,
+       "FullDPS": 5493311.7606287,
+       "HitChance": 100,
+       "Life": 1,
+       "LifeCost": 0,
+       "LifePerSecondCost": 0,
+       "LifeRegenRecovery": 0,
+       "LifeUnreserved": 1,
+       "LightningResist": 89,
+       "Mana": 519,
+       "ManaCost": 0,
+       "ManaPerSecondCost": 0,
+       "ManaRegenRecovery": 14.2,
+       "ManaUnreserved": 6,
+       "PhysicalMaximumHitTaken": 33307,
+       "Speed": 10.032,
+       "TotalDPS": 222191.0927977,
+       "TotalEHP": 273342.00327521
+      }
+     },
+     {
+      "name": "Forbidden Rite of Soul Sacrifice",
+      "isMain": false,
+      "isAttack": false,
+      "count": 1,
+      "part": "1 Projectile",
+      "partIndex": 1,
+      "partCalcs": null,
+      "partCount": 2,
+      "out": {
+       "ChaosResist": 0,
+       "ColdResist": 89,
+       "CombinedDPS": 5271120.667831,
+       "CritChance": 100,
+       "ESCost": 149,
+       "ESPerSecondCost": 754.85784,
+       "EffectiveSourceRate": 10.032,
+       "EnergyShield": 17116,
+       "EnergyShieldRecharge": 11876,
+       "EnergyShieldRegenRecovery": 2250.6,
+       "FireResist": 89,
+       "HitChance": 100,
+       "Life": 1,
+       "LifeCost": 0,
+       "LifePerSecondCost": 0,
+       "LifeRegenRecovery": 0,
+       "LifeUnreserved": 1,
+       "LightningResist": 89,
+       "Mana": 519,
+       "ManaCost": 0,
+       "ManaPerSecondCost": 0,
+       "ManaRegenRecovery": 14.2,
+       "ManaUnreserved": 6,
+       "PhysicalMaximumHitTaken": 33307,
+       "ProjectileCount": 5,
+       "SkillTriggerRate": 5.06616,
+       "Speed": 5.06616,
+       "TotalDPS": 5271120.667831,
+       "TotalEHP": 273342.00327521,
+       "TriggerRateCap": 7.5757575757576
+      }
+     }
+    ],
+    "supports": [
+     "SupportCastOnCriticalStrike",
+     "SupportIncreasedCriticalDamage",
+     "SupportVoidManipulation",
+     "SupportGreaterVolley"
+    ],
+    "keystones": [
+     "Chaos Inoculation",
+     "Zealot's Oath"
+    ],
+    "skillDPS": [
+     {
+      "count": 1,
+      "dps": 5271120.667831,
+      "name": "Forbidden Rite of Soul Sacrifice",
+      "skillPart": "1 Projectile",
+      "trigger": "Cast On Critical Strike"
+     },
+     {
+      "count": 1,
+      "dps": 222191.0927977,
+      "name": "Cyclone",
+      "skillPart": null,
+      "trigger": null
+     }
+    ],
+    "otherGroups": [
+     {
+      "group": 2,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Assassin's Mark",
+      "name": "Assassin's Mark",
+      "out": {
+       "ESPerSecondCost": 19.783104,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "SkillTriggerRate": 0.290928,
+       "Speed": 0.290928,
+       "TotalDPS": 0,
+       "TriggerRateCap": 0.28587764436821
+      }
+     },
+     {
+      "group": 3,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Precision",
+      "name": "Precision",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 4,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Discipline, Tempest Shield, Flesh and Stone",
+      "name": "Discipline",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 4,
+      "includeInFullDPS": false,
+      "index": 2,
+      "label": "Discipline, Tempest Shield, Flesh and Stone",
+      "name": "Tempest Shield",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "SkillTriggerRate": 1.1223344556678,
+       "Speed": 1.1223344556678,
+       "TotalDPS": 36438.65776431,
+       "TriggerRateCap": 1.1223344556678
+      }
+     },
+     {
+      "group": 4,
+      "includeInFullDPS": false,
+      "index": 3,
+      "label": "Discipline, Tempest Shield, Flesh and Stone",
+      "name": "Flesh and Stone",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 5,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Purity of Lightning, Arctic Armour",
+      "name": "Purity of Lightning",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 5,
+      "includeInFullDPS": false,
+      "index": 2,
+      "label": "Purity of Lightning, Arctic Armour",
+      "name": "Arctic Armour",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 6,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Punishment, Despair, Temporal Chains, Enfeeble",
+      "name": "Punishment",
+      "out": {
+       "ESPerSecondCost": 114.24,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 3.36,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 6,
+      "includeInFullDPS": false,
+      "index": 2,
+      "label": "Punishment, Despair, Temporal Chains, Enfeeble",
+      "name": "Despair",
+      "out": {
+       "ESPerSecondCost": 114.24,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 3.36,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 6,
+      "includeInFullDPS": false,
+      "index": 3,
+      "label": "Punishment, Despair, Temporal Chains, Enfeeble",
+      "name": "Temporal Chains",
+      "out": {
+       "ESPerSecondCost": 114.24,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 3.36,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 6,
+      "includeInFullDPS": false,
+      "index": 4,
+      "label": "Punishment, Despair, Temporal Chains, Enfeeble",
+      "name": "Enfeeble",
+      "out": {
+       "ESPerSecondCost": 114.24,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 3.36,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 7,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Automation, Withering Step",
+      "name": "Automation",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "SkillTriggerRate": 0,
+       "Speed": 0,
+       "TotalDPS": 0,
+       "TriggerRateCap": 1.8939393939394
+      }
+     },
+     {
+      "group": 7,
+      "includeInFullDPS": false,
+      "index": 2,
+      "label": "Automation, Withering Step",
+      "name": "Withering Step",
+      "out": {
+       "ESPerSecondCost": 13.986013986014,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "SkillTriggerRate": 0.38850038850039,
+       "Speed": 0.38850038850039,
+       "TotalDPS": 0,
+       "TriggerRateCap": 0.38850038850039
+      }
+     }
+    ],
+    "config": {
+     "ChanceToIgnoreEnemyPhysicalDamageReductionMode": "AVERAGE",
+     "ConcPathBypassCD": true,
+     "DisableEHPGainOnBlock": true,
+     "FlickerStrikeBypassCD": true,
+     "GamblesprintMovementSpeed": 30,
+     "VigilantStrikeBypassCD": true,
+     "bandit": "Eramir",
+     "bloodSandStance": "SAND",
+     "bloodsoakedBannerStages": 1,
+     "brandAttachedToEnemy": true,
+     "channellingCycloneCheck": true,
+     "conditionChampionIntimidate": true,
+     "conditionCorruptingCryStages": 1,
+     "conditionEnemyDebilitated": true,
+     "conditionEnemyOnConsecratedGround": true,
+     "conditionEnemyUnnerved": true,
+     "conditionHaveEnergyShield": true,
+     "conditionOnConsecratedGround": true,
+     "conditionSacrificeMinion": true,
+     "doomBlastSource": "vixen",
+     "enemyIsBoss": "Pinnacle",
+     "enemySizePreset": "Medium",
+     "maniaDebuffsCount": 15,
+     "multiplierWitheredStackCount": 9,
+     "pantheonMajorGod": "Lunaris",
+     "pantheonMinorGod": "Abberath",
+     "plagueBearerState": "INC",
+     "presetBossSkills": "None",
+     "raiseSpectreEnableBuffs": true,
+     "raiseSpectreEnableCurses": true,
+     "repeatMode": "AVERAGE",
+     "resistancePenalty": -60,
+     "resourceGainMode": "AVERAGE",
+     "summonElementalRelicEnableAngerAura": true,
+     "summonElementalRelicEnableHatredAura": true,
+     "summonElementalRelicEnableWrathAura": true,
+     "targetBrandedEnemy": true,
+     "touchedDebuffsCount": 10,
+     "usePowerCharges": true
+    },
+    "configOfNote": {
+     "conditionOnConsecratedGround": true,
+     "enemyIsBoss": "Pinnacle",
+     "multiplierChannelling": null
+    },
+    "missingKeys": [],
+    "missingInMainOutput": [
+     "EffectiveSourceRate",
+     "ProjectileCount",
+     "SkillTriggerRate",
+     "TriggerRateCap"
+    ],
+    "missingPerSkill": {
+     "Cyclone": [
+      "SkillTriggerRate",
+      "TriggerRateCap",
+      "EffectiveSourceRate",
+      "ProjectileCount"
+     ],
+     "Forbidden Rite of Soul Sacrifice": [
+      "FullDPS"
+     ]
+    }
+   }
+  },
+  "v2": {
+   "file": "AutoBuilder/FR CoC Occu Three Dragons v2.xml",
+   "snapshot": {
+    "summary": {
+     "ascendancy": "Occultist",
+     "buildName": "FR CoC Occu Three Dragons v2",
+     "className": "Witch",
+     "level": 100,
+     "mainSkill": "Cyclone",
+     "pobVersion": "2.67.2-16de4b82d",
+     "stats": {
+      "ChaosResist": 0,
+      "ColdResist": 89,
+      "CombinedDPS": 222191.0927977,
+      "CritChance": 100,
+      "EnergyShield": 17116,
+      "FireResist": 89,
+      "FullDPS": 15621685.109951,
+      "HitChance": 100,
+      "Life": 1,
+      "LightningResist": 89,
+      "Mana": 519,
+      "PhysicalMaximumHitTaken": 33307,
+      "Speed": 10.032,
+      "TotalDPS": 222191.0927977,
+      "TotalDotDPS": 0,
+      "TotalEHP": 273342.00327521
+     }
+    },
+    "mainGroup": {
+     "index": 1,
+     "label": "Cyclone, Forbidden Rite of Soul Sacrifice",
+     "mainActiveSkill": 1
+    },
+    "mainOutput": {
+     "ChaosResist": 0,
+     "ColdResist": 89,
+     "CombinedDPS": 222191.0927977,
+     "CritChance": 100,
+     "ESCost": 6,
+     "ESPerSecondCost": 60.192,
+     "EnergyShield": 17116,
+     "EnergyShieldRecharge": 11876,
+     "EnergyShieldRegenRecovery": 2250.6,
+     "FireResist": 89,
+     "FullDPS": 15621685.109951,
+     "HitChance": 100,
+     "Life": 1,
+     "LifeCost": 0,
+     "LifePerSecondCost": 0,
+     "LifeRegenRecovery": 0,
+     "LifeUnreserved": 1,
+     "LightningResist": 89,
+     "Mana": 519,
+     "ManaCost": 0,
+     "ManaPerSecondCost": 0,
+     "ManaRegenRecovery": 14.2,
+     "ManaUnreserved": 6,
+     "PhysicalMaximumHitTaken": 33307,
+     "Speed": 10.032,
+     "TotalDPS": 222191.0927977,
+     "TotalEHP": 273342.00327521
+    },
+    "skills": [
+     {
+      "name": "Cyclone",
+      "isMain": true,
+      "isAttack": true,
+      "count": 1,
+      "part": null,
+      "partIndex": null,
+      "partCalcs": null,
+      "partCount": 0,
+      "out": {
+       "ChaosResist": 0,
+       "ColdResist": 89,
+       "CombinedDPS": 222191.0927977,
+       "CritChance": 100,
+       "ESCost": 6,
+       "ESPerSecondCost": 60.192,
+       "EnergyShield": 17116,
+       "EnergyShieldRecharge": 11876,
+       "EnergyShieldRegenRecovery": 2250.6,
+       "FireResist": 89,
+       "FullDPS": 15621685.109951,
+       "HitChance": 100,
+       "Life": 1,
+       "LifeCost": 0,
+       "LifePerSecondCost": 0,
+       "LifeRegenRecovery": 0,
+       "LifeUnreserved": 1,
+       "LightningResist": 89,
+       "Mana": 523,
+       "ManaCost": 0,
+       "ManaPerSecondCost": 0,
+       "ManaRegenRecovery": 14.3,
+       "ManaUnreserved": 6,
+       "PhysicalMaximumHitTaken": 33307,
+       "Speed": 10.032,
+       "TotalDPS": 222191.0927977,
+       "TotalEHP": 273342.00327521
+      }
+     },
+     {
+      "name": "Forbidden Rite of Soul Sacrifice",
+      "isMain": false,
+      "isAttack": false,
+      "count": 1,
+      "part": "1 Projectile",
+      "partIndex": 1,
+      "partCalcs": null,
+      "partCount": 2,
+      "out": {
+       "ChaosResist": 0,
+       "ColdResist": 89,
+       "CombinedDPS": 15453987.496654,
+       "CritChance": 100,
+       "ESCost": 149,
+       "ESPerSecondCost": 1494.768,
+       "EffectiveSourceRate": 10.032,
+       "EnergyShield": 17116,
+       "EnergyShieldRecharge": 11876,
+       "EnergyShieldRegenRecovery": 2250.6,
+       "FireResist": 89,
+       "HitChance": 100,
+       "Life": 1,
+       "LifeCost": 0,
+       "LifePerSecondCost": 0,
+       "LifeRegenRecovery": 0,
+       "LifeUnreserved": 1,
+       "LightningResist": 89,
+       "Mana": 523,
+       "ManaCost": 0,
+       "ManaPerSecondCost": 0,
+       "ManaRegenRecovery": 14.3,
+       "ManaUnreserved": 6,
+       "PhysicalMaximumHitTaken": 33307,
+       "ProjectileCount": 1,
+       "SkillTriggerRate": 10.032,
+       "Speed": 10.032,
+       "TotalDPS": 15453987.496654,
+       "TotalEHP": 273342.00327521,
+       "TriggerRateCap": 10.10101010101
+      }
+     }
+    ],
+    "supports": [
+     "SupportCastOnCriticalStrike",
+     "SupportIncreasedCriticalDamage",
+     "SupportVoidManipulation",
+     "SupportCooldownRecovery"
+    ],
+    "keystones": [
+     "Chaos Inoculation",
+     "Inner Conviction",
+     "Zealot's Oath"
+    ],
+    "skillDPS": [
+     {
+      "count": 1,
+      "dps": 15399494.017153,
+      "name": "Forbidden Rite of Soul Sacrifice",
+      "skillPart": "1 Projectile",
+      "trigger": "Cast On Critical Strike"
+     },
+     {
+      "count": 1,
+      "dps": 222191.0927977,
+      "name": "Cyclone",
+      "skillPart": null,
+      "trigger": null
+     }
+    ],
+    "otherGroups": [
+     {
+      "group": 2,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Assassin's Mark",
+      "name": "Assassin's Mark",
+      "out": {
+       "ESPerSecondCost": 19.783104,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "SkillTriggerRate": 0.290928,
+       "Speed": 0.290928,
+       "TotalDPS": 0,
+       "TriggerRateCap": 0.28587764436821
+      }
+     },
+     {
+      "group": 3,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Precision",
+      "name": "Precision",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 4,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Discipline, Tempest Shield, Flesh and Stone",
+      "name": "Discipline",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 4,
+      "includeInFullDPS": false,
+      "index": 2,
+      "label": "Discipline, Tempest Shield, Flesh and Stone",
+      "name": "Tempest Shield",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "SkillTriggerRate": 1.1223344556678,
+       "Speed": 1.1223344556678,
+       "TotalDPS": 44250.815399327,
+       "TriggerRateCap": 1.1223344556678
+      }
+     },
+     {
+      "group": 4,
+      "includeInFullDPS": false,
+      "index": 3,
+      "label": "Discipline, Tempest Shield, Flesh and Stone",
+      "name": "Flesh and Stone",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 5,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Purity of Lightning, Arctic Armour",
+      "name": "Purity of Lightning",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 5,
+      "includeInFullDPS": false,
+      "index": 2,
+      "label": "Purity of Lightning, Arctic Armour",
+      "name": "Arctic Armour",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 6,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Punishment, Despair, Temporal Chains, Enfeeble",
+      "name": "Punishment",
+      "out": {
+       "ESPerSecondCost": 114.24,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 3.36,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 6,
+      "includeInFullDPS": false,
+      "index": 2,
+      "label": "Punishment, Despair, Temporal Chains, Enfeeble",
+      "name": "Despair",
+      "out": {
+       "ESPerSecondCost": 114.24,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 3.36,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 6,
+      "includeInFullDPS": false,
+      "index": 3,
+      "label": "Punishment, Despair, Temporal Chains, Enfeeble",
+      "name": "Temporal Chains",
+      "out": {
+       "ESPerSecondCost": 114.24,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 3.36,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 6,
+      "includeInFullDPS": false,
+      "index": 4,
+      "label": "Punishment, Despair, Temporal Chains, Enfeeble",
+      "name": "Enfeeble",
+      "out": {
+       "ESPerSecondCost": 114.24,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 3.36,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 7,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Automation, Withering Step",
+      "name": "Automation",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "SkillTriggerRate": 0,
+       "Speed": 0,
+       "TotalDPS": 0,
+       "TriggerRateCap": 1.8939393939394
+      }
+     },
+     {
+      "group": 7,
+      "includeInFullDPS": false,
+      "index": 2,
+      "label": "Automation, Withering Step",
+      "name": "Withering Step",
+      "out": {
+       "ESPerSecondCost": 13.986013986014,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "SkillTriggerRate": 0.38850038850039,
+       "Speed": 0.38850038850039,
+       "TotalDPS": 0,
+       "TriggerRateCap": 0.38850038850039
+      }
+     }
+    ],
+    "config": {
+     "ChanceToIgnoreEnemyPhysicalDamageReductionMode": "AVERAGE",
+     "ConcPathBypassCD": true,
+     "DisableEHPGainOnBlock": true,
+     "FlickerStrikeBypassCD": true,
+     "GamblesprintMovementSpeed": 30,
+     "VigilantStrikeBypassCD": true,
+     "bandit": "Eramir",
+     "bloodSandStance": "SAND",
+     "bloodsoakedBannerStages": 1,
+     "brandAttachedToEnemy": true,
+     "channellingCycloneCheck": true,
+     "conditionChampionIntimidate": true,
+     "conditionCorruptingCryStages": 1,
+     "conditionEnemyDebilitated": true,
+     "conditionEnemyOnConsecratedGround": true,
+     "conditionEnemyUnnerved": true,
+     "conditionHaveEnergyShield": true,
+     "conditionOnConsecratedGround": true,
+     "conditionSacrificeMinion": true,
+     "doomBlastSource": "vixen",
+     "enemyIsBoss": "Pinnacle",
+     "enemySizePreset": "Medium",
+     "maniaDebuffsCount": 15,
+     "multiplierWitheredStackCount": 9,
+     "pantheonMajorGod": "Lunaris",
+     "pantheonMinorGod": "Abberath",
+     "plagueBearerState": "INC",
+     "presetBossSkills": "None",
+     "raiseSpectreEnableBuffs": true,
+     "raiseSpectreEnableCurses": true,
+     "repeatMode": "AVERAGE",
+     "resistancePenalty": -60,
+     "resourceGainMode": "AVERAGE",
+     "summonElementalRelicEnableAngerAura": true,
+     "summonElementalRelicEnableHatredAura": true,
+     "summonElementalRelicEnableWrathAura": true,
+     "targetBrandedEnemy": true,
+     "touchedDebuffsCount": 10,
+     "usePowerCharges": true
+    },
+    "configOfNote": {
+     "conditionOnConsecratedGround": true,
+     "enemyIsBoss": "Pinnacle",
+     "multiplierChannelling": null
+    },
+    "missingKeys": [],
+    "missingInMainOutput": [
+     "EffectiveSourceRate",
+     "ProjectileCount",
+     "SkillTriggerRate",
+     "TriggerRateCap"
+    ],
+    "missingPerSkill": {
+     "Cyclone": [
+      "SkillTriggerRate",
+      "TriggerRateCap",
+      "EffectiveSourceRate",
+      "ProjectileCount"
+     ],
+     "Forbidden Rite of Soul Sacrifice": [
+      "FullDPS"
+     ]
+    }
+   }
+  },
+  "v3": {
+   "file": "AutoBuilder/FR CoC Occu Three Dragons v3.xml",
+   "snapshot": {
+    "summary": {
+     "ascendancy": "Occultist",
+     "buildName": "FR CoC Occu Three Dragons v3",
+     "className": "Witch",
+     "level": 100,
+     "mainSkill": "Cyclone",
+     "pobVersion": "2.67.2-16de4b82d",
+     "stats": {
+      "ChaosResist": 0,
+      "ColdResist": 89,
+      "CombinedDPS": 222191.0927977,
+      "CritChance": 100,
+      "EnergyShield": 17116,
+      "FireResist": 89,
+      "FullDPS": 38490675.744969,
+      "HitChance": 100,
+      "Life": 1,
+      "LightningResist": 89,
+      "Mana": 523,
+      "PhysicalMaximumHitTaken": 33307,
+      "Speed": 10.032,
+      "TotalDPS": 222191.0927977,
+      "TotalDotDPS": 0,
+      "TotalEHP": 273342.00327521
+     }
+    },
+    "mainGroup": {
+     "index": 1,
+     "label": "Cyclone, Forbidden Rite of Soul Sacrifice",
+     "mainActiveSkill": 1
+    },
+    "mainOutput": {
+     "ChaosResist": 0,
+     "ColdResist": 89,
+     "CombinedDPS": 222191.0927977,
+     "CritChance": 100,
+     "ESCost": 6,
+     "ESPerSecondCost": 60.192,
+     "EnergyShield": 17116,
+     "EnergyShieldRecharge": 11876,
+     "EnergyShieldRegenRecovery": 2250.6,
+     "FireResist": 89,
+     "FullDPS": 38490675.744969,
+     "HitChance": 100,
+     "Life": 1,
+     "LifeCost": 0,
+     "LifePerSecondCost": 0,
+     "LifeRegenRecovery": 0,
+     "LifeUnreserved": 1,
+     "LightningResist": 89,
+     "Mana": 523,
+     "ManaCost": 0,
+     "ManaPerSecondCost": 0,
+     "ManaRegenRecovery": 14.3,
+     "ManaUnreserved": 6,
+     "PhysicalMaximumHitTaken": 33307,
+     "Speed": 10.032,
+     "TotalDPS": 222191.0927977,
+     "TotalEHP": 273342.00327521
+    },
+    "skills": [
+     {
+      "name": "Cyclone",
+      "isMain": true,
+      "isAttack": true,
+      "count": 1,
+      "part": null,
+      "partIndex": null,
+      "partCalcs": null,
+      "partCount": 0,
+      "out": {
+       "ChaosResist": 0,
+       "ColdResist": 89,
+       "CombinedDPS": 222191.0927977,
+       "CritChance": 100,
+       "ESCost": 6,
+       "ESPerSecondCost": 60.192,
+       "EnergyShield": 17116,
+       "EnergyShieldRecharge": 11876,
+       "EnergyShieldRegenRecovery": 2250.6,
+       "FireResist": 89,
+       "FullDPS": 38490675.744969,
+       "HitChance": 100,
+       "Life": 1,
+       "LifeCost": 0,
+       "LifePerSecondCost": 0,
+       "LifeRegenRecovery": 0,
+       "LifeUnreserved": 1,
+       "LightningResist": 89,
+       "Mana": 523,
+       "ManaCost": 0,
+       "ManaPerSecondCost": 0,
+       "ManaRegenRecovery": 14.3,
+       "ManaUnreserved": 6,
+       "PhysicalMaximumHitTaken": 33307,
+       "Speed": 10.032,
+       "TotalDPS": 222191.0927977,
+       "TotalEHP": 273342.00327521
+      }
+     },
+     {
+      "name": "Forbidden Rite of Soul Sacrifice",
+      "isMain": false,
+      "isAttack": false,
+      "count": 1,
+      "part": "All Primary Projectiles",
+      "partIndex": 2,
+      "partCalcs": 2,
+      "partCount": 2,
+      "out": {
+       "ChaosResist": 0,
+       "ColdResist": 89,
+       "CombinedDPS": 38404154.343411,
+       "CritChance": 100,
+       "ESCost": 149,
+       "ESPerSecondCost": 754.85784,
+       "EffectiveSourceRate": 10.032,
+       "EnergyShield": 17116,
+       "EnergyShieldRecharge": 11876,
+       "EnergyShieldRegenRecovery": 2250.6,
+       "FireResist": 89,
+       "HitChance": 100,
+       "Life": 1,
+       "LifeCost": 0,
+       "LifePerSecondCost": 0,
+       "LifeRegenRecovery": 0,
+       "LifeUnreserved": 1,
+       "LightningResist": 89,
+       "Mana": 523,
+       "ManaCost": 0,
+       "ManaPerSecondCost": 0,
+       "ManaRegenRecovery": 14.3,
+       "ManaUnreserved": 6,
+       "PhysicalMaximumHitTaken": 33307,
+       "ProjectileCount": 5,
+       "SkillTriggerRate": 5.06616,
+       "Speed": 5.06616,
+       "TotalDPS": 38404154.343411,
+       "TotalEHP": 273342.00327521,
+       "TriggerRateCap": 7.5757575757576
+      }
+     }
+    ],
+    "supports": [
+     "SupportCastOnCriticalStrike",
+     "SupportIncreasedCriticalDamage",
+     "SupportVoidManipulation",
+     "SupportGreaterVolley"
+    ],
+    "keystones": [
+     "Chaos Inoculation",
+     "Inner Conviction",
+     "Zealot's Oath"
+    ],
+    "skillDPS": [
+     {
+      "count": 1,
+      "dps": 38268484.652171,
+      "name": "Forbidden Rite of Soul Sacrifice",
+      "skillPart": "All Primary Projectiles",
+      "trigger": "Cast On Critical Strike"
+     },
+     {
+      "count": 1,
+      "dps": 222191.0927977,
+      "name": "Cyclone",
+      "skillPart": null,
+      "trigger": null
+     }
+    ],
+    "otherGroups": [
+     {
+      "group": 2,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Assassin's Mark",
+      "name": "Assassin's Mark",
+      "out": {
+       "ESPerSecondCost": 19.783104,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "SkillTriggerRate": 0.290928,
+       "Speed": 0.290928,
+       "TotalDPS": 0,
+       "TriggerRateCap": 0.28587764436821
+      }
+     },
+     {
+      "group": 3,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Precision",
+      "name": "Precision",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 4,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Discipline, Tempest Shield, Flesh and Stone",
+      "name": "Discipline",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 4,
+      "includeInFullDPS": false,
+      "index": 2,
+      "label": "Discipline, Tempest Shield, Flesh and Stone",
+      "name": "Tempest Shield",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "SkillTriggerRate": 1.1223344556678,
+       "Speed": 1.1223344556678,
+       "TotalDPS": 44250.815399327,
+       "TriggerRateCap": 1.1223344556678
+      }
+     },
+     {
+      "group": 4,
+      "includeInFullDPS": false,
+      "index": 3,
+      "label": "Discipline, Tempest Shield, Flesh and Stone",
+      "name": "Flesh and Stone",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 5,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Purity of Lightning, Arctic Armour",
+      "name": "Purity of Lightning",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 5,
+      "includeInFullDPS": false,
+      "index": 2,
+      "label": "Purity of Lightning, Arctic Armour",
+      "name": "Arctic Armour",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 6,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Punishment, Despair, Temporal Chains, Enfeeble",
+      "name": "Punishment",
+      "out": {
+       "ESPerSecondCost": 114.24,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 3.36,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 6,
+      "includeInFullDPS": false,
+      "index": 2,
+      "label": "Punishment, Despair, Temporal Chains, Enfeeble",
+      "name": "Despair",
+      "out": {
+       "ESPerSecondCost": 114.24,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 3.36,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 6,
+      "includeInFullDPS": false,
+      "index": 3,
+      "label": "Punishment, Despair, Temporal Chains, Enfeeble",
+      "name": "Temporal Chains",
+      "out": {
+       "ESPerSecondCost": 114.24,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 3.36,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 6,
+      "includeInFullDPS": false,
+      "index": 4,
+      "label": "Punishment, Despair, Temporal Chains, Enfeeble",
+      "name": "Enfeeble",
+      "out": {
+       "ESPerSecondCost": 114.24,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 3.36,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 7,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Automation, Withering Step",
+      "name": "Automation",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "SkillTriggerRate": 0,
+       "Speed": 0,
+       "TotalDPS": 0,
+       "TriggerRateCap": 1.8939393939394
+      }
+     },
+     {
+      "group": 7,
+      "includeInFullDPS": false,
+      "index": 2,
+      "label": "Automation, Withering Step",
+      "name": "Withering Step",
+      "out": {
+       "ESPerSecondCost": 13.986013986014,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "SkillTriggerRate": 0.38850038850039,
+       "Speed": 0.38850038850039,
+       "TotalDPS": 0,
+       "TriggerRateCap": 0.38850038850039
+      }
+     }
+    ],
+    "config": {
+     "ChanceToIgnoreEnemyPhysicalDamageReductionMode": "AVERAGE",
+     "ConcPathBypassCD": true,
+     "DisableEHPGainOnBlock": true,
+     "FlickerStrikeBypassCD": true,
+     "GamblesprintMovementSpeed": 30,
+     "VigilantStrikeBypassCD": true,
+     "bandit": "Eramir",
+     "bloodSandStance": "SAND",
+     "bloodsoakedBannerStages": 1,
+     "brandAttachedToEnemy": true,
+     "channellingCycloneCheck": true,
+     "conditionChampionIntimidate": true,
+     "conditionCorruptingCryStages": 1,
+     "conditionEnemyDebilitated": true,
+     "conditionEnemyOnConsecratedGround": true,
+     "conditionEnemyUnnerved": true,
+     "conditionHaveEnergyShield": true,
+     "conditionOnConsecratedGround": true,
+     "conditionSacrificeMinion": true,
+     "doomBlastSource": "vixen",
+     "enemyIsBoss": "Pinnacle",
+     "enemySizePreset": "Medium",
+     "maniaDebuffsCount": 15,
+     "multiplierWitheredStackCount": 9,
+     "pantheonMajorGod": "Lunaris",
+     "pantheonMinorGod": "Abberath",
+     "plagueBearerState": "INC",
+     "presetBossSkills": "None",
+     "raiseSpectreEnableBuffs": true,
+     "raiseSpectreEnableCurses": true,
+     "repeatMode": "AVERAGE",
+     "resistancePenalty": -60,
+     "resourceGainMode": "AVERAGE",
+     "summonElementalRelicEnableAngerAura": true,
+     "summonElementalRelicEnableHatredAura": true,
+     "summonElementalRelicEnableWrathAura": true,
+     "targetBrandedEnemy": true,
+     "touchedDebuffsCount": 10,
+     "usePowerCharges": true
+    },
+    "configOfNote": {
+     "conditionOnConsecratedGround": true,
+     "enemyIsBoss": "Pinnacle",
+     "multiplierChannelling": null
+    },
+    "missingKeys": [],
+    "missingInMainOutput": [
+     "EffectiveSourceRate",
+     "ProjectileCount",
+     "SkillTriggerRate",
+     "TriggerRateCap"
+    ],
+    "missingPerSkill": {
+     "Cyclone": [
+      "SkillTriggerRate",
+      "TriggerRateCap",
+      "EffectiveSourceRate",
+      "ProjectileCount"
+     ],
+     "Forbidden Rite of Soul Sacrifice": [
+      "FullDPS"
+     ]
+    }
+   }
+  },
+  "v4": {
+   "file": "AutoBuilder/FR CoC Occu Three Dragons v4.xml",
+   "snapshot": {
+    "summary": {
+     "ascendancy": "Occultist",
+     "buildName": "FR CoC Occu Three Dragons v4",
+     "className": "Witch",
+     "level": 100,
+     "mainSkill": "Cyclone",
+     "pobVersion": "2.67.2-16de4b82d",
+     "stats": {
+      "ChaosResist": 0,
+      "ColdResist": 89,
+      "CombinedDPS": 166643.31959827,
+      "CritChance": 100,
+      "EnergyShield": 17116,
+      "FireResist": 89,
+      "FullDPS": 57001026.466388,
+      "HitChance": 100,
+      "Life": 1,
+      "LightningResist": 89,
+      "Mana": 523,
+      "PhysicalMaximumHitTaken": 33307,
+      "Speed": 7.524,
+      "TotalDPS": 166643.31959827,
+      "TotalDotDPS": 0,
+      "TotalEHP": 273342.00327521
+     }
+    },
+    "mainGroup": {
+     "index": 1,
+     "label": "Cyclone, Forbidden Rite of Soul Sacrifice",
+     "mainActiveSkill": 1
+    },
+    "mainOutput": {
+     "ChaosResist": 0,
+     "ColdResist": 89,
+     "CombinedDPS": 166643.31959827,
+     "CritChance": 100,
+     "ESCost": 6,
+     "ESPerSecondCost": 45.144,
+     "EnergyShield": 17116,
+     "EnergyShieldRecharge": 11876,
+     "EnergyShieldRegenRecovery": 2250.6,
+     "FireResist": 89,
+     "FullDPS": 57001026.466388,
+     "HitChance": 100,
+     "Life": 1,
+     "LifeCost": 0,
+     "LifePerSecondCost": 0,
+     "LifeRegenRecovery": 0,
+     "LifeUnreserved": 1,
+     "LightningResist": 89,
+     "Mana": 523,
+     "ManaCost": 0,
+     "ManaPerSecondCost": 0,
+     "ManaRegenRecovery": 14.3,
+     "ManaUnreserved": 6,
+     "PhysicalMaximumHitTaken": 33307,
+     "Speed": 7.524,
+     "TotalDPS": 166643.31959827,
+     "TotalEHP": 273342.00327521
+    },
+    "skills": [
+     {
+      "name": "Cyclone",
+      "isMain": true,
+      "isAttack": true,
+      "count": 1,
+      "part": null,
+      "partIndex": null,
+      "partCalcs": null,
+      "partCount": 0,
+      "out": {
+       "ChaosResist": 0,
+       "ColdResist": 89,
+       "CombinedDPS": 166643.31959827,
+       "CritChance": 100,
+       "ESCost": 6,
+       "ESPerSecondCost": 45.144,
+       "EnergyShield": 17116,
+       "EnergyShieldRecharge": 11876,
+       "EnergyShieldRegenRecovery": 2250.6,
+       "FireResist": 89,
+       "FullDPS": 57001026.466388,
+       "HitChance": 100,
+       "Life": 1,
+       "LifeCost": 0,
+       "LifePerSecondCost": 0,
+       "LifeRegenRecovery": 0,
+       "LifeUnreserved": 1,
+       "LightningResist": 89,
+       "Mana": 523,
+       "ManaCost": 0,
+       "ManaPerSecondCost": 0,
+       "ManaRegenRecovery": 14.3,
+       "ManaUnreserved": 6,
+       "PhysicalMaximumHitTaken": 33307,
+       "Speed": 7.524,
+       "TotalDPS": 166643.31959827,
+       "TotalEHP": 273342.00327521
+      }
+     },
+     {
+      "name": "Forbidden Rite of Soul Sacrifice",
+      "isMain": false,
+      "isAttack": false,
+      "count": 1,
+      "part": "All Primary Projectiles",
+      "partIndex": 2,
+      "partCalcs": 2,
+      "partCount": 2,
+      "out": {
+       "ChaosResist": 0,
+       "ColdResist": 89,
+       "CombinedDPS": 57035872.787245,
+       "CritChance": 100,
+       "ESCost": 149,
+       "ESPerSecondCost": 1121.076,
+       "EffectiveSourceRate": 7.524,
+       "EnergyShield": 17116,
+       "EnergyShieldRecharge": 11876,
+       "EnergyShieldRegenRecovery": 2250.6,
+       "FireResist": 89,
+       "HitChance": 100,
+       "Life": 1,
+       "LifeCost": 0,
+       "LifePerSecondCost": 0,
+       "LifeRegenRecovery": 0,
+       "LifeUnreserved": 1,
+       "LightningResist": 89,
+       "Mana": 523,
+       "ManaCost": 0,
+       "ManaPerSecondCost": 0,
+       "ManaRegenRecovery": 14.3,
+       "ManaUnreserved": 6,
+       "PhysicalMaximumHitTaken": 33307,
+       "ProjectileCount": 5,
+       "SkillTriggerRate": 7.524,
+       "Speed": 7.524,
+       "TotalDPS": 57035872.787245,
+       "TotalEHP": 273342.00327521,
+       "TriggerRateCap": 7.5757575757576
+      }
+     }
+    ],
+    "supports": [
+     "SupportCastOnCriticalStrike",
+     "SupportIncreasedCriticalDamage",
+     "SupportVoidManipulation",
+     "SupportGreaterVolley"
+    ],
+    "keystones": [
+     "Chaos Inoculation",
+     "Inner Conviction",
+     "Zealot's Oath"
+    ],
+    "skillDPS": [
+     {
+      "count": 1,
+      "dps": 56834383.146789,
+      "name": "Forbidden Rite of Soul Sacrifice",
+      "skillPart": "All Primary Projectiles",
+      "trigger": "Cast On Critical Strike"
+     },
+     {
+      "count": 1,
+      "dps": 166643.31959827,
+      "name": "Cyclone",
+      "skillPart": null,
+      "trigger": null
+     }
+    ],
+    "otherGroups": [
+     {
+      "group": 2,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Assassin's Mark",
+      "name": "Assassin's Mark",
+      "out": {
+       "ESPerSecondCost": 19.442016,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "SkillTriggerRate": 0.285912,
+       "Speed": 0.285912,
+       "TotalDPS": 0,
+       "TriggerRateCap": 0.28587764436821
+      }
+     },
+     {
+      "group": 3,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Precision",
+      "name": "Precision",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 4,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Discipline, Tempest Shield, Flesh and Stone",
+      "name": "Discipline",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 4,
+      "includeInFullDPS": false,
+      "index": 2,
+      "label": "Discipline, Tempest Shield, Flesh and Stone",
+      "name": "Tempest Shield",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "SkillTriggerRate": 1.1223344556678,
+       "Speed": 1.1223344556678,
+       "TotalDPS": 44250.815399327,
+       "TriggerRateCap": 1.1223344556678
+      }
+     },
+     {
+      "group": 4,
+      "includeInFullDPS": false,
+      "index": 3,
+      "label": "Discipline, Tempest Shield, Flesh and Stone",
+      "name": "Flesh and Stone",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 5,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Purity of Lightning, Arctic Armour",
+      "name": "Purity of Lightning",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 5,
+      "includeInFullDPS": false,
+      "index": 2,
+      "label": "Purity of Lightning, Arctic Armour",
+      "name": "Arctic Armour",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 6,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Punishment, Despair, Temporal Chains, Enfeeble",
+      "name": "Punishment",
+      "out": {
+       "ESPerSecondCost": 87.72,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 2.58,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 6,
+      "includeInFullDPS": false,
+      "index": 2,
+      "label": "Punishment, Despair, Temporal Chains, Enfeeble",
+      "name": "Despair",
+      "out": {
+       "ESPerSecondCost": 87.72,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 2.58,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 6,
+      "includeInFullDPS": false,
+      "index": 3,
+      "label": "Punishment, Despair, Temporal Chains, Enfeeble",
+      "name": "Temporal Chains",
+      "out": {
+       "ESPerSecondCost": 87.72,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 2.58,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 6,
+      "includeInFullDPS": false,
+      "index": 4,
+      "label": "Punishment, Despair, Temporal Chains, Enfeeble",
+      "name": "Enfeeble",
+      "out": {
+       "ESPerSecondCost": 87.72,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 2.58,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 7,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Automation, Withering Step",
+      "name": "Automation",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "SkillTriggerRate": 0,
+       "Speed": 0,
+       "TotalDPS": 0,
+       "TriggerRateCap": 1.8939393939394
+      }
+     },
+     {
+      "group": 7,
+      "includeInFullDPS": false,
+      "index": 2,
+      "label": "Automation, Withering Step",
+      "name": "Withering Step",
+      "out": {
+       "ESPerSecondCost": 13.986013986014,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "SkillTriggerRate": 0.38850038850039,
+       "Speed": 0.38850038850039,
+       "TotalDPS": 0,
+       "TriggerRateCap": 0.38850038850039
+      }
+     }
+    ],
+    "config": {
+     "ChanceToIgnoreEnemyPhysicalDamageReductionMode": "AVERAGE",
+     "ConcPathBypassCD": true,
+     "DisableEHPGainOnBlock": true,
+     "FlickerStrikeBypassCD": true,
+     "GamblesprintMovementSpeed": 30,
+     "VigilantStrikeBypassCD": true,
+     "bandit": "Eramir",
+     "bloodSandStance": "SAND",
+     "bloodsoakedBannerStages": 1,
+     "brandAttachedToEnemy": true,
+     "channellingCycloneCheck": true,
+     "conditionChampionIntimidate": true,
+     "conditionCorruptingCryStages": 1,
+     "conditionEnemyDebilitated": true,
+     "conditionEnemyOnConsecratedGround": true,
+     "conditionEnemyUnnerved": true,
+     "conditionHaveEnergyShield": true,
+     "conditionOnConsecratedGround": true,
+     "conditionSacrificeMinion": true,
+     "doomBlastSource": "vixen",
+     "enemyIsBoss": "Pinnacle",
+     "enemySizePreset": "Medium",
+     "maniaDebuffsCount": 15,
+     "multiplierWitheredStackCount": 9,
+     "pantheonMajorGod": "Lunaris",
+     "pantheonMinorGod": "Abberath",
+     "plagueBearerState": "INC",
+     "presetBossSkills": "None",
+     "raiseSpectreEnableBuffs": true,
+     "raiseSpectreEnableCurses": true,
+     "repeatMode": "AVERAGE",
+     "resistancePenalty": -60,
+     "resourceGainMode": "AVERAGE",
+     "summonElementalRelicEnableAngerAura": true,
+     "summonElementalRelicEnableHatredAura": true,
+     "summonElementalRelicEnableWrathAura": true,
+     "targetBrandedEnemy": true,
+     "touchedDebuffsCount": 10,
+     "usePowerCharges": true
+    },
+    "configOfNote": {
+     "conditionOnConsecratedGround": true,
+     "enemyIsBoss": "Pinnacle",
+     "multiplierChannelling": null
+    },
+    "missingKeys": [],
+    "missingInMainOutput": [
+     "EffectiveSourceRate",
+     "ProjectileCount",
+     "SkillTriggerRate",
+     "TriggerRateCap"
+    ],
+    "missingPerSkill": {
+     "Cyclone": [
+      "SkillTriggerRate",
+      "TriggerRateCap",
+      "EffectiveSourceRate",
+      "ProjectileCount"
+     ],
+     "Forbidden Rite of Soul Sacrifice": [
+      "FullDPS"
+     ]
+    }
+   }
+  },
+  "source": {
+   "file": "3.26/CoC/FR CoC Occu No Mirror Helm.xml",
+   "snapshot": {
+    "summary": {
+     "ascendancy": "Occultist",
+     "buildName": "FR CoC Occu No Mirror Helm",
+     "className": "Witch",
+     "level": 100,
+     "mainSkill": "Cyclone",
+     "pobVersion": "2.67.2-16de4b82d",
+     "stats": {
+      "ChaosResist": 0,
+      "ColdResist": 89,
+      "CombinedDPS": 242701.60485859,
+      "CritChance": 100,
+      "EnergyShield": 20655,
+      "FireResist": 89,
+      "FullDPS": 16782108.390709,
+      "HitChance": 100,
+      "Life": 1,
+      "LightningResist": 89,
+      "Mana": 537,
+      "PhysicalMaximumHitTaken": 43218,
+      "Speed": 10.032,
+      "TotalDPS": 242701.60485859,
+      "TotalDotDPS": 0,
+      "TotalEHP": 347083.3973927
+     }
+    },
+    "mainGroup": {
+     "index": 1,
+     "label": "Cyclone, Forbidden Rite of Soul Sacrifice",
+     "mainActiveSkill": 1
+    },
+    "mainOutput": {
+     "ChaosResist": 0,
+     "ColdResist": 89,
+     "CombinedDPS": 242701.60485859,
+     "CritChance": 100,
+     "ESCost": 6,
+     "ESPerSecondCost": 60.192,
+     "EnergyShield": 20655,
+     "EnergyShieldRecharge": 14331,
+     "EnergyShieldRegenRecovery": 2692.2,
+     "FireResist": 89,
+     "FullDPS": 16782108.390709,
+     "HitChance": 100,
+     "Life": 1,
+     "LifeCost": 0,
+     "LifePerSecondCost": 0,
+     "LifeRegenRecovery": 0,
+     "LifeUnreserved": 1,
+     "LightningResist": 89,
+     "Mana": 537,
+     "ManaCost": 0,
+     "ManaPerSecondCost": 0,
+     "ManaRegenRecovery": 14.7,
+     "ManaUnreserved": 7,
+     "PhysicalMaximumHitTaken": 43218,
+     "Speed": 10.032,
+     "TotalDPS": 242701.60485859,
+     "TotalEHP": 347083.3973927
+    },
+    "skills": [
+     {
+      "name": "Cyclone",
+      "isMain": true,
+      "isAttack": true,
+      "count": 1,
+      "part": null,
+      "partIndex": null,
+      "partCalcs": null,
+      "partCount": 0,
+      "out": {
+       "ChaosResist": 0,
+       "ColdResist": 89,
+       "CombinedDPS": 242701.60485859,
+       "CritChance": 100,
+       "ESCost": 6,
+       "ESPerSecondCost": 60.192,
+       "EnergyShield": 20655,
+       "EnergyShieldRecharge": 14331,
+       "EnergyShieldRegenRecovery": 2692.2,
+       "FireResist": 89,
+       "FullDPS": 16782108.390709,
+       "HitChance": 100,
+       "Life": 1,
+       "LifeCost": 0,
+       "LifePerSecondCost": 0,
+       "LifeRegenRecovery": 0,
+       "LifeUnreserved": 1,
+       "LightningResist": 89,
+       "Mana": 537,
+       "ManaCost": 0,
+       "ManaPerSecondCost": 0,
+       "ManaRegenRecovery": 14.7,
+       "ManaUnreserved": 7,
+       "PhysicalMaximumHitTaken": 43218,
+       "Speed": 10.032,
+       "TotalDPS": 242701.60485859,
+       "TotalEHP": 347083.3973927
+      }
+     },
+     {
+      "name": "Forbidden Rite of Soul Sacrifice",
+      "isMain": false,
+      "isAttack": false,
+      "count": 1,
+      "part": "1 Projectile",
+      "partIndex": 1,
+      "partCalcs": null,
+      "partCount": 2,
+      "out": {
+       "ChaosResist": 0,
+       "ColdResist": 89,
+       "CombinedDPS": 16597987.276314,
+       "CritChance": 100,
+       "ESCost": 155,
+       "ESPerSecondCost": 1554.96,
+       "EffectiveSourceRate": 10.032,
+       "EnergyShield": 20655,
+       "EnergyShieldRecharge": 14331,
+       "EnergyShieldRegenRecovery": 2692.2,
+       "FireResist": 89,
+       "HitChance": 100,
+       "Life": 1,
+       "LifeCost": 0,
+       "LifePerSecondCost": 0,
+       "LifeRegenRecovery": 0,
+       "LifeUnreserved": 1,
+       "LightningResist": 89,
+       "Mana": 537,
+       "ManaCost": 0,
+       "ManaPerSecondCost": 0,
+       "ManaRegenRecovery": 14.7,
+       "ManaUnreserved": 7,
+       "PhysicalMaximumHitTaken": 43218,
+       "ProjectileCount": 5,
+       "SkillTriggerRate": 10.032,
+       "Speed": 10.032,
+       "TotalDPS": 16597987.276314,
+       "TotalEHP": 347083.3973927,
+       "TriggerRateCap": 10.10101010101
+      }
+     }
+    ],
+    "supports": [
+     "SupportAwakenedCastOnCriticalStrike",
+     "SupportIncreasedCriticalDamage",
+     "SupportAwakenedVoidManipulation",
+     "SupportGreaterVolley"
+    ],
+    "keystones": [
+     "Chaos Inoculation",
+     "Inner Conviction",
+     "Zealot's Oath"
+    ],
+    "skillDPS": [
+     {
+      "count": 1,
+      "dps": 16539406.785851,
+      "name": "Forbidden Rite of Soul Sacrifice",
+      "skillPart": "1 Projectile",
+      "trigger": "Awakened Cast On Critical Strike"
+     },
+     {
+      "count": 1,
+      "dps": 242701.60485859,
+      "name": "Cyclone",
+      "skillPart": null,
+      "trigger": null
+     }
+    ],
+    "otherGroups": [
+     {
+      "group": 2,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Assassin's Mark",
+      "name": "Assassin's Mark",
+      "out": {
+       "ESPerSecondCost": 19.783104,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "SkillTriggerRate": 0.290928,
+       "Speed": 0.290928,
+       "TotalDPS": 0,
+       "TriggerRateCap": 0.28587764436821
+      }
+     },
+     {
+      "group": 3,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Precision",
+      "name": "Precision",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 4,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Discipline, Tempest Shield, Flesh and Stone",
+      "name": "Discipline",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 4,
+      "includeInFullDPS": false,
+      "index": 2,
+      "label": "Discipline, Tempest Shield, Flesh and Stone",
+      "name": "Tempest Shield",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "SkillTriggerRate": 1.1223344556678,
+       "Speed": 1.1223344556678,
+       "TotalDPS": 46367.549629798,
+       "TriggerRateCap": 1.1223344556678
+      }
+     },
+     {
+      "group": 4,
+      "includeInFullDPS": false,
+      "index": 3,
+      "label": "Discipline, Tempest Shield, Flesh and Stone",
+      "name": "Flesh and Stone",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 5,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Purity of Lightning, Arctic Armour",
+      "name": "Purity of Lightning",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 5,
+      "includeInFullDPS": false,
+      "index": 2,
+      "label": "Purity of Lightning, Arctic Armour",
+      "name": "Arctic Armour",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 6,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Punishment, Despair, Temporal Chains, Enfeeble",
+      "name": "Punishment",
+      "out": {
+       "ESPerSecondCost": 2.8333333333333,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "SkillTriggerRate": 0.083333333333333,
+       "Speed": 0.083333333333333,
+       "TotalDPS": 0,
+       "TriggerRateCap": 4.3290043290043
+      }
+     },
+     {
+      "group": 6,
+      "includeInFullDPS": false,
+      "index": 2,
+      "label": "Punishment, Despair, Temporal Chains, Enfeeble",
+      "name": "Despair",
+      "out": {
+       "ESPerSecondCost": 2.8333333333333,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "SkillTriggerRate": 0.083333333333333,
+       "Speed": 0.083333333333333,
+       "TotalDPS": 0,
+       "TriggerRateCap": 4.3290043290043
+      }
+     },
+     {
+      "group": 6,
+      "includeInFullDPS": false,
+      "index": 3,
+      "label": "Punishment, Despair, Temporal Chains, Enfeeble",
+      "name": "Temporal Chains",
+      "out": {
+       "ESPerSecondCost": 2.8333333333333,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "SkillTriggerRate": 0.083333333333333,
+       "Speed": 0.083333333333333,
+       "TotalDPS": 0,
+       "TriggerRateCap": 4.3290043290043
+      }
+     },
+     {
+      "group": 6,
+      "includeInFullDPS": false,
+      "index": 4,
+      "label": "Punishment, Despair, Temporal Chains, Enfeeble",
+      "name": "Enfeeble",
+      "out": {
+       "ESPerSecondCost": 2.8333333333333,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "SkillTriggerRate": 0.083333333333333,
+       "Speed": 0.083333333333333,
+       "TotalDPS": 0,
+       "TriggerRateCap": 4.3290043290043
+      }
+     },
+     {
+      "group": 7,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Automation, Withering Step",
+      "name": "Automation",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "SkillTriggerRate": 0,
+       "Speed": 0,
+       "TotalDPS": 0,
+       "TriggerRateCap": 1.8939393939394
+      }
+     },
+     {
+      "group": 7,
+      "includeInFullDPS": false,
+      "index": 2,
+      "label": "Automation, Withering Step",
+      "name": "Withering Step",
+      "out": {
+       "ESPerSecondCost": 13.986013986014,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "SkillTriggerRate": 0.38850038850039,
+       "Speed": 0.38850038850039,
+       "TotalDPS": 0,
+       "TriggerRateCap": 0.38850038850039
+      }
+     }
+    ],
+    "config": {
+     "ChanceToIgnoreEnemyPhysicalDamageReductionMode": "AVERAGE",
+     "ConcPathBypassCD": true,
+     "DisableEHPGainOnBlock": true,
+     "FlickerStrikeBypassCD": true,
+     "GamblesprintMovementSpeed": 30,
+     "VigilantStrikeBypassCD": true,
+     "bandit": "Eramir",
+     "bloodSandStance": "SAND",
+     "bloodsoakedBannerStages": 1,
+     "brandAttachedToEnemy": true,
+     "channellingCycloneCheck": true,
+     "conditionChampionIntimidate": true,
+     "conditionCorruptingCryStages": 1,
+     "conditionEnemyDebilitated": true,
+     "conditionEnemyOnConsecratedGround": true,
+     "conditionEnemyUnnerved": true,
+     "conditionHaveEnergyShield": true,
+     "conditionOnConsecratedGround": true,
+     "conditionSacrificeMinion": true,
+     "doomBlastSource": "vixen",
+     "enemyIsBoss": "Pinnacle",
+     "enemySizePreset": "Medium",
+     "maniaDebuffsCount": 15,
+     "multiplierWitheredStackCount": 9,
+     "pantheonMajorGod": "Lunaris",
+     "pantheonMinorGod": "Abberath",
+     "plagueBearerState": "INC",
+     "presetBossSkills": "None",
+     "raiseSpectreEnableBuffs": true,
+     "raiseSpectreEnableCurses": true,
+     "repeatMode": "AVERAGE",
+     "resistancePenalty": -60,
+     "resourceGainMode": "AVERAGE",
+     "summonElementalRelicEnableAngerAura": true,
+     "summonElementalRelicEnableHatredAura": true,
+     "summonElementalRelicEnableWrathAura": true,
+     "targetBrandedEnemy": true,
+     "touchedDebuffsCount": 10,
+     "usePowerCharges": true
+    },
+    "configOfNote": {
+     "conditionOnConsecratedGround": true,
+     "enemyIsBoss": "Pinnacle",
+     "multiplierChannelling": null
+    },
+    "missingKeys": [],
+    "missingInMainOutput": [
+     "EffectiveSourceRate",
+     "ProjectileCount",
+     "SkillTriggerRate",
+     "TriggerRateCap"
+    ],
+    "missingPerSkill": {
+     "Cyclone": [
+      "SkillTriggerRate",
+      "TriggerRateCap",
+      "EffectiveSourceRate",
+      "ProjectileCount"
+     ],
+     "Forbidden Rite of Soul Sacrifice": [
+      "FullDPS"
+     ]
+    }
+   }
+  },
+  "EK": {
+   "file": "3.29/Ninja Builds/CoC EK Assa.xml",
+   "snapshot": {
+    "summary": {
+     "ascendancy": "Assassin",
+     "buildName": "CoC EK Assa",
+     "className": "Shadow",
+     "level": 95,
+     "mainSkill": "Ethereal Knives",
+     "pobVersion": "2.67.2-16de4b82d",
+     "stats": {
+      "ChaosResist": -43,
+      "ColdResist": 75,
+      "CombinedDPS": 15084434.170505,
+      "CritChance": 100,
+      "EnergyShield": 5189,
+      "FireResist": 75,
+      "FullDPS": 15136639.020573,
+      "HitChance": 100,
+      "Life": 1,
+      "LightningResist": 76,
+      "Mana": 1201,
+      "PhysicalMaximumHitTaken": 7538,
+      "Speed": 8.9297208,
+      "TotalDPS": 7728444.6756092,
+      "TotalDotDPS": 0,
+      "TotalEHP": 145258.59276091
+     }
+    },
+    "mainGroup": {
+     "index": 1,
+     "label": "Ethereal Knives, Cyclone",
+     "mainActiveSkill": 1
+    },
+    "mainOutput": {
+     "ChaosResist": -43,
+     "ColdResist": 75,
+     "CombinedDPS": 15084434.170505,
+     "CritChance": 100,
+     "ESCost": 0,
+     "ESPerSecondCost": 0,
+     "EffectiveSourceRate": 8.9208,
+     "EnergyShield": 5189,
+     "EnergyShieldRecharge": 1989,
+     "EnergyShieldRegenRecovery": 0,
+     "FireResist": 75,
+     "FullDPS": 15136639.020573,
+     "HitChance": 100,
+     "Life": 1,
+     "LifeCost": 0,
+     "LifePerSecondCost": 0,
+     "LifeRegenRecovery": 116,
+     "LifeUnreserved": 1,
+     "LightningResist": 76,
+     "Mana": 1201,
+     "ManaCost": 18,
+     "ManaPerSecondCost": 160.7349744,
+     "ManaRegenRecovery": 209.4,
+     "ManaUnreserved": 107,
+     "PhysicalMaximumHitTaken": 7538,
+     "ProjectileCount": 17,
+     "SkillTriggerRate": 8.9297208,
+     "Speed": 8.9297208,
+     "TotalDPS": 7728444.6756092,
+     "TotalEHP": 145258.59276091,
+     "TriggerRateCap": 10.10101010101
+    },
+    "skills": [
+     {
+      "name": "Ethereal Knives",
+      "isMain": true,
+      "isAttack": false,
+      "count": 1,
+      "part": null,
+      "partIndex": null,
+      "partCalcs": null,
+      "partCount": 0,
+      "out": {
+       "ChaosResist": -43,
+       "ColdResist": 75,
+       "CombinedDPS": 15084434.170505,
+       "CritChance": 100,
+       "ESCost": 0,
+       "ESPerSecondCost": 0,
+       "EffectiveSourceRate": 8.9208,
+       "EnergyShield": 5189,
+       "EnergyShieldRecharge": 1989,
+       "EnergyShieldRegenRecovery": 0,
+       "FireResist": 75,
+       "FullDPS": 15136639.020573,
+       "HitChance": 100,
+       "Life": 1,
+       "LifeCost": 0,
+       "LifePerSecondCost": 0,
+       "LifeRegenRecovery": 116,
+       "LifeUnreserved": 1,
+       "LightningResist": 76,
+       "Mana": 1201,
+       "ManaCost": 18,
+       "ManaPerSecondCost": 160.7349744,
+       "ManaRegenRecovery": 209.4,
+       "ManaUnreserved": 107,
+       "PhysicalMaximumHitTaken": 7538,
+       "ProjectileCount": 17,
+       "SkillTriggerRate": 8.9297208,
+       "Speed": 8.9297208,
+       "TotalDPS": 7728444.6756092,
+       "TotalEHP": 145258.59276091,
+       "TriggerRateCap": 10.10101010101
+      }
+     },
+     {
+      "name": "Cyclone",
+      "isMain": false,
+      "isAttack": true,
+      "count": 1,
+      "part": null,
+      "partIndex": null,
+      "partCalcs": null,
+      "partCount": 0,
+      "out": {
+       "ChaosResist": -43,
+       "ColdResist": 75,
+       "CombinedDPS": 64084.814715575,
+       "CritChance": 100,
+       "ESCost": 0,
+       "ESPerSecondCost": 0,
+       "EnergyShield": 5189,
+       "EnergyShieldRecharge": 1989,
+       "EnergyShieldRegenRecovery": 0,
+       "FireResist": 75,
+       "FullDPS": 15136639.020573,
+       "HitChance": 100,
+       "Life": 1,
+       "LifeCost": 0,
+       "LifePerSecondCost": 0,
+       "LifeRegenRecovery": 116,
+       "LifeUnreserved": 1,
+       "LightningResist": 76,
+       "Mana": 1201,
+       "ManaCost": 3,
+       "ManaPerSecondCost": 26.7624,
+       "ManaRegenRecovery": 209.4,
+       "ManaUnreserved": 107,
+       "PhysicalMaximumHitTaken": 7538,
+       "Speed": 8.9208,
+       "TotalDPS": 62518.573053922,
+       "TotalEHP": 145258.59276091
+      }
+     }
+    ],
+    "supports": [
+     "SupportIncreasedCriticalStrikes",
+     "SupportIncreasedCriticalDamage",
+     "SupportBrutality",
+     "SupportCastOnCriticalStrike"
+    ],
+    "keystones": [
+     "Chaos Inoculation",
+     "Inner Conviction"
+    ],
+    "skillDPS": [
+     {
+      "count": 1,
+      "dps": 7722462.0497816,
+      "name": "Ethereal Knives",
+      "skillPart": null,
+      "trigger": "Cast On Critical Strike"
+     },
+     {
+      "count": 1,
+      "dps": 7350092.1560763,
+      "name": "Full Impale DPS",
+      "skillPart": null,
+      "trigger": null
+     },
+     {
+      "count": 1,
+      "dps": 62518.573053922,
+      "name": "Cyclone",
+      "skillPart": null,
+      "trigger": null
+     },
+     {
+      "count": 1,
+      "dps": 1566.2416616536,
+      "name": "Best Bleed DPS",
+      "skillPart": null,
+      "trigger": null
+     }
+    ],
+    "otherGroups": [
+     {
+      "group": 2,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Assassin's Mark",
+      "name": "Assassin's Mark",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 3.76,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 3,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Flesh and Stone, Herald of Purity, Tempest Shield",
+      "name": "Flesh and Stone",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 3,
+      "includeInFullDPS": false,
+      "index": 2,
+      "label": "Flesh and Stone, Herald of Purity, Tempest Shield",
+      "name": "Herald of Purity",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 3,
+      "includeInFullDPS": false,
+      "index": 3,
+      "label": "Flesh and Stone, Herald of Purity, Tempest Shield",
+      "name": "Tempest Shield",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "SkillTriggerRate": 1.5151515151515,
+       "Speed": 1.5151515151515,
+       "TotalDPS": 48608.743640999,
+       "TriggerRateCap": 1.5151515151515
+      }
+     },
+     {
+      "group": 4,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Pride, Clarity",
+      "name": "Pride",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 4,
+      "includeInFullDPS": false,
+      "index": 2,
+      "label": "Pride, Clarity",
+      "name": "Clarity",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 5,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Whirling Blades, Frostblink",
+      "name": "Whirling Blades",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 1.7253637245393,
+       "TotalDPS": 11049.345982572
+      }
+     },
+     {
+      "group": 5,
+      "includeInFullDPS": false,
+      "index": 2,
+      "label": "Whirling Blades, Frostblink",
+      "name": "Frostblink",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 6,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Vulnerability",
+      "name": "Vulnerability",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 321.21212121212,
+       "SkillTriggerRate": 6.0606060606061,
+       "Speed": 6.0606060606061,
+       "TotalDPS": 0,
+       "TriggerRateCap": 6.0606060606061
+      }
+     },
+     {
+      "group": 7,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Summon Stone Golem",
+      "name": "Summon Stone Golem",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 11.204481792717,
+       "Speed": 0.25464731347084,
+       "TotalDPS": 0
+      }
+     }
+    ],
+    "config": {
+     "ChanceToIgnoreEnemyPhysicalDamageReductionMode": "AVERAGE",
+     "ConcPathBypassCD": true,
+     "DisableEHPGainOnBlock": true,
+     "FlickerStrikeBypassCD": true,
+     "GamblesprintMovementSpeed": 30,
+     "VigilantStrikeBypassCD": true,
+     "bandit": "Eramir",
+     "bloodsoakedBannerStages": 1,
+     "buffElusive": true,
+     "channellingCycloneCheck": true,
+     "conditionChampionIntimidate": true,
+     "conditionCorruptingCryStages": 1,
+     "conditionEnemyChilled": true,
+     "conditionEnemyIgnited": true,
+     "conditionSacrificeMinion": true,
+     "doomBlastSource": "vixen",
+     "enemyIsBoss": "Pinnacle",
+     "enemySizePreset": "Medium",
+     "maniaDebuffsCount": 15,
+     "meatShieldEnemyNearYou": true,
+     "pantheonMajorGod": "TheBrineKing",
+     "pantheonMinorGod": "Abberath",
+     "plagueBearerState": "INC",
+     "presetBossSkills": "None",
+     "prideEffect": "MAX",
+     "raiseSpectreEnableBuffs": true,
+     "raiseSpectreEnableCurses": true,
+     "repeatMode": "AVERAGE",
+     "resistancePenalty": -60,
+     "resourceGainMode": "AVERAGE",
+     "summonElementalRelicEnableAngerAura": true,
+     "summonElementalRelicEnableHatredAura": true,
+     "summonElementalRelicEnableWrathAura": true,
+     "targetBrandedEnemy": true,
+     "touchedDebuffsCount": 10,
+     "useEnduranceCharges": true,
+     "usePowerCharges": true
+    },
+    "configOfNote": {
+     "conditionOnConsecratedGround": null,
+     "enemyIsBoss": "Pinnacle",
+     "multiplierChannelling": null
+    },
+    "missingKeys": [],
+    "missingInMainOutput": [],
+    "missingPerSkill": {
+     "Ethereal Knives": [],
+     "Cyclone": [
+      "SkillTriggerRate",
+      "TriggerRateCap",
+      "EffectiveSourceRate",
+      "ProjectileCount"
+     ]
+    }
+   }
+  },
+  "Worb": {
+   "file": "3.29/Worb.xml",
+   "snapshot": {
+    "summary": {
+     "ascendancy": "Elementalist",
+     "buildName": "Worb",
+     "className": "Witch",
+     "level": 98,
+     "mainSkill": "Winter Orb",
+     "pobVersion": "2.67.2-16de4b82d",
+     "stats": {
+      "ChaosResist": 63,
+      "ColdResist": 75,
+      "CombinedDPS": 1435203.8291955,
+      "CritChance": 93.39,
+      "EnergyShield": 2318,
+      "FireResist": 75,
+      "FullDPS": 7176019.1459774,
+      "HitChance": 100,
+      "Life": 4306,
+      "LightningResist": 75,
+      "Mana": 1359,
+      "PhysicalMaximumHitTaken": 16310,
+      "Speed": 9.568,
+      "TotalDPS": 1435203.8291955,
+      "TotalDotDPS": 0,
+      "TotalEHP": 76836.938890095
+     }
+    },
+    "mainGroup": {
+     "index": 2,
+     "label": "Winter Orb",
+     "mainActiveSkill": 1
+    },
+    "mainOutput": {
+     "ChaosResist": 63,
+     "ColdResist": 75,
+     "CombinedDPS": 1435203.8291955,
+     "CritChance": 93.39,
+     "ESCost": 0,
+     "ESPerSecondCost": 0,
+     "EnergyShield": 2318,
+     "EnergyShieldRecharge": 773,
+     "EnergyShieldRegenRecovery": 0,
+     "FireResist": 75,
+     "FullDPS": 7176019.1459774,
+     "HitChance": 100,
+     "Life": 4306,
+     "LifeCost": 0,
+     "LifePerSecondCost": 0,
+     "LifeRegenRecovery": 189,
+     "LifeUnreserved": 4306,
+     "LightningResist": 75,
+     "Mana": 1359,
+     "ManaCost": 10,
+     "ManaPerSecondCost": 95.68,
+     "ManaRegenRecovery": 150.8,
+     "ManaUnreserved": -158,
+     "PhysicalMaximumHitTaken": 16310,
+     "ProjectileCount": 6,
+     "Speed": 9.568,
+     "TotalDPS": 1435203.8291955,
+     "TotalEHP": 76836.938890095
+    },
+    "skills": [
+     {
+      "name": "Winter Orb",
+      "isMain": true,
+      "isAttack": false,
+      "count": 5,
+      "part": "Channelling",
+      "partIndex": 1,
+      "partCalcs": 1,
+      "partCount": 2,
+      "out": {
+       "ChaosResist": 63,
+       "ColdResist": 75,
+       "CombinedDPS": 1435203.8291955,
+       "CritChance": 93.39,
+       "ESCost": 0,
+       "ESPerSecondCost": 0,
+       "EnergyShield": 2318,
+       "EnergyShieldRecharge": 773,
+       "EnergyShieldRegenRecovery": 0,
+       "FireResist": 75,
+       "FullDPS": 7176019.1459774,
+       "HitChance": 100,
+       "Life": 4306,
+       "LifeCost": 0,
+       "LifePerSecondCost": 0,
+       "LifeRegenRecovery": 189,
+       "LifeUnreserved": 4306,
+       "LightningResist": 75,
+       "Mana": 1359,
+       "ManaCost": 10,
+       "ManaPerSecondCost": 95.68,
+       "ManaRegenRecovery": 150.8,
+       "ManaUnreserved": -158,
+       "PhysicalMaximumHitTaken": 16310,
+       "ProjectileCount": 6,
+       "Speed": 9.568,
+       "TotalDPS": 1435203.8291955,
+       "TotalEHP": 76836.938890095
+      }
+     }
+    ],
+    "supports": [
+     "SupportIncreasedCriticalStrikes",
+     "SupportFocusedChannelling",
+     "SupportArcaneSurge",
+     "SupportInfusedChannelling",
+     "SupportIncreasedCriticalDamage"
+    ],
+    "keystones": [
+     "Bitter Frost"
+    ],
+    "skillDPS": [
+     {
+      "count": 5,
+      "dps": 1435203.8291955,
+      "name": "Winter Orb",
+      "skillPart": "Channelling",
+      "trigger": null
+     }
+    ],
+    "otherGroups": [
+     {
+      "group": 1,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Frostbite, Frostblink",
+      "name": "Frostbite",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 302.016,
+       "Speed": 4.576,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 1,
+      "includeInFullDPS": false,
+      "index": 2,
+      "label": "Frostbite, Frostblink",
+      "name": "Frostblink",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 22.533022533023,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 3,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Summon Flame Golem, Summon Lightning Golem, Summon Stone Golem, Summon Ice Golem",
+      "name": "Summon Flame Golem",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 9.4043887147335,
+       "Speed": 0.17415534656914,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 3,
+      "includeInFullDPS": false,
+      "index": 2,
+      "label": "Summon Flame Golem, Summon Lightning Golem, Summon Stone Golem, Summon Ice Golem",
+      "name": "Summon Lightning Golem",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 9.7526994078718,
+       "Speed": 0.17415534656914,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 3,
+      "includeInFullDPS": false,
+      "index": 3,
+      "label": "Summon Flame Golem, Summon Lightning Golem, Summon Stone Golem, Summon Ice Golem",
+      "name": "Summon Stone Golem",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 9.4043887147335,
+       "Speed": 0.17415534656914,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 3,
+      "includeInFullDPS": false,
+      "index": 4,
+      "label": "Summon Flame Golem, Summon Lightning Golem, Summon Stone Golem, Summon Ice Golem",
+      "name": "Summon Ice Golem",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 9.7526994078718,
+       "Speed": 0.17415534656914,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 4,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Tempest Shield, Flesh and Stone, Arctic Armour, Herald of Ice",
+      "name": "Tempest Shield",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "SkillTriggerRate": 1.0449320794148,
+       "Speed": 1.0449320794148,
+       "TotalDPS": 11328.08839446,
+       "TriggerRateCap": 1.0449320794148
+      }
+     },
+     {
+      "group": 4,
+      "includeInFullDPS": false,
+      "index": 2,
+      "label": "Tempest Shield, Flesh and Stone, Arctic Armour, Herald of Ice",
+      "name": "Flesh and Stone",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 4,
+      "includeInFullDPS": false,
+      "index": 3,
+      "label": "Tempest Shield, Flesh and Stone, Arctic Armour, Herald of Ice",
+      "name": "Arctic Armour",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 4,
+      "includeInFullDPS": false,
+      "index": 4,
+      "label": "Tempest Shield, Flesh and Stone, Arctic Armour, Herald of Ice",
+      "name": "Herald of Ice",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     },
+     {
+      "group": 5,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Immortal Call, Frost Shield, Vaal Cold Snap",
+      "name": "Immortal Call",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 23.336816440265,
+       "SkillTriggerRate": 0.34831069313828,
+       "Speed": 0.34831069313828,
+       "TotalDPS": 0,
+       "TriggerRateCap": 0.34831069313828
+      }
+     },
+     {
+      "group": 5,
+      "includeInFullDPS": false,
+      "index": 2,
+      "label": "Immortal Call, Frost Shield, Vaal Cold Snap",
+      "name": "Frost Shield",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 29.258098223615,
+       "SkillTriggerRate": 0.20898641588297,
+       "Speed": 0.20898641588297,
+       "TotalDPS": 0,
+       "TriggerRateCap": 0.20898641588297
+      }
+     },
+     {
+      "group": 5,
+      "includeInFullDPS": false,
+      "index": 3,
+      "label": "Immortal Call, Frost Shield, Vaal Cold Snap",
+      "name": "Vaal Cold Snap",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 2.86,
+       "TotalDPS": 936555.08356845
+      }
+     },
+     {
+      "group": 5,
+      "includeInFullDPS": false,
+      "index": 4,
+      "label": "Immortal Call, Frost Shield, Vaal Cold Snap",
+      "name": "Cold Snap",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 25.078369905956,
+       "SkillTriggerRate": 0.34831069313828,
+       "Speed": 0.34831069313828,
+       "TotalDPS": 47463.30094036,
+       "TriggerRateCap": 0.34831069313828
+      }
+     },
+     {
+      "group": 6,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Shield Charge",
+      "name": "Shield Charge",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 51.2512,
+       "Speed": 4.6592,
+       "TotalDPS": 12103.356144917
+      }
+     },
+     {
+      "group": 7,
+      "includeInFullDPS": false,
+      "index": 1,
+      "label": "Aspect of the Brine King",
+      "name": "Aspect of the Brine King",
+      "out": {
+       "ESPerSecondCost": 0,
+       "LifePerSecondCost": 0,
+       "ManaPerSecondCost": 0,
+       "Speed": 0,
+       "TotalDPS": 0
+      }
+     }
+    ],
+    "config": {
+     "ChanceToIgnoreEnemyPhysicalDamageReductionMode": "AVERAGE",
+     "ConcPathBypassCD": true,
+     "FlickerStrikeBypassCD": true,
+     "GamblesprintMovementSpeed": 30,
+     "VigilantStrikeBypassCD": true,
+     "bandit": "None",
+     "bloodSandStance": "SAND",
+     "bloodsoakedBannerStages": 1,
+     "buffArcaneSurge": true,
+     "conditionChampionIntimidate": true,
+     "conditionCorruptingCryStages": 1,
+     "conditionEnemyChilled": true,
+     "conditionEnemyChilledEffect": 30,
+     "conditionEnemyColdExposure": true,
+     "conditionEnemyFrozen": true,
+     "conditionEnemyShocked": true,
+     "conditionLeeching": true,
+     "conditionSacrificeMinion": true,
+     "conditionShockEffect": 57,
+     "conditionShockedEnemyRecently": true,
+     "doomBlastSource": "vixen",
+     "enemyIsBoss": "Pinnacle",
+     "enemySizePreset": "Medium",
+     "infusedChannellingInfusion": true,
+     "maniaDebuffsCount": 15,
+     "multiplierFrozenByYouSeconds": 24,
+     "pantheonMajorGod": "TheBrineKing",
+     "pantheonMinorGod": "Ryslatha",
+     "plagueBearerState": "INC",
+     "presetBossSkills": "None",
+     "raiseSpectreEnableBuffs": true,
+     "raiseSpectreEnableCurses": true,
+     "repeatMode": "AVERAGE",
+     "resistancePenalty": -60,
+     "resourceGainMode": "AVERAGE",
+     "summonElementalRelicEnableAngerAura": true,
+     "summonElementalRelicEnableHatredAura": true,
+     "summonElementalRelicEnableWrathAura": true,
+     "summonLightningGolemEnableWrath": true,
+     "targetBrandedEnemy": true,
+     "touchedDebuffsCount": 10,
+     "useFrenzyCharges": true,
+     "usePowerCharges": true
+    },
+    "configOfNote": {
+     "conditionOnConsecratedGround": null,
+     "enemyIsBoss": "Pinnacle",
+     "multiplierChannelling": null
+    },
+    "missingKeys": [
+     "SkillTriggerRate",
+     "TriggerRateCap",
+     "EffectiveSourceRate"
+    ],
+    "missingInMainOutput": [
+     "EffectiveSourceRate",
+     "SkillTriggerRate",
+     "TriggerRateCap"
+    ],
+    "missingPerSkill": {
+     "Winter Orb": [
+      "SkillTriggerRate",
+      "TriggerRateCap",
+      "EffectiveSourceRate"
+     ]
+    }
+   }
+  }
+ },
+ "evidenceChecks": [
+  {
+   "check": "v4 FullDPS",
+   "expected": "57,001,026.47",
+   "actual": "57,001,026.47",
+   "actualRaw": 57001026.466388,
+   "status": "MATCH",
+   "source": "summary.stats.FullDPS"
+  },
+  {
+   "check": "v3 FullDPS (M)",
+   "expected": "38.49",
+   "actual": "38.49",
+   "actualRaw": 38490675.744969,
+   "status": "MATCH",
+   "source": "summary.stats.FullDPS"
+  },
+  {
+   "check": "v3->v4 FullDPS %",
+   "expected": "48.1",
+   "actual": "48.1",
+   "actualRaw": 48.09048000109073,
+   "status": "MATCH",
+   "source": "summary.stats.FullDPS"
+  },
+  {
+   "check": "v3->v4 FR % (SkillDPS dps x count)",
+   "expected": "48.5",
+   "actual": "48.5",
+   "actualRaw": 48.51485148514952,
+   "status": "MATCH",
+   "source": "mainOutput.SkillDPS"
+  },
+  {
+   "check": "v3->v4 Cyclone % (SkillDPS)",
+   "expected": "-25.0",
+   "actual": "-25.0",
+   "actualRaw": -25.00000000000225,
+   "status": "MATCH",
+   "source": "mainOutput.SkillDPS"
+  },
+  {
+   "check": "v3->v4 main-skill CombinedDPS % (what today's audit scores)",
+   "expected": "-25.0",
+   "actual": "-25.0",
+   "actualRaw": -25.00000000000225,
+   "status": "MATCH",
+   "source": "summary.stats.CombinedDPS (main skill Cyclone)"
+  },
+  {
+   "check": "v1->v2 FullDPS %",
+   "expected": "184.4",
+   "actual": "184.4",
+   "actualRaw": 184.37645250563978,
+   "status": "MATCH",
+   "source": "summary.stats.FullDPS"
+  },
+  {
+   "check": "v2->v3 FullDPS %",
+   "expected": "146.4",
+   "actual": "146.4",
+   "actualRaw": 146.39259768749577,
+   "status": "MATCH",
+   "source": "summary.stats.FullDPS"
+  },
+  {
+   "check": "v4 SkillDPS FR dps (M)",
+   "expected": "56.83",
+   "actual": "56.83",
+   "actualRaw": 56834383.146789,
+   "status": "MATCH",
+   "source": "mainOutput.SkillDPS"
+  },
+  {
+   "check": "v4 SkillDPS FR skillPart",
+   "expected": "All Primary Projectiles",
+   "actual": "All Primary Projectiles",
+   "status": "MATCH",
+   "source": "mainOutput.SkillDPS"
+  },
+  {
+   "check": "v4 SkillDPS FR count",
+   "expected": "1",
+   "actual": "1",
+   "actualRaw": 1,
+   "status": "MATCH",
+   "source": "mainOutput.SkillDPS"
+  },
+  {
+   "check": "v4 SkillDPS Cyclone dps (M)",
+   "expected": "0.17",
+   "actual": "0.17",
+   "actualRaw": 166643.31959827,
+   "status": "MATCH",
+   "source": "mainOutput.SkillDPS"
+  },
+  {
+   "check": "v4 SkillDPS Cyclone count",
+   "expected": "1",
+   "actual": "1",
+   "actualRaw": 1,
+   "status": "MATCH",
+   "source": "mainOutput.SkillDPS"
+  },
+  {
+   "check": "v4 FR SkillTriggerRate /s",
+   "expected": "7.52",
+   "actual": "7.52",
+   "actualRaw": 7.524,
+   "status": "MATCH",
+   "source": "evaluate FR out"
+  },
+  {
+   "check": "v4 FR TriggerRateCap /s",
+   "expected": "7.58",
+   "actual": "7.58",
+   "actualRaw": 7.5757575757576,
+   "status": "MATCH",
+   "source": "evaluate FR out"
+  },
+  {
+   "check": "v4 Cyclone Speed /s",
+   "expected": "7.52",
+   "actual": "7.52",
+   "actualRaw": 7.524,
+   "status": "MATCH",
+   "source": "evaluate Cyclone out"
+  },
+  {
+   "check": "v1 FR (M, SkillDPS)",
+   "expected": "5.27",
+   "actual": "5.27",
+   "actualRaw": 5271120.667831,
+   "status": "MATCH",
+   "source": "mainOutput.SkillDPS"
+  },
+  {
+   "check": "v1 PhysicalMaximumHitTaken (k)",
+   "expected": "33.3",
+   "actual": "33.3",
+   "actualRaw": 33307,
+   "status": "MATCH",
+   "source": "summary.stats"
+  },
+  {
+   "check": "v1 FireResist %",
+   "expected": "89",
+   "actual": "89",
+   "actualRaw": 89,
+   "status": "MATCH",
+   "source": "summary.stats"
+  },
+  {
+   "check": "v1 ColdResist %",
+   "expected": "89",
+   "actual": "89",
+   "actualRaw": 89,
+   "status": "MATCH",
+   "source": "summary.stats"
+  },
+  {
+   "check": "v1 LightningResist %",
+   "expected": "89",
+   "actual": "89",
+   "actualRaw": 89,
+   "status": "MATCH",
+   "source": "summary.stats"
+  },
+  {
+   "check": "v2 FR (M, SkillDPS)",
+   "expected": "15.45",
+   "actual": "15.40",
+   "actualRaw": 15399494.017153,
+   "status": "MISMATCH",
+   "source": "mainOutput.SkillDPS"
+  },
+  {
+   "check": "v2 FR SkillTriggerRate /s",
+   "expected": "10.03",
+   "actual": "10.03",
+   "actualRaw": 10.032,
+   "status": "MATCH",
+   "source": "evaluate FR out"
+  },
+  {
+   "check": "v3 FR (M, SkillDPS)",
+   "expected": "38.4",
+   "actual": "38.3",
+   "actualRaw": 38268484.652171,
+   "status": "MISMATCH",
+   "source": "mainOutput.SkillDPS"
+  },
+  {
+   "check": "v3 FR SkillTriggerRate /s",
+   "expected": "5.07",
+   "actual": "5.07",
+   "actualRaw": 5.06616,
+   "status": "MATCH",
+   "source": "evaluate FR out"
+  },
+  {
+   "check": "v3 FR ProjectileCount",
+   "expected": "5",
+   "actual": "5",
+   "actualRaw": 5,
+   "status": "MATCH",
+   "source": "evaluate FR out"
+  },
+  {
+   "check": "v1 FR (M, TotalDPS as main)",
+   "expected": "5.27",
+   "actual": "5.27",
+   "actualRaw": 5271120.667831,
+   "status": "MATCH",
+   "source": "evaluate FR out.TotalDPS (FR as main skill; differs from its SkillDPS row)"
+  },
+  {
+   "check": "v2 FR (M, TotalDPS as main)",
+   "expected": "15.45",
+   "actual": "15.45",
+   "actualRaw": 15453987.496654,
+   "status": "MATCH",
+   "source": "evaluate FR out.TotalDPS (FR as main skill; differs from its SkillDPS row)"
+  },
+  {
+   "check": "v3 FR (M, TotalDPS as main)",
+   "expected": "38.4",
+   "actual": "38.4",
+   "actualRaw": 38404154.343411,
+   "status": "MATCH",
+   "source": "evaluate FR out.TotalDPS (FR as main skill; differs from its SkillDPS row)"
+  },
+  {
+   "check": "v4 FR (M, TotalDPS as main; tile claim 56.83 is SkillDPS)",
+   "expected": "56.83",
+   "actual": "57.04",
+   "actualRaw": 57035872.787245,
+   "status": "MISMATCH",
+   "source": "evaluate FR out.TotalDPS (FR as main skill; differs from its SkillDPS row)"
+  },
+  {
+   "check": "v3->v4 FR % (TotalDPS as main)",
+   "expected": "48.5",
+   "actual": "48.5",
+   "actualRaw": 48.51485148515096,
+   "status": "MATCH",
+   "source": "evaluate FR out.TotalDPS (FR as main skill; differs from its SkillDPS row)"
+  },
+  {
+   "check": "source FR (M, TotalDPS as main)",
+   "expected": "16.60",
+   "actual": "16.60",
+   "actualRaw": 16597987.276314,
+   "status": "MATCH",
+   "source": "evaluate FR out.TotalDPS (FR as main skill; differs from its SkillDPS row)"
+  },
+  {
+   "check": "v2 ES regen /s",
+   "expected": "2,250.6",
+   "actual": "2,250.6",
+   "actualRaw": 2250.6,
+   "status": "MATCH",
+   "source": "evaluate out; net = EnergyShieldRegenRecovery - sum ESPerSecondCost (main group)"
+  },
+  {
+   "check": "v2 Cyclone ES/s",
+   "expected": "60.2",
+   "actual": "60.2",
+   "actualRaw": 60.192,
+   "status": "MATCH",
+   "source": "evaluate out; net = EnergyShieldRegenRecovery - sum ESPerSecondCost (main group)"
+  },
+  {
+   "check": "v2 FR ES/s",
+   "expected": "1,494.8",
+   "actual": "1,494.8",
+   "actualRaw": 1494.768,
+   "status": "MATCH",
+   "source": "evaluate out; net = EnergyShieldRegenRecovery - sum ESPerSecondCost (main group)"
+  },
+  {
+   "check": "v2 ES net /s",
+   "expected": "695.6",
+   "actual": "695.6",
+   "actualRaw": 695.6399999999999,
+   "status": "MATCH",
+   "source": "evaluate out; net = EnergyShieldRegenRecovery - sum ESPerSecondCost (main group)"
+  },
+  {
+   "check": "v2 ES pool",
+   "expected": "17,116",
+   "actual": "17,116",
+   "actualRaw": 17116,
+   "status": "MATCH",
+   "source": "evaluate out; net = EnergyShieldRegenRecovery - sum ESPerSecondCost (main group)"
+  },
+  {
+   "check": "v4 ES regen /s",
+   "expected": "2,250.6",
+   "actual": "2,250.6",
+   "actualRaw": 2250.6,
+   "status": "MATCH",
+   "source": "evaluate out; net = EnergyShieldRegenRecovery - sum ESPerSecondCost (main group)"
+  },
+  {
+   "check": "v4 Cyclone ES/s",
+   "expected": "45.1",
+   "actual": "45.1",
+   "actualRaw": 45.144,
+   "status": "MATCH",
+   "source": "evaluate out; net = EnergyShieldRegenRecovery - sum ESPerSecondCost (main group)"
+  },
+  {
+   "check": "v4 FR ES/s",
+   "expected": "1,121.1",
+   "actual": "1,121.1",
+   "actualRaw": 1121.076,
+   "status": "MATCH",
+   "source": "evaluate out; net = EnergyShieldRegenRecovery - sum ESPerSecondCost (main group)"
+  },
+  {
+   "check": "v4 ES costs sum /s",
+   "expected": "1,166.2",
+   "actual": "1,166.2",
+   "actualRaw": 1166.22,
+   "status": "MATCH",
+   "source": "evaluate out; net = EnergyShieldRegenRecovery - sum ESPerSecondCost (main group)"
+  },
+  {
+   "check": "v4 ES net /s",
+   "expected": "1,084.4",
+   "actual": "1,084.4",
+   "actualRaw": 1084.3799999999999,
+   "status": "MATCH",
+   "source": "evaluate out; net = EnergyShieldRegenRecovery - sum ESPerSecondCost (main group)"
+  },
+  {
+   "check": "source ES net /s",
+   "expected": "1,077.0",
+   "actual": "1,077.0",
+   "actualRaw": 1077.0479999999998,
+   "status": "MATCH",
+   "source": "evaluate out; net = EnergyShieldRegenRecovery - sum ESPerSecondCost (main group)"
+  },
+  {
+   "check": "source FR (M, SkillDPS)",
+   "expected": "16.60",
+   "actual": "16.54",
+   "actualRaw": 16539406.785851,
+   "status": "MISMATCH",
+   "source": "mainOutput.SkillDPS"
+  },
+  {
+   "check": "source FR SkillTriggerRate /s",
+   "expected": "10.03",
+   "actual": "10.03",
+   "actualRaw": 10.032,
+   "status": "MATCH",
+   "source": "evaluate FR out"
+  },
+  {
+   "check": "source FR ES/s",
+   "expected": "1,555.0",
+   "actual": "1,555.0",
+   "actualRaw": 1554.96,
+   "status": "MATCH",
+   "source": "evaluate out; net = EnergyShieldRegenRecovery - sum ESPerSecondCost (main group)"
+  },
+  {
+   "check": "EK FullDPS as saved",
+   "expected": "15,136,639.02",
+   "actual": "15,136,639.02",
+   "actualRaw": 15136639.020573,
+   "status": "MATCH",
+   "source": "Auditor.summary"
+  },
+  {
+   "check": "Worb FullDPS as saved",
+   "expected": "7,176,019.15",
+   "actual": "7,176,019.15",
+   "actualRaw": 7176019.1459774,
+   "status": "MATCH",
+   "source": "Auditor.summary"
+  },
+  {
+   "check": "EK mana regen /s",
+   "expected": "209.4",
+   "actual": "209.4",
+   "actualRaw": 209.4,
+   "status": "MATCH",
+   "source": "kpiSources.manaMargin"
+  },
+  {
+   "check": "EK EK cost /s",
+   "expected": "160.7",
+   "actual": "160.7",
+   "actualRaw": 160.7349744,
+   "status": "MATCH",
+   "source": "kpiSources.manaMargin"
+  },
+  {
+   "check": "EK Cyclone cost /s",
+   "expected": "26.8",
+   "actual": "26.8",
+   "actualRaw": 26.7624,
+   "status": "MATCH",
+   "source": "kpiSources.manaMargin"
+  },
+  {
+   "check": "EK mana margin /s",
+   "expected": "21.9",
+   "actual": "21.9",
+   "actualRaw": 21.902625599999993,
+   "status": "MATCH",
+   "source": "Auditor base.manaMargin"
+  },
+  {
+   "check": "Worb Winter Orb pobCount",
+   "expected": "5",
+   "actual": "5",
+   "actualRaw": 5,
+   "status": "MATCH",
+   "source": "Auditor models"
+  },
+  {
+   "check": "Worb Winter Orb multiplier",
+   "expected": "4",
+   "actual": "4",
+   "actualRaw": 4,
+   "status": "MATCH",
+   "source": "Auditor models"
+  },
+  {
+   "check": "Worb Winter Orb expected (~4.4)",
+   "expected": "4.4",
+   "actual": "4.4",
+   "actualRaw": 4.42,
+   "status": "MATCH",
+   "source": "Auditor models"
+  },
+  {
+   "check": "v4 Assassin's Mark (Mark On Hit group) ES/s",
+   "expected": "19.4",
+   "actual": "19.4",
+   "actualRaw": 19.442016,
+   "status": "MATCH",
+   "source": "otherGroups"
+  },
+  {
+   "check": "v4 Withering Step (Automation group) ES/s",
+   "expected": "14.0",
+   "actual": "14.0",
+   "actualRaw": 13.986013986014,
+   "status": "MATCH",
+   "source": "otherGroups"
+  }
+ ],
+ "determinism": {
+  "method": "each build loaded twice in fresh PobEngine instances (same process), full snapshot diffed with exact float equality; cross-process: every test_golden run re-loads and compares",
+  "checkedAt": "2026-10-22T01:22:41",
+  "differences": {
+   "audit:EK": [],
+   "audit:Worb": [],
+   "raw:v1": [],
+   "raw:v2": [],
+   "raw:v3": [],
+   "raw:v4": [],
+   "raw:source": [],
+   "raw:EK": [],
+   "raw:Worb": []
+  },
+  "deterministic": true
+ },
+ "tolerancesNote": "{} = exact equality on JSON-decoded floats everywhere",
+ "anchors": [
+  {
+   "label": "EK FullDPS as saved",
+   "build": "audit:EK",
+   "path": [
+    "summary",
+    "stats",
+    "FullDPS"
+   ],
+   "expected": 15136639.02,
+   "digits": 2,
+   "source": "tasks/003-integrate-fr-coc-learnings.md Phase A spec / user golden-build facts"
+  },
+  {
+   "label": "Worb FullDPS as saved",
+   "build": "audit:Worb",
+   "path": [
+    "summary",
+    "stats",
+    "FullDPS"
+   ],
+   "expected": 7176019.15,
+   "digits": 2,
+   "source": "tasks/003-integrate-fr-coc-learnings.md Phase A spec / user golden-build facts"
+  },
+  {
+   "label": "v4 FullDPS as saved",
+   "build": "raw:v4",
+   "path": [
+    "summary",
+    "stats",
+    "FullDPS"
+   ],
+   "expected": 57001026.47,
+   "digits": 2,
+   "source": "tasks/003-integrate-fr-coc-learnings.md Phase A spec / user golden-build facts"
+  },
+  {
+   "label": "EK mana margin 209.4 - 160.7 - 26.8",
+   "build": "audit:EK",
+   "path": [
+    "base",
+    "manaMargin"
+   ],
+   "expected": 21.9,
+   "digits": 1,
+   "source": "tasks/003-integrate-fr-coc-learnings.md Phase A spec / user golden-build facts"
+  },
+  {
+   "label": "Worb leaves out Aspect of the Brine King",
+   "build": "audit:Worb",
+   "path": [
+    "disabledSkills"
+   ],
+   "expected": [
+    "Aspect of the Brine King"
+   ],
+   "digits": null,
+   "source": "tasks/003-integrate-fr-coc-learnings.md Phase A spec / user golden-build facts"
+  },
+  {
+   "label": "Worb Winter Orb pobCount (count=5 saved in file)",
+   "build": "audit:Worb",
+   "path": [
+    "models",
+    0,
+    "pobCount"
+   ],
+   "expected": 5,
+   "digits": null,
+   "source": "tasks/003-integrate-fr-coc-learnings.md Phase A spec / user golden-build facts"
+  },
+  {
+   "label": "Worb Winter Orb model multiplier (4 hits)",
+   "build": "audit:Worb",
+   "path": [
+    "models",
+    0,
+    "multiplier"
+   ],
+   "expected": 4,
+   "digits": null,
+   "source": "tasks/003-integrate-fr-coc-learnings.md Phase A spec / user golden-build facts"
+  },
+  {
+   "label": "Worb Winter Orb expected rounds down to 4",
+   "build": "audit:Worb",
+   "path": [
+    "models",
+    0,
+    "expected"
+   ],
+   "expected": 4,
+   "digits": null,
+   "floor": true,
+   "source": "tasks/003-integrate-fr-coc-learnings.md Phase A spec / user golden-build facts"
+  }
+ ],
+ "runEquivalence": {
+  "build": "EK",
+  "runSeconds": 80.6,
+  "differences": {
+   "disabledSkills": [],
+   "scenario": [],
+   "models": [],
+   "dpsBreakdown": [],
+   "kpiSources": [],
+   "base": [],
+   "rules": [],
+   "build.skills": [],
+   "reservation": []
+  },
+  "equal": true,
+  "checkedAt": "2026-10-22T01:24:04"
+ },
+ "perf": {
+  "date": "2026-10-22T01:15:50",
+  "build": "v4",
+  "settings": {
+   "file": "AutoBuilder/FR CoC Occu Three Dragons v4.xml",
+   "disabledSkills": [],
+   "scenario": "Pinnacle Boss",
+   "includeDrafts": true
+  },
+  "runs": [
+   {
+    "constructSeconds": 2.25,
+    "runSeconds": 46.9,
+    "sections": {
+     "Testing gem upgrades": 0.4,
+     "Testing support gem swaps": 4.3,
+     "Checking gear and flask mods": 3.3,
+     "Searching cheaper tree paths": 0.8,
+     "Searching notable swaps": 0.0,
+     "Running PoB power report (every node and mastery)": 35.7,
+     "Searching tree swaps for DPS": 1.0,
+     "Searching tree swaps for EHP": 0.5,
+     "Comparing every mastery option": 0.3,
+     "Checking tree branches": 0.6,
+     "base (before first section)": 0.1
+    },
+    "suggestions": 23,
+    "baseDps": 57001026.466388,
+    "violations": []
+   },
+   {
+    "constructSeconds": 2.07,
+    "runSeconds": 45.4,
+    "sections": {
+     "Testing gem upgrades": 0.4,
+     "Testing support gem swaps": 3.7,
+     "Checking gear and flask mods": 3.4,
+     "Searching cheaper tree paths": 0.8,
+     "Searching notable swaps": 0.0,
+     "Running PoB power report (every node and mastery)": 34.8,
+     "Searching tree swaps for DPS": 0.3,
+     "Searching tree swaps for EHP": 0.5,
+     "Comparing every mastery option": 0.8,
+     "Checking tree branches": 0.6,
+     "base (before first section)": 0.0
+    },
+    "suggestions": 25,
+    "baseDps": 57001026.466388,
+    "violations": []
+   }
+  ],
+  "machine": {
+   "python": "3.14.6",
+   "processor": "AMD64 Family 25 Model 97 Stepping 2, AuthenticAMD",
+   "platform": "Windows-11-10.0.26200-SP0"
+  },
+  "note": "Full Auditor(v4).run() wall time via time.perf_counter, construction (PoB boot + load + hooks + offline Obtainability) and run() separately; sections from the progress callback. Baseline before A1 scoring changes. Not pass/fail.",
+  "observations": [
+   "run() sections are NOT pinned: they are not fully deterministic across fresh engines.",
+   "perf run 1 produced 23 suggestions, run 2 25; 3+2 further v4 runs (scratch run_twice/run_three) all gave 25 (swap 10, gem 8, repath 5, mastery 2). The 23 case was not reproduced; cause unverified (perf run 1 'Searching tree swaps for DPS' took 1.0 s vs 0.3 s).",
+   "gems[].statChanges order flips between runs: Lua pairs() in gemStatDiffJSON (engine/audit.lua:376); only the first 3 lines are shown, so the shown lines can differ.",
+   "Equivalent run() on EK took 80.5 s (pin_golden.py --verify-run, runEquivalence).",
+   "perf was measured with the vault as of 01:10 (incl. draft rule 'Skill costs sustainable per resource'); the vault was edited by others 01:14-01:21 and golden was re-pinned at 2026-10-22T01:22:01; engine files unchanged (meta.engineFiles)."
+  ]
+ }
+}

@@ -1,0 +1,58 @@
+{
+  "collapse-filter": true,
+  "search": "-file:Home -file:Dashboard",
+  "showTags": false,
+  "showAttachments": false,
+  "hideUnresolved": false,
+  "showOrphans": true,
+  "collapse-color-groups": false,
+  "colorGroups": [
+    {
+      "query": "path:Rules",
+      "color": {
+        "a": 1,
+        "rgb": 15026253
+      }
+    },
+    {
+      "query": "path:Models",
+      "color": {
+        "a": 1,
+        "rgb": 16098596
+      }
+    },
+    {
+      "query": "path:Scenarios",
+      "color": {
+        "a": 1,
+        "rgb": 9326278
+      }
+    },
+    {
+      "query": "path:Gaps",
+      "color": {
+        "a": 1,
+        "rgb": 4103167
+      }
+    },
+    {
+      "query": "path:Inbox",
+      "color": {
+        "a": 1,
+        "rgb": 9145752
+      }
+    }
+  ],
+  "collapse-display": true,
+  "showArrow": false,
+  "textFadeMultiplier": 0,
+  "nodeSizeMultiplier": 1,
+  "lineSizeMultiplier": 1,
+  "collapse-forces": true,
+  "centerStrength": 0.518713248970312,
+  "repelStrength": 10,
+  "linkStrength": 1,
+  "linkDistance": 250,
+  "scale": 1,
+  "close": true
+}

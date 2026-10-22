@@ -1,0 +1,223 @@
+{
+  "main": {
+    "id": "a9f36edcbf2dbd7c",
+    "type": "split",
+    "children": [
+      {
+        "id": "817ea19a2484ea04",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "b18115ab0cb3f0d4",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Inbox/Foulborn Three Dragons - chaos shock and freeze.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Foulborn Three Dragons - chaos shock and freeze"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "fc4f67e51ecdc176",
+    "type": "split",
+    "children": [
+      {
+        "id": "4a02f137dc79c1d1",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "612ff35afb31648d",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "0aed7809c3213de3",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "cf8cca8039e2e307",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "7acce0a612b79a65",
+    "type": "split",
+    "children": [
+      {
+        "id": "bd95c6d2a7a41655",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "3b99d80ba86d8cd1",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "8b65a5abb63e3e16",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "46ccc1e528028e65",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "abc4896593c0dcff",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "8eb778b6dde270fb",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "b18115ab0cb3f0d4",
+  "lastOpenFiles": [
+    "Inbox/FR CoC - ascendancy and tree.md",
+    "Inbox/FR CoC Cyclone - skills and supports.md",
+    "Inbox/Foulborn Three Dragons - chaos shock and freeze.md",
+    "Gaps/Mods PoB can't value.md",
+    "Rules/Total skill cost must be sustainable.md",
+    "Rules/Reservation must fit the pool.md",
+    "Rules/Mastery needs a notable in its cluster.md",
+    "Rules/Attribute requirements must be met.md",
+    "_templates/sedrR3ziX",
+    "_templates/sedytyPtQ",
+    "_templates/sedETFvnj",
+    "_templates/sedw0wiz7",
+    "Gaps",
+    "Scenarios/Pinnacle Boss.md",
+    "Scenarios/Mapping.md",
+    "Scenarios",
+    "Build Concepts/Fireball GMP Overlap.md",
+    "Build Concepts/CoC Forbidden Rite Shock-Freeze.md",
+    "Models/sedOxoOrR",
+    "Mechanics/Chaos Damage.md",
+    "Hubs/Hit and Crit.md",
+    "Hubs/Area of Effect.md",
+    "Hubs/Projectiles.md",
+    "Hubs/Triggers.md",
+    "Hubs/Ailments.md",
+    "_templates/sedzg0213",
+    "Build Concepts",
+    "Hubs",
+    "Rules/CoC requires 100% crit and hit.md",
+    "Dashboard.md",
+    "Home.md",
+    "Target Profiles/Pinnacle Boss.md"
+  ]
+}

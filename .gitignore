@@ -1,0 +1,10 @@
+# caches and per-user runtime data
+engine/cache/
+engine/userdata/
+__pycache__/
+*.pyc
+# secrets, tokens and logs: never commit
+*.token
+secrets/
+logs/
+*.log

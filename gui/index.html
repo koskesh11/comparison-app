@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PoB Autobuilder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0c0a;
+    --bg-raised: #17140f;
+    --bg-sunk: #0a0907;
+    --line: #2b251c;
+    --line-strong: #40372a;
+    --text: #ebe2d1;
+    --text-dim: #9d927f;
+    --text-faint: #6b6253;
+    --gold: #c9a45c;
+    --gold-bright: #e6c67e;
+    --gain: #8fcf86;
+    --loss: #e5826a;
+    --warn: #e0b04f;
+    --font-display: "Cinzel", Georgia, serif;
+    --font-body: "IBM Plex Sans", system-ui, sans-serif;
+    --radius-s: 4px;
+    --radius-m: 8px;
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: radial-gradient(1200px 600px at 70% -10%, #2a1f12 0%, transparent 60%), var(--bg);
+    color: var(--text); font: 14px/1.5 var(--font-body); font-variant-numeric: tabular-nums;
+    display: grid; grid-template-columns: 300px 1fr; overflow: hidden;
+  }
+  button, input { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+  /* ---- sidebar ---- */
+  aside { border-right: 1px solid var(--line); background: var(--bg-sunk); display: flex; flex-direction: column; min-height: 0; }
+  .brand { padding: 22px 20px 16px; border-bottom: 1px solid var(--line); }
+  .brand h1 { font: 700 18px/1.1 var(--font-display); letter-spacing: .08em; margin: 0; color: var(--gold-bright); }
+  .brand p { margin: 6px 0 0; color: var(--text-faint); font-size: 12px; }
+  .search { margin: 14px 16px 8px; padding: 9px 12px; width: calc(100% - 32px); background: var(--bg-raised);
+    border: 1px solid var(--line); border-radius: var(--radius-m); }
+  .search::placeholder { color: var(--text-faint); }
+  .toggle { display: flex; gap: 8px; align-items: center; padding: 4px 18px 12px; color: var(--text-dim); font-size: 12px; cursor: pointer; }
+  .builds { overflow-y: auto; padding: 0 8px 16px; flex: 1; border-top: 1px solid var(--line); }
+  .settings { display: grid; gap: 8px; padding: 0 16px 12px; font-size: 12px; color: var(--text-dim); }
+  .settings label:not(.toggle) { display: grid; gap: 4px; }
+  .settings select, .settings input:not([type]) { background: var(--bg-raised); border: 1px solid var(--line);
+    border-radius: var(--radius-s); padding: 6px 8px; }
+  .settings .toggle { padding: 0; }
+  .ghost { background: none; border: 1px solid var(--line-strong); border-radius: var(--radius-s); padding: 6px; cursor: pointer; color: var(--gold); }
+  .ghost:disabled { opacity: .4; cursor: default; }
+  .folder { color: var(--text-faint); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; padding: 14px 10px 4px; }
+  .build-btn { display: block; width: 100%; text-align: left; background: none; border: 0; padding: 7px 10px;
+    border-radius: var(--radius-s); color: var(--text-dim); cursor: pointer; transition: background .15s, color .15s; }
+  .build-btn:hover { background: var(--bg-raised); color: var(--text); }
+  .build-btn[aria-current="true"] { background: #2a2116; color: var(--gold-bright); box-shadow: inset 2px 0 0 var(--gold); }
+
+  /* ---- main ---- */
+  main { overflow-y: auto; min-height: 0; padding: 36px 48px 120px; }
+  .empty { height: 70vh; display: grid; place-content: center; text-align: center; color: var(--text-faint); }
+  .empty h2 { font: 500 28px var(--font-display); color: var(--text-dim); margin: 0 0 8px; }
+
+  .progress { max-width: 520px; margin: 18vh auto 0; text-align: center; }
+  .progress h2 { font: 500 22px var(--font-display); margin: 0 0 6px; }
+  .progress p { color: var(--gold); margin: 0 0 22px; min-height: 1.5em; }
+  .bar { height: 3px; background: var(--line); border-radius: 2px; overflow: hidden; }
+  .bar::after { content: ""; display: block; height: 100%; width: 35%; background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    animation: sweep 1.4s var(--ease) infinite; }
+  @keyframes sweep { from { transform: translateX(-100%); } to { transform: translateX(300%); } }
+
+  header.build { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; margin-bottom: 28px; }
+  header.build h2 { font: 700 34px/1.05 var(--font-display); margin: 0; letter-spacing: .02em; }
+  header.build .meta { color: var(--text-dim); margin-top: 8px; }
+  .chip { display: inline-block; padding: 2px 9px; border: 1px solid var(--line-strong); border-radius: 999px; font-size: 12px; color: var(--text-dim); }
+  .chip.gold { border-color: #5c4a2a; color: var(--gold-bright); }
+
+  .stats { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; border: 1px solid var(--line); border-radius: var(--radius-m);
+    background: var(--bg-raised); margin-bottom: 18px; overflow: hidden; }
+  .stat { padding: 16px 20px; border-left: 1px solid var(--line); }
+  .stat:first-child { border-left: 0; }
+  .stat .label { color: var(--text-faint); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
+  .stat .value { font-size: 22px; font-weight: 600; margin-top: 4px; }
+  .stat:first-child .value { font: 700 34px/1.1 var(--font-display); color: var(--gold-bright); }
+  .breakdown { list-style: none; margin: 10px 0 0; padding: 8px 0 0; border-top: 1px dashed var(--line); font-size: 12px; color: var(--text-dim); }
+  .breakdown li { display: flex; justify-content: space-between; gap: 12px; padding: 1px 0; }
+  .breakdown li span:last-child { color: var(--text); white-space: nowrap; }
+
+  .rules { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; color: var(--text-dim); font-size: 13px; margin-bottom: 36px; }
+  .alert { border: 1px solid #5a3a26; background: #24150e; color: var(--loss); padding: 10px 14px; border-radius: var(--radius-m); margin-bottom: 18px; }
+
+  section { margin-bottom: 40px; }
+  section > h3 { font: 500 20px var(--font-display); margin: 0 0 4px; letter-spacing: .03em; }
+  section > .sub { color: var(--text-faint); font-size: 13px; margin: 0 0 14px; }
+  .group-title { color: var(--gold); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; margin: 20px 0 8px; }
+
+  .row { display: grid; grid-template-columns: 26px 1fr auto; gap: 12px; align-items: start; padding: 12px 14px;
+    border: 1px solid var(--line); border-radius: var(--radius-m); background: var(--bg-raised); margin-bottom: 6px;
+    cursor: pointer; transition: border-color .15s, transform .2s var(--ease), background .15s; }
+  .row:hover { border-color: var(--line-strong); }
+  .row.selected { border-color: var(--gold); background: #1f1911; }
+  .row:active { transform: scale(.995); }
+  .row.disabled { cursor: default; opacity: .55; }
+  .row input { accent-color: var(--gold); width: 16px; height: 16px; margin-top: 3px; }
+  .row .title { font-weight: 500; }
+  .row .title .arrow { color: var(--text-faint); margin: 0 6px; }
+  .row .detail { color: var(--text-dim); font-size: 12.5px; margin-top: 4px; }
+  .row .detail div { margin-top: 2px; }
+  .row .reason { color: var(--loss); font-size: 12.5px; margin-top: 4px; }
+  .dims { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  .dim { font-size: 12px; padding: 2px 8px; border-radius: var(--radius-s); background: var(--bg-sunk); color: var(--text-dim); white-space: nowrap; }
+  .dim.up { color: var(--gain); }
+  .dim.down { color: var(--loss); }
+
+  details.finding { border: 1px solid var(--line); border-radius: var(--radius-m); background: var(--bg-raised); margin-bottom: 8px; }
+  details.finding summary { padding: 12px 16px; cursor: pointer; display: flex; justify-content: space-between; list-style: none; }
+  details.finding summary::-webkit-details-marker { display: none; }
+  details.finding summary .count { color: var(--gold); }
+  details.finding[open] summary { border-bottom: 1px solid var(--line); }
+  .finding-list { padding: 6px 16px 12px; }
+  .finding-item { display: grid; grid-template-columns: 110px 220px 1fr; gap: 12px; padding: 6px 0; border-bottom: 1px dashed var(--line); font-size: 13px; }
+  .finding-item:last-child { border-bottom: 0; }
+  .finding-item .why { color: var(--text-faint); }
+  .muted { color: var(--text-faint); }
+
+  .actionbar { position: fixed; left: 300px; right: 0; bottom: 0; padding: 14px 48px; background: linear-gradient(transparent, var(--bg) 35%);
+    display: flex; justify-content: flex-end; align-items: center; gap: 16px; pointer-events: none; }
+  .actionbar > * { pointer-events: auto; }
+  .primary { background: linear-gradient(180deg, var(--gold-bright), var(--gold)); color: #1a1208; border: 0; font-weight: 600;
+    padding: 11px 22px; border-radius: var(--radius-m); cursor: pointer; box-shadow: 0 6px 24px -8px #c9a45c80;
+    transition: transform .2s var(--ease), filter .15s; }
+  .primary:hover { filter: brightness(1.06); }
+  .primary:active { transform: translateY(1px); }
+  .primary:disabled { opacity: .35; cursor: default; box-shadow: none; }
+  .result { border: 1px solid #4b5a32; background: #141a0f; border-radius: var(--radius-m); padding: 14px 16px; margin-bottom: 24px; }
+  .result.bad { border-color: #5a3a26; background: #24150e; }
+  .result code { color: var(--gold-bright); word-break: break-all; }
+  .reserve { border: 1px solid #5c4a2a; background: #1d160c; border-radius: var(--radius-m); padding: 16px 18px; margin-bottom: 24px; }
+  .reserve h3 { font: 500 17px var(--font-display); margin: 0 0 4px; }
+  .reserve .sub { color: var(--text-dim); font-size: 13px; margin: 0 0 12px; }
+  .reserve-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 6px; margin-bottom: 12px; }
+  .reserve-item { display: flex; gap: 10px; align-items: center; padding: 8px 10px; border: 1px solid var(--line); border-radius: var(--radius-s);
+    background: var(--bg-raised); cursor: pointer; }
+  .reserve-item input { accent-color: var(--gold); }
+  .reserve-item .amt { margin-left: auto; color: var(--text-dim); font-size: 12px; }
+  .reserve-total { font-weight: 600; }
+  .reserve-total.over { color: var(--loss); }
+  .reserve-total.ok { color: var(--gain); }
+
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+  @media (max-width: 900px) {
+    body { grid-template-columns: 1fr; overflow: auto; }
+    aside { max-height: 40vh; }
+    main { padding: 24px 16px 120px; }
+    .stats { grid-template-columns: 1fr 1fr; }
+    .actionbar { left: 0; padding: 14px 16px; }
+    .finding-item { grid-template-columns: 1fr; gap: 2px; }
+  }
+</style>
+</head>
+<body>
+<aside>
+  <div class="brand">
+    <h1>PoB AUTOBUILDER</h1>
+    <p>Optimize skills and tree. Gear stays fixed.</p>
+  </div>
+  <input class="search" id="search" placeholder="Search builds…" aria-label="Search builds">
+  <div class="settings">
+    <label>Scenario <select id="scenario"></select></label>
+    <label>Leave out skills <input id="leaveout" placeholder="e.g. Aspect of the Brine King"></label>
+    <label class="toggle"><input type="checkbox" id="drafts" checked> Include draft vault rules</label>
+    <button class="ghost" id="rerun" disabled>Re-run audit</button>
+  </div>
+  <nav class="builds" id="builds" aria-label="Builds"></nav>
+</aside>
+<main id="main">
+  <div class="empty"><div><h2>Pick a build</h2><div>Choose a build from your PoB folder to audit it.</div></div></div>
+</main>
+<div class="actionbar" id="actionbar" hidden>
+  <span class="muted" id="selcount"></span>
+  <button class="primary" id="apply" disabled>Apply &amp; save to PoB</button>
+</div>
+
+<script>
+const state = { builds: [], settings: {}, current: null, job: null, report: null, selected: new Set() };
+const $ = (id) => document.getElementById(id);
+
+// DOM builder: text is always set via textContent (build data is untrusted).
+function h(tag, attrs = {}, ...children) {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === "class") el.className = v;
+    else if (k.startsWith("on")) el.addEventListener(k.slice(2), v);
+    else if (v !== false && v != null) el.setAttribute(k, v === true ? "" : v);
+  }
+  for (const c of children.flat()) if (c != null && c !== false) el.append(c instanceof Node ? c : document.createTextNode(String(c)));
+  return el;
+}
+
+const fmtBig = (n) => n >= 1e6 ? (n / 1e6).toFixed(2) + "M" : n >= 1e3 ? (n / 1e3).toFixed(1) + "k" : Math.round(n).toString();
+const fmtPct = (v) => v == null ? "n/a" : (v > 0 ? "+" : "") + v.toFixed(1) + "%";
+const fmtMana = (v) => (v >= 0 ? "+" : "") + v.toFixed(0) + "/s";
+
+async function api(path, body) {
+  const res = await fetch(path, body ? { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) } : {});
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || res.statusText);
+  return data;
+}
+
+// ---- sidebar -------------------------------------------------------------------------------
+async function loadBuilds() {
+  const data = await api("/api/builds");
+  state.builds = data.builds; state.settings = data.settings || {};
+  $("scenario").replaceChildren(...data.scenarios.map((n) => h("option", { value: n, selected: n === data.defaultScenario }, n)));
+  state.defaultScenario = data.defaultScenario;
+  renderBuilds();
+}
+
+function renderBuilds() {
+  const q = $("search").value.toLowerCase();
+  const byFolder = new Map();
+  for (const b of state.builds) {
+    if (q && !(b.name + " " + b.folder).toLowerCase().includes(q)) continue;
+    if (!byFolder.has(b.folder)) byFolder.set(b.folder, []);
+    byFolder.get(b.folder).push(b);
+  }
+  const folders = [...byFolder.keys()].sort((a, b) => b.localeCompare(a));
+  $("builds").replaceChildren(...folders.flatMap((folder) => [
+    h("div", { class: "folder" }, folder || "Builds"),
+    ...byFolder.get(folder).map((b) => h("button", {
+      class: "build-btn", "aria-current": state.current === b.path ? "true" : "false", onclick: () => pickBuild(b.path),
+    }, b.name)),
+  ]));
+}
+
+// ---- audit -----------------------------------------------------------------------------------
+function pickBuild(path) {
+  // restore what was used last time for this build
+  const saved = state.settings[path] || {};
+  $("scenario").value = saved.scenario || state.defaultScenario;
+  $("leaveout").value = (saved.leaveOut || []).join(", ");
+  startAudit(path);
+}
+
+async function startAudit(path) {
+  $("rerun").disabled = false;
+  state.current = path; state.report = null; state.lastResult = null; state.selected.clear();
+  renderBuilds(); $("actionbar").hidden = true;
+  renderProgress("Starting…");
+  try {
+    const leaveOut = $("leaveout").value.split(",").map((x) => x.trim()).filter(Boolean);
+    const scenario = $("scenario").value;
+    state.settings[path] = { leaveOut, scenario };
+    const { jobId } = await api("/api/audit", { build: path, includeDrafts: $("drafts").checked, leaveOut, scenario });
+    state.job = jobId;
+    poll(jobId);
+  } catch (e) { renderError(e.message); }
+}
+
+async function poll(jobId) {
+  if (state.job !== jobId) return;
+  const job = await api("/api/jobs/" + jobId);
+  if (job.status === "running") { renderProgress(job.progress); setTimeout(() => poll(jobId), 600); }
+  else if (job.status === "error") renderError(job.error);
+  else { state.report = job.report; renderReport(); }
+}
+
+function renderProgress(label) {
+  $("main").replaceChildren(h("div", { class: "progress" },
+    h("h2", {}, state.current.split("/").pop().replace(/\.xml$/i, "")), h("p", {}, label), h("div", { class: "bar" })));
+}
+
+function renderError(msg) {
+  $("main").replaceChildren(h("div", { class: "alert" }, "Audit failed: " + msg));
+}
+
+// ---- report ----------------------------------------------------------------------------------
+function dimChips(d, opts = {}) {
+  const cls = (v) => v == null || Math.abs(v) < 0.05 ? "dim" : v > 0 ? "dim up" : "dim down";
+  const manaDelta = d.manaTo - d.manaFrom;
+  return h("div", { class: "dims" },
+    h("span", { class: cls(d.dps) }, "DPS " + fmtPct(d.dps)),
+    h("span", { class: cls(d.ehp) }, "EHP " + fmtPct(d.ehp)),
+    opts.physMaxHit ? h("span", { class: cls(d.physMaxHit) }, "Max hit " + fmtPct(d.physMaxHit)) : null,
+    h("span", { class: Math.abs(manaDelta) < 0.5 ? "dim" : manaDelta > 0 ? "dim up" : "dim down" },
+      "Mana " + fmtMana(d.manaFrom) + " → " + fmtMana(d.manaTo)),
+    ...(d.models || []).map((m) => h("span", { class: m.to > m.from ? "dim up" : m.to < m.from ? "dim down" : "dim",
+      title: m.model }, `Hits ${m.from} → ${m.to}`)),
+    d.weakens && d.weakens.length ? h("span", { class: "dim down", title: d.weakens.join(", ") },
+      "Weakens " + d.weakens.length + " ailment stat" + (d.weakens.length > 1 ? "s" : "")) : null,
+    d.loses && d.loses.length ? h("span", { class: "dim down", title: d.loses.join(", ") },
+      "Loses " + [...new Set(d.loses.map((k) => k.replace(/Chance(OnHit|OnCrit)?$/, "")))].join(", ")) : null);
+}
+
+function suggestionRow(id, title, detailLines, dims, opts = {}) {
+  const disabled = id == null;
+  const checked = state.selected.has(id);
+  const row = h("div", {
+    class: "row" + (checked ? " selected" : "") + (disabled ? " disabled" : ""),
+    onclick: disabled ? null : () => toggle(id, opts.gem),
+  },
+    h("input", { type: "checkbox", checked, disabled, "aria-label": "Select", tabindex: -1 }),
+    h("div", {}, h("div", { class: "title" }, title),
+      detailLines.length ? h("div", { class: "detail" }, detailLines.map((l) => h("div", {}, l))) : null,
+      opts.reason ? h("div", { class: "reason" }, opts.reason) : null),
+    dimChips(dims, opts));
+  row.dataset.id = id ?? "";
+  return row;
+}
+
+function toggle(id, gem) {
+  if (state.selected.has(id)) state.selected.delete(id);
+  else {
+    // one change per gem: deselect other suggestions touching the same gem
+    const sug = state.report.suggestions;
+    for (const other of [...state.selected]) {
+      const o = sug[other - 1];
+      // one tree swap at a time; one option per mastery
+      const tree = (gem === "__tree__" && o.type === "repath")
+        || (gem && gem.startsWith("__mastery__") && o.type === "mastery" && "__mastery__" + o.name === gem);
+      if (tree || (gem && (o.name === gem || o.replaced === gem))) state.selected.delete(other);
+    }
+    state.selected.add(id);
+  }
+  renderReport();
+}
+
+function gemTitle(name, from, to) {
+  return [name + " ", h("span", { class: "muted" }, from), h("span", { class: "arrow" }, "→"), to];
+}
+
+function renderReport() {
+  const r = state.report, s = r.sections, b = r.build;
+  const parts = [];
+
+  parts.push(h("header", { class: "build" },
+    h("div", {}, h("h2", {}, b.buildName),
+      h("div", { class: "meta" }, `${b.ascendancy || b.className} · level ${b.level} · skills used together: ${b.skills.join(" + ")}`),
+      h("div", { class: "meta" }, `Scenario: ${r.scenario.name}` + (Object.keys(r.scenario.config).length ? ` (${Object.entries(r.scenario.config).map(([k, v]) => k + "=" + v).join(", ")})` : "")
+        + (r.disabledSkills.length ? ` · left out: ${r.disabledSkills.join(", ")}` : "")),
+      h("div", { class: "meta" }, `Analysed file: ${b.file} · saved ${b.savedAt} — save in PoB (Ctrl+S) before auditing`)),
+    h("span", { class: "chip gold" }, "League: " + b.league)));
+
+  parts.push(h("div", { class: "stats" },
+    h("div", { class: "stat" }, h("div", { class: "label" }, "Full DPS"), h("div", { class: "value" }, fmtBig(r.base.dps)),
+      h("ol", { class: "breakdown" }, (r.dpsBreakdown || []).map((st) =>
+        h("li", {}, h("span", {}, st.label), h("span", {}, st.dps == null ? "" : fmtBig(st.dps)))))),
+    kpiTile("Total EHP", fmtBig(r.base.ehp), (r.kpiSources || {}).ehp),
+    kpiTile("Phys max hit", fmtBig(r.base.physMaxHit), (r.kpiSources || {}).physMaxHit),
+    kpiTile("Mana margin", fmtMana(r.base.manaMargin), (r.kpiSources || {}).manaMargin)));
+
+  const reservePanel = reservationPanel(r);
+  if (reservePanel) parts.push(reservePanel);
+
+  if (r.rules.currentViolations.length)
+    parts.push(h("div", { class: "alert" }, "Your build already breaks (suggestions are only rejected for new breaks): "
+      + r.rules.currentViolations.join("; ")));
+  parts.push(h("div", { class: "rules" }, h("span", { class: "chip" }, r.rules.active.length + " vault rules active"),
+    (r.models || []).map((m) => h("span", { class: "chip gold", title: "PoB doesn't calculate this; the vault model does" },
+      `${m.model}: ${m.multiplier} hits (PoB count ${m.pobCount})`)),
+    r.rules.skipped.length ? h("span", {}, "Skipped drafts: " + r.rules.skipped.join(", ")) : null));
+
+  if (state.lastResult) parts.push(state.lastResult);
+
+  // suggestions
+  const sugSection = h("section", {}, h("h3", {}, "Suggestions"),
+    h("p", { class: "sub" }, "Only changes that pass every rule and are obtainable in " + b.league + ". Select, then apply."));
+  sugSection.append(h("div", { class: "group-title" }, "Gem upgrades"));
+  if (!s.gems.length) sugSection.append(h("p", { class: "muted" }, "All gems at their best obtainable level/quality."));
+  for (const g of s.gems)
+    sugSection.append(suggestionRow(g.id, gemTitle(g.gem, g.from, g.to), g.statChanges.map((c) => c.from + "  →  " + c.to), g.dims,
+      { gem: g.gem, reason: g.rejected.length ? "Rejected: " + g.rejected[0] : null }));
+
+  sugSection.append(h("div", { class: "group-title" }, "Support gem swaps"),
+    h("p", { class: "sub" }, `${s.swaps.tried} tried · ${s.swaps.unobtainable} not in league · ${s.swaps.rejected} break a rule`));
+  if (!s.swaps.items.length) sugSection.append(h("p", { class: "muted" }, "No swap beats your current links."));
+  for (const w of s.swaps.items)
+    sugSection.append(suggestionRow(w.id, gemTitle("", w.replaced, w.with), [], w.dims, { gem: w.replaced }));
+
+  sugSection.append(h("div", { class: "group-title" }, "Passive tree"));
+  const rp = s.repath;
+  if (rp.status === "found")
+    sugSection.append(suggestionRow(rp.id, `Re-path: ${rp.currentPoints} → ${rp.newPoints} points`,
+      ["Drop: " + rp.drop.join(", "), "Take: " + (rp.take.join(", ") || "—")], rp.dims, { physMaxHit: true }));
+  else sugSection.append(h("p", { class: "muted" }, "Re-path: " + rp.message));
+  const tree = s.treeSwaps || { swaps: {}, masteries: [] };
+  for (const [objective, label] of [["dps", "DPS"], ["ehp", "defence (EHP)"]]) {
+    sugSection.append(h("div", { class: "group-title" }, `Tree swaps for ${label}`),
+      h("p", { class: "sub" }, `From PoB's power report (${tree.nodesScored || 0} nodes scored). Pick one tree swap at a time.`));
+    const list = (tree.swaps || {})[objective] || [];
+    if (!list.length) sugSection.append(h("p", { class: "muted" }, "No swap passes every rule."));
+    for (const t of list)
+      sugSection.append(suggestionRow(t.id, `Drop ${t.drop} (${t.dropPoints} pts)`,
+        ["Take: " + t.take.join(", "),
+         ...(t.dropDetails || []).map((d) => "Drop does: " + d),
+         ...(t.takeDetails || []).map((d) => "Take does: " + d),
+         ...(t.why || []).map((w) => "Why (PoB modifier change): " + w),
+         ...(t.warnings || []).map((w) => "⚠ " + w),
+         ...(t.unspentPoints ? [`⚠ ${t.unspentPoints} point(s) left unspent`] : [])], t.dims,
+        { physMaxHit: true, gem: "__tree__" }));
+  }
+  sugSection.append(h("div", { class: "group-title" }, "Mastery options"),
+    h("p", { class: "sub" }, "Every alternative for your allocated masteries, compared like PoB's mastery popup."));
+  if (!(tree.masteries || []).length) sugSection.append(h("p", { class: "muted" }, "Your current mastery choices are the best."));
+  for (const m of tree.masteries || [])
+    sugSection.append(suggestionRow(m.id, m.mastery, ["From: " + m.from, "To: " + m.to], m.dims, { gem: "__mastery__" + m.mastery }));
+  parts.push(sugSection);
+
+  // findings
+  const g = s.mods.groups;
+  const findings = h("section", {}, h("h3", {}, "Findings"),
+    h("p", { class: "sub" }, `${s.mods.checked} gear & flask mod lines checked. Gear is not changed — these are for you to act on.`),
+    findingGroup("No effect (rare/magic)", "Nothing changes in PoB — improvement potential if you ever re-craft the item", g.wasted, true),
+    findingGroup("Unique lines with no PoB effect", "Part of the item — a drawback, irrelevant here, or something PoB can't measure", g.uniquePackage || []),
+    findingGroup("Conditional", "Only work when a condition is on — check PoB's config", g.conditional || []),
+    findingGroup("Overcapped", "Individually wasted — test together before rerolling", g.overcapped),
+    findingGroup("Can't measure", "PoB can't value these (vault Gap patterns)", g.cantMeasure),
+    findingGroup("PoB can't parse", "Unsupported mod lines — vault Gap candidates", g.unparsed),
+    branchGroup(s.branches));
+  parts.push(findings);
+
+  $("main").replaceChildren(...parts);
+  updateActionbar();
+}
+
+function findingGroup(title, hint, rows, open = false) {
+  return h("details", { class: "finding", open },
+    h("summary", {}, h("span", {}, title + " ", h("span", { class: "muted" }, "— " + hint)), h("span", { class: "count" }, rows.length)),
+    h("div", { class: "finding-list" }, rows.length ? rows.map((m) => h("div", { class: "finding-item" },
+      h("span", { class: "muted" }, m.slot), h("span", {}, m.item), h("span", {}, m.line, m.why ? h("span", { class: "why" }, "  · " + m.why) : null)))
+      : h("div", { class: "muted" }, "None")));
+}
+
+function branchGroup(rows) {
+  return h("details", { class: "finding" },
+    h("summary", {}, h("span", {}, "Low-value tree nodes ", h("span", { class: "muted" }, "— under 1% DPS/EHP and safe to remove")), h("span", { class: "count" }, rows.length)),
+    h("div", { class: "finding-list" }, rows.length ? rows.map((r) => h("div", { class: "finding-item" },
+      h("span", { class: "muted" }, r.points + " pts"), h("span", {}, r.name),
+      h("span", { class: "why" }, `DPS ${fmtPct(r.dims.dps)} · EHP ${fmtPct(r.dims.ehp)} if removed`)))
+      : h("div", { class: "muted" }, "None")));
+}
+
+// When reservation exceeds the pool, ask which reserving skills (auras, heralds, aspects...) are actually run.
+function reservationPanel(r) {
+  const res = r.reservation;
+  if (!res) return null;
+  const names = new Set(res.skills.map((s) => s.name));
+  const leftOut = new Set(r.disabledSkills || []);
+  const isLeftOut = [...leftOut].some((n) => names.has(n));
+  if (!res.overReserved && !isLeftOut) return null;
+
+  const boxes = res.skills.map((s) => ({ skill: s, input: h("input", { type: "checkbox", checked: !leftOut.has(s.name) }) }));
+  const total = h("span", { class: "reserve-total" });
+  const update = () => {
+    for (const pool of ["Mana", "Life"]) {
+      if (!res.skills.some((s) => s.pool === pool)) continue;
+      const used = boxes.filter((b) => b.skill.pool === pool && b.input.checked).reduce((sum, b) => sum + b.skill.amount, 0);
+      const max = pool === "Mana" ? res.mana : res.life;
+      total.textContent = `${pool}: ${used} / ${max} reserved`;
+      total.className = "reserve-total " + (used > max ? "over" : "ok");
+    }
+  };
+  boxes.forEach((b) => b.input.addEventListener("change", update));
+  update();
+
+  const rerun = h("button", { class: "primary", onclick: () => {
+    const others = $("leaveout").value.split(",").map((x) => x.trim()).filter((x) => x && !names.has(x));
+    const off = boxes.filter((b) => !b.input.checked).map((b) => b.skill.name);
+    $("leaveout").value = [...others, ...off].join(", ");
+    startAudit(state.current);
+  } }, "Re-run with this setup");
+
+  return h("div", { class: "reserve" },
+    h("h3", {}, res.overReserved ? "Your reservations don't fit — which do you run?" : "Reservation setup"),
+    h("p", { class: "sub" }, `In your file, these reserve ${res.skills.reduce((s, x) => s + x.amount, 0)} against a pool of ${res.mana} mana. `
+      + "Untick what you don't run in this scenario (e.g. boss-only aspects). The file isn't changed."),
+    h("div", { class: "reserve-list" }, boxes.map((b) => h("label", { class: "reserve-item" }, b.input,
+      h("span", {}, b.skill.name), h("span", { class: "amt" }, `${b.skill.amount} ${b.skill.pool.toLowerCase()} (${b.skill.percent}%)`)))),
+    h("div", { style: "display:flex; gap:16px; align-items:center" }, total, rerun));
+}
+
+// KPI tile with the PoB values it's built from listed underneath.
+function kpiTile(label, value, sources) {
+  const fmt = (v) => typeof v === "number" ? (Math.abs(v) >= 1000 ? fmtBig(v) : v.toFixed(1).replace(/\.0$/, "")) : v;
+  return h("div", { class: "stat" }, h("div", { class: "label" }, label), h("div", { class: "value" }, value),
+    sources ? h("ol", { class: "breakdown" }, sources.map((s) => h("li", {}, h("span", {}, s.label), h("span", {}, fmt(s.value))))) : null);
+}
+
+function updateActionbar() {
+  const n = state.selected.size;
+  $("actionbar").hidden = !state.report;
+  $("selcount").textContent = n ? `${n} change${n > 1 ? "s" : ""} selected` : "Select suggestions to apply";
+  $("apply").disabled = n === 0;
+}
+
+$("apply").addEventListener("click", async () => {
+  const btn = $("apply");
+  btn.disabled = true; btn.textContent = "Applying…";
+  try {
+    const out = await api(`/api/jobs/${state.job}/apply`, { ids: [...state.selected] });
+    state.lastResult = h("div", { class: "result" + (out.saved ? "" : " bad") },
+      h("div", { class: "title" }, out.saved ? "Saved — open it in Path of Building" : "Not saved — the combined changes break a rule"),
+      h("div", { style: "margin:8px 0" }, dimChips(out.dims, { physMaxHit: true })),
+      out.saved ? h("code", {}, out.path) : h("div", { class: "reason" }, out.violations.join("; ")));
+  } catch (e) {
+    state.lastResult = h("div", { class: "result bad" }, "Apply failed: " + e.message);
+  }
+  btn.textContent = "Apply & save to PoB";
+  renderReport();
+  $("main").scrollTo({ top: 0, behavior: "smooth" });
+});
+
+$("search").addEventListener("input", renderBuilds);
+$("rerun").addEventListener("click", () => state.current && startAudit(state.current));
+loadBuilds().catch((e) => renderError(e.message));
+</script>
+</body>
+</html>
