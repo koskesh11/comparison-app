@@ -62,9 +62,14 @@ def evaluate_with(engine: PobEngine, request: dict) -> dict:
 
 
 def apply_changes(engine: PobEngine, changes: list[dict], stats: list[str],
-                  build_name: str | None = None) -> dict:
+                  build_name: str | None = None, *, extra_skills: list[dict] | None = None,
+                  save: bool = True) -> dict:
     """Apply persistent changes and return calculation context plus XML."""
     request = {"changes": changes, "stats": stats}
     if build_name is not None:
         request["buildName"] = build_name
+    if extra_skills is not None:
+        request["extraSkills"] = extra_skills
+    if not save:
+        request["save"] = False
     return _call(engine, "applyChangesJSON", request)

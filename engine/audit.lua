@@ -364,7 +364,7 @@ function applyChangesJSON(requestText)
 	-- the saved file keeps the user's own setup: skills left out and scenario config are calc-only
 	restoreSkills()
 	restoreConfig()
-	return dkjson.encode({ ctx = ctx, xml = build:SaveDB(build.buildName) })
+	return dkjson.encode({ ctx = ctx, xml = request.save ~= false and build:SaveDB(build.buildName) or nil })
 end
 
 -- Scenario config (e.g. "Channeling for # seconds" vs a boss), applied for calculation only.

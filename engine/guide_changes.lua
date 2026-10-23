@@ -160,6 +160,7 @@ applyChange.alloc = function(change)
 	end
 	if not includes then error("allocation path must include target " .. change.target) end
 	build.spec:AllocNode(target, path)
+	build:EstimatePlayerProgress()
 end
 
 applyChange.dealloc = function(change)
@@ -167,6 +168,7 @@ applyChange.dealloc = function(change)
 	if not target then error("unknown node " .. tostring(change.target)) end
 	if not build.spec.allocNodes[change.target] then error("node not allocated " .. change.target) end
 	build.spec:DeallocNode(target)
+	build:EstimatePlayerProgress()
 end
 
 applyChange.item = function(change)
