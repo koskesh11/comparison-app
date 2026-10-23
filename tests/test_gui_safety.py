@@ -175,7 +175,7 @@ class GuideRenderTest(unittest.TestCase):
             for bad in ("[object", "undefined", "NaN", "null"):
                 self.assertNotIn(bad, out[name], f"{bad!r} in {name}")
             # the EK report has no real tiny loss, so a "-0.0" / "-0.1" would be float noise shown as a loss
-            self.assertNotRegex(out[name], r"-0\.[01]", name)
+            self.assertNotRegex(out[name], r"-0\.[01]", name)
         labels = [r["label"] for r in rep["notTested"]]
         self.assertEqual(len(labels), 26)
         for label in labels:
