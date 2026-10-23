@@ -93,6 +93,7 @@ def _add_group(guide: dict, player: dict) -> dict:
                    for value in player.get("items") or [])
     change = {"type": "addGroup", "slot": slot if slot and equipped else None,
               "label": str(guide.get("label") or ", ".join(active)),
+              "fullDps": guide.get("fullDps"),
               "gems": [_gem_payload(value) for value in _gems(guide)]}
     touches = [{"kind": "group", "key": f"add:{name}"} for name in active]
     return row(f"group-add:{key}", "group-add", f"Add skill {', '.join(active)}", change,
