@@ -1,13 +1,17 @@
 """Guide apply planning tests and slow real-Path-of-Building integration tests."""
 
 import json
+import importlib.util
 import math
 import os
 import shutil
 import sys
 import tempfile
+import threading
 import unittest
+from itertools import combinations
 from pathlib import Path
+from types import SimpleNamespace
 from unittest import mock
 
 TESTS_DIR = Path(__file__).resolve().parent
@@ -19,6 +23,9 @@ from api_errors import InvalidRequest  # noqa: E402
 import guide_apply  # noqa: E402
 import guide_diff  # noqa: E402
 import guide_lua  # noqa: E402
+import guide_routes  # noqa: E402
+import engine_pool  # noqa: E402
+import pobbin  # noqa: E402
 import audit  # noqa: E402
 import golden_common as gc  # noqa: E402
 
@@ -262,6 +269,67 @@ class GuideApplyIntegrationTests(unittest.TestCase):
         self.assertTrue(saved["saved"])
         self.assertEqual(predicted["combined"], saved["combined"])
         self.assertTrue(saved["reload"]["equal"], saved["reload"])
+
+
+@unittest.skipUnless(importlib.util.find_spec("guide_check"), "engine/guide_check.py not present yet")
+class GuideCheckIntegration(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.saved_cwd = os.getcwd()
+        cls.temp = tempfile.TemporaryDirectory()
+        cls.root = Path(cls.temp.name)
+        cls.player = cls.root / "CoC EK Assa.xml"
+        shutil.copyfile(gc.BUILDS_DIR / "3.29/Ninja Builds/CoC EK Assa.xml", cls.player)
+        code = (TESTS_DIR / "fixtures" / "pobb_F8CiRC9KVADl.code.txt").read_text(encoding="utf-8")
+        cls.guide = cls.root / "guide.xml"
+        cls.guide.write_text(pobbin.decode(code), encoding="utf-8")
+        cls.cwd = gc.pob_cwd()
+        cls.cwd.__enter__()
+        cls.pool = engine_pool.EnginePool(size=1)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.pool.close()
+        cls.cwd.__exit__(None, None, None)
+        os.chdir(cls.saved_cwd)
+        cls.temp.cleanup()
+
+    def test_job_preview_and_apply_reload(self):
+        settings = {"includeDrafts": True, "leaveOut": [], "scenario": "Pinnacle Boss"}
+        job = guide_routes._new_job("j", "CoC EK Assa.xml", settings)
+        state = SimpleNamespace(
+            jobs={"j": job}, pool=self.pool, engine_lock=threading.Lock(), Auditor=audit.Auditor,
+            BUILDS_DIR=self.root, DEFAULT_OUT_DIR=self.root / "out", guide_capability=None,
+        )
+        imported = {"id": "F8CiRC9KVADl", "path": str(self.guide)}
+        spec = {"playerPath": self.player, "guideLink": "pobb.in/F8CiRC9KVADl",
+                "build": "CoC EK Assa.xml", "settings": settings}
+        with mock.patch.object(pobbin, "import_link", return_value=imported), \
+                mock.patch.object(audit.Obtainability, "load",
+                                  return_value=gc.offline_obtainability()):
+            guide_routes.run_guide_job(state, "j", spec)
+        self.assertEqual(job["status"], "done", job.get("error"))
+        self.assertTrue(job["report"]["rows"])
+        pair = self._accepted_pair(state, job)
+        with mock.patch.object(audit.Obtainability, "load", side_effect=AssertionError("network")), \
+                mock.patch.object(guide_routes.build_settings, "update"):
+            previewed = guide_routes.preview(state, {"jobId": "j", "ids": pair})
+            applied = guide_routes.apply(state, {"jobId": "j", "ids": pair, "force": True})
+        self.assertEqual(previewed["combined"], applied["combined"])
+        self.assertTrue(applied["saved"], applied)
+        self.assertTrue(applied["reload"]["equal"], applied["reload"])
+
+    @staticmethod
+    def _accepted_pair(state, job):
+        rows = [row for row in job["report"]["rows"] if not row.get("locked")]
+        for left, right in combinations(rows, 2):
+            if guide_apply.conflicts([left, right]):
+                continue
+            ids = [left["id"], right["id"]]
+            result = guide_routes.preview(state, {"jobId": "j", "ids": ids})
+            if not result["refused"] or result["refused"]["reason"] == "rule":
+                return ids
+        raise AssertionError("no applicable non-conflicting pair")
 
 
 if __name__ == "__main__":

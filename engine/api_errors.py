@@ -26,6 +26,11 @@ class Forbidden(ApiError):
     kind = "Forbidden"
 
 
+class Unavailable(ApiError):
+    status = 503
+    kind = "Unavailable"
+
+
 class StaleAudit(ApiError):
     status = 409
     kind = "StaleAudit"
