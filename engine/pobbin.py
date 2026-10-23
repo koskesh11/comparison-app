@@ -2,7 +2,7 @@
 
 Limits (spec A1-A4, F1-F3): fixed host pobb.in, id ^[A-Za-z0-9_-]{4,32}$, 15 s timeout, code <= 256 KB, inflated
 XML <= 4 MB (zlib bomb guard), no DOCTYPE/ENTITY, root tag PathOfBuilding. PoB parses the XML; Python never does.
-Imported XML is saved only under <AutoBuilder dir>\imports\.
+Imported XML is saved only under <AutoBuilder dir>/imports/.
 """
 
 import base64
@@ -116,7 +116,7 @@ def _checked_xml(data: bytes) -> str:
 
 
 def save_import(xml: str, build_id: str, out_dir: Path) -> Path:
-    """Write the XML to <out_dir>\imports\pobb-<id>.xml (the only write location, A4)."""
+    """Write the XML to <out_dir>/imports/pobb-<id>.xml (the only write location, A4)."""
     target_dir = Path(out_dir) / "imports"
     target_dir.mkdir(parents=True, exist_ok=True)
     path = target_dir / f"pobb-{build_id}.xml"
