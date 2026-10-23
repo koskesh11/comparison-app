@@ -106,6 +106,31 @@ class ServerSecurityTests(unittest.TestCase):
             ):
                 self.assertEqual(self.get("/api/builds", headers).status, 200)
 
+    def test_post_without_token_is_unauthorized(self):
+        with mock.patch.object(server, "pool", FakePool()):
+            handler = self.post("/api/audit", {"build": "x.xml"})
+            wrong = self.post("/api/audit", {"build": "x.xml"}, {"X-Api-Token": "wrong"})
+
+        self.assertEqual((handler.status, handler.response_json()["kind"]), (401, "Unauthorized"))
+        self.assertEqual(wrong.status, 401)
+        self.assertEqual(server.jobs, {})
+
+    def test_origin_null_is_forbidden(self):
+        handler = self.get("/api/builds", {"X-Api-Token": "t0ken", "Origin": "null"})
+        post = self.post("/api/audit", {"build": "x.xml"}, {"X-Api-Token": "t0ken", "Origin": "null"})
+
+        self.assertEqual((handler.status, post.status), (403, 403))
+
+    def test_page_and_api_forbid_framing_and_caching(self):
+        page = self.get("/")
+        api = self.get("/api/unknown", {"X-Api-Token": "t0ken"})
+        refused = self.get("/api/builds")
+
+        for response in (page, api, refused):
+            self.assertEqual(response.response_headers["X-Frame-Options"], "DENY")
+            self.assertEqual(response.response_headers["Content-Security-Policy"], "frame-ancestors 'none'")
+            self.assertEqual(response.response_headers["Cache-Control"], "no-store")
+
     def test_unknown_path_returns_named_json_error(self):
         handler = self.get("/api/unknown", {"X-Api-Token": "t0ken"})
         self.assertEqual(handler.status, 404)
@@ -137,7 +162,8 @@ class ServerSecurityTests(unittest.TestCase):
         self.assertNotIn("auditor", job)
         self.assertNotIn(auditor, job.values())
         self.assertNotIn(engine, job.values())
-        self.assertTrue({"sha", "settings", "auditor"}.isdisjoint(server.Handler.public_job(job)))
+        self.assertIs(job["obtainable"], auditor.obtainable)
+        self.assertTrue({"sha", "settings", "auditor", "obtainable"}.isdisjoint(server.Handler.public_job(job)))
 
     def test_apply_rebuilds_auditor_using_pool(self):
         engine = object()
@@ -154,7 +180,8 @@ class ServerSecurityTests(unittest.TestCase):
 
         self.assertEqual(handler.status, 200)
         self.assertEqual(pool.entered, 1)
-        auditor_type.assert_called_once_with(Path("x.xml"), False, disabled_skills=[], scenario="Mapping", engine=engine)
+        auditor_type.assert_called_once_with(Path("x.xml"), False, disabled_skills=[], scenario="Mapping",
+                                             engine=engine, obtainable="league data")
         self.assertEqual(auditor.suggestions, [{"x": 1}])
         self.assertEqual(auditor.source_sha256, "abc")
         apply.assert_called_once_with(auditor, [1], force=False)
@@ -176,7 +203,7 @@ class ServerSecurityTests(unittest.TestCase):
     def done_job() -> dict:
         return {
             "id": "j", "status": "done", "progress": "Done", "build": "x.xml",
-            "error": None, "report": {"suggestions": [{"x": 1}]}, "sha": "abc",
+            "error": None, "report": {"suggestions": [{"x": 1}]}, "sha": "abc", "obtainable": "league data",
             "settings": {"includeDrafts": False, "leaveOut": [], "scenario": "Mapping"},
         }
 

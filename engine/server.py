@@ -27,6 +27,8 @@ TOKEN_FILE = Path(__file__).resolve().parent / "userdata" / "api-token"
 MAX_BODY_BYTES = 64 * 1024
 VALID_HOSTS = {f"127.0.0.1:{PORT}", f"localhost:{PORT}"}
 VALID_ORIGINS = {f"http://127.0.0.1:{PORT}", f"http://localhost:{PORT}"}
+COMMON_HEADERS = (("X-Frame-Options", "DENY"), ("Content-Security-Policy", "frame-ancestors 'none'"),
+                  ("Cache-Control", "no-store"), ("X-Content-Type-Options", "nosniff"))
 PUBLIC_JOB_KEYS = ("id", "status", "progress", "build", "error", "report")
 
 API_TOKEN = ""
@@ -65,9 +67,9 @@ def run_audit(job_id: str, build_path: Path, include_drafts: bool,
             auditor = Auditor(build_path, include_drafts, progress, disabled_skills=leave_out,
                               scenario=scenario, engine=engine)
             report = auditor.run()
-            source_sha256 = auditor.source_sha256
+            source_sha256, obtainable = auditor.source_sha256, auditor.obtainable
             del auditor
-        job.update(status="done", report=report, sha=source_sha256)
+        job.update(status="done", report=report, sha=source_sha256, obtainable=obtainable)
         runlog.log_event("INFO", "job_done", "audit completed", job_id, job["build"])
     except Exception as error:
         _, body = classify(error)
@@ -79,11 +81,17 @@ class Handler(BaseHTTPRequestHandler):
     def log_message(self, fmt, *args):
         pass
 
+    def send_common_headers(self) -> None:
+        """Anti-framing (clickjacking) and no caching: the GUI page carries the API token."""
+        for name, value in COMMON_HEADERS:
+            self.send_header(name, value)
+
     def send_json(self, payload: dict, status: int = HTTPStatus.OK) -> None:
         body = json.dumps(payload).encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "application/json")
         self.send_header("Content-Length", str(len(body)))
+        self.send_common_headers()
         self.end_headers()
         self.wfile.write(body)
 
@@ -163,6 +171,7 @@ class Handler(BaseHTTPRequestHandler):
         self.send_response(HTTPStatus.OK)
         self.send_header("Content-Type", "text/html; charset=utf-8")
         self.send_header("Content-Length", str(len(body)))
+        self.send_common_headers()
         self.end_headers()
         self.wfile.write(body)
 
@@ -228,7 +237,7 @@ class Handler(BaseHTTPRequestHandler):
         settings = job["settings"]
         with engine_lock, pool.lease() as engine:
             auditor = Auditor(build_path, settings["includeDrafts"], disabled_skills=settings["leaveOut"],
-                              scenario=settings["scenario"], engine=engine)
+                              scenario=settings["scenario"], engine=engine, obtainable=job.get("obtainable"))
             auditor.suggestions = job["report"]["suggestions"]
             auditor.source_sha256 = job["sha"]
             return apply_changes(auditor, ids, force=force)
