@@ -1,6 +1,7 @@
 ---
 type: model
-status: draft
+status: verified
+verified_by: user, 2026-10-22 (blind-test reveal)
 pob_refs: [ForbiddenRite, ForbiddenRiteAltX, SupportGreaterVolley, ProjectileCount, AreaOfEffectRadius, EnemyRadius, skillPart, FullDPS]
 superseded_by_pob:
 source: "PoB 2.67.2 (3.29) Data/Skills/act_int.lua, Data/Skills/sup_dex.lua, Modules/ConfigOptions.lua, Modules/Calcs.lua; poewiki Forbidden Rite (text since 2021-08-29 / 3.15, unchanged in the 2026-07-26 revision), Greater Volley Support, Trigger (API, 2026-10-22); pathofexile.com forum thread 3155643 (3.15, 2021-07-31); headless runs on FR CoC v4 (in memory, 2026-10-22)"
@@ -9,6 +10,9 @@ last_confirmed_patch: "3.29.x"
 
 ```model
 proposed_kind: parallel_projectile_single_target_hits   # not in models.py KINDS; no "kind:" so the app skips this note
+hit_fraction: 0.6   # USER-VERIFIED 2026-10-22: ~60% of all projectiles hit a boss for FR, Fireball and other
+                    # skills with an AoE explosion. Authoritative; the geometry params below are reference only
+                    # (department estimate was 4 of 6 = 67%: close, slightly high). v4: 6 x 0.6 = 3.6 hits.
 applies_to: { skill: ["Forbidden Rite", "Forbidden Rite of Soul Sacrifice"], support: "Greater Volley" }   # list + support: engine must accept both first
 multiplies: [FullDPS]                  # FR's share only, via feed_pob (never the whole FullDPS)
 inputs: { from_pob: [ProjectileCount, AreaOfEffectRadius, skillPart, count], from_scenario: [enemy_radius_u] }

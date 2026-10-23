@@ -1,5 +1,8 @@
 # Agent models and effort (task 001)
 
+> Superseded 2026-10-23 by task 019 (token budget): current models and reasons are in the MODELS table of
+> tools/make_agents.py and in tasks/019-token-reduction.md. The table below is the task 001 state.
+
 Source of truth: the `MODELS` table in `tools/make_agents.py`; regenerate with `python tools/make_agents.py .`.
 Code itself is always written by Codex (gpt-5.6-sol, medium) via `tools/codex_task.py`; the models below are the
 Claude side (judgment, briefs, verification).

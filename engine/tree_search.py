@@ -8,8 +8,8 @@ explained by the PoB modifier sources that change ("why").
 
 from dataclasses import dataclass
 
-POWER_STATS = ["FullDPS", "TotalEHP"]
-OBJECTIVES = {"dps": "FullDPS", "ehp": "TotalEHP"}  # each objective gets its own best swaps (trade-offs)
+from display import fmt_compact
+
 OTHER = {"dps": "ehp", "ehp": "dps"}
 MAX_DISTANCE = 8            # PoB nodePowerMaxDepth
 MAX_BRANCH_POINTS = 12      # bigger branches are trunks, not swap candidates
@@ -45,21 +45,23 @@ def acceptable(dims: dict, objective: str) -> bool:
 class TreeSearch:
     def __init__(self, auditor):
         self.a = auditor
+        self.objectives = {"dps": auditor.dps_key, "ehp": "TotalEHP"}
 
     def power_report(self) -> dict:
         self.a.progress("Running PoB power report (every node and mastery)")
-        return self.a.call("powerReportJSON", {"stats": POWER_STATS, "maxDist": MAX_DISTANCE})
+        return self.a.call("powerReportJSON", {"stats": list(self.objectives.values()), "maxDist": MAX_DISTANCE})
 
     def options(self, report: dict, base: dict) -> tuple[list[Option], list[Option]]:
         adds, removes = [], []
-        candidates = {int(i): n for i, n in report["nodes"].items()
-                      if n["alloc"] or (n.get("dist") and n["type"] in ("Notable", "Keystone", "Normal"))}
+        candidates = {int(i): report["nodes"][i] for i in sorted(report["nodes"], key=int)
+                      if report["nodes"][i]["alloc"] or (report["nodes"][i].get("dist")
+                      and report["nodes"][i]["type"] in ("Notable", "Keystone", "Normal"))}
         paths = self.a.call("nodePathsJSON", {"ids": list(candidates)})
         for node_id, node in candidates.items():
             ids = tuple(paths.get(str(node_id)) or ())
             if not ids:
                 continue
-            gain = {obj: power_pct(node, stat, base) for obj, stat in OBJECTIVES.items()}
+            gain = {obj: power_pct(node, stat, base) for obj, stat in self.objectives.items()}
             option = Option(node_id, node["name"], ids, gain, node["type"] != "Normal")
             if node["alloc"] and option.notable and len(ids) <= MAX_BRANCH_POINTS:
                 removes.append(option)  # gain here is what removing it does (<= 0)
@@ -105,8 +107,9 @@ class TreeSearch:
 
     def swaps_for(self, objective: str, adds: list[Option], removes: list[Option], base_ctx: dict) -> list[dict]:
         per_point = lambda o: o.gain[objective] / len(o.ids)  # noqa: E731
-        ranked = sorted((o for o in adds if o.gain[objective] > 0), key=per_point, reverse=True)
-        cheapest = sorted(removes, key=lambda o: -o.gain[objective] / len(o.ids))
+        ranked = sorted((o for o in adds if o.gain[objective] > 0),
+                        key=lambda o: (-per_point(o), o.node_id))
+        cheapest = sorted(removes, key=lambda o: (-o.gain[objective] / len(o.ids), o.node_id))
         found = []
         # removal-first: drop one cheap branch, refill its points
         for rem in cheapest[:REMOVAL_CANDIDATES]:
@@ -124,7 +127,7 @@ class TreeSearch:
             if needed <= 0 and drops:
                 found.append(self.candidate(objective, drops, [add], ranked, base_ctx))
         found = [f for f in found if f]
-        found.sort(key=lambda f: f["dims"][objective] or 0, reverse=True)
+        found.sort(key=lambda f: (-(f["dims"][objective] or 0), tuple(f["addIds"]), tuple(f["removeIds"])))
         unique = {tuple(f["addIds"]) + (-1,) + tuple(f["removeIds"]): f for f in found}
         return list(unique.values())[:SWAPS_PER_OBJECTIVE]
 
@@ -137,7 +140,8 @@ class TreeSearch:
                 s["dropDetails"] = [stats.get(str(i), "") for i in s["dropNodes"]]
                 s["takeDetails"] = [stats.get(str(i), "") for i in s["takeNodes"]]
                 diffs = self.a.call("whyJSON", {"removeIds": s["removeIds"], "addIds": s["addIds"]})
-                s["why"] = [f"{d['type']} {d['stat']} {d['from']:g} -> {d['to']:g} ({d['source']})" for d in diffs[:WHY_LINES]]
+                s["why"] = [f"{d['type']} {d['stat']} {fmt_compact(d['from'])} -> "
+                            f"{fmt_compact(d['to'])} ({d['source']})" for d in diffs[:WHY_LINES]]
                 # PoB's EHP is a hit pool: it ignores recovery, so dropping leech/regen looks free when it isn't
                 dropped_text = " ".join(s["dropDetails"]).lower()
                 s["warnings"] = [f"drops {word} — PoB's EHP doesn't count recovery, so the EHP number understates the loss"
@@ -146,30 +150,38 @@ class TreeSearch:
     def masteries(self, base_ctx: dict) -> list[dict]:
         self.a.progress("Comparing every mastery option")
         rows = []
-        for mastery in self.a.call("masteryOptionsJSON", {"stats": self.a.keys}):
+        request = self.a.with_parts({"stats": self.a.keys, "extraSkills": self.a.extra_request()})
+        for mastery in self.a.call("masteryOptionsJSON", request):
             for option in mastery["options"]:
                 ctx = self.a.adjust(option["ctx"])
-                dims = self.a.dimensions(ctx, base_ctx, "CombinedDPS")
+                dims = self.a.dimensions(ctx, base_ctx)
                 if self.a.breaks(ctx) or not (acceptable(dims, "dps") or acceptable(dims, "ehp")):
                     continue
                 rows.append({"id": self.a.suggest({"type": "mastery", "masteryId": mastery["masteryId"],
                                                    "effectId": option["effectId"], "name": mastery["name"]}),
                              "mastery": mastery["name"], "from": mastery["current"], "to": option["text"], "dims": dims})
-        return sorted(rows, key=lambda r: max(r["dims"]["dps"] or 0, r["dims"]["ehp"] or 0), reverse=True)
+        score = lambda row: max(row["dims"]["dps"] or 0, row["dims"]["ehp"] or 0)  # noqa: E731
+        return sorted(rows, key=lambda row: (-score(row), row["mastery"], row["to"]))
 
     def run(self, base_ctx: dict) -> dict:
         base = self.a.main_out(base_ctx)
         report = self.power_report()
         adds, removes = self.options(report, base)
         swaps = {}
-        for objective in OBJECTIVES:
+        for objective in self.objectives:
             self.a.progress(f"Searching tree swaps for {objective.upper()}")
-            swaps[objective] = [{**s, "id": self.a.suggest({"type": "repath", "removeIds": s["removeIds"], "addIds": s["addIds"]})}
-                                for s in self.swaps_for(objective, adds, removes, base_ctx)]
+            shown = self.swaps_for(objective, adds, removes, base_ctx)
+            for swap in shown:
+                swap["dims"] = self.a.shown_dims(
+                    swap["removeIds"], swap["addIds"], base_ctx, swap["dims"])
+            swaps[objective] = [{**swap, "id": self.a.suggest(
+                {"type": "repath", "removeIds": swap["removeIds"], "addIds": swap["addIds"]})}
+                for swap in shown]
         self.explain(swaps)
         notables = [o for o in adds if o.notable]
         top_adds = {obj: [{"name": o.name, "points": len(o.ids), "gain": o.gain}
-                          for o in sorted(notables, key=lambda o: o.gain[obj] / len(o.ids), reverse=True)[:8]]
-                    for obj in OBJECTIVES}
+                          for o in sorted(notables,
+                                          key=lambda o: (-(o.gain[obj] / len(o.ids)), o.node_id))[:8]]
+                    for obj in self.objectives}
         return {"swaps": swaps, "masteries": self.masteries(base_ctx), "bestAdditions": top_adds,
                 "nodesScored": len(report["nodes"]), "masteriesScored": len(report["masteries"])}

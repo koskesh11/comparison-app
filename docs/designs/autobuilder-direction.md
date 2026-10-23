@@ -237,6 +237,12 @@ run on v4 ≤ 60 s with progress shown; trade excluded from the budget. No "one 
 Effort is re-estimated per phase after P0; the earlier per-phase session counts are withdrawn (Codex: not
 credible for P1).
 
+**Override (user, 2026-10-22): guide check MVP right after P1** (before P1.5). Scope: player build + guide build,
+both as pobb.in links from real guides; diff gems/links, tree, gear, config; test each difference on the player's
+build in PoB; rank by impact with the PoB modifier source as the reason. Pulls only the pobb.in import forward
+from P4 (E6); poe.ninja characters, detectors and model estimates stay in later phases. Owner: task 010. Goal:
+first outside feedback from players. Meta budget: no new studio/tooling tasks until P1 is done.
+
 ## Open risks from the outside voice (recorded, not yet decided)
 - Finding contract needs: findings without changes (warnings, blind spots), stable ID rules, schema version,
   preconditions, deduplication.
@@ -255,6 +261,33 @@ credible for P1).
 ## Reviewer concerns kept open
 - E5 is the largest and least certain item (review #15); kept in scope by the user's decision, gated by the
   spike.
+
+## Key functions (user, 2026-10-22, later phases) — override earlier "not in scope"
+1. Build from zero by budget tier (league starter, low, mid, high, mirror): numbers from poe.ninja and PoB's
+   "Trade for items" → tasks/011. Reverses "NOT in scope: generating builds from scratch" for a later phase.
+2. Guide check: compare a player's build with the content creator's and give interaction-aware hints to fix
+   it → tasks/010 (builds on task 002's diff-and-test engine and E6 imports). This is why the interactions
+   department is central.
+Both start with the orchestrator's /plan-ceo-review step. Current phases P0-P3 are their foundations
+(detectors, change vocabulary, model estimates, imports, trade spike).
+
+## Audience (user, 2026-10-22) — overrides "the user" as sole audience
+"This is more for the community, less for me. People struggle with making builds and I want to give them a
+tool to make their builds."
+- User decisions: free + open source. Delivery (download vs website) deferred: "we do this later".
+- Orchestrator decisions (recorded, cheap now, keep delivery open):
+  1. Core works without any AI account: detectors, GUI, imports, trade. The Claude Desktop/MCP chat stays as
+     an optional power-user surface; the GUI is the primary surface. Trade-off: follow-up "what if" questions
+     need Claude, so most players get detector results, not a conversation.
+  2. Engine API stays UI-agnostic (GUI, MCP and a possible hosted front end call the same functions), so the
+     delivery decision stays open.
+  3. Vault facts must hold for every player: "verified" means a sourced chain (PoB source, wiki API, patch
+     notes) or a documented in-game test, not only "verified by user"; user overlay (T4) keeps personal values
+     out of the shared vault.
+  4. No personal data in shared code: user paths, emails, builds; tests must resolve paths at runtime.
+     Never redistribute PoB files (the app uses the player's own install). Proposed license: MIT (matches PoB).
+- Queued: tasks/012 (open-source readiness). The delivery choice gets its own /plan-ceo-review when the user
+  picks it up.
 
 ## Review outputs
 

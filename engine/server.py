@@ -16,7 +16,7 @@ from pathlib import Path
 import build_settings
 from audit import DEFAULT_SCENARIO, Auditor
 from vault import load_scenarios
-from optimize import DEFAULT_OUT_DIR, ChangeError, apply_changes
+from optimize import DEFAULT_OUT_DIR, ChangeError, StaleAudit, apply_changes
 
 HOST, PORT = "127.0.0.1", 8765
 BUILDS_DIR = (Path.home() / "Documents" / "Path of Building" / "Builds").resolve()
@@ -133,6 +133,8 @@ class Handler(BaseHTTPRequestHandler):
                 self.send_json(outcome)
             else:
                 self.send_json({"error": "not found"}, HTTPStatus.NOT_FOUND)
+        except StaleAudit as error:
+            self.send_json({"error": str(error), "kind": "StaleAudit"}, HTTPStatus.CONFLICT)
         except (ValueError, ChangeError, KeyError) as error:
             self.send_json({"error": str(error)}, HTTPStatus.BAD_REQUEST)
         except Exception as error:

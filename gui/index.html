@@ -79,12 +79,13 @@
   .chip { display: inline-block; padding: 2px 9px; border: 1px solid var(--line-strong); border-radius: 999px; font-size: 12px; color: var(--text-dim); }
   .chip.gold { border-color: #5c4a2a; color: var(--gold-bright); }
 
-  .stats { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; border: 1px solid var(--line); border-radius: var(--radius-m);
+  .stats { display: grid; grid-template-columns: 1.6fr repeat(var(--kpis, 3), 1fr); border: 1px solid var(--line); border-radius: var(--radius-m);
     background: var(--bg-raised); margin-bottom: 18px; overflow: hidden; }
   .stat { padding: 16px 20px; border-left: 1px solid var(--line); }
   .stat:first-child { border-left: 0; }
   .stat .label { color: var(--text-faint); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
   .stat .value { font-size: 22px; font-weight: 600; margin-top: 4px; }
+  .stat .value.neg { color: var(--loss); }
   .stat:first-child .value { font: 700 34px/1.1 var(--font-display); color: var(--gold-bright); }
   .breakdown { list-style: none; margin: 10px 0 0; padding: 8px 0 0; border-top: 1px dashed var(--line); font-size: 12px; color: var(--text-dim); }
   .breakdown li { display: flex; justify-content: space-between; gap: 12px; padding: 1px 0; }
@@ -92,6 +93,12 @@
 
   .rules { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; color: var(--text-dim); font-size: 13px; margin-bottom: 36px; }
   .alert { border: 1px solid #5a3a26; background: #24150e; color: var(--loss); padding: 10px 14px; border-radius: var(--radius-m); margin-bottom: 18px; }
+  .alert.unob .row { background: var(--bg-raised); color: var(--text); }
+  .alert.unob .row:first-of-type { margin-top: 10px; }
+  .warn { color: var(--warn); }
+  .notsummed { margin: -8px 0 18px; font-size: 12px; }
+  .notsummed details.finding { margin: 0; }
+  .notsummed .finding-list > div { padding: 3px 0; }
 
   section { margin-bottom: 40px; }
   section > h3 { font: 500 20px var(--font-display); margin: 0 0 4px; letter-spacing: .03em; }
@@ -191,6 +198,7 @@ const $ = (id) => document.getElementById(id);
 
 // DOM builder: text is always set via textContent (build data is untrusted).
 function h(tag, attrs = {}, ...children) {
+  if (!tag) return null;
   const el = document.createElement(tag);
   for (const [k, v] of Object.entries(attrs)) {
     if (k === "class") el.className = v;
@@ -201,14 +209,99 @@ function h(tag, attrs = {}, ...children) {
   return el;
 }
 
-const fmtBig = (n) => n >= 1e6 ? (n / 1e6).toFixed(2) + "M" : n >= 1e3 ? (n / 1e3).toFixed(1) + "k" : Math.round(n).toString();
-const fmtPct = (v) => v == null ? "n/a" : (v > 0 ? "+" : "") + v.toFixed(1) + "%";
-const fmtMana = (v) => (v >= 0 ? "+" : "") + v.toFixed(0) + "/s";
+function trunc(v, d = 0) {
+  return Math.trunc(Number((v * 10 ** d).toFixed(6))) / 10 ** d;
+}
+
+function fmtNum(v, d = 0, { sign = false, group = true, unit = "" } = {}) {
+  if (!Number.isFinite(v)) return "n/a";
+  const raw = trunc(v, d);
+  const t = raw === 0 ? 0 : raw;
+  const formatted = t.toLocaleString("en-US", {
+    minimumFractionDigits: d, maximumFractionDigits: d, useGrouping: group,
+  });
+  return (sign && t > 0 ? "+" : "") + formatted + unit;
+}
+
+const fmtBig = (n) => !Number.isFinite(n) ? "n/a"
+  : n >= 1e6 ? fmtNum(n / 1e6, 2) + "M"
+    : n >= 1e3 ? fmtNum(n / 1e3, 1) + "k" : fmtNum(n, 0);
+const fmtPct = (v) => Number.isFinite(v) ? fmtNum(v, 1, { sign: true }) + "%" : "n/a";
+const fmtMana = (v) => typeof v === "number" && Number.isFinite(v) ? fmtNum(v, 0, { sign: true }) + "/s" : "";
+const fmtMargin = (v) => Number.isFinite(v) ? fmtNum(v, 1, { sign: true }) + "/s" : "n/a";
+const fmtRate = (v) => Number.isFinite(v) ? fmtNum(v, 2) + "/s" : "n/a";
+
+function unverifiedNote(resource) {
+  const costs = state.report && state.report.base && Array.isArray(state.report.base.costs)
+    ? state.report.base.costs : [];
+  const cost = costs.find((entry) => entry && entry.resource === resource);
+  return cost && typeof cost.unverified === "string" ? cost.unverified : "";
+}
+
+function withEsUnverified(line) {
+  const note = unverifiedNote("ES");
+  return note && /\bES\b|energy shield/i.test(String(line)) ? `${line} [${note}]` : line;
+}
+
+function skillsLine(skills) {
+  if (!skills || !skills.length) return "";
+  const contribution = (s) => Number.isFinite(s.contribution) ? s.contribution : (s.dps || 0) * (s.count || 1);
+  const dps = skills.filter((s) => contribution(s) > 0).map((s) => {
+    const details = s.part == null ? `x${s.count}` : `${s.part}, x${s.count}`;
+    return `${s.name} ${fmtNum(contribution(s) / 1e6, 2)}M (${details})`;
+  }).join(" + ");
+  const triggers = skills.filter((s) => s.trigger != null).map((s) => {
+    const cap = s.trigger.cap;
+    return `${s.name} ${fmtRate(s.trigger.rate)}`
+      + (Number.isFinite(cap) ? ` of ${fmtRate(cap)} cap` : ", no cap");
+  }).join("; ");
+  return dps + (dps && triggers ? "; " : "") + triggers;
+}
+
+function skillsWhy(skills) {
+  if (!skills || !skills.length) return [];
+  return skills.filter((s) => s.trigger != null && s.trigger.why != null).map((s) => s.trigger.why);
+}
+
+function skillLabel(s) {
+  s = s && typeof s === "object" ? s : {};
+  const parts = [];
+  if (typeof s.part === "string" && s.part.trim()) parts.push(s.part);
+  if (Number.isFinite(s.projectiles)) parts.push(`${fmtNum(s.projectiles, 0)} proj`);
+  return (typeof s.name === "string" ? s.name : "") + (parts.length ? ` (${parts.join(", ")})` : "");
+}
+
+function skillDeltaLine(s) {
+  return `${skillLabel(s)} ${fmtPct(s && s.pct)} (${fmtNum(s && s.from / 1e6, 2)}M -> ${fmtNum(s && s.to / 1e6, 2)}M)`;
+}
+
+function skillDelta(dims) {
+  const skills = dims && Array.isArray(dims.skills) ? dims.skills : [];
+  return skills.filter((s) => s && s.pct != null).slice(0, 3).map(skillDeltaLine).join(", ");
+}
+
+function partsLine(dims) {
+  const parts = dims && Array.isArray(dims.parts) ? dims.parts : [];
+  if (!parts.length) return null;
+  const first = parts[0] && typeof parts[0] === "object" ? parts[0] : {};
+  return h("div", { class: "muted" }, `${typeof first.skill === "string" ? first.skill : ""} parts: `,
+    parts.map((value, i) => {
+      const part = value && typeof value === "object" ? value : {};
+      const name = typeof part.partName === "string" ? part.partName : "";
+      const attrs = Number.isFinite(part.dps) && part.dps < 0 ? { class: "warn" } : {};
+      return [i ? " | " : null, h("span", attrs, `${name}${part.saved === true ? " (saved)" : ""} ${fmtPct(part.dps)}`)];
+    }));
+}
 
 async function api(path, body) {
   const res = await fetch(path, body ? { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) } : {});
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error || res.statusText);
+  if (!res.ok) {
+    const error = new Error(data.error || res.statusText);
+    error.status = res.status;
+    error.kind = data.kind;
+    throw error;
+  }
   return data;
 }
 
@@ -281,13 +374,29 @@ function renderError(msg) {
 
 // ---- report ----------------------------------------------------------------------------------
 function dimChips(d, opts = {}) {
+  d = d && typeof d === "object" ? d : {};
   const cls = (v) => v == null || Math.abs(v) < 0.05 ? "dim" : v > 0 ? "dim up" : "dim down";
-  const manaDelta = d.manaTo - d.manaFrom;
+  const costs = d.costs && typeof d.costs === "object" ? d.costs : {};
+  const costKeys = ["Mana", "Life", "ES"].filter((resource) => costs[resource]
+    && typeof costs[resource].from === "number" && typeof costs[resource].to === "number");
+  const legacyMana = !costKeys.length && typeof d.manaFrom === "number" && typeof d.manaTo === "number";
+  const manaDelta = legacyMana ? d.manaTo - d.manaFrom : 0;
   return h("div", { class: "dims" },
     h("span", { class: cls(d.dps) }, "DPS " + fmtPct(d.dps)),
     h("span", { class: cls(d.ehp) }, "EHP " + fmtPct(d.ehp)),
     opts.physMaxHit ? h("span", { class: cls(d.physMaxHit) }, "Max hit " + fmtPct(d.physMaxHit)) : null,
-    h("span", { class: Math.abs(manaDelta) < 0.5 ? "dim" : manaDelta > 0 ? "dim up" : "dim down" },
+    ...costKeys.map((resource) => {
+      const change = costs[resource], delta = change.to - change.from;
+      const fallbackNote = resource === "ES" ? unverifiedNote("ES") : "";
+      const note = typeof change.unverified === "string" && change.unverified ? change.unverified : fallbackNote;
+      const isUnverified = resource === "ES" && Boolean(change.unverified || fallbackNote);
+      return h("span", {
+        class: Math.abs(delta) < 0.5 ? "dim" : delta > 0 ? "dim up" : "dim down",
+        title: isUnverified ? note || "unverified" : null,
+      }, `${resource} margin ${fmtMargin(change.from).replace("/s", "")} -> ${fmtMargin(change.to)}`,
+      isUnverified ? h("small", {}, " ⚠ unverified") : null);
+    }),
+    h(legacyMana ? "span" : null, { class: Math.abs(manaDelta) < 0.5 ? "dim" : manaDelta > 0 ? "dim up" : "dim down" },
       "Mana " + fmtMana(d.manaFrom) + " → " + fmtMana(d.manaTo)),
     ...(d.models || []).map((m) => h("span", { class: m.to > m.from ? "dim up" : m.to < m.from ? "dim down" : "dim",
       title: m.model }, `Hits ${m.from} → ${m.to}`)),
@@ -300,34 +409,155 @@ function dimChips(d, opts = {}) {
 function suggestionRow(id, title, detailLines, dims, opts = {}) {
   const disabled = id == null;
   const checked = state.selected.has(id);
+  detailLines = Array.isArray(detailLines) ? detailLines : [];
+  const perSkill = skillDelta(dims);
+  const partsEl = partsLine(dims);
+  const warnings = (Array.isArray(opts.warn) ? opts.warn : []).map(withEsUnverified);
   const row = h("div", {
     class: "row" + (checked ? " selected" : "") + (disabled ? " disabled" : ""),
     onclick: disabled ? null : () => toggle(id, opts.gem),
   },
-    h("input", { type: "checkbox", checked, disabled, "aria-label": "Select", tabindex: -1 }),
+    disabled && opts.noCheckbox ? h("span") : h("input", { type: "checkbox", checked, disabled, "aria-label": "Select", tabindex: -1 }),
     h("div", {}, h("div", { class: "title" }, title),
-      detailLines.length ? h("div", { class: "detail" }, detailLines.map((l) => h("div", {}, l))) : null,
+      detailLines.length || perSkill || warnings.length || partsEl ? h("div", { class: "detail" },
+        detailLines.map((l) => h("div", {}, l)),
+        warnings.map((l) => h("div", { class: "warn" }, l)),
+        perSkill ? h("div", { class: "muted" }, perSkill) : null, partsEl) : null,
       opts.reason ? h("div", { class: "reason" }, opts.reason) : null),
-    dimChips(dims, opts));
+    dims && typeof dims === "object" && Object.keys(dims).length ? dimChips(dims, opts) : null);
   row.dataset.id = id ?? "";
   return row;
+}
+
+function clearConflicts(gem) {
+  const suggestions = (state.report && state.report.suggestions) || [];
+  for (const other of [...state.selected]) {
+    const o = suggestions[other - 1];
+    if (!o) continue;
+    const tree = (gem === "__tree__" && o.type === "repath")
+      || (gem && gem.startsWith("__mastery__") && o.type === "mastery" && "__mastery__" + o.name === gem);
+    if (tree || (gem && (o.name === gem || o.replaced === gem))) state.selected.delete(other);
+  }
 }
 
 function toggle(id, gem) {
   if (state.selected.has(id)) state.selected.delete(id);
   else {
-    // one change per gem: deselect other suggestions touching the same gem
-    const sug = state.report.suggestions;
-    for (const other of [...state.selected]) {
-      const o = sug[other - 1];
-      // one tree swap at a time; one option per mastery
-      const tree = (gem === "__tree__" && o.type === "repath")
-        || (gem && gem.startsWith("__mastery__") && o.type === "mastery" && "__mastery__" + o.name === gem);
-      if (tree || (gem && (o.name === gem || o.replaced === gem))) state.selected.delete(other);
-    }
+    clearConflicts(gem);
     state.selected.add(id);
   }
   renderReport();
+}
+
+function selectMany(ids, gemFor) {
+  const valid = (Array.isArray(ids) ? ids : []).filter((id) => id != null);
+  if (valid.length && valid.every((id) => state.selected.has(id))) {
+    valid.forEach((id) => state.selected.delete(id));
+  } else {
+    valid.forEach((id) => {
+      const suggestion = state.report && Array.isArray(state.report.suggestions) ? state.report.suggestions[id - 1] : null;
+      const mapped = typeof gemFor === "function" ? gemFor(id) : gemFor && gemFor[id];
+      const gems = mapped ? [mapped] : suggestion ? [suggestion.name, suggestion.replaced].filter(Boolean) : [];
+      gems.forEach(clearConflicts);
+      state.selected.add(id);
+    });
+  }
+  if (state.report && state.report.sections && state.report.build) renderReport();
+  else updateActionbar();
+}
+
+function scenarioMetaText(r) {
+  const scenario = r && r.scenario || {};
+  const config = scenario.config && typeof scenario.config === "object" ? scenario.config : {};
+  const conditional = Array.isArray(scenario.conditional) ? scenario.conditional : [];
+  const conditions = conditional.map((entry) => entry && entry.applied
+    ? `${entry.var}=${String(entry.value)} (source: ${entry.source || "unknown"})`
+    : `${entry && entry.var}=${String(entry && entry.value)} not applied: no source in the build`);
+  return `Scenario: ${scenario.name || ""}`
+    + (Object.keys(config).length ? ` (${Object.entries(config).map(([k, v]) => k + "=" + v).join(", ")})` : "")
+    + (conditions.length ? ` · ${conditions.join(" · ")}` : "");
+}
+
+function costTiles(r) {
+  const costs = r && r.base && Array.isArray(r.base.costs)
+    ? r.base.costs.filter((cost) => cost && typeof cost === "object") : [];
+  if (!costs.length) return [kpiTile("Mana margin", fmtMana(r && r.base && r.base.manaMargin),
+    r && r.kpiSources && r.kpiSources.manaMargin)];
+  const sourceCosts = r && r.kpiSources && Array.isArray(r.kpiSources.costs) ? r.kpiSources.costs : [];
+  return costs.map((cost) => {
+    const match = sourceCosts.find((entry) => entry && entry.resource === cost.resource);
+    const extras = [];
+    const warnExtras = [];
+    if (Number.isFinite(cost.poolSeconds)) extras.push(`pool lasts ${fmtNum(cost.poolSeconds, 0)} s`);
+    if (cost.resource === "ES" && cost.recharge && cost.recharge.text && cost.recharge.text !== "none")
+      extras.push("Recharge (not counted): "
+        + (Number.isFinite(cost.recharge.perSecond) ? fmtNum(cost.recharge.perSecond, 0, { sign: true }) + "/s" : "n/a")
+        + ", only after " + (Number.isFinite(cost.recharge.delay) ? fmtNum(cost.recharge.delay, 2) + " s" : "n/a")
+        + " without damage");
+    if (cost.resource === "ES" && typeof cost.unverified === "string" && cost.unverified) {
+      extras.push(cost.unverified);
+      warnExtras.push(cost.unverified);
+    }
+    return kpiTile(`${cost.resource} margin`, fmtMargin(cost.margin), match && match.sources,
+      (v) => Number.isFinite(v) && Math.abs(v) >= 100 ? fmtNum(v, 0) : fmtNum(v, 1),
+      { negative: cost.margin < 0, extras, warnExtras });
+  });
+}
+
+function notSummedBlock(r) {
+  const excluded = r && r.costs && Array.isArray(r.costs.excluded) ? r.costs.excluded : [];
+  if (!excluded.length) return null;
+  return h("div", { class: "notsummed muted" }, h("details", { class: "finding" },
+    h("summary", {}, h("span", {}, "Not summed"), h("span", { class: "count" }, excluded.length)),
+    h("div", { class: "finding-list" },
+      h("div", {}, "Not summed (PoB's rate would overstate what you actually pay):"),
+      excluded.map((entry) => {
+        const values = entry && entry.value && typeof entry.value === "object" ? Object.entries(entry.value) : [];
+        const amount = values.filter(([, value]) => typeof value === "number")
+          .map(([resource, value]) => `${resource} ${fmtNum(value, 1)}/s`).join(", ");
+        return h("div", {}, `${entry && entry.name || "Unknown"}${entry && entry.group != null ? ` (group ${entry.group})` : ""}: ${amount} - ${entry && entry.reason || ""}`);
+      }))));
+}
+
+function unobRow(item) {
+  const replacement = item && item.replacement;
+  const title = [`${item && item.name || "Unknown gem"} ${item && item.level != null ? item.level : "?"}/${item && item.quality != null ? item.quality : "?"}`
+    + ` (${item && item.groupLabel || "Unknown group"}): ${item && item.label || ""}`];
+  if (replacement) title.push(h("div", {}, `-> ${replacement.with} ${replacement.level}/${replacement.quality}`));
+  const details = (item && Array.isArray(item.why) ? item.why : []).map((why) => "Why: " + why);
+  if (!replacement && item && item.replacementNote) details.push(item.replacementNote);
+  const warnings = (item && Array.isArray(item.breaks) ? item.breaks : []).map((warning) => "⚠ " + warning);
+  return suggestionRow(item && item.id, title, details, item && item.dims || {}, {
+    gem: item && item.name, warn: warnings, noCheckbox: !item || item.id == null,
+  });
+}
+
+function unobtainableAlert(r) {
+  const section = r && r.sections && r.sections.unobtainable;
+  const items = section && Array.isArray(section.items) ? section.items : [];
+  if (!items.length) return null;
+  const nodes = [
+    h("div", { class: "title" }, `Unobtainable or unlisted gems already in your build (${items.length})`),
+    h("div", { class: "muted" }, "denied = vault note says it can't be obtained; unlisted = not on poe.ninja, unverified."),
+  ];
+  nodes.push(...items.map(unobRow));
+  const combined = section.combined;
+  const ids = combined && Array.isArray(combined.ids) ? combined.ids.filter((id) => id != null) : [];
+  if (combined && ids.length > 1) {
+    const gems = Object.fromEntries(items.filter((item) => item && item.id != null).map((item) => [item.id, item.name]));
+    const checked = ids.every((id) => state.selected.has(id));
+    const details = (Array.isArray(combined.why) ? combined.why : []).map((why) => "Why: " + why);
+    const warnings = (Array.isArray(combined.breaks) ? combined.breaks : [])
+      .map((warning) => withEsUnverified("⚠ " + warning));
+    const row = h("div", { class: "row" + (checked ? " selected" : ""), onclick: () => selectMany(ids, gems) },
+      h("input", { type: "checkbox", checked, "aria-label": "Select all replacements", tabindex: -1 }),
+      h("div", {}, h("div", { class: "title" }, "Take all replacements"),
+        details.length || warnings.length ? h("div", { class: "detail" },
+          details.map((line) => h("div", {}, line)), warnings.map((line) => h("div", { class: "warn" }, line))) : null),
+      combined.dims && typeof combined.dims === "object" && Object.keys(combined.dims).length ? dimChips(combined.dims) : null);
+    nodes.push(row);
+  }
+  return h("div", { class: "alert unob" }, nodes);
 }
 
 function gemTitle(name, from, to) {
@@ -337,29 +567,43 @@ function gemTitle(name, from, to) {
 function renderReport() {
   const r = state.report, s = r.sections, b = r.build;
   const parts = [];
+  const baseSkills = skillsLine(r.base.skills);
+  const baseSkillsWhy = skillsWhy(r.base.skills);
+  const costKpis = costTiles(r);
 
   parts.push(h("header", { class: "build" },
     h("div", {}, h("h2", {}, b.buildName),
       h("div", { class: "meta" }, `${b.ascendancy || b.className} · level ${b.level} · skills used together: ${b.skills.join(" + ")}`),
-      h("div", { class: "meta" }, `Scenario: ${r.scenario.name}` + (Object.keys(r.scenario.config).length ? ` (${Object.entries(r.scenario.config).map(([k, v]) => k + "=" + v).join(", ")})` : "")
+      h("div", { class: "meta" }, scenarioMetaText(r)
         + (r.disabledSkills.length ? ` · left out: ${r.disabledSkills.join(", ")}` : "")),
       h("div", { class: "meta" }, `Analysed file: ${b.file} · saved ${b.savedAt} — save in PoB (Ctrl+S) before auditing`)),
     h("span", { class: "chip gold" }, "League: " + b.league)));
 
-  parts.push(h("div", { class: "stats" },
-    h("div", { class: "stat" }, h("div", { class: "label" }, "Full DPS"), h("div", { class: "value" }, fmtBig(r.base.dps)),
+  if (r.dpsMeasure && r.dpsMeasure.warning)
+    parts.push(h("div", { class: "alert" }, r.dpsMeasure.warning));
+
+  parts.push(h("div", { class: "stats", style: `--kpis:${Math.max(3, 2 + costKpis.length)}` },
+    h("div", { class: "stat" }, h("div", { class: "label" }, r.dpsMeasure && r.dpsMeasure.key === "FullDPS" ? "PoB Full DPS" : "Main skill DPS (CombinedDPS)"),
+      h("div", { class: "value" }, fmtBig(r.base.dps)),
+      baseSkills ? h("div", { class: "breakdown" }, h("div", {}, baseSkills),
+        baseSkillsWhy.map((why) => h("div", { class: "muted" }, why))) : null,
       h("ol", { class: "breakdown" }, (r.dpsBreakdown || []).map((st) =>
         h("li", {}, h("span", {}, st.label), h("span", {}, st.dps == null ? "" : fmtBig(st.dps)))))),
     kpiTile("Total EHP", fmtBig(r.base.ehp), (r.kpiSources || {}).ehp),
     kpiTile("Phys max hit", fmtBig(r.base.physMaxHit), (r.kpiSources || {}).physMaxHit),
-    kpiTile("Mana margin", fmtMana(r.base.manaMargin), (r.kpiSources || {}).manaMargin)));
+    costKpis));
+
+  const notSummed = notSummedBlock(r);
+  if (notSummed) parts.push(notSummed);
 
   const reservePanel = reservationPanel(r);
   if (reservePanel) parts.push(reservePanel);
 
   if (r.rules.currentViolations.length)
     parts.push(h("div", { class: "alert" }, "Your build already breaks (suggestions are only rejected for new breaks): "
-      + r.rules.currentViolations.join("; ")));
+      + r.rules.currentViolations.map(withEsUnverified).join("; ")));
+  const unobtainable = unobtainableAlert(r);
+  if (unobtainable) parts.push(unobtainable);
   parts.push(h("div", { class: "rules" }, h("span", { class: "chip" }, r.rules.active.length + " vault rules active"),
     (r.models || []).map((m) => h("span", { class: "chip gold", title: "PoB doesn't calculate this; the vault model does" },
       `${m.model}: ${m.multiplier} hits (PoB count ${m.pobCount})`)),
@@ -381,7 +625,6 @@ function renderReport() {
   if (!s.swaps.items.length) sugSection.append(h("p", { class: "muted" }, "No swap beats your current links."));
   for (const w of s.swaps.items)
     sugSection.append(suggestionRow(w.id, gemTitle("", w.replaced, w.with), [], w.dims, { gem: w.replaced }));
-
   sugSection.append(h("div", { class: "group-title" }, "Passive tree"));
   const rp = s.repath;
   if (rp.status === "found")
@@ -485,10 +728,16 @@ function reservationPanel(r) {
 }
 
 // KPI tile with the PoB values it's built from listed underneath.
-function kpiTile(label, value, sources) {
-  const fmt = (v) => typeof v === "number" ? (Math.abs(v) >= 1000 ? fmtBig(v) : v.toFixed(1).replace(/\.0$/, "")) : v;
-  return h("div", { class: "stat" }, h("div", { class: "label" }, label), h("div", { class: "value" }, value),
-    sources ? h("ol", { class: "breakdown" }, sources.map((s) => h("li", {}, h("span", {}, s.label), h("span", {}, fmt(s.value))))) : null);
+function kpiTile(label, value, sources, sourceFmt, opts = {}) {
+  const fmt = sourceFmt || ((v) => Math.abs(v) >= 1000 ? fmtBig(v) : fmtNum(v, 1));
+  const lines = Array.isArray(sources) ? sources : [];
+  const extras = Array.isArray(opts.extras) ? opts.extras : [];
+  const warnExtras = Array.isArray(opts.warnExtras) ? opts.warnExtras : [];
+  return h("div", { class: "stat" }, h("div", { class: "label" }, label),
+    h("div", { class: "value" + (opts.negative ? " neg" : "") }, value),
+    lines.length || extras.length ? h("ol", { class: "breakdown" },
+      lines.map((s) => h("li", {}, h("span", {}, s && s.label), h("span", {}, fmt(s && s.value)))),
+      extras.map((line) => h("li", { class: warnExtras.includes(line) ? "muted warn" : "muted" }, h("span", {}, line)))) : null);
 }
 
 function updateActionbar() {
@@ -508,7 +757,11 @@ $("apply").addEventListener("click", async () => {
       h("div", { style: "margin:8px 0" }, dimChips(out.dims, { physMaxHit: true })),
       out.saved ? h("code", {}, out.path) : h("div", { class: "reason" }, out.violations.join("; ")));
   } catch (e) {
-    state.lastResult = h("div", { class: "result bad" }, "Apply failed: " + e.message);
+    state.lastResult = e.kind === "StaleAudit"
+      ? h("div", { class: "result bad" },
+        h("div", { class: "title" }, "Build changed since audit"),
+        h("div", { class: "reason" }, e.message))
+      : h("div", { class: "result bad" }, "Apply failed: " + e.message);
   }
   btn.textContent = "Apply & save to PoB";
   renderReport();

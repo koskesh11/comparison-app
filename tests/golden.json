@@ -1,26 +1,34 @@
 {
  "schema": 1,
  "meta": {
-  "pinnedAt": "2026-10-22T01:22:01",
+  "pinnedAt": "2026-10-23T09:05:40",
   "pinnedBy": "tests/pin_golden.py",
   "python": "3.14.6",
   "offlineLeague": "Allflame",
   "note": "A = Auditor with the user's settings (include_drafts, leave-out, scenario, vault models); B = raw PoB as saved (load_build + audit.lua evaluateJSON, no models/scenario/leave-out). engineFiles/vault hashes are for telling an engine change from a vault change.",
   "engineFiles": {
    "_SimpleGraphic.def.lua": "2f6b31b71ee2e474daed9a5d70c156a480675eeea126ff3c19edf41583a73e67",
-   "audit.lua": "c2acc5f40ea9415e708b38834358199131ca137d2f99494069f808d766f075e1",
-   "audit.py": "eddb67ee462bf03b6aa940ad82cf0733ecfd0780c3893afd7636e8f701305c05",
+   "audit.lua": "cd4f44cf7b874dbe3b58ed606dac31c25d27b29fdc2271a775c4e9b21e7452a5",
+   "audit.py": "be9eeb51c3be7df3a330eabd1d826ed6ddca6c667b0d23921570e0b657f109c8",
+   "audit_costs.lua": "00470cc67ec3b2b61f7dde5154876b35d524ceb96db1c67d21f0cc107574f8f1",
+   "audit_gems.lua": "f9e50078ce242f0909662e212db7f56271c767e8cf6b7150d8596f06a7d89430",
+   "audit_tree.lua": "ae172621ee517208bbdabdc9f3a969a9954b4e9a9129f328ad6de6eaba8ca604",
    "build_settings.py": "ae498a9cd948eb30bb4810ba517400543c6fb877408a8da10ce60a45721b3fac",
+   "costs.py": "571dfa1cd07fbcf18f317f13d0188ecd4e7a4acbeaabe27d44babe6090a856d5",
+   "display.py": "9d9cb22d9ea01760af993f2ca5c00b2f631cd36455602548ece3df9a3dac202e",
    "filesearch.lua": "b4adef0fc6ffbea9574c595d91da8f6413b5fad735a0d94759b44cc7d71420f1",
    "HeadlessWrapper.upstream.lua": "a9baa73128e54a6781d795d50add3f17d956a011fc1daaf97134b071eef40238",
-   "models.py": "0bf8d8b90df55113c20b001e6e53e29f8cb7dcc682bf0f9614dff8211302b8e0",
-   "obtainability.py": "280b5143f759bb982f4e12f5e0af81a3e8f60d95020dbedfda9793cd322750f9",
-   "optimize.py": "9fef09f61bd3a23f80d6ce14c4e9005227a9f59b8c7b81df65383cc4f414aeb3",
+   "models.py": "d455a27291410a764f1cb1f8e432449e93db6ed77e9ce83e8a70aeb7befaa494",
+   "obtainability.py": "f6592156e2a216ba4df8d16c339587c28ae8e3578261df5e7b40f7ad9224fc87",
+   "optimize.py": "2901fab2c628aedc83448e536325fcc0d9db8ef5280513913a65925cea7796a3",
+   "part_variants.py": "89beec963acea348b2b0a1c219f58a5989f2be71e9dbcd1aa91fd2c2ceed18bd",
    "pob_headless.lua": "3706323ee4342ae19a159a286e5245494316834475c6f8276709eca3138d77b5",
    "pobhost.py": "7f4f4156169f25227d577d610915bd9ec54a722c347ef911aa099416d43a8c49",
-   "rules.py": "b49526915ce738ffe215440d7b480c1d2ac2bfb518201e53c2f533d69ab5ad29",
-   "server.py": "83b17ae55daf4c6d6fdcee8cb3505e261215c603312f827267c2a137cf595d99",
-   "tree_search.py": "e1f2bed2280bc002c1a000e3c03fe90f0b91182fac7bf75830f7cfcfc4ce030a",
+   "rules.py": "315371ac2ad03131c6bb9ef3bebbe6173bc49a6f01ec7239d6de2a2a0365aaf3",
+   "scoring.py": "d8600859d4f75f0be0a2de65530f0a153548c756b128a5b87d51ee7af8eba793",
+   "server.py": "c8f720abecb4ac9e145052885e83630c8fc144d1ad8c24c84cfe8a32cae17852",
+   "tree_search.py": "565d8c7c018d0d1f0439f6983bde30a3f99b22e8f804ed43f5e71b45ac664f95",
+   "unobtainable.py": "09bec5e581d645d66f70c663db7af6dab8d8d907a8e14c8a39044bffbc824168",
    "vault.py": "f969ddf3dcc766638deb80ca8a728dcb72ec85be2e1a700430440c8c8746b751"
   }
  },
@@ -73,23 +81,24 @@
   }
  },
  "vault": {
+  "Rules/Arcane Surge support needs mana spent.md": "4ac646450681efb99e07b0288e71d70a21a48e26898d85f58f9d932d3c3010b2",
   "Rules/Attribute requirements must be met.md": "b74481b149d38a6aebc2e87c6810bcb551a1ea5b0f3860062a666dcecd52a80a",
   "Rules/CoC requires 100% crit and hit.md": "6b721a0246be42396224ea87c27f05cbab402264c731715910d61a643c175258",
   "Rules/Mastery needs a notable in its cluster.md": "cad4695bea06c595f9c719463992a14e3e0f9a669a9c41fefff6fc1b5d5e1950",
   "Rules/Models round down.md": "d158be87c51ed09a85823503dfcf3ef4159476c417e0df49f5662e2348c351c6",
   "Rules/Reservation must fit the pool.md": "d01c34bdbab270b059c6cf5e61779f7da7dbdcaf40379982aa4d31684d805063",
-  "Rules/Total skill cost must be sustainable.md": "fb4d2ca957ddf4c9d64c66196e973e9be635c34757007402ad6b94531bd07e3a",
+  "Rules/Total skill cost must be sustainable.md": "5d9f4d888a9b89b0d0d812928e641e17a540e2951026c9f38f63373f58a10757",
   "Rules/Trigger attack stays at cheapest level.md": "2c2aa5665207ada926effffea44a76b373a61352113328eb69cf65af381e6261",
   "Rules/Trigger attack under the CoC cap.md": "c9e12c156848fa22f31befcf82c430c2a180ac15c06c7a55205fd5612213f209",
   "Models/Fireball explosion overlap.md": "8b9b91eef471c4f9983377b7c1da1fb69ba635d511869157e966908b20c42110",
-  "Models/Own shock effect.md": "e5928199ccc6b876265ab471a87e2bafb8202de66f0f09272e4cd34ad23474ec",
-  "Models/Projectiles hitting a single target.md": "5d3a175e1300ccc978237555f80b1227a55a3c7d58d3cc992d8e321cbfdaa937",
+  "Models/Own shock effect.md": "b809694eac8af6f79dfa9852a186547c6686a0d0519cabf8a3e0b698aea31ce8",
+  "Models/Projectiles hitting a single target.md": "4f7bfc15cd16e1454402e43b0d99bc6d4a45b1327e1c6d512f6250be100ccc01",
   "Models/Winter Orb projectile overlap.md": "b5cb7055b674caa53697acf86cad030e6ee1f4e08d9c622557eba83a5d761bff",
   "Scenarios/Mapping.md": "98c3f4c0c3b96a0abc3b7cfb84d3ba63870e10272970bd7e612c9512d22b7750",
-  "Scenarios/Pinnacle Boss.md": "8363d7ee365078a3f992812e1955f2dcf5966f318767d9a638195a26cd294236",
+  "Scenarios/Pinnacle Boss.md": "1e5bab34397e076a72b7111a2592b123d637a9a42a3f643528c4237ad9567258",
   "Gaps/Foulborn The Three Dragons.md": "2c28e10af3c849345543e0ac21ab7e4343f580004c47f0b85e6370adf4c06f94",
   "Gaps/Mageblood flasks.md": "f831334c50fb7c0b8e5784ed44dc51bc3cfa9cdf2fb5886cc1baeb4af1e5b563",
-  "Gaps/Mods PoB can't value.md": "87ffde88eedf007290657c642d02e77207a01dabf5f18014a9bb8db20fabb1af",
+  "Gaps/Mods PoB can't value.md": "90d42a68a0fdc893ba6cf2b83b3fbe0ef232ce7ec8b8ade1dc4133e30930dd87",
   "Gaps/Unobtainable gems.md": "2e64b40b90cabb79a8b3aa10f8ef9f329666114e814d9a7d1083d92b2ffafcc7"
  },
  "audit": {
@@ -137,6 +146,7 @@
     },
     "rules": {
      "active": [
+      "Arcane Surge support needs mana spent",
       "Attribute requirements must be met",
       "CoC requires 100% crit and hit",
       "Mastery needs a notable in its cluster",
@@ -227,6 +237,31 @@
        "label": "= margin per second",
        "value": 21.902625599999993
       }
+     ],
+     "costs": [
+      {
+       "resource": "Mana",
+       "sources": [
+        {
+         "label": "Mana regen (PoB)",
+         "value": 209.4
+        },
+        {
+         "label": "Ethereal Knives cost",
+         "value": -160.7349744
+        },
+        {
+         "label": "Cyclone cost",
+         "value": -26.7624
+        },
+        {
+         "label": "= margin per second",
+         "value": 21.902625599999993
+        }
+       ],
+       "margin": 21.902625599999993,
+       "poolSeconds": null
+      }
      ]
     },
     "reservation": {
@@ -288,7 +323,12 @@
         "CritChance": 100,
         "Dex": 181,
         "ESCost": 0,
+        "ESPerSecondCost": 0,
+        "EffectiveSourceRate": 8.9208,
         "EnergyShield": 5189,
+        "EnergyShieldRecharge": 1989,
+        "EnergyShieldRechargeDelay": 2,
+        "EnergyShieldRegenRecovery": 0,
         "Evasion": 14082,
         "FreezeAvoidChance": 100,
         "FreezeChance": 100,
@@ -300,6 +340,8 @@
         "Int": 362,
         "Life": 1,
         "LifeCost": 0,
+        "LifePerSecondCost": 0,
+        "LifeRegenRecovery": 116,
         "LifeUnreserved": 1,
         "ManaCost": 18,
         "ManaCostPayablePool": 107,
@@ -327,9 +369,11 @@
         "ShockAvoidChance": 100,
         "ShockChance": 100,
         "ShockChanceOnCrit": 100,
+        "SkillTriggerRate": 8.9297208,
         "SpellBlockChance": 78,
         "Str": 179,
-        "TotalEHP": 145258.59276091
+        "TotalEHP": 145258.59276091,
+        "TriggerRateCap": 10.10101010101
        },
        "models": []
       },
@@ -347,7 +391,11 @@
         "CritChance": 100,
         "Dex": 181,
         "ESCost": 0,
+        "ESPerSecondCost": 0,
         "EnergyShield": 5189,
+        "EnergyShieldRecharge": 1989,
+        "EnergyShieldRechargeDelay": 2,
+        "EnergyShieldRegenRecovery": 0,
         "Evasion": 14082,
         "FreezeAvoidChance": 100,
         "FreezeChance": 100,
@@ -357,6 +405,8 @@
         "Int": 362,
         "Life": 1,
         "LifeCost": 0,
+        "LifePerSecondCost": 0,
+        "LifeRegenRecovery": 116,
         "LifeUnreserved": 1,
         "ManaCost": 3,
         "ManaCostPayablePool": 107,
@@ -412,7 +462,12 @@
      "CritChance",
      "Dex",
      "ESCost",
+     "ESPerSecondCost",
+     "EffectiveSourceRate",
      "EnergyShield",
+     "EnergyShieldRecharge",
+     "EnergyShieldRechargeDelay",
+     "EnergyShieldRegenRecovery",
      "Evasion",
      "FreezeAvoidChance",
      "FreezeChance",
@@ -424,6 +479,8 @@
      "Int",
      "Life",
      "LifeCost",
+     "LifePerSecondCost",
+     "LifeRegenRecovery",
      "LifeUnreserved",
      "ManaCost",
      "ManaCostPayablePool",
@@ -451,9 +508,11 @@
      "ShockAvoidChance",
      "ShockChance",
      "ShockChanceOnCrit",
+     "SkillTriggerRate",
      "SpellBlockChance",
      "Str",
-     "TotalEHP"
+     "TotalEHP",
+     "TriggerRateCap"
     ],
     "capabilityKeys": [
      "BleedAvoidChance",
@@ -602,6 +661,7 @@
     },
     "rules": {
      "active": [
+      "Arcane Surge support needs mana spent",
       "Attribute requirements must be met",
       "CoC requires 100% crit and hit",
       "Mastery needs a notable in its cluster",
@@ -707,6 +767,27 @@
        "label": "= margin per second",
        "value": -2.2879999999999825
       }
+     ],
+     "costs": [
+      {
+       "resource": "Mana",
+       "sources": [
+        {
+         "label": "Mana regen (PoB)",
+         "value": 150.8
+        },
+        {
+         "label": "Winter Orb cost",
+         "value": -153.088
+        },
+        {
+         "label": "= margin per second",
+         "value": -2.2879999999999825
+        }
+       ],
+       "margin": -2.2879999999999825,
+       "poolSeconds": 63
+      }
      ]
     },
     "reservation": {
@@ -770,7 +851,11 @@
         "CritChance": 93.39,
         "Dex": 123,
         "ESCost": 0,
+        "ESPerSecondCost": 0,
         "EnergyShield": 2318,
+        "EnergyShieldRecharge": 773,
+        "EnergyShieldRechargeDelay": 2,
+        "EnergyShieldRegenRecovery": 0,
         "Evasion": 1482,
         "FreezeAvoidChance": 100,
         "FreezeChance": 100,
@@ -784,6 +869,8 @@
         "Int": 349,
         "Life": 4306,
         "LifeCost": 0,
+        "LifePerSecondCost": 0,
+        "LifeRegenRecovery": 189,
         "LifeUnreserved": 4306,
         "ManaCost": 16,
         "ManaCostPayablePool": 145,
@@ -856,7 +943,12 @@
      "CritChance",
      "Dex",
      "ESCost",
+     "ESPerSecondCost",
+     "EffectiveSourceRate",
      "EnergyShield",
+     "EnergyShieldRecharge",
+     "EnergyShieldRechargeDelay",
+     "EnergyShieldRegenRecovery",
      "Evasion",
      "FreezeAvoidChance",
      "FreezeChance",
@@ -870,6 +962,8 @@
      "Int",
      "Life",
      "LifeCost",
+     "LifePerSecondCost",
+     "LifeRegenRecovery",
      "LifeUnreserved",
      "ManaCost",
      "ManaCostPayablePool",
@@ -900,9 +994,11 @@
      "ShockChanceOnHit",
      "ShockDuration",
      "ShockEffectMod",
+     "SkillTriggerRate",
      "SpellBlockChance",
      "Str",
-     "TotalEHP"
+     "TotalEHP",
+     "TriggerRateCap"
     ],
     "capabilityKeys": [
      "ChillChance",
@@ -4451,7 +4547,7 @@
  ],
  "determinism": {
   "method": "each build loaded twice in fresh PobEngine instances (same process), full snapshot diffed with exact float equality; cross-process: every test_golden run re-loads and compares",
-  "checkedAt": "2026-10-22T01:22:41",
+  "checkedAt": "2026-10-23T09:06:17",
   "differences": {
    "audit:EK": [],
    "audit:Worb": [],
@@ -4566,20 +4662,25 @@
  ],
  "runEquivalence": {
   "build": "EK",
-  "runSeconds": 80.6,
+  "runSeconds": 73.4,
   "differences": {
    "disabledSkills": [],
-   "scenario": [],
+   "scenario": [
+    "conditional: new key (now [{'var': 'conditionOnConsecratedGround', 'value': True, 'applied': False, 'source': None, 'conditionalSources': []}])"
+   ],
    "models": [],
    "dpsBreakdown": [],
    "kpiSources": [],
-   "base": [],
+   "base": [
+    "costs: new key (now [{'resource': 'Mana', 'regen': 209.4, 'lines': [{'name': 'Ethereal Knives', 'value': -160.7349744, 'group': None}, {'name': 'Cyclone', 'value': -26.7624, 'group': None}], 'total': 187.4973744, 'margin': 21.902625599999993, 'pool': 107, 'poolSeconds': None, 'hasCost': True}])",
+    "skills: new key (now [{'name': 'Ethereal Knives', 'part': None, 'count': 1, 'dps': 7722462.0497816, 'contribution': 7722462.0497816, 'trigger': {'rate': 8.9297208, 'cap': 10.10101010101, 'sourceRate': 8.9208, 'atCap': False, 'why': 'limited by the trigger source: Cyclone at 8.92/s'}}, {'name': 'Full Impale DPS', 'part': None, 'count': 1, 'dps': 7350092.1560763, 'contribution': 7350092.1560763, 'trigger': None}, {'name': 'Cyclone', 'part': None, 'count': 1, 'dps': 62518.573053922, 'contribution': 62518.573053922, 'trigger': None}, {'name': 'Best Bleed DPS', 'part': None, 'count': 1, 'dps': 1566.2416616536, 'contribution': 1566.2416616536, 'trigger': None}])"
+   ],
    "rules": [],
    "build.skills": [],
    "reservation": []
   },
-  "equal": true,
-  "checkedAt": "2026-10-22T01:24:04"
+  "equal": false,
+  "checkedAt": "2026-10-23T09:07:32"
  },
  "perf": {
   "date": "2026-10-22T01:15:50",

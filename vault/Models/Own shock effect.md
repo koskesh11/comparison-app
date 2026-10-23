@@ -1,6 +1,7 @@
 ---
 type: model
-status: draft
+status: verified
+verified_by: user, 2026-10-22 (blind-test reveal; rule chain below)
 pob_refs: [conditionEnemyShocked, conditionShockEffect, enemyIsBoss, ailmentMode, ShockEffectMod, ShockDuration, MaximumShock, ShockChanceOnHit, ShockChanceOnCrit, ChaosCanShock]
 superseded_by_pob:
 source: "PoB 2.67.2 (3.29) Modules/CalcOffence.lua, Modules/CalcPerform.lua, Modules/Data.lua; poewiki Shock (3.9.0); headless runs on FR CoC v2/v4 (in memory, 2026-10-21)"
@@ -9,6 +10,11 @@ last_confirmed_patch: "3.29.x"
 
 ```model
 proposed_kind: own_shock_effect     # not in models.py KINDS yet; no "kind:" so the app skips this note
+applies_when: "rule chain holds: crit chance 100% (crits always try to shock: CalcOffence.lua:4249, wiki Ailment)
+  + the hit's damage type can shock (e.g. Foulborn The Three Dragons ChaosCanShock, ModParser.lua:3638)
+  + the skill deals that damage as a hit (Forbidden Rite: chaos) + nothing blocks (CannotShock false).
+  Every link is sourced, so the conclusion is verified without a separate community test (blind-test lesson
+  2026-10-22). Magnitude still comes from PoB's own formula vs the boss ailment threshold."
 applies_to: { scope: all_enabled_skill_groups }   # shock is an enemy debuff; the strongest source wins
 inputs:
   from_pob_per_skill: ["<Type>CritAverage", "<Type>HitAverage", CritChance, HitChance, ShockChanceOnHit, ShockChanceOnCrit, ShockEffectMod, ShockDuration, MaximumShock, Speed]   # <Type> = Lightning + types whose <Type>CanShock flag is set

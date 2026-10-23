@@ -8,7 +8,7 @@ import argparse
 import json
 from pathlib import Path
 
-from audit import DEFAULT_SCENARIO, Auditor, fmt_dims, print_report
+from audit import DEFAULT_SCENARIO, Auditor, file_sha256, fmt_dims, print_report
 from pobhost import ENGINE_DIR, _lua_str
 
 DEFAULT_OUT_DIR = Path.home() / "Documents" / "Path of Building" / "Builds" / "AutoBuilder"
@@ -18,17 +18,56 @@ class ChangeError(ValueError):
     pass
 
 
+class StaleAudit(ChangeError):
+    pass
+
+
+def _gem_touch(change: dict) -> tuple[str, tuple[int, int] | None] | None:
+    if change["type"] not in ("gem", "swap", "replaceGem"):
+        return None
+    name = change.get("name") or change.get("replaced")
+    socket = (change["group"], change["gemIndex"]) if change["type"] == "replaceGem" else None
+    return name, socket
+
+
 def check_conflicts(changes: list[dict]) -> None:
     if sum(c["type"] == "repath" for c in changes) > 1:
         raise ChangeError("pick at most one re-path")
-    touched = [c.get("name") or c.get("replaced") for c in changes if c["type"] in ("gem", "swap")]
-    duplicates = sorted({g for g in touched if touched.count(g) > 1})
+    touches = [touch for change in changes if (touch := _gem_touch(change)) is not None]
+    duplicates = set()
+    for index, (name, socket) in enumerate(touches):
+        for other_name, other_socket in touches[index + 1:]:
+            same_name = name == other_name and (socket is None or other_socket is None or socket == other_socket)
+            same_socket = socket is not None and socket == other_socket
+            if same_name or same_socket:
+                duplicates.update((name, other_name))
     if duplicates:
-        raise ChangeError(f"several changes touch the same gem: {', '.join(duplicates)}")
+        raise ChangeError(f"several changes touch the same gem: {', '.join(sorted(duplicates))}")
+
+
+def save_xml(out_dir: Path, name: str, xml: str) -> Path:
+    out_dir.mkdir(parents=True, exist_ok=True)
+    for number in range(1, 10_001):
+        candidate = name if number == 1 else f"{name[:-1]} {number})"
+        path = out_dir / f"{candidate}.xml"
+        try:
+            with path.open("x", encoding="utf-8") as output:
+                output.write(xml)
+            return path
+        except FileExistsError:
+            continue
+    raise ChangeError(f"no free optimized filename in {out_dir}")
 
 
 def apply_changes(auditor: Auditor, ids: list[int], out_dir: Path = DEFAULT_OUT_DIR, force: bool = False) -> dict:
     """Apply suggestions by id to a fresh copy of the build; save it unless a rule breaks."""
+    try:
+        current_sha256 = file_sha256(auditor.build_path)
+    except OSError:
+        current_sha256 = None
+    if current_sha256 != auditor.source_sha256:
+        raise StaleAudit(f"Build changed since audit; re-run the audit ({auditor.build_path.name})")
+
     bad = [i for i in ids if not 1 <= i <= len(auditor.suggestions)]
     if not ids or bad:
         raise ChangeError(f"unknown suggestion ids: {bad or 'none picked'}")
@@ -40,7 +79,8 @@ def apply_changes(auditor: Auditor, ids: list[int], out_dir: Path = DEFAULT_OUT_
     auditor.load_audit_hooks(auditor.disabled_skills)
     base_ctx = auditor.evaluate()
     name = f"{auditor.summary['buildName']} (optimized)"
-    request = json.dumps({"changes": changes, "stats": auditor.keys, "buildName": name})
+    request = json.dumps({"changes": changes, "stats": auditor.keys, "buildName": name,
+                          "extraSkills": auditor.extra_request()})
     result = json.loads(engine.run(f"return applyChangesJSON({_lua_str(request)})"))
     result["ctx"] = auditor.adjust(result["ctx"])
 
@@ -49,9 +89,7 @@ def apply_changes(auditor: Auditor, ids: list[int], out_dir: Path = DEFAULT_OUT_
                "saved": False, "path": None}
     if broken and not force:
         return outcome
-    out_dir.mkdir(parents=True, exist_ok=True)
-    path = out_dir / f"{name}.xml"
-    path.write_text(result["xml"], encoding="utf-8")
+    path = save_xml(out_dir, name, result["xml"])
     return {**outcome, "saved": True, "path": str(path)}
 
 
