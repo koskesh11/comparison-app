@@ -159,6 +159,70 @@
   .reserve-total.over { color: var(--loss); }
   .reserve-total.ok { color: var(--gain); }
 
+  /* ---- guide check ---- */
+  .gnav { margin: 12px 16px 0; width: calc(100% - 32px); border-color: var(--gold); text-align: left; padding: 8px 12px; }
+  .gnav[aria-current="true"] { background: #2a2116; color: var(--gold-bright); }
+  .gnote { margin: 8px 16px 12px; color: var(--text-faint); font-size: 12px; }
+  .gview { max-width: 1000px; }
+  .gview h2.gtitle { font: 700 30px/1.1 var(--font-display); margin: 0 0 6px; }
+  .gview .lead { color: var(--text-dim); margin: 0 0 22px; }
+  .gform { display: grid; gap: 14px; max-width: 720px; }
+  .gform label { display: grid; gap: 4px; color: var(--text-dim); font-size: 12px; }
+  .gform input, .gform select { background: var(--bg-raised); border: 1px solid var(--line); border-radius: var(--radius-s); padding: 8px 10px; color: var(--text); }
+  .gform .invalid { border-color: var(--loss); }
+  .ferror { color: var(--loss); font-size: 12.5px; margin: 0; }
+  .ferror:empty, .reason:empty { display: none; }
+  .gstrip { color: var(--text-dim); font-size: 13px; margin: 0 0 14px; }
+  .gbanner { border: 1px solid var(--warn); border-radius: var(--radius-s); padding: 6px 12px; margin-bottom: 6px; font-size: 13px; }
+  .gsummary { margin: 14px 0 18px; font-weight: 500; }
+  .gprogress { margin-top: 12vh; }
+  .gstages { list-style: none; margin: 0 0 18px; padding: 0; text-align: left; display: inline-block; }
+  .gstages li { padding: 2px 0; color: var(--text-faint); }
+  .gstages li.done { color: var(--text-dim); }
+  .gstages li.now { color: var(--text); }
+  .gstages .mark { display: inline-block; width: 22px; color: var(--gold); }
+  .gstages .now .mark { animation: pulse 1.2s ease-in-out infinite; }
+  @keyframes pulse { 50% { opacity: .25; } }
+  .bar.det::after { display: none; }
+  .bar > span { display: none; height: 100%; background: var(--gold); }
+  .bar.det > span { display: block; }
+  .sr { position: absolute; left: -9999px; }
+  .ggroup { border: 1px solid var(--line); border-radius: var(--radius-m); margin-bottom: 14px; background: var(--bg-sunk); }
+  .ggroup > summary { padding: 12px 16px; cursor: pointer; font: 500 18px var(--font-display); }
+  .ggroup-body { padding: 4px 14px 12px; }
+  .ggroup .intro { color: var(--text-dim); font-size: 13px; margin: 0 0 10px; }
+  .gtools { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin-bottom: 10px; font-size: 13px; color: var(--text-dim); }
+  .gtools label { display: inline-flex; gap: 5px; align-items: center; cursor: pointer; }
+  .gfilter[aria-pressed="true"] { border-color: var(--gold); color: var(--gold-bright); cursor: pointer; }
+  .gfilter { background: none; cursor: pointer; }
+  ul.glist { list-style: none; margin: 0; padding: 0; }
+  .row.grow { cursor: default; }
+  .row.grow .lock { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--text-faint); }
+  .row.grow .lockreason { color: var(--loss); font-weight: 600; }
+  .chip.ok { border-color: #4b5a32; color: var(--gain); }
+  .chip.warn { border-color: #5c4a2a; color: var(--warn); }
+  .chip.bad { border-color: #5a3a26; color: var(--loss); }
+  .row .chip { margin-left: 4px; }
+  .gnums { display: grid; gap: 2px; font-size: 12.5px; min-width: 250px; }
+  .nrow { display: grid; grid-template-columns: 62px 78px 1fr; gap: 6px; align-items: baseline; }
+  .nlabel { color: var(--text-faint); }
+  .nval.up { color: var(--gain); } .nval.down { color: var(--loss); } .nval.flat { color: var(--text-faint); }
+  .nstrong { font-weight: 700; }
+  .nfrom { color: var(--text-faint); font-size: 11.5px; }
+  .gbreak { margin-top: 6px; font-size: 12px; }
+  .gbreak summary { cursor: pointer; color: var(--gold); }
+  .gbreak table { border-collapse: collapse; margin-top: 4px; }
+  .gbreak td, .gbreak th { padding: 1px 12px 1px 0; text-align: left; color: var(--text-dim); font-weight: 400; }
+  .gbar { position: sticky; bottom: 0; z-index: 5; margin-top: 24px; padding: 12px 16px; background: var(--bg-raised);
+    border: 1px solid var(--line-strong); border-radius: var(--radius-m); display: flex; gap: 16px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+  .gbar.amber { border-color: var(--warn); }
+  .gbar-text > div { margin: 2px 0; }
+  .gbar .m { margin-right: 12px; }
+  .linkbtn { background: none; border: 0; padding: 0; color: var(--gold); text-decoration: underline; cursor: pointer; }
+  .gpanel { max-width: 640px; }
+  .gpanel .btns { margin-top: 12px; display: flex; gap: 10px; }
+  .gpanel .ghost { padding: 6px 12px; }
+
   @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
   @media (max-width: 900px) {
     body { grid-template-columns: 1fr; overflow: auto; }
@@ -167,6 +231,8 @@
     .stats { grid-template-columns: 1fr 1fr; }
     .actionbar { left: 0; padding: 14px 16px; }
     .finding-item { grid-template-columns: 1fr; gap: 2px; }
+    .row.grow { grid-template-columns: 26px 1fr; }
+    .row.grow .gnums { grid-column: 2; }
   }
 </style>
 </head>
@@ -183,6 +249,8 @@
     <label class="toggle"><input type="checkbox" id="drafts" checked> Include draft vault rules</label>
     <button class="ghost" id="rerun" disabled>Re-run audit</button>
   </div>
+  <button class="ghost gnav" id="gnav" hidden>Guide check</button>
+  <p class="gnote" id="gnote" hidden></p>
   <nav class="builds" id="builds" aria-label="Builds"></nav>
 </aside>
 <main id="main">
@@ -320,6 +388,7 @@ async function loadBuilds() {
   state.builds = data.builds; state.settings = data.settings || {};
   $("scenario").replaceChildren(...data.scenarios.map((n) => h("option", { value: n, selected: n === data.defaultScenario }, n)));
   state.defaultScenario = data.defaultScenario;
+  guideInit(data.guideCheck);
   renderBuilds();
 }
 
@@ -351,6 +420,7 @@ function pickBuild(path) {
 
 async function startAudit(path) {
   $("rerun").disabled = false;
+  G.active = false; $("gnav").setAttribute("aria-current", "false");
   state.current = path; state.report = null; state.lastResult = null; state.selected.clear();
   renderBuilds(); $("actionbar").hidden = true;
   renderProgress("Starting…");
@@ -776,6 +846,480 @@ $("apply").addEventListener("click", async () => {
   renderReport();
   $("main").scrollTo({ top: 0, behavior: "smooth" });
 });
+
+// ---- guide check -------------------------------------------------------------------------------
+// Everything from the guide (names, notes, item names, mod lines) reaches the page through h()/textContent only.
+// PoB drops keys and sends inf/NaN as null: every read goes through obj/arr/str and Number.isFinite.
+const G = { available: false, active: false, job: null, running: false, report: null, ticked: new Set(), sort: "best",
+  filter: "all", seq: 0, timer: null, rowMsg: new Map(), rowEls: new Map(), boxes: new Map(), inputs: { build: "", link: "", guide: "" },
+  started: 0, saved: null, preview: null, bar: "idle", saving: false, last: null, groups: {}, groupA: null, barEl: null };
+const STAGES = ["Fetching the guide from pobb.in", "Loading both builds in Path of Building", "Testing differences", "Ranking and explaining"];
+const TESTING = "Testing differences";
+const PREVIEW_DELAY_MS = 500, POLL_MS = 600, SLOW_AFTER_S = 60, ZERO_PCT = 0.1, DASH = "–";
+const POBB = /^(?:https?:\/\/)?(?:www\.)?pobb\.in\/(?:pob\/)?[A-Za-z0-9_-]{4,32}\/?$/i;
+const TIP = { dps: "PoB Full DPS (all your skills used together)", ehp: "PoB Total EHP",
+  mana: "Mana regeneration minus the mana cost per second of the skills you use together.",
+  best: "The larger of the DPS gain and the EHP gain." };
+const CHIP_CLASS = { "helps": "ok", "trade-off": "warn", "breaks a rule": "bad" };
+const GEAR = ["item", "flask", "jewel"], TREE = ["tree-add", "tree-remove"];
+
+const arr = (v) => Array.isArray(v) ? v : [];
+const obj = (v) => v && typeof v === "object" && !Array.isArray(v) ? v : {};
+const str = (v) => typeof v === "string" ? v : "";
+const fin = (v) => Number.isFinite(v) ? v : 0;
+const gPct = (v) => Number.isFinite(v) ? fmtNum(v, 1, { sign: true }) + "%" : DASH;
+const gBig = (v) => Number.isFinite(v) ? fmtBig(v) : DASH;
+const gMargin = (v) => Number.isFinite(v) ? fmtNum(v, 1, { sign: true }) + "/s" : DASH;
+const gPlain = (v) => Number.isFinite(v) ? fmtNum(v, 1) : DASH;
+const gCell = (v) => typeof v === "string" ? v : Number.isFinite(v) ? (Math.abs(v) >= 1000 ? fmtBig(v) : fmtNum(v, 1)) : DASH;
+const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
+function groupOf(row) {
+  const c = obj(row).category;
+  return GEAR.includes(c) ? "Gear" : TREE.includes(c) ? "Tree" : "Gems & supports";
+}
+
+function guideInit(info) {
+  info = obj(info);
+  G.available = info.available === true;
+  $("gnav").hidden = !G.available;
+  $("gnote").hidden = G.available || !str(info.reason);
+  $("gnote").textContent = G.available ? "" : str(info.reason);
+}
+
+function openGuide() {
+  if (!G.available) return;
+  G.active = true; state.job = null; $("actionbar").hidden = true;
+  $("gnav").setAttribute("aria-current", "true");
+  if (G.running) { guidePoll(G.job); return; }
+  if (G.report) renderGuideResult(G.report); else renderGuideInput({});
+}
+
+// ---- input ---------------------------------------------------------------------------------------
+function validLink(v) { return POBB.test(v.trim()); }
+
+function renderGuideInput(errors) {
+  if (!G.inputs.build && !G.inputs.link && state.current) G.inputs.build = state.current;
+  const buildSel = h("select", { id: "g-build", "aria-label": "Your build", onchange: (e) => { G.inputs.build = e.target.value; sync(); } },
+    h("option", { value: "" }, "Pick from your PoB builds"),
+    ...state.builds.map((b) => h("option", { value: b.path, selected: b.path === G.inputs.build }, (b.folder ? b.folder + " / " : "") + b.name)));
+  const link = h("input", { id: "g-link", placeholder: "pobb.in/AbC123", "aria-label": "Your build as a pobb.in link", value: G.inputs.link });
+  const guide = h("input", { id: "g-guide", placeholder: "pobb.in/AbC123", "aria-label": "Guide build link", value: G.inputs.guide });
+  const errPlayer = h("p", { class: "ferror", role: "alert" }, str(errors.player));
+  const errGuide = h("p", { class: "ferror", role: "alert" }, str(errors.guide));
+  const go = h("button", { class: "primary", id: "g-go", onclick: startGuide }, "Compare");
+  function sync() { go.disabled = !(G.inputs.guide.trim() && (G.inputs.link.trim() || G.inputs.build)); }
+  const blur = (input, msgEl, text) => () => {
+    const bad = input.value.trim() !== "" && !validLink(input.value);
+    input.classList.toggle("invalid", bad); msgEl.textContent = bad ? text : "";
+  };
+  link.addEventListener("input", () => { G.inputs.link = link.value; sync(); });
+  guide.addEventListener("input", () => { G.inputs.guide = guide.value; sync(); });
+  link.addEventListener("blur", blur(link, errPlayer, "That is not a pobb.in build link."));
+  guide.addEventListener("blur", blur(guide, errGuide, "That is not a pobb.in build link."));
+  sync();
+  $("main").replaceChildren(h("div", { class: "gview" }, h("h2", { class: "gtitle", tabindex: "-1" }, "Guide check"),
+    h("p", { class: "lead" }, "Find what a guide build does differently, and test each difference on YOUR build with Path of Building."),
+    h("div", { class: "gform" },
+      h("label", {}, "Your build", buildSel), h("label", {}, "or paste your build as a pobb.in link", link), errPlayer,
+      h("label", {}, "Guide build (pobb.in links only)", guide), errGuide,
+      h("div", {}, go, " ", h("span", { class: "muted" },
+        "Runs in Path of Building on your PC. No account needed. Takes up to about 90 seconds.")))));
+}
+
+async function startGuide() {
+  const player = G.inputs.link.trim() ? { link: G.inputs.link.trim() } : { build: G.inputs.build };
+  if (!validLink(G.inputs.guide)) { renderGuideInput({ guide: "That is not a pobb.in build link." }); return; }
+  if (player.link && !validLink(player.link)) { renderGuideInput({ player: "That is not a pobb.in build link." }); return; }
+  G.report = null; G.active = true; state.job = null;
+  try {
+    const res = await api("/api/guide-check", { player, guide: { link: G.inputs.guide.trim() } });
+    G.job = res.jobId; G.running = true; G.started = Date.now();
+    guidePoll(G.job);
+  } catch (e) { G.running = false; renderGuideInput({ guide: e.message }); }
+}
+
+// ---- progress ------------------------------------------------------------------------------------
+async function guidePoll(jobId) {
+  if (!G.active || G.job !== jobId) return;
+  let job;
+  try { job = await api("/api/jobs/" + jobId); } catch (e) {
+    G.running = false; renderGuidePanel({ error: "Lost contact with the app: " + e.message }, true); return;
+  }
+  if (!G.active || G.job !== jobId) return;
+  if (job.status === "running") { updateProgress(job); setTimeout(() => guidePoll(jobId), POLL_MS); return; }
+  G.running = false;
+  if (job.status === "done" && job.report) renderGuideResult(job.report);
+  else guideFailed(job);
+}
+
+function guideFailed(job) {
+  const kind = str(job.errorKind);
+  if (["BadLink", "Unreadable", "TooLarge"].includes(kind)) { renderGuideInput({ guide: str(job.error) }); return; }
+  renderGuidePanel(job, kind !== "FetchFailed");
+}
+
+function stageList(job) {
+  const started = arr(job.stages).length ? arr(job.stages) : (job.stage ? [job.stage] : []);
+  const all = [...started, ...STAGES.filter((name) => !started.includes(name))];
+  return all.map((name, i) => {
+    const mode = i < started.length - 1 ? "done" : i === started.length - 1 ? "now" : "wait";
+    const text = name === TESTING && mode === "now" && Number.isFinite(job.done) && Number.isFinite(job.total)
+      ? `${name}: ${job.done} of ${job.total}` : name;
+    const mark = mode === "done" ? "✓" : mode === "now" ? "●" : "○";
+    const word = mode === "done" ? "done" : mode === "now" ? "in progress" : "waiting";
+    return h("li", { class: mode }, h("span", { class: "mark", "aria-hidden": "true" }, mark), h("span", { class: "sr" }, word + ": "), text);
+  });
+}
+
+function updateProgress(job) {
+  if (!$("gprog")) {
+    $("main").replaceChildren(h("div", { class: "progress gprogress", id: "gprog" }, h("h2", {}, "Guide check"),
+      h("p", { id: "gname" }), h("ol", { class: "gstages", id: "gstages", "aria-live": "polite" }),
+      h("div", { class: "bar", id: "gfillbar", role: "progressbar", "aria-label": "Testing differences", "aria-valuemin": "0", "aria-valuemax": "100" }, h("span")),
+      h("p", { class: "muted", id: "gtime" }), h("p", { class: "muted", id: "gslow" })));
+  }
+  $("gname").textContent = str(job.build);
+  const sig = JSON.stringify([job.stages, job.stage, job.done, job.total]);
+  if ($("gstages").dataset.sig !== sig) { $("gstages").replaceChildren(...stageList(job)); $("gstages").dataset.sig = sig; }
+  const bar = $("gfillbar"), det = job.stage === TESTING && fin(job.total) > 0 && Number.isFinite(job.done);
+  bar.classList.toggle("det", det);
+  if (det) {
+    const pct = Math.min(100, Math.floor(100 * job.done / job.total));
+    bar.firstChild.style.width = pct + "%"; bar.setAttribute("aria-valuenow", String(pct));
+  } else bar.removeAttribute("aria-valuenow");
+  const secs = Math.max(0, Math.floor((Date.now() - G.started) / 1000));
+  $("gtime").textContent = `Elapsed ${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, "0")}`;
+  $("gslow").textContent = secs >= SLOW_AFTER_S ? "Big builds take longer." : "";
+}
+
+function renderGuidePanel(job, isCheckFailure) {
+  const id = str(job.referenceId);
+  const text = isCheckFailure ? str(job.error) || "The check failed."
+    : (str(job.error) || "Couldn’t fetch the guide.") + " Try again later. Your build was not touched.";
+  const buttons = isCheckFailure
+    ? [id && navigator.clipboard ? h("button", { class: "ghost", onclick: () => navigator.clipboard.writeText(id) }, "Copy ID") : null,
+       h("button", { class: "ghost", onclick: () => renderGuideInput({}) }, "Back")]
+    : [h("button", { class: "ghost", onclick: startGuide }, "Try again"), h("button", { class: "ghost", onclick: () => renderGuideInput({}) }, "Back")];
+  const panel = h("div", { class: "alert gpanel", tabindex: "-1", role: "alert" }, h("div", { class: "title" }, text),
+    isCheckFailure && id ? h("div", { class: "muted" }, "Reference ID: " + id) : null, h("div", { class: "btns" }, buttons));
+  $("main").replaceChildren(panel); panel.focus();
+}
+
+// ---- result ----------------------------------------------------------------------------------------
+function headerStrip(report) {
+  const hd = obj(report.header), pts = obj(hd.points);
+  const parts = [`Your build: ${str(hd.playerName)}`, `Guide: ${str(hd.guideName)}`];
+  if (str(hd.pobVersion)) parts.push("PoB " + hd.pobVersion);
+  if (str(hd.league)) parts.push("League " + hd.league + (str(hd.leagueDate) ? ` (data ${hd.leagueDate})` : ""));
+  if (Number.isFinite(pts.used) && Number.isFinite(pts.available)) parts.push(`Points ${pts.used} of ${pts.available}`);
+  return h("p", { class: "gstrip" }, parts.join(" | "));
+}
+
+function summaryLine(report) {
+  const c = obj(report.counts), rows = arr(report.rows);
+  const has = (chip) => rows.filter((r) => arr(obj(r).chips).includes(chip)).length;
+  const found = Number.isFinite(c.found) ? c.found : rows.length + arr(report.noChange).length + arr(report.notTested).length;
+  const tested = Number.isFinite(c.tested) ? c.tested : rows.length + arr(report.noChange).length;
+  const nt = Number.isFinite(c.notTested) ? c.notTested : arr(report.notTested).length;
+  return `${plural(found, "difference")} found - ${tested} tested - ${has("helps")} help - ${plural(has("trade-off"), "trade-off")} - ${nt} not tested`;
+}
+
+function detailLines(row) {
+  const info = obj(row.info), cat = row.category, d = obj(obj(row.result).delta), out = [];
+  const add = (t) => { if (str(t)) out.push(t); };
+  add(row.detail); add(row.note);
+  if (cat === "tree-add" && Number.isFinite(info.points)) {
+    const per = info.points > 0 && Number.isFinite(d.dpsPct) ? ` - ${gPct(d.dpsPct / info.points)} DPS per point` : "";
+    add(`Costs ${plural(info.points, "point")}${fin(info.pathNodes) > 0 ? ` (includes ${plural(info.pathNodes, "path node")})` : ""}${per}`);
+  }
+  if (cat === "tree-remove" && Number.isFinite(info.refund)) {
+    const also = arr(info.alsoRemoves).map(String);
+    add(`Refunds ${plural(info.refund, "point")}${also.length ? "; also removes: " + also.join(", ") : ""}`);
+  }
+  if (cat === "item" && str(info.toItem))
+    add(`Replaces your ${str(info.slot)}: ${str(info.fromItem) || "nothing"} -> ${info.toItem}. Tested as the whole item.`);
+  if (GEAR.includes(cat)) add("Price: " + (typeof row.price === "string" && row.price ? row.price : "price unknown"));
+  const avail = obj(row.availability);
+  if (str(avail.text) && avail.state !== "n/a") add("Availability: " + avail.text);
+  return out;
+}
+
+function tradeoffLine(row) {
+  const d = obj(obj(row.result).delta);
+  if (!arr(row.chips).includes("trade-off")) return null;
+  const gain = [["DPS", d.dpsPct], ["EHP", d.ehpPct]].filter(([, v]) => Number.isFinite(v) && v > ZERO_PCT);
+  const cost = [["DPS", d.dpsPct], ["EHP", d.ehpPct]].filter(([, v]) => Number.isFinite(v) && v < -ZERO_PCT);
+  const fmt = (list) => list.map(([k, v]) => `${k} ${gPct(v)}`).join(", ");
+  return (gain.length ? `Gains ${fmt(gain)}; ` : "") + (cost.length ? `costs ${fmt(cost)}` : "");
+}
+
+function interactionLine(row) {
+  const it = row.interaction;
+  if (!it || typeof it !== "object") return "Interaction: none known";
+  const refs = arr(it.vaultRefs).map(String);
+  return "Interaction: " + str(it.note) + (refs.length ? ` (vault: ${refs.join(", ")})` : "");
+}
+
+function numLine(label, tip, delta, from, to, o) {
+  const flat = !Number.isFinite(delta) || Math.abs(delta) < o.zero;
+  const cls = flat ? "flat" : delta > 0 ? "up" : "down";
+  return h("div", { class: "nrow" }, h("span", { class: "nlabel", title: tip }, label),
+    h("span", { class: `nval ${cls}` + (o.strong ? " nstrong" : "") }, !Number.isFinite(delta) ? DASH : flat ? "no change" : o.fmt(delta)),
+    h("span", { class: "nfrom" }, `(${o.big(from)} -> ${o.big(to)})`));
+}
+
+function numbersCell(row) {
+  const res = obj(row.result), d = obj(res.delta), b = obj(res.base), a = obj(res.after);
+  const key = G.sort === "dps" ? "dps" : G.sort === "ehp" ? "ehp" : fin(d.dpsPct) >= fin(d.ehpPct) ? "dps" : "ehp";
+  return h("div", { class: "gnums" },
+    numLine("DPS", TIP.dps, d.dpsPct, b.dps, a.dps, { fmt: gPct, big: gBig, zero: ZERO_PCT, strong: key === "dps" }),
+    numLine("EHP", TIP.ehp, d.ehpPct, b.ehp, a.ehp, { fmt: gPct, big: gBig, zero: ZERO_PCT, strong: key === "ehp" }),
+    numLine("Mana/s", TIP.mana, d.manaMargin, b.manaMargin, a.manaMargin, { fmt: gMargin, big: gPlain, zero: ZERO_PCT }));
+}
+
+function breakdownEl(row) {
+  const items = arr(row.breakdown);
+  if (!items.length) return null;
+  return h("details", { class: "gbreak" }, h("summary", {}, "Show breakdown"),
+    h("table", {}, h("thead", {}, h("tr", {}, h("th", {}, "Source"), h("th", {}, "Before"), h("th", {}, "After"))),
+      h("tbody", {}, items.map((x) => h("tr", {}, h("td", {}, str(obj(x).label)), h("td", {}, gCell(obj(x).before)), h("td", {}, gCell(obj(x).after)))))));
+}
+
+function chipEls(chips) {
+  return arr(chips).filter((c) => typeof c === "string").map((c) => h("span", { class: "chip " + (CHIP_CLASS[c] || "") }, c));
+}
+
+function guideRow(row) {
+  row = obj(row);
+  const id = str(row.id), locked = row.locked === true || row.tickable === false, reason = str(row.lockReason);
+  const label = str(row.label);
+  const control = locked ? h("span", { class: "lock" }, "locked")
+    : h("input", { type: "checkbox", checked: G.ticked.has(id), "aria-label": label, onchange: (e) => onTick(id, e.target.checked) });
+  const msg = h("div", { class: "reason", role: "alert" }, G.rowMsg.get(id) || "");
+  G.rowEls.set(id, msg);
+  const extra = [tradeoffLine(row), ...arr(row.why).map((w) => "Why: " + w), interactionLine(row),
+    obj(row.conditional).text, row.zeroNote,
+    Number.isFinite(obj(row.nodeAlone).dpsPct) ? `PoB’s node-alone value, without the path: DPS ${gPct(row.nodeAlone.dpsPct)}` : null];
+  const el = h("div", { class: "row grow" + (locked ? " disabled" : ""), "aria-disabled": locked ? "true" : null },
+    control, h("div", {},
+      locked && reason ? h("div", { class: "title lockreason" }, reason) : null,
+      h("div", { class: "title" }, label, " ", h("span", { class: "chip" }, groupOf(row)), ...chipEls(row.chips)),
+      h("div", { class: "detail" }, [...detailLines(row), ...extra].filter((t) => str(t)).map((t) => h("div", {}, t))),
+      msg, breakdownEl(row)), numbersCell(row));
+  if (!locked) G.boxes.set(id, control);
+  return h("li", {}, el);
+}
+
+function orderedRows() {
+  const rows = arr(G.report.rows).map(obj), byId = new Map(rows.map((r) => [r.id, r]));
+  const order = arr(obj(G.report.sorts)[G.sort]);
+  const sorted = order.map((id) => byId.get(id)).filter(Boolean);
+  const rest = rows.filter((r) => !order.includes(r.id));
+  return [...sorted, ...rest].filter((r) => G.filter === "all" || groupOf(r) === G.filter);
+}
+
+function groupTools() {
+  const sorts = [["best", "Biggest gain"], ["dps", "DPS"], ["ehp", "EHP"]];
+  return h("div", { class: "gtools" }, h("span", {}, "Sort by:"),
+    ...sorts.map(([k, text]) => h("label", { title: k === "best" ? TIP.best : null },
+      h("input", { type: "radio", name: "gsort", value: k, checked: G.sort === k, onchange: () => { G.sort = k; renderGroupA(); } }), text)),
+    h("span", {}, "Show:"),
+    ...["all", "Gear", "Tree", "Gems & supports"].map((k) => h("button", { class: "chip gfilter", "aria-pressed": String(G.filter === k),
+      onclick: () => { G.filter = k; renderGroupA(); } }, k === "all" ? "All" : k)));
+}
+
+function groupBox(title, count, open, ...body) {
+  return h("details", { class: "ggroup", open }, h("summary", {}, `${title} (${count})`), h("div", { class: "ggroup-body" }, body));
+}
+
+function renderGroupA() {
+  G.rowEls.clear(); G.boxes.clear();
+  const rep = G.report, shown = orderedRows(), all = arr(rep.rows), flat = arr(rep.noChange);
+  const msg = rep.state === "differences" && !all.length && !flat.length ? "None of the tested differences improve your build." : null;
+  const open = G.groupA ? G.groupA.open : true;
+  const box = groupBox("Differences, ranked", all.length + flat.length, open, groupTools(),
+    G.filter !== "all" ? h("p", { class: "intro" }, `Showing ${shown.length} of ${all.length}.`) : null,
+    msg ? h("p", { class: "muted" }, msg) : null,
+    h("ul", { class: "glist", "aria-label": "Differences, ranked" }, shown.map(guideRow)),
+    flat.length ? h("details", { class: "ggroup" }, h("summary", {}, `No change in PoB (${flat.length})`),
+      h("div", { class: "ggroup-body" }, h("ul", { class: "glist", "aria-label": "No change in PoB" }, flat.map(guideRow)))) : null);
+  if (G.groupA && G.groupA.isConnected) G.groupA.replaceWith(box);
+  G.groupA = box; G.groups.a = box;
+  return box;
+}
+
+function configRows(rows) {
+  if (!rows.length) return h("p", { class: "muted" }, "The guide sets no extra conditions.");
+  return h("ul", { class: "glist" }, rows.map((r) => {
+    r = obj(r);
+    const d = obj(obj(r.result).delta);
+    const shown = r.result ? `If on, PoB shows: DPS ${gPct(d.dpsPct)}  EHP ${gPct(d.ehpPct)}` : "Not tested";
+    return h("li", {}, h("div", { class: "row grow" }, h("span"), h("div", {}, h("div", { class: "title" }, str(r.label)),
+      h("div", { class: "detail" }, str(r.detail) ? h("div", {}, r.detail) : null, h("div", {}, "Only if this applies to you in game."))),
+      h("div", { class: "gnums" }, shown)));
+  }));
+}
+
+function notTestedRows(rows) {
+  if (!rows.length) return h("p", { class: "muted" }, "Nothing was left untested.");
+  const byReason = new Map();
+  for (const r of rows.map(obj)) { const k = str(r.reason) || "Not testable"; byReason.set(k, [...(byReason.get(k) || []), r]); }
+  return [...byReason].map(([reason, list]) => h("div", {}, h("div", { class: "group-title" }, reason),
+    h("ul", { class: "glist" }, list.map((r) => h("li", {}, h("div", { class: "row grow" }, h("span"),
+      h("div", {}, h("div", { class: "title" }, str(r.label), " ", h("span", { class: "chip" }, "not tested"), ...chipEls(arr(r.chips).filter((c) => c !== "not tested"))),
+        str(r.detail) ? h("div", { class: "detail" }, r.detail) : null)))))));
+}
+
+function renderGuideResult(report) {
+  Object.assign(G, { report, ticked: new Set(), saved: null, preview: null, bar: "idle", saving: false, last: null,
+    sort: "best", filter: "all", groupA: null, seq: G.seq + 1 });
+  G.rowMsg.clear();
+  const rep = obj(report), st = str(rep.state), config = arr(rep.config), nt = arr(rep.notTested);
+  const title = h("h2", { class: "gtitle", tabindex: "-1" }, "Guide check");
+  const parts = [title, headerStrip(rep), ...arr(obj(rep.header).banners).map((b) => h("div", { class: "gbanner" }, str(obj(b).text))),
+    h("div", { class: "gsummary" }, summaryLine(rep))];
+  if (st === "identical") parts.push(h("p", {}, "Both builds are the same."));
+  else {
+    parts.push(st === "nothingTestable" ? groupBox("Differences, ranked", 0, true, h("p", { class: "muted" }, "No differences to test.")) : renderGroupA());
+    G.groups.b = groupBox("Settings the guide assumes", config.length, false,
+      h("p", { class: "intro" }, "These are Path of Building settings the guide author turned on. They inflate the guide’s numbers if they don’t apply to you in game. They are never changed in your build."),
+      configRows(config));
+    parts.push(G.groups.b);
+  }
+  G.groups.c = groupBox("Not tested", nt.length, false,
+    h("p", { class: "intro" }, "Found, but not tested, so no number. Path of Building can’t judge these one at a time, or this check doesn’t cover them yet."),
+    notTestedRows(nt));
+  G.barEl = h("div", { class: "gbar", id: "gsavebar" });
+  parts.push(G.groups.c, h("button", { class: "ghost", onclick: () => { G.report = null; renderGuideInput({}); } }, "Check another guide"), G.barEl);
+  $("main").replaceChildren(...parts);
+  renderBar(); title.focus();
+}
+
+// ---- ticks, combined prediction, save --------------------------------------------------------------
+function onTick(id, on) {
+  if (on) G.ticked.add(id); else G.ticked.delete(id);
+  G.last = on ? id : null; G.saved = null;
+  for (const key of [...G.rowMsg.keys()]) setRowMsg(key, "");
+  schedulePreview();
+}
+
+function setRowMsg(id, text) {
+  if (text) G.rowMsg.set(id, text); else G.rowMsg.delete(id);
+  const el = G.rowEls.get(id);
+  if (el) el.textContent = text;
+}
+
+function schedulePreview() {
+  clearTimeout(G.timer);
+  const seq = ++G.seq;
+  G.preview = null; G.bar = G.ticked.size ? "checking" : "idle";
+  renderBar();
+  if (G.ticked.size) G.timer = setTimeout(() => runPreview(seq), PREVIEW_DELAY_MS);
+}
+
+async function runPreview(seq) {
+  try {
+    const out = await api("/api/guide-preview", { jobId: G.job, ids: [...G.ticked] });
+    if (seq === G.seq && G.active) gotPreview(out);
+  } catch (e) { if (seq === G.seq) barFailed(e); }
+}
+
+function gotPreview(out) {
+  out = obj(out);
+  const conflicts = arr(out.conflicts).map(obj);
+  const mine = conflicts.find((c) => arr(c.ids).includes(G.last));
+  for (const c of conflicts) for (const id of arr(c.ids)) if (!mine || id === G.last) setRowMsg(id, str(c.message));
+  if (mine && G.last) {
+    G.ticked.delete(G.last);
+    const box = G.boxes.get(G.last); if (box) box.checked = false;
+    G.last = null; schedulePreview(); return;
+  }
+  G.preview = out; G.bar = out.ok === true ? "ok" : "refused";
+  renderBar();
+}
+
+function barFailed(e) {
+  G.bar = e.status === 409 ? "stale" : "error"; G.preview = { message: e.message }; G.saving = false;
+  renderBar();
+}
+
+function barMetrics(out) {
+  const c = obj(out.combined), d = obj(c.delta), pts = obj(out.points);
+  if (!out.combined) return h("div", {}, "Combined effect is checked when you save.");
+  return h("div", {}, h("span", { class: "m", title: TIP.dps }, "DPS " + gPct(d.dpsPct)), h("span", { class: "m", title: TIP.ehp }, "EHP " + gPct(d.ehpPct)),
+    h("span", { class: "m", title: TIP.mana }, "Mana margin " + gMargin(d.manaMargin)), h("span", { class: "muted" }, "(all ticked together)"),
+    Number.isFinite(pts.after) && Number.isFinite(pts.available) ? h("span", { class: "m muted" }, ` Points ${pts.after} of ${pts.available}`) : null);
+}
+
+function barLines() {
+  const n = G.ticked.size, out = obj(G.preview), r = obj(out.refused);
+  if (G.bar === "stale") return [h("div", {}, "Your build changed since the check; run it again.")];
+  if (G.bar === "error") return [h("div", { class: "warn" }, str(out.message) || "Couldn’t check the ticked changes.")];
+  if (!n) return [h("div", { class: "muted" }, "0 ticked. Tick the changes you want.")];
+  const head = h("div", {}, plural(n, "change") + " ticked");
+  if (G.bar === "checking") return [head, h("div", { class: "muted" }, "Checking the combined effect…")];
+  if (G.bar === "refused") {
+    const why = r.reason === "rule" ? "Breaks a rule: " + arr(out.violations).map(String).join("; ")
+      : r.reason === "pob" ? "Path of Building couldn’t check this set: " + str(r.message) : str(r.message);
+    return [head, h("div", { class: "warn" }, why), out.combined ? barMetrics(out) : null];
+  }
+  return [head, barMetrics(out)];
+}
+
+function renderBar() {
+  const bar = G.barEl;
+  if (!bar) return;
+  bar.classList.toggle("amber", G.bar === "stale");
+  if (G.saved) { bar.replaceChildren(...savedNodes(obj(G.saved))); return; }
+  const action = G.bar === "stale" ? h("button", { class: "primary", onclick: startGuide }, "Run again")
+    : h("button", { class: "primary", disabled: G.bar !== "ok" || G.saving, onclick: saveCopy }, G.saving ? "Saving…" : "Save fixed copy");
+  bar.replaceChildren(h("div", { class: "gbar-text", "aria-live": "polite" }, ...barLines()), action);
+}
+
+async function saveCopy() {
+  G.saving = true; renderBar();
+  try {
+    const out = obj(await api("/api/guide-apply", { jobId: G.job, ids: [...G.ticked] }));
+    G.saving = false;
+    if (out.saved === true) G.saved = out;
+    else { G.preview = { ...out, message: "Nothing was saved." }; G.bar = out.refused ? "refused" : "error"; }
+    renderBar();
+  } catch (e) { barFailed(e); }
+}
+
+function jump(group) {
+  const el = G.groups[group];
+  if (!el) return;
+  el.open = true; el.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function notAppliedLine(na) {
+  const parts = [["settings the guide assumes", na.config, "b"], ["not tested", na.notTested, "c"], ["not obtainable", na.unobtainable, "a"],
+    ["blocked by a rule", na.locked, "a"], ["unticked", na.unticked, "a"]];
+  const nodes = [];
+  parts.forEach(([text, n, g], i) => {
+    nodes.push(i ? ", " : "Not applied: ", h("button", { class: "linkbtn", onclick: () => jump(g) }, `${fin(n)} ${text}`));
+  });
+  return h("div", {}, ...nodes, ".");
+}
+
+function reloadLine(rl) {
+  if (!rl || rl.checked !== true) return h("div", { class: "warn" }, "The saved copy was not re-checked in Path of Building.");
+  if (str(rl.error)) return h("div", { class: "warn" }, "The re-check could not run: " + rl.error);
+  if (rl.equal === true) return h("div", {}, "Re-checked in Path of Building: the saved copy matches the prediction.");
+  return h("div", { class: "warn" }, "The saved copy differs from the prediction: " + arr(rl.diffs).map(String).join("; "));
+}
+
+function savedNodes(out) {
+  const ap = obj(out.applied), n = fin(ap.count);
+  return [h("div", { class: "gbar-text", "aria-live": "polite" },
+    h("div", {}, "Saved: ", h("code", {}, str(out.path) || str(out.fileName)), ". Your original was not changed."),
+    h("div", {}, `Applied: ${plural(n, "change")}.`), notAppliedLine(obj(out.notApplied)), reloadLine(out.reload),
+    h("div", { class: "muted" }, "Open it in Path of Building to check; the numbers should match within rounding.")),
+  h("button", { class: "ghost", onclick: () => { G.saved = null; schedulePreview(); } }, "Back to the list")];
+}
+
+$("gnav").addEventListener("click", openGuide);
 
 $("search").addEventListener("input", renderBuilds);
 $("rerun").addEventListener("click", () => state.current && startAudit(state.current));
