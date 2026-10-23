@@ -189,5 +189,22 @@ class SlowAndRedirectTests(unittest.TestCase):
                 self.assertIsNotNone(handler.redirect_request(request, None, 301, "moved", {}, target))
 
 
+    def test_malformed_redirect_target_gives_the_clean_fetch_error(self):
+        """N2: https://pobb.in:abc/ made urlparse().port raise ValueError out of pobbin.fetch."""
+        request = urllib.request.Request("https://pobb.in/F8CiRC9KVADl/raw")
+        handler = pobbin._SameHostRedirect()
+        for target in ("https://pobb.in:abc/", "https://pobb.in:99999999/x", "https://[bad/x"):
+            with self.subTest(target=target):
+                with self.assertRaises(urllib.error.URLError):
+                    handler.redirect_request(request, None, 301, "moved", {}, target)
+
+                def redirected(url, timeout, target=target):
+                    return handler.redirect_request(request, None, 301, "moved", {}, target)
+                with mock.patch.object(pobbin, "_open", side_effect=redirected):
+                    with self.assertRaises(pobbin.FetchFailed) as caught:
+                        pobbin.fetch("F8CiRC9KVADl")
+                self.assertIn("no connection", str(caught.exception))
+
+
 if __name__ == "__main__":
     unittest.main()

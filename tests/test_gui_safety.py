@@ -1,4 +1,5 @@
 """GUI renders data with textContent only (replaces the security reviewer's manual XSS sink check)."""
+import json
 import re
 import shutil
 import subprocess
@@ -99,3 +100,115 @@ class GuideCheckViewTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+# ---- real render of the guide view in node, with a minimal stub DOM ------------------------------
+REPORT = Path(__file__).resolve().parent / "fixtures" / "guide_report_ek.json"
+HARNESS = r"""
+class Node { constructor() { this.children = []; this.attrs = {}; this.handlers = {}; this.className = ""; this.parent = null; }
+  append(...c) { for (const x of c) { x.parent = this; this.children.push(x); } }
+  setAttribute(k, v) { this.attrs[k] = String(v); }
+  getAttribute(k) { return this.attrs[k] ?? null; }
+  addEventListener(k, f) { this.handlers[k] = f; }
+  replaceChildren(...c) { this.children = []; this.append(...c); }
+  replaceWith() {} focus() {} click() { this.clicked = true; if (this.handlers.change) this.handlers.change({ target: this }); }
+  get isConnected() { return false; }
+  get classList() { return { add() {}, remove() {}, toggle() {}, contains: () => false }; }
+  get textContent() { return this.text !== undefined ? this.text : this.children.map((c) => c.textContent).join(" "); }
+  set textContent(v) { this.text = String(v); this.children = []; }
+  all(tag) { return this.children.flatMap((c) => [...(c.tag === tag ? [c] : []), ...(c.all ? c.all(tag) : [])]); }
+  find(pred) { return this.children.flatMap((c) => [...(pred(c) ? [c] : []), ...(c.find ? c.find(pred) : [])]); } }
+class Text extends Node { constructor(t) { super(); this.text = String(t); } }
+class El extends Node { constructor(tag) { super(); this.tag = tag; } }
+const ids = {};
+global.Node = Node;
+global.document = { createElement: (t) => new El(t), createTextNode: (t) => new Text(t),
+  getElementById: (id) => (ids[id] ||= new El("div")), addEventListener() {} };
+global.window = global; global.fetch = async () => ({ ok: false, json: async () => ({}) });
+global.localStorage = { getItem: () => null, setItem() {} };
+"""
+HARNESS_RUN = r"""
+const input = JSON.parse(require("fs").readFileSync(0, "utf8"));
+const out = {};
+renderGuideResult(input.report);
+out.main = ids.main.textContent;
+out.a = G.groups.a ? G.groups.a.textContent : "";
+out.b = G.groups.b.textContent; out.bRows = G.groups.b.all("li").length;
+out.c = G.groups.c.textContent;
+out.locked = ids.main.find((n) => n.tag === "span" && n.className === "lock").map((n) => n.attrs["aria-label"]);
+const box = ids.main.find((n) => n.tag === "input" && n.attrs.type === "checkbox")[0];
+let prevented = false;
+if (box.handlers.keydown) box.handlers.keydown({ key: "Enter", target: box, preventDefault() { prevented = true; } });
+out.enter = { clicked: box.clicked === true, prevented };
+out.fmt = input.fmt.map(([v, d]) => fmtNum(v, d));
+out.fmtSigned = [fmtNum(-0, 1, { sign: true }), fmtNum(NaN, 1), fmtNum(Infinity, 1), fmtNum(null, 1)];
+process.stdout.write(JSON.stringify(out));
+"""
+
+
+def run_render(report: dict, fmt: list | None = None) -> dict:
+    node = shutil.which("node")
+    if node is None:
+        raise unittest.SkipTest("node is not installed")
+    text = page()
+    script = re.search(r"<script>(.*)</script>", text, re.S).group(1)
+    script = script[: script.index(END)]
+    with tempfile.TemporaryDirectory() as folder:
+        path = Path(folder) / "render.js"
+        path.write_text(HARNESS + script + HARNESS_RUN, encoding="utf-8")
+        done = subprocess.run([node, str(path)], input=json.dumps({"report": report, "fmt": fmt or []}),
+                              capture_output=True, text=True, timeout=60)
+    if done.returncode != 0:
+        raise AssertionError(done.stderr)
+    return json.loads(done.stdout)
+
+
+class GuideRenderTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.report = json.loads(REPORT.read_text(encoding="utf-8"))
+
+    def test_real_report_renders_every_group(self) -> None:
+        rep = self.report
+        out = run_render(rep)
+        for name in ("main", "a", "b", "c"):
+            for bad in ("[object", "undefined", "NaN", "null"):
+                self.assertNotIn(bad, out[name], f"{bad!r} in {name}")
+        labels = [r["label"] for r in rep["notTested"]]
+        self.assertEqual(len(labels), 26)
+        for label in labels:
+            self.assertIn(label, out["c"])
+        self.assertTrue(any(r["reason"] in out["c"] for r in rep["notTested"] if r.get("reason")))
+        for r in rep["rows"] + rep["noChange"]:
+            self.assertIn(r["label"], out["a"])
+        self.assertEqual((len(rep["rows"]), len(rep["noChange"])), (82, 8))
+        self.assertEqual(out["bRows"], len(rep["config"]))
+        self.assertEqual(out["bRows"], 15)
+
+    def test_not_tested_row_shows_reason(self) -> None:
+        rep = json.loads(json.dumps(self.report))
+        rep["notTested"].append({"category": "unique", "chips": ["not tested"], "detail": "Mageblood detail line",
+                                 "id": "x:1", "label": "Mageblood", "reason": "You wear Mageblood", "result": None})
+        out = run_render(rep)
+        self.assertIn("You wear Mageblood", out["c"])
+        self.assertIn("Mageblood detail line", out["c"])
+        self.assertIn("not tested", out["c"])
+        self.assertNotIn("[object", out["c"])
+
+    def test_locked_row_has_aria_label_and_enter_toggles(self) -> None:
+        rep = json.loads(json.dumps(self.report))
+        rep["rows"][0]["locked"] = True
+        rep["rows"][0]["lockReason"] = "Needs a free socket"
+        rep["rows"][1]["locked"] = True
+        rep["rows"][1]["lockReason"] = ""
+        out = run_render(rep)
+        self.assertIn("Can't be applied: Needs a free socket", out["locked"])
+        self.assertIn("Can't be applied", out["locked"])
+        self.assertEqual(out["enter"], {"clicked": True, "prevented": True})
+
+    def test_numbers_round_down(self) -> None:
+        cases = [(-41.578, 1), (41.578, 1), (7.5757, 1), (0, 1), (-0, 1), (0.29999999999, 1), (-0.0001, 1), (1234.5, 0)]
+        out = run_render(self.report, cases)
+        # PoE rounds down: negatives go toward -infinity, so -0.0001 shows -0.1 (user decision)
+        self.assertEqual(out["fmt"], ["-41.6", "41.5", "7.5", "0.0", "0.0", "0.3", "-0.1", "1,234"])
+        self.assertEqual(out["fmtSigned"], ["0.0", "n/a", "n/a", "n/a"])

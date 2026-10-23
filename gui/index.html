@@ -274,12 +274,12 @@ function h(tag, attrs = {}, ...children) {
     else if (k.startsWith("on")) el.addEventListener(k.slice(2), v);
     else if (v !== false && v != null) el.setAttribute(k, v === true ? "" : v);
   }
-  for (const c of children.flat()) if (c != null && c !== false) el.append(c instanceof Node ? c : document.createTextNode(String(c)));
+  for (const c of children.flat(Infinity)) if (c != null && c !== false) el.append(c instanceof Node ? c : document.createTextNode(String(c)));
   return el;
 }
 
 function trunc(v, d = 0) {
-  return Math.trunc(Number((v * 10 ** d).toFixed(6))) / 10 ** d;
+  return Math.floor(Number((v * 10 ** d).toFixed(6))) / 10 ** d;
 }
 
 function fmtNum(v, d = 0, { sign = false, group = true, unit = "" } = {}) {
@@ -1043,7 +1043,7 @@ function detailLines(row) {
   }
   if (cat === "item" && str(info.toItem))
     add(`Replaces your ${str(info.slot)}: ${str(info.fromItem) || "nothing"} -> ${info.toItem}. Tested as the whole item.`);
-  if (GEAR.includes(cat)) add("Price: " + (typeof row.price === "string" && row.price ? row.price : "price unknown"));
+  if (GEAR.includes(cat)) add("Price: " + (typeof row.price === "string" && row.price ? row.price : "no price"));
   const avail = obj(row.availability);
   if (str(avail.text) && avail.state !== "n/a") add("Availability: " + avail.text);
   return out;
@@ -1103,8 +1103,10 @@ function guideRow(row) {
   row = obj(row);
   const id = str(row.id), locked = row.locked === true || row.tickable === false, reason = str(row.lockReason);
   const label = str(row.label);
-  const control = locked ? h("span", { class: "lock" }, "locked")
-    : h("input", { type: "checkbox", checked: G.ticked.has(id), "aria-label": label, onchange: (e) => onTick(id, e.target.checked) });
+  const lockText = reason ? "Can't be applied: " + reason : "Can't be applied";
+  const control = locked ? h("span", { class: "lock", "aria-label": lockText }, "locked")
+    : h("input", { type: "checkbox", checked: G.ticked.has(id), "aria-label": label, onchange: (e) => onTick(id, e.target.checked),
+      onkeydown: (e) => { if (e.key === "Enter") { e.preventDefault(); e.target.click(); } } });
   const msg = h("div", { class: "reason", role: "alert" }, G.rowMsg.get(id) || "");
   G.rowEls.set(id, msg);
   const extra = [tradeoffLine(row), ...arr(row.why).map((w) => "Why: " + w), interactionLine(row),

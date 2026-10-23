@@ -62,8 +62,12 @@ def parse_link(text) -> str:
 
 class _SameHostRedirect(urllib.request.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
-        target = urllib.request.urlparse(newurl)
-        if (target.hostname or "").lower() not in (HOST, "www." + HOST) or target.scheme != "https"                 or target.port not in (None, 443) or target.username or target.password:
+        try:  # a malformed target (https://pobb.in:abc/, https://[bad) makes urlparse/.port raise ValueError
+            target = urllib.request.urlparse(newurl)
+            host, port = (target.hostname or "").lower(), target.port
+        except ValueError as error:
+            raise urllib.error.URLError("redirect to a malformed address refused") from error
+        if host not in (HOST, "www." + HOST) or target.scheme != "https" or port not in (None, 443)                 or target.username or target.password:
             raise urllib.error.URLError("redirect to another host, scheme, port or login refused")
         return super().redirect_request(req, fp, code, msg, headers, newurl)
 
