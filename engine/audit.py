@@ -48,10 +48,11 @@ class Auditor:
     multi_part = False
 
     def __init__(self, build_path: Path, include_drafts: bool, progress: Callable[[str], None] = lambda _: None,
-                 disabled_skills: list[str] | None = None, scenario: str = DEFAULT_SCENARIO):
+                 disabled_skills: list[str] | None = None, scenario: str = DEFAULT_SCENARIO,
+                 engine: PobEngine | None = None):
         self.progress = progress
         progress("Starting Path of Building")
-        self.engine = PobEngine()
+        self.engine = engine if engine is not None else PobEngine()
         self.build_path = build_path
         self.source_sha256 = file_sha256(build_path)
         self.summary = self.engine.load_build(build_path)

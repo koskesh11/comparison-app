@@ -138,11 +138,8 @@ def pob_cwd():
 
 
 def close_engine(engine) -> None:
-    """Free the Lua state (PobEngine has no close); one PoB state holds a lot of memory."""
-    lua = engine._lua
-    lua.lua_close.argtypes = [ctypes.c_void_p]
-    lua.lua_close(engine._L)
-    engine._L = None
+    """Free the Lua state; one PoB state holds a lot of memory."""
+    engine.close()
 
 
 def offline_obtainability(league: str = OFFLINE_LEAGUE):
@@ -157,12 +154,13 @@ def offline_obtainability(league: str = OFFLINE_LEAGUE):
     return result
 
 
-def offline_auditor(build_path: Path, settings: dict, progress=lambda _: None):
+def offline_auditor(build_path: Path, settings: dict, progress=lambda _: None, engine=None):
     """Auditor exactly as the GUI builds it, with Obtainability.load patched to the offline cache."""
     import audit
     with mock.patch.object(audit.Obtainability, "load", lambda *a, **k: offline_obtainability()):
         return audit.Auditor(build_path, settings["includeDrafts"], progress=progress,
-                             disabled_skills=list(settings["disabledSkills"]), scenario=settings["scenario"])
+                             disabled_skills=list(settings["disabledSkills"]), scenario=settings["scenario"],
+                             engine=engine)
 
 
 def jsonable(value):

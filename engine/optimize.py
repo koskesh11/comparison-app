@@ -22,6 +22,15 @@ class StaleAudit(ChangeError):
     pass
 
 
+def check_source_fresh(build_path: Path, expected_sha256: str) -> None:
+    try:
+        current_sha256 = file_sha256(build_path)
+    except OSError:
+        current_sha256 = None
+    if current_sha256 != expected_sha256:
+        raise StaleAudit(f"Build changed since audit; re-run the audit ({build_path.name})")
+
+
 def _gem_touch(change: dict) -> tuple[str, tuple[int, int] | None] | None:
     if change["type"] not in ("gem", "swap", "replaceGem"):
         return None
@@ -61,12 +70,7 @@ def save_xml(out_dir: Path, name: str, xml: str) -> Path:
 
 def apply_changes(auditor: Auditor, ids: list[int], out_dir: Path = DEFAULT_OUT_DIR, force: bool = False) -> dict:
     """Apply suggestions by id to a fresh copy of the build; save it unless a rule breaks."""
-    try:
-        current_sha256 = file_sha256(auditor.build_path)
-    except OSError:
-        current_sha256 = None
-    if current_sha256 != auditor.source_sha256:
-        raise StaleAudit(f"Build changed since audit; re-run the audit ({auditor.build_path.name})")
+    check_source_fresh(auditor.build_path, auditor.source_sha256)
 
     bad = [i for i in ids if not 1 <= i <= len(auditor.suggestions)]
     if not ids or bad:
@@ -78,6 +82,7 @@ def apply_changes(auditor: Auditor, ids: list[int], out_dir: Path = DEFAULT_OUT_
     engine.load_build(auditor.build_path)  # fresh state: audits leave the build touched
     auditor.load_audit_hooks(auditor.disabled_skills)
     base_ctx = auditor.evaluate()
+    auditor.breaks(base_ctx)  # Prime the baseline before applyChangesJSON mutates the loaded build.
     name = f"{auditor.summary['buildName']} (optimized)"
     request = json.dumps({"changes": changes, "stats": auditor.keys, "buildName": name,
                           "extraSkills": auditor.extra_request()})
