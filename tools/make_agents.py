@@ -316,9 +316,10 @@ MODELS = {
     "ui-qa": (HAIKU, "medium"),
     # Engineering (Claude side: briefs for Codex + verification; GATE 2 re-checks)
     "engineering-lead": (SONNET, "high"),
-    "pob-engine-dev": (SONNET, "high"),
-    "optimizer-dev": (SONNET, "high"),
-    "integration-dev": (SONNET, "medium"),
+    # Haiku since 2026-10-23 (user, /usage: these were 17% of usage; Codex writes the code, Opus GATE 2 re-checks)
+    "pob-engine-dev": (HAIKU, "high"),
+    "optimizer-dev": (HAIKU, "high"),
+    "integration-dev": (HAIKU, "medium"),
     # Code Review (GATE 2)
     "review-lead": (SONNET, "high"),
     "correctness-reviewer": (OPUS, "high"),
