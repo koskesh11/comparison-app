@@ -279,6 +279,7 @@ function h(tag, attrs = {}, ...children) {
 }
 
 function trunc(v, d = 0) {
+  if (Math.abs(v) < 1e-9) return 0; // float noise is exactly zero, never a visible -0.1
   return Math.floor(Number((v * 10 ** d).toFixed(6))) / 10 ** d;
 }
 

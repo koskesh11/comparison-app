@@ -174,6 +174,8 @@ class GuideRenderTest(unittest.TestCase):
         for name in ("main", "a", "b", "c"):
             for bad in ("[object", "undefined", "NaN", "null"):
                 self.assertNotIn(bad, out[name], f"{bad!r} in {name}")
+            # the EK report has no real tiny loss, so a "-0.0" / "-0.1" would be float noise shown as a loss
+            self.assertNotRegex(out[name], r"-0\.[01]", name)
         labels = [r["label"] for r in rep["notTested"]]
         self.assertEqual(len(labels), 26)
         for label in labels:
@@ -207,8 +209,8 @@ class GuideRenderTest(unittest.TestCase):
         self.assertEqual(out["enter"], {"clicked": True, "prevented": True})
 
     def test_numbers_round_down(self) -> None:
-        cases = [(-41.578, 1), (41.578, 1), (7.5757, 1), (0, 1), (-0, 1), (0.29999999999, 1), (-0.0001, 1), (1234.5, 0)]
+        cases = [(-41.578, 1), (41.578, 1), (7.5757, 1), (0, 1), (-0, 1), (0.29999999999, 1), (-0.0001, 1), (1234.5, 0), (-1e-12, 1), (1e-12, 1)]
         out = run_render(self.report, cases)
         # PoE rounds down: negatives go toward -infinity, so -0.0001 shows -0.1 (user decision)
-        self.assertEqual(out["fmt"], ["-41.6", "41.5", "7.5", "0.0", "0.0", "0.3", "-0.1", "1,234"])
+        self.assertEqual(out["fmt"], ["-41.6", "41.5", "7.5", "0.0", "0.0", "0.3", "-0.1", "1,234", "0.0", "0.0"])
         self.assertEqual(out["fmtSigned"], ["0.0", "n/a", "n/a", "n/a"])
