@@ -92,7 +92,9 @@ class RealEkGuideCheckTests(_EkCase):
         row = rows[0]
         request = {"removeNodes": [], "addNodes": [], "stats": self.auditor.keys,
                    "extraSkills": self.auditor.extra_request(), "gemChange": row["change"]}
-        independent = self.auditor.adjust(evaluate_with(self.auditor.engine, request))
+        from guide_check_eval import models_not_applied
+        with models_not_applied(self.auditor):
+            independent = self.auditor.adjust(evaluate_with(self.auditor.engine, request))
         expected = self.auditor.main_out(independent)[self.auditor.dps_key]
         self.assertAlmostEqual(expected, row["result"]["after"]["dps"],
                                delta=1e-9 * max(1, abs(expected)))
@@ -449,8 +451,11 @@ class RealWorbTests(helpers.PobGuardedTestCase):
         self.assertIsNotNone(row["result"])
         self.assertIn("Winter Orb", row["interaction"]["note"])
         self.assertIn("Winter Orb projectile overlap", row["interaction"]["vaultRefs"])
-        expected = self.auditor.main_out(self.auditor.base_context())[self.auditor.dps_key]
+        from guide_check_eval import models_not_applied
+        with models_not_applied(self.auditor):
+            expected = self.auditor.main_out(self.auditor.base_context())[self.auditor.dps_key]
         self.assertEqual(expected, result["base"]["dps"])
+        self.assertIn("model not applied", row["interaction"]["note"])
 
     def test_full_winter_orb_group_never_adds_seventh_gem(self):
         from guide_check import run_check

@@ -12,7 +12,7 @@ import guide_lua
 from api_errors import ApiError
 from display import fmt_pct
 from guide_check_avail import row_availability
-from guide_check_eval import evaluate_options, lua_mb
+from guide_check_eval import evaluate_options, lua_mb, models_not_applied, named_models
 from guide_check_log import log_check
 from guide_check_rank import rank_rows
 from guide_check_result import assemble_row, build_result, carries_value, kpis
@@ -117,7 +117,7 @@ def _tested_row(auditor, row: dict, base_ctx: dict, player: dict, guide: dict,
     availability = row_availability(auditor.obtainable, row)
     slot = (row.get("info") or {}).get("slot") or change.get("slot")
     player_item, guide_item = _items(player).get(str(slot)), _items(guide).get(str(slot))
-    interaction = interaction_for(row, auditor.main_models(ctx), guide_item, player_item,
+    interaction = interaction_for(row, named_models(auditor, ctx), guide_item, player_item,
                                   gaps, statuses)
     values = breakdown(auditor, base_ctx, ctx)
     built = assemble_row(row, result, dims, breaks, availability, interaction, values, statuses,
@@ -305,6 +305,12 @@ def _finish(auditor, guide_label: str, state: dict, differences: dict,
 
 def run_check(auditor, guide_xml_path, guide_label, progress=lambda label: None, deadline_s=90, *,
               clock=time.monotonic, job_id=None, source=None) -> dict:
+    """Test every guide difference on the player build; vault Models are named, not applied (spec 5B)."""
+    with models_not_applied(auditor):
+        return _run_check(auditor, guide_xml_path, guide_label, progress, deadline_s, clock, job_id, source)
+
+
+def _run_check(auditor, guide_xml_path, guide_label, progress, deadline_s, clock, job_id, source) -> dict:
     start = clock()
     progress("Loading both builds in Path of Building")
     _probe(auditor.engine)

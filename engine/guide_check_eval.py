@@ -50,6 +50,24 @@ def _simple_extra(change: dict) -> dict | None:
     return None
 
 
+@contextmanager
+def models_not_applied(auditor):
+    """Spec 5B: vault Models are named, not applied. Rows show PoB's own number; the models stay readable."""
+    kept = auditor.models
+    auditor.models, auditor.named_models = [], kept
+    try:
+        yield
+    finally:
+        auditor.models = kept
+
+
+def named_models(auditor, ctx: dict) -> list[dict]:
+    """The main skill's vault Models with the hits they would give (for the note only, never in a number)."""
+    from models import apply_models
+    modelled = apply_models(getattr(auditor, "named_models", []), ctx, auditor.equipped)
+    return auditor.main_models(modelled)
+
+
 def restore_player(auditor) -> None:
     auditor.engine.load_build(auditor.build_path)
     auditor.load_audit_hooks(list(auditor.disabled_skills))

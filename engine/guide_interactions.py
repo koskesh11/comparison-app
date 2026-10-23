@@ -82,7 +82,7 @@ def _model_notes(models: list[dict]) -> tuple[list[str], list[str]]:
     texts, refs = [], []
     for model in models:
         name = model.get("model")
-        texts.append(f"Includes vault model {name}: {model.get('multiplier')} hits "
+        texts.append(f"PoB number; model not applied: {name} would count {model.get('multiplier')} hits "
                      f"(PoB counts {model.get('pobCount')}).")
         refs.append(name)
     return texts, refs

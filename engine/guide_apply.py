@@ -12,6 +12,7 @@ import display
 import guide_lua
 import optimize
 from pobhost import LuaError
+from guide_check_eval import models_not_applied
 from scoring import change_pct
 
 _PHASES = {"dealloc": 0, "alloc": 1, "item": 2, "gemLevel": 3, "level": 3,
@@ -187,7 +188,8 @@ def _run(auditor, rows: list[dict], want_xml: bool) -> tuple[dict, str | None]:
 
 def predict(auditor, rows: list[dict]) -> dict:
     """Preview a row combination without serializing or writing the build."""
-    return _run(auditor, rows, False)[0]
+    with models_not_applied(auditor):
+        return _run(auditor, rows, False)[0]
 
 
 def _safe_name(value: object) -> str:
@@ -224,6 +226,11 @@ def _reload(auditor, path: Path, predicted: dict) -> dict:
 
 def save(auditor, rows: list[dict], out_dir: Path, force: bool = False) -> dict:
     """Run the preview path, save an accepted XML, and verify it after reload."""
+    with models_not_applied(auditor):
+        return _save(auditor, rows, out_dir, force)
+
+
+def _save(auditor, rows: list[dict], out_dir: Path, force: bool) -> dict:
     result, xml = _run(auditor, rows, True)
     allowed = result["refused"] is None or (force and result["refused"]["reason"] == "rule")
     result.update(saved=False, path=None, fileName=None, reload=None)
