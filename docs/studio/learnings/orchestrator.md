@@ -14,3 +14,10 @@ Process lessons only (game facts go to the vault). Format: date · task · trigg
   ordered a label workaround for Greater Volley instead of asking PoB about the other skill part → Before any fix
   for a wrong number, first check whether PoB can give the right number with different inputs (skill part, config,
   enemy) → check: the fix names the PoB input that changes, or says why PoB can't. · active
+- 2026-10-23 · 003 · GATE 4 loop 2 F1: my M5 decision covered false sources only, not "instead of" cancelling a real
+  source → Split every gate-fix decision into one acceptance check per failure direction → check: the fix-loop log
+  entry has a test line per direction. · promoted (interactions-lead prompt)
+- 2026-10-23 · 003 · pytest isn't installed; the gate agents had to find that out themselves → Gate prompts say
+  `python -m unittest discover -s tests` (slow: AUTOBUILDER_SLOW=1) → check: the command is in the dispatch. · active
+- 2026-10-23 · 003 · Both loop-2 gate agents stopped without writing reports (usage limit) → Log the dispatch before
+  waiting; re-dispatch from the log → check: resume point names the report paths. · active

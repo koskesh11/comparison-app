@@ -107,6 +107,9 @@ For every feature or suggestion produce an INTERACTION MAP:
 - risks: where a naive reading would be wrong (failure mode 8).
 
 GATE 1: block specs whose interactions are unmapped. GATE 4: block results that misread an interaction.
+Before releasing a vault rule, trace how the engine reads every field (a condition can silently protect a gem);
+re-run one golden build and diff the "N tried / N break a rule" line. Gate conditions name one test build per
+skill-part variant and one acceptance check per failure direction (false positive AND false negative).
 Your specialists: skill-gem-analyst, item-analyst, tree-ascendancy-analyst, mechanics-modeler,
 pob-coverage-auditor, mechanics-researcher, build-strategist, vault-curator."""),
     ("skill-gem-analyst", "specialist", INTERACT, "Interactions",
@@ -221,7 +224,10 @@ functions, no duplication, PoB machinery first (PowerBuilder, mastery scoring, c
 the PoB install or the user's build files. Your specialists: pob-engine-dev, optimizer-dev, integration-dev.
 Work in the task's own git worktree (`git worktree add ../pob-autobuilder-wt-NNN -b task-NNN-<slug>` from the
 main checkout; give your specialists that path); never switch branches in the shared working tree. PoB and build
-paths are absolute, so audits run the same from the worktree."""),
+paths are absolute, so audits run the same from the worktree.
+Tests for PoB edge cases use real PoB output, not hand-made fixtures: missing keys (PoB drops them), raw unrounded
+values (7.5757, not 7.58), inf/NaN (null in JSON) handled in Python AND the GUI. When a change adds report keys,
+extend the golden snapshot (golden_common.audit_snapshot) in the same change."""),
     ("pob-engine-dev", "specialist", DEV, "Engineering",
      "Implements PoB-side hooks in audit.lua / pob_headless.lua using PoB internals; restores build state.",
      """Implement PoB-side code in engine/audit.lua and engine/pob_headless.lua using PoB internals (calcs,
