@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import importlib.util
 import threading
+import time
 import uuid
 from pathlib import Path
 
@@ -19,6 +20,7 @@ from vault import load_scenarios
 
 GUIDE_POST_PATHS = {"/api/guide-check", "/api/guide-preview", "/api/guide-apply"}
 _START_LOCK = threading.Lock()
+MAX_JOB_AGE_S = 15 * 60  # a running guide job older than this is given up, so one stuck job cannot block all checks
 
 
 class JobProgress:
@@ -118,9 +120,7 @@ def _settings(data: dict, saved: dict, build: str, local_build: bool) -> dict:
     scenario = data.get("scenario", saved.get("scenario", DEFAULT_SCENARIO))
     if not isinstance(scenario, str) or scenario not in load_scenarios():
         raise InvalidRequest(f"unknown scenario {scenario!r}")
-    include = data.get("includeDrafts", False)
-    if not isinstance(include, bool):
-        raise InvalidRequest("includeDrafts must be a boolean")
+    include = _strict_bool(data, "includeDrafts")
     if ("scenario" in data or "leaveOut" in data) and local_build:
         build_settings.update(build, leaveOut=leave_out, scenario=scenario)
     return {"includeDrafts": include, "leaveOut": leave_out, "scenario": scenario}
@@ -133,6 +133,7 @@ def start_check(state, data) -> dict:
     settings = _settings(data, saved, build, "playerPath" in spec)
     spec.update(settings=settings, build=build)
     with _START_LOCK:
+        _expire_stuck_jobs(state)
         running = next((job for job in state.jobs.values()
                         if job.get("kind") == "guide" and job.get("status") == "running"), None)
         if running:
@@ -144,8 +145,16 @@ def start_check(state, data) -> dict:
     return {"jobId": job_id, "running": False}
 
 
+def _expire_stuck_jobs(state, clock=time.monotonic) -> None:
+    for job in state.jobs.values():
+        if job.get("kind") == "guide" and job.get("status") == "running"                 and clock() - job.get("started", clock()) > MAX_JOB_AGE_S:
+            job.update(status="error", error="The check took too long and was given up. Try again.",
+                       errorKind="Timeout", report=None)
+            runlog.log_event("ERROR", "error", "guide check expired", job.get("id"), job.get("build"))
+
+
 def _new_job(job_id: str, build: str, settings: dict) -> dict:
-    return {"id": job_id, "kind": "guide", "status": "running", "progress": "Queued",
+    return {"id": job_id, "kind": "guide", "status": "running", "progress": "Queued", "started": time.monotonic(),
             "stage": "Queued", "stages": [], "done": None, "total": None, "build": build,
             "error": None, "errorKind": None, "referenceId": None, "report": None,
             "sha": None, "playerPath": None, "settings": settings, "obtainable": None}
@@ -243,13 +252,20 @@ def _carry_settings(state, job: dict, result: dict) -> None:
     build_settings.update(rel, leaveOut=settings["leaveOut"], scenario=settings["scenario"])
 
 
+def _strict_bool(data: dict, name: str) -> bool:
+    value = data.get(name, False)
+    if not isinstance(value, bool):
+        raise InvalidRequest(f"{name} must be a boolean")
+    return value
+
+
 def apply(state, data) -> dict:
     job, rows = _finished_job(state, data)
     _fresh(job)
     with state.engine_lock, state.pool.lease() as engine:
         auditor = _auditor(state, job, engine)
         result = guide_apply.save(auditor, rows, state.DEFAULT_OUT_DIR,
-                                  force=bool(data.get("force")))
+                                  force=_strict_bool(data, "force"))
         del auditor
     ids = [row["id"] for row in rows]
     result.update(applied={"count": len(rows), "ids": ids,

@@ -78,6 +78,20 @@ class GuideCheckViewTest(unittest.TestCase):
         for fn in ("detailLines", "numbersCell", "guideRow", "gotPreview"):
             self.assertRegex(text, rf"function {fn}\([^)]*\) \{{[^}}]*?\b(?:obj|arr)\(", fn)
 
+    def test_guide_check_sends_the_same_drafts_checkbox_as_the_audit(self) -> None:
+        """GATE 2 H3: the route defaults drafts to off, so the GUI must send the checkbox like the audit does."""
+        text = page()
+        audit_call = next(l for l in text.splitlines() if 'api("/api/audit"' in l)
+        guide_call = next(l for l in text.splitlines() if 'api("/api/guide-check"' in l)
+        self.assertIn('includeDrafts: $("drafts").checked', audit_call)
+        self.assertIn('includeDrafts: $("drafts").checked', guide_call)
+        self.assertEqual(1, text.count('id="drafts"'))
+
+    def test_header_shows_the_settings_the_numbers_were_measured_with(self) -> None:
+        text = guide_script()
+        for field in ("hd.scenario", "hd.leaveOut", "hd.skippedDrafts", ".dpsStat"):
+            self.assertIn(field, text)
+
     def test_no_cancel_button(self) -> None:
         self.assertNotRegex(guide_script(), r'"Cancel"')
 

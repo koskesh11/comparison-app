@@ -160,7 +160,8 @@ def _missing_support(guide_gem: dict, player_group: dict, guide_names: set[str])
     free = limit - len(_gems(player_group))
     label = str(player_group.get("label") or f"Group {index}")
     if free > 0:
-        change = {"type": "addSupport", "group": index, "gem": _gem_payload(guide_gem, True)}
+        change = {"type": "addSupport", "group": index, "gem": _gem_payload(guide_gem, True),
+                  "socketLimit": limit, "freeSockets": free}
         return row(f"support-add:{index}:{name}", "support-add", f'Add support {name} in "{label}"',
                    change, [{"kind": "gem", "key": [index, name]}, {"kind": "socket", "key": index}],
                    info={"freeSockets": free})
@@ -237,6 +238,12 @@ def gem_rows(player: dict, guide: dict) -> tuple[list[dict], list[dict]]:
                                        "Group has no active skill"))
             continue
         matched = _match_group(guide_group, players, used)
+        if matched is None and guide_group.get("source") is not None:
+            untested.append(not_tested(f"group-add:granted:{index}", "group-add",
+                                       str(guide_group.get("label") or f"Group {index}"),
+                                       "Granted to the guide by a passive node or an item: there are no gems to "
+                                       "socket. Its node or item is listed on its own row"))
+            continue
         if matched is None:
             tested.append(_add_group(guide_group, player))
             continue

@@ -932,7 +932,7 @@ async function startGuide() {
   if (player.link && !validLink(player.link)) { renderGuideInput({ player: "That is not a pobb.in build link." }); return; }
   G.report = null; G.active = true; state.job = null;
   try {
-    const res = await api("/api/guide-check", { player, guide: { link: G.inputs.guide.trim() } });
+    const res = await api("/api/guide-check", { player, guide: { link: G.inputs.guide.trim() }, includeDrafts: $("drafts").checked });
     G.job = res.jobId; G.running = true; G.started = Date.now();
     guidePoll(G.job);
   } catch (e) { G.running = false; renderGuideInput({ guide: e.message }); }
@@ -1012,6 +1012,11 @@ function headerStrip(report) {
   if (str(hd.pobVersion)) parts.push("PoB " + hd.pobVersion);
   if (str(hd.league)) parts.push("League " + hd.league + (str(hd.leagueDate) ? ` (data ${hd.leagueDate})` : ""));
   if (Number.isFinite(pts.used) && Number.isFinite(pts.available)) parts.push(`Points ${pts.used} of ${pts.available}`);
+  if (str(hd.scenario)) parts.push("Scenario " + hd.scenario);
+  const left = arr(hd.leaveOut).map(String);
+  if (left.length) parts.push("Left out: " + left.join(", "));
+  const skipped = arr(hd.skippedDrafts).length;
+  parts.push(skipped ? `Draft vault notes off (${skipped} skipped)` : "Draft vault notes on");
   return h("p", { class: "gstrip" }, parts.join(" | "));
 }
 
@@ -1060,6 +1065,11 @@ function interactionLine(row) {
   return "Interaction: " + str(it.note) + (refs.length ? ` (vault: ${refs.join(", ")})` : "");
 }
 
+function dpsTip() {
+  return str(obj(obj(G.report).header).dpsStat) === "CombinedDPS"
+    ? "PoB main skill DPS (CombinedDPS: no skill group is in Full DPS)" : TIP.dps;
+}
+
 function numLine(label, tip, delta, from, to, o) {
   const flat = !Number.isFinite(delta) || Math.abs(delta) < o.zero;
   const cls = flat ? "flat" : delta > 0 ? "up" : "down";
@@ -1072,7 +1082,7 @@ function numbersCell(row) {
   const res = obj(row.result), d = obj(res.delta), b = obj(res.base), a = obj(res.after);
   const key = G.sort === "dps" ? "dps" : G.sort === "ehp" ? "ehp" : fin(d.dpsPct) >= fin(d.ehpPct) ? "dps" : "ehp";
   return h("div", { class: "gnums" },
-    numLine("DPS", TIP.dps, d.dpsPct, b.dps, a.dps, { fmt: gPct, big: gBig, zero: ZERO_PCT, strong: key === "dps" }),
+    numLine("DPS", dpsTip(), d.dpsPct, b.dps, a.dps, { fmt: gPct, big: gBig, zero: ZERO_PCT, strong: key === "dps" }),
     numLine("EHP", TIP.ehp, d.ehpPct, b.ehp, a.ehp, { fmt: gPct, big: gBig, zero: ZERO_PCT, strong: key === "ehp" }),
     numLine("Mana/s", TIP.mana, d.manaMargin, b.manaMargin, a.manaMargin, { fmt: gMargin, big: gPlain, zero: ZERO_PCT }));
 }
@@ -1153,7 +1163,7 @@ function configRows(rows) {
   return h("ul", { class: "glist" }, rows.map((r) => {
     r = obj(r);
     const d = obj(obj(r.result).delta);
-    const shown = r.result ? `If on, PoB shows: DPS ${gPct(d.dpsPct)}  EHP ${gPct(d.ehpPct)}` : "Not tested";
+    const shown = r.result ? `With the guide's setting, PoB shows: DPS ${gPct(d.dpsPct)}  EHP ${gPct(d.ehpPct)}` : "Not tested";
     return h("li", {}, h("div", { class: "row grow" }, h("span"), h("div", {}, h("div", { class: "title" }, str(r.label)),
       h("div", { class: "detail" }, str(r.detail) ? h("div", {}, r.detail) : null, h("div", {}, "Only if this applies to you in game."))),
       h("div", { class: "gnums" }, shown)));
@@ -1182,7 +1192,7 @@ function renderGuideResult(report) {
   else {
     parts.push(st === "nothingTestable" ? groupBox("Differences, ranked", 0, true, h("p", { class: "muted" }, "No differences to test.")) : renderGroupA());
     G.groups.b = groupBox("Settings the guide assumes", config.length, false,
-      h("p", { class: "intro" }, "These are Path of Building settings the guide author turned on. They inflate the guide’s numbers if they don’t apply to you in game. They are never changed in your build."),
+      h("p", { class: "intro" }, "These are Path of Building settings where the guide differs from yours (some turned on, some turned off). They change the guide’s numbers if they don’t apply to you in game. They are never changed in your build."),
       configRows(config));
     parts.push(G.groups.b);
   }

@@ -6,6 +6,7 @@ import json
 from contextlib import contextmanager
 
 import guide_lua
+from guide_check_result import rule_breaks
 from pobhost import ENGINE_DIR, _lua_str
 
 
@@ -77,6 +78,7 @@ def restore_player(auditor) -> None:
 def _apply_path(auditor, change: dict) -> dict:
     request = _request(auditor)
     request["changes"] = change.get("changes") if change.get("type") == "compound" else [change]
+    request["save"] = False  # only the numbers are needed here, not a serialized build per row
     command = "return applyChangesJSON(" + _lua_str(json.dumps(request)) + ")"
     try:
         result = json.loads(auditor.engine.run(command))
@@ -105,7 +107,7 @@ def evaluate_options(auditor, row: dict, base_ctx: dict) -> tuple[dict, dict]:
     values = []
     for index, change in enumerate(options):
         ctx = evaluate_change(auditor, change)
-        values.append((bool(auditor.breaks(ctx)), -_score(auditor, ctx, base_ctx), index, ctx, change))
+        values.append((bool(rule_breaks(auditor, base_ctx, ctx)), -_score(auditor, ctx, base_ctx), index, ctx, change))
     if any(not value[0] for value in values):
         values = [value for value in values if not value[0]]
     _, _, _, ctx, change = min(values, key=lambda value: value[:3])

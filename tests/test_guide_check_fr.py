@@ -43,6 +43,23 @@ class FrRegressionPairTests(helpers.PobGuardedTestCase):
         categories = {row["category"] for row in result["rows"] + result["noChange"]}
         print("T-FR", result["counts"], sorted(categories))
 
+    def test_mageblood_player_gets_flask_rows_as_not_tested_with_the_vault_note(self):
+        """GATE 2 H5: PoB keeps the saved flasks under Mageblood, so a flask swap would show a phantom second flask."""
+        from guide_check import MAGEBLOOD_NOTE, run_check, wears_mageblood
+        import guide_lua
+
+        guide_lua.ensure_loaded(self.auditor.engine)
+        self.assertTrue(wears_mageblood(guide_lua.snapshot(self.auditor.engine, "player")))
+        result = run_check(self.auditor, self.v4, "FR v4")
+        ranked = result["rows"] + result["noChange"]
+        self.assertEqual([], [row["id"] for row in ranked if row["category"] == "flask"])
+        flasks = [row for row in result["notTested"] if row["category"] == "flask"]
+        self.assertTrue(flasks)
+        for row in flasks:
+            self.assertIn("Mageblood", row["reason"])
+            self.assertIn(MAGEBLOOD_NOTE, row["vaultRefs"])
+            self.assertIsNone(row["result"])
+
 
 if __name__ == "__main__":
     unittest.main()

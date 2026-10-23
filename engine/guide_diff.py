@@ -4,6 +4,8 @@
 reported separately and are deliberately not included in that count.
 """
 
+import logging
+
 from guide_diff_common import CATEGORY_ORDER, clean_label, node_id, nodes_by_id, row, validate_snapshot
 from guide_diff_gems import gem_rows
 from guide_diff_items import equipment_rows, jewel_rows, unmatched_jewel_sockets
@@ -156,6 +158,7 @@ def _dedupe(tested: list[dict], untested: list[dict]) -> tuple[list[dict], list[
     for destination, values in ((left, tested), (right, untested)):
         for value in values:
             if value["id"] in seen:
+                logging.warning("guide diff: duplicate row id %s dropped", value["id"])
                 continue
             seen.add(value["id"])
             destination.append(value)

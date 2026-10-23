@@ -78,12 +78,24 @@ class GuideApplyPureTests(unittest.TestCase):
             {"id": "group", "change": {"type": "addGroup"}},
         ]
         planned = guide_apply.plan_changes(rows)
+        # a removal is ticked: PoB re-paths every add after it, so a path covered by another is still kept (GATE 2 H2)
         self.assertEqual([change["type"] for change in planned],
-                         ["dealloc", "alloc", "item", "item", "gemLevel",
+                         ["dealloc", "alloc", "alloc", "item", "item", "gemLevel",
                           "replaceSupport", "addSupport", "addGroup"])
         self.assertEqual(planned[0]["target"], 3)
-        self.assertEqual(planned[1]["target"], 9)
-        self.assertEqual([change["slot"] for change in planned[2:4]], ["Weapon 1", "Weapon 2"])
+        self.assertEqual([change["target"] for change in planned[1:3]], [9, 8])
+        self.assertTrue(all(change["afterRemoval"] for change in planned[1:3]))
+        self.assertEqual([[1, 2, 3]] * 2, [change["removedNodes"] for change in planned[1:3]])
+        self.assertEqual([change["slot"] for change in planned[3:5]], ["Weapon 1", "Weapon 2"])
+
+    def test_plan_changes_without_a_removal_keeps_stored_paths_and_deduplicates(self):
+        rows = [
+            {"id": "long", "change": {"type": "alloc", "target": 9, "nodes": [7, 8, 9]}},
+            {"id": "short", "change": {"type": "alloc", "target": 8, "nodes": [8]}},
+        ]
+        planned = guide_apply.plan_changes(rows)
+        self.assertEqual([change["target"] for change in planned], [9])
+        self.assertNotIn("afterRemoval", planned[0])
 
     def test_resolve_ticks_returns_report_order_and_merges_duplicates(self):
         report = fixture_report()
@@ -240,8 +252,11 @@ class GuideApplyIntegrationTests(unittest.TestCase):
         row = next({**value, "locked": False} for value in found["rows"]
                    if value["change"]["type"] == "compound" and "handedness" in value["flags"])
         predicted = guide_apply.predict(vfos, [row])
-        saved = guide_apply.save(vfos, [row], self.out_dir)
-        self.assertTrue(predicted["ok"] and saved["saved"])
+        # This real build already breaks the Int requirement (short by 121); the pair makes it 125 (GATE 2 H4).
+        self.assertEqual(predicted["refused"]["reason"], "rule")
+        self.assertIn("already broken in your build and made worse", predicted["refused"]["message"])
+        saved = guide_apply.save(vfos, [row], self.out_dir, force=True)
+        self.assertTrue(saved["saved"])
         self.assertEqual(predicted["combined"], saved["combined"])
         self.assertTrue(saved["reload"]["equal"], saved["reload"])
 

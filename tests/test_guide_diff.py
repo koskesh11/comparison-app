@@ -701,6 +701,25 @@ class RealSnapshotTests(unittest.TestCase):
                     self.assertEqual(json.dumps(with_info, sort_keys=True),
                                      json.dumps(repeated, sort_keys=True))
 
+    def test_granted_skill_groups_are_not_add_skill_rows(self):
+        """GATE 2 M1: a skill the guide gets from a passive node or an item has no gems to socket (EK: Assassin's Mark)."""
+        ek, worb = self._load("ek_player.json"), self._load("worb_player.json")
+        for player, guide, wanted in ((worb, ek, "Assassin"), (ek, worb, "Brine King")):
+            found = guide_diff.diff(player, guide, None)
+            granted = [row for row in found["notTested"] if row["id"].startswith("group-add:granted:")]
+            self.assertTrue(any(wanted in row["label"] for row in granted), wanted)
+            self.assertFalse(any(wanted in row["label"] for row in found["rows"]), wanted)
+            self.assertEqual(found["found"], len(found["rows"]) + len(found["notTested"]))
+
+    def test_support_add_rows_carry_socket_limit_and_free_sockets(self):
+        player, guide = self._load("ek_player.json"), self._load("pobb_guide.json")
+        adds = [row for row in guide_diff.diff(player, guide, None)["rows"] if row["category"] == "support-add"]
+        self.assertTrue(adds)
+        for row in adds:
+            change = row["change"]
+            self.assertEqual(change["freeSockets"], row["info"]["freeSockets"])
+            self.assertGreaterEqual(change["socketLimit"] - change["freeSockets"], 1)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -6,6 +6,7 @@ import sys
 import tempfile
 import unittest
 import urllib.error
+import urllib.request
 import zlib
 from pathlib import Path
 from unittest import mock
@@ -153,6 +154,39 @@ class ImportTests(unittest.TestCase):
         self.assertEqual(pobbin.Unreadable.status, 400)
         self.assertEqual(pobbin.TooLarge.status, 400)
         self.assertEqual(pobbin.FetchFailed.status, 502)
+
+
+class SlowAndRedirectTests(unittest.TestCase):
+    """GATE 2 M9 and L1: a slow server is cut off in total; a redirect must stay on https://pobb.in:443."""
+
+    def test_trickling_server_is_cut_off_by_the_total_deadline(self):
+        ticks = iter(range(0, 1000, 20))  # every clock reading is 20 s later
+        slow = FakeResponse(b"a" * 100)
+        with mock.patch.object(pobbin, "_open", return_value=slow):
+            with self.assertRaises(pobbin.FetchFailed) as caught:
+                pobbin.fetch("F8CiRC9KVADl", clock=lambda: next(ticks))
+        self.assertIn("too slow", str(caught.exception))
+
+    def test_fast_server_is_read_in_chunks_up_to_the_limit(self):
+        body = b"b" * (pobbin.CHUNK_BYTES * 2 + 5)
+        with mock.patch.object(pobbin, "_open", return_value=FakeResponse(body)):
+            self.assertEqual(body.decode(), pobbin.fetch("F8CiRC9KVADl"))
+        big = b"c" * (pobbin.MAX_CODE_BYTES + 10)
+        with mock.patch.object(pobbin, "_open", return_value=FakeResponse(big)):
+            with self.assertRaises(pobbin.TooLarge):
+                pobbin.fetch("F8CiRC9KVADl")
+
+    def test_redirects_off_https_443_or_with_a_login_are_refused(self):
+        handler = pobbin._SameHostRedirect()
+        request = urllib.request.Request("https://pobb.in/F8CiRC9KVADl/raw")
+        for target in ("http://pobb.in/F8CiRC9KVADl/raw", "https://pobb.in:8080/x", "ftp://pobb.in/x",
+                       "https://user@pobb.in/x", "https://user:pass@pobb.in/x", "https://evil.example/x"):
+            with self.subTest(target=target):
+                with self.assertRaises(urllib.error.URLError):
+                    handler.redirect_request(request, None, 301, "moved", {}, target)
+        for target in ("https://pobb.in/F8CiRC9KVADl/raw", "https://www.pobb.in:443/x"):
+            with self.subTest(target=target):
+                self.assertIsNotNone(handler.redirect_request(request, None, 301, "moved", {}, target))
 
 
 if __name__ == "__main__":

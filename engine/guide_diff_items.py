@@ -45,8 +45,11 @@ def _item_change(item: dict, slot: str, flask_active: bool | None = None) -> dic
     abyss = [{"slot": value.get("slot"), "raw": value.get("raw")}
              for value in item.get("abyssJewels") or [] if isinstance(value, dict)]
     abyss.sort(key=lambda value: (str(value.get("slot") or "").casefold(), str(value.get("raw") or "")))
-    return {"type": "item", "slot": slot, "name": item_name(item), "raw": item.get("raw"),
-            "abyssJewels": abyss, "flaskActive": flask_active}
+    change = {"type": "item", "slot": slot, "name": item_name(item), "raw": item.get("raw"),
+              "abyssJewels": abyss, "flaskActive": flask_active}
+    if node_id(item.get("socketNode")) is not None:
+        change["socketNode"] = node_id(item.get("socketNode"))
+    return change
 
 
 def _touches(item: dict, slot: str) -> list[dict]:

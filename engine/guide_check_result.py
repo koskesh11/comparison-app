@@ -1,14 +1,10 @@
 """KPI deltas, chips, locks, and tested guide rows."""
 
 from audit import NO_WORSE_PCT
-from rules import rule_name
+from rules import WORSE_MARK, rule_name, worsened
 from scoring import change_pct
 
 ZERO_LIMIT = 0.1
-GENERIC_REFS = {"Attribute requirements must be met",
-                "Mastery needs a notable in its cluster",
-                "Reservation must fit the pool",
-                "Total skill cost must be sustainable"}
 
 
 def _number(value) -> float:
@@ -23,6 +19,11 @@ def kpis(auditor, ctx: dict) -> dict:
             "maxHit": _number(out.get("PhysicalMaximumHitTaken"))}
 
 
+def rule_breaks(auditor, base_ctx: dict, ctx: dict) -> list[str]:
+    """New rule breaks plus checks of an already-broken rule that the change makes worse (spec B6)."""
+    return auditor.breaks(ctx) + worsened(auditor.rules, base_ctx, ctx)
+
+
 def build_result(auditor, base_ctx: dict, ctx: dict) -> tuple[dict, dict, list[str]]:
     before, after = kpis(auditor, base_ctx), kpis(auditor, ctx)
     delta = {"dpsPct": change_pct(after["dps"], before["dps"]),
@@ -30,7 +31,7 @@ def build_result(auditor, base_ctx: dict, ctx: dict) -> tuple[dict, dict, list[s
              "manaMargin": after["manaMargin"] - before["manaMargin"],
              "maxHit": change_pct(after["maxHit"], before["maxHit"])}
     dims = auditor.dimensions(ctx, base_ctx)
-    return {"base": before, "after": after, "delta": delta}, dims, auditor.breaks(ctx)
+    return {"base": before, "after": after, "delta": delta}, dims, rule_breaks(auditor, base_ctx, ctx)
 
 
 def is_zero(result: dict, dims: dict, breaks: list[str]) -> bool:
@@ -45,6 +46,8 @@ def _break_reason(violation: str) -> str:
     name = rule_name(violation)
     prefix = f"[{name}]"
     message = violation[len(prefix):].strip() if violation.startswith(prefix) else violation
+    if WORSE_MARK in message:
+        return f"Makes a rule you already break worse: {name} ({message.replace(WORSE_MARK, '')})"
     return f"Breaks a rule: {name} ({message})"
 
 
@@ -89,6 +92,5 @@ def assemble_row(row: dict, result: dict, dims: dict, breaks: list[str],
 
 
 def carries_value(row: dict) -> bool:
-    interaction = row.get("interaction") or {}
-    refs = set(interaction.get("vaultRefs") or [])
-    return bool(row.get("locked") or refs - GENERIC_REFS)
+    """A zero row stays ranked when it is locked or its own vault refs (rule flags, gap patterns, gem models) apply."""
+    return bool(row.get("locked") or (row.get("interaction") or {}).get("carries"))

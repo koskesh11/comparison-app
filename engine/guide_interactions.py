@@ -9,7 +9,7 @@ from vault import FRONTMATTER, GAP_BLOCK, VAULT_DIR
 
 INTERACTIONS = (
     {"when": {"category": "item"},
-     "note": "Tested as the whole item replacing yours (mods, implicits, enchant, anoint and sockets together).",
+     "note": "Tested as the whole item replacing yours (mods, implicits, enchant and anoint together; Path of Building does not check socket links).",
      "refs": ["Attribute requirements must be met"]},
     {"when": {"flag": "same-name"},
      "note": "Same item, different version: the differing mods are listed on the row.",
@@ -19,7 +19,7 @@ INTERACTIONS = (
      "refs": []},
     {"when": {"category": "flask"},
      "note": "Counts only if the matching flask slot is active in your build.",
-     "refs": ["Mageblood flasks"]},
+     "refs": []},
     {"when": {"category": "jewel", "flag": "paired"},
      "note": "Needs both pieces: tested as one row.", "refs": []},
     {"when": {"category": "jewel"},
@@ -41,6 +41,8 @@ INTERACTIONS = (
      "refs": ["Mastery needs a notable in its cluster", "Attribute requirements must be met"]},
 )
 
+MODEL_CATEGORIES = {"group-add", "support-add", "support-replace", "gem-level"}
+GAP_CATEGORIES = {"item", "flask", "jewel"}  # slotless patterns (M8) also fit flasks and jewels
 _warned = set()
 
 
@@ -108,6 +110,7 @@ def _gap_notes(guide: dict | None, player: dict | None, patterns: list[dict]) ->
 def interaction_for(row: dict, ctx_models: list[dict], guide_item=None, player_item=None,
                     gap_patterns=None, statuses=None) -> dict | None:
     texts, refs = [], list(row.get("vaultRefs") or [])
+    carries = list(refs)
     for entry in INTERACTIONS:
         if _matches(entry, row):
             texts.append(entry["note"])
@@ -115,10 +118,13 @@ def interaction_for(row: dict, ctx_models: list[dict], guide_item=None, player_i
     model_text, model_refs = _model_notes(ctx_models or [])
     texts += model_text
     refs += model_refs
-    if row.get("category") == "item":
+    if row.get("category") in MODEL_CATEGORIES:
+        carries += model_refs  # a gem change can matter for the model even when PoB shows no effect
+    if row.get("category") in GAP_CATEGORIES:
         gap_text, gap_refs = _gap_notes(guide_item, player_item, gap_patterns or [])
         texts += gap_text
         refs += gap_refs
+        carries += gap_refs
     statuses = vault_note_status() if statuses is None else statuses
     known = []
     for name in sorted(set(filter(None, refs)), key=str.casefold):
@@ -128,4 +134,6 @@ def interaction_for(row: dict, ctx_models: list[dict], guide_item=None, player_i
             logging.warning("unknown guide interaction vault note: %s", name)
             _warned.add(name)
     note = " ".join(filter(None, texts))
-    return {"note": note, "vaultRefs": known} if note or known else None
+    # carries: refs that make THIS row matter although PoB shows no effect (not the generic notes of its category)
+    carried = sorted({name for name in carries if name in known}, key=str.casefold)
+    return {"note": note, "vaultRefs": known, "carries": carried} if note or known else None

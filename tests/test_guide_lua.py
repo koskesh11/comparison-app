@@ -309,6 +309,19 @@ class ApplyTests(unittest.TestCase):
         with self.assertRaises(LuaError):
             apply_changes(self.engine, [{"type": "unknown"}], ["FullDPS"])
 
+    def test_item_with_empty_guide_sockets_checks_and_applies_to_the_same_numbers(self):
+        """GATE 2 M3: the check emptied abyss sockets the guide leaves empty while the apply kept your jewel."""
+        player = snapshot(self.engine, "player")
+        belt = next(row for row in player["items"] if row["abyssJewels"])
+        base = main_out(evaluate_with(self.engine, {"stats": STATS}))
+        spec = {"slot": belt["slot"], "raw": belt["raw"]}
+        checked = main_out(evaluate_with(self.engine, {"stats": STATS, "repItem": {**spec, "jewels": []}}))
+        applied = apply_changes(self.engine, [{"type": "item", **spec, "abyssJewels": []}], STATS, save=False)
+        self.assertNotEqual(base, checked)
+        self.assertEqual(checked, main_out(applied["ctx"]))
+        changed = next(row for row in snapshot(self.engine, "player")["items"] if row["slot"] == belt["slot"])
+        self.assertEqual([], changed["abyssJewels"])
+
     def test_apply_tree_round_trip(self):
         load_guide(self.engine, gl.decode_guide())
         original = snapshot(self.engine, "player")

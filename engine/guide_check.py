@@ -39,8 +39,11 @@ def _first_line(error: Exception) -> str:
 
 
 def _not_tested(row: dict, reason: str | None = None) -> dict:
-    return {**copy.deepcopy(row), "reason": reason or row.get("reason") or "Not testable",
-            "chips": ["not tested"], "rank": None, "result": None}
+    result = {**copy.deepcopy(row), "reason": reason or row.get("reason") or "Not testable",
+              "chips": ["not tested"], "rank": None, "result": None}
+    if MAGEBLOOD_NOTE in result["reason"]:
+        result["vaultRefs"] = sorted({*result.get("vaultRefs", []), MAGEBLOOD_NOTE})
+    return result
 
 
 def _probe(engine) -> None:
@@ -144,6 +147,8 @@ def _header(auditor, player: dict, guide: dict, label: str, banners: list[dict])
             "playerMainSkill": player.get("mainSkill"), "guideMainSkill": guide.get("mainSkill"),
             "pobVersion": player.get("pobVersion"), "league": auditor.obtainable.league,
             "leagueDate": auditor.obtainable.cache_date, "points": player.get("points") or {},
+            "scenario": auditor.scenario, "leaveOut": list(auditor.disabled_skills),
+            "dpsStat": auditor.dps_key, "skippedDrafts": list(auditor.skipped),
             "sets": {"player": player.get("sets") or {}, "guide": guide.get("sets") or {}},
             "banners": banners}
 
@@ -166,7 +171,8 @@ def _test_rows(state: dict) -> None:
 
 def _test_one(state: dict, row: dict) -> None:
     state["done"] += 1
-    reason = _granted_group_reason(row, state["player"]) or _alternate_set_reason(row)
+    reason = (_granted_group_reason(row, state["player"]) or _alternate_set_reason(row)
+              or _mageblood_reason(row, state["player"]))
     if reason:
         state["not_tested"].append(_not_tested(row, reason))
         return
@@ -199,6 +205,31 @@ def _granted_group_reason(row: dict, player: dict) -> str | None:
            for change in gem_changes):
         return "This skill is granted by your passive tree or an item, so its gems can't be changed."
     return None
+
+
+MAGEBLOOD_NOTE = "Mageblood flasks"
+_MAGEBLOOD_LINE = "constantly apply their flask effects"
+
+
+def wears_mageblood(player: dict) -> bool:
+    """A belt line that keeps magic utility flasks on (Mageblood, also the Foulborn version)."""
+    return any(_MAGEBLOOD_LINE in str(mod).casefold() for item in player.get("items") or []
+               if item.get("slot") == "Belt" for mod in item.get("mods") or [])
+
+
+def _mageblood_reason(row: dict, player: dict) -> str | None:
+    """PoB re-adds the saved flasks under Mageblood, so a flask swap measures a phantom second flask."""
+    if row.get("category") != "flask" or not wears_mageblood(player):
+        return None
+    return ("You wear Mageblood: Path of Building keeps your saved flasks on, so a flask change can't "
+            f"be measured here (vault note: {MAGEBLOOD_NOTE}).")
+
+
+def _gap_patterns(player: dict) -> list[dict]:
+    """Vault gap patterns; the Mageblood flask lines only apply to a player who wears Mageblood."""
+    wears = wears_mageblood(player)
+    return [pattern for pattern in load_named_gap_patterns()
+            if wears or not (pattern.get("note") == MAGEBLOOD_NOTE and pattern.get("slot") == "Flask")]
 
 
 def _alternate_set_reason(row: dict) -> str | None:
@@ -323,7 +354,7 @@ def _run_check(auditor, guide_xml_path, guide_label, progress, deadline_s, clock
     state = {"auditor": auditor, "progress": progress, "clock": clock, "start": start,
              "deadline": deadline_s, "limited": False,
              "player": player, "guide": guide, "base_ctx": base_ctx, "powers": powers,
-             "statuses": vault_note_status(), "gaps": load_named_gap_patterns(),
+             "statuses": vault_note_status(), "gaps": _gap_patterns(player),
              "rows": differences["rows"], "initial_not_tested": differences["notTested"],
              "ranked": [], "no_change": [], "not_tested": [], "done": 0,
              "total": differences["found"] + len(testable_config)}

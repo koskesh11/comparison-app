@@ -42,7 +42,10 @@ def _gem_touch(change: dict) -> tuple[str, tuple[int, int] | None] | None:
 def _item_touches(change: dict) -> list[tuple[str, object, str]]:
     slots = [change.get("slot")]
     slots += [jewel.get("slot") for jewel in change.get("abyssJewels") or []]
-    return [("slot", slot, "set") for slot in slots if slot is not None]
+    touches = [("slot", slot, "set") for slot in slots if slot is not None]
+    if change.get("socketNode") is not None:  # a jewel needs its tree socket: a removal of it conflicts
+        touches.append(("node", change["socketNode"], "add"))
+    return touches
 
 
 def _compound_touches(change: dict) -> list[tuple[str, object, str]]:

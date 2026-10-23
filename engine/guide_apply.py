@@ -13,12 +13,14 @@ import guide_lua
 import optimize
 from pobhost import LuaError
 from guide_check_eval import models_not_applied
+from guide_check_result import rule_breaks
 from scoring import change_pct
 
 _PHASES = {"dealloc": 0, "alloc": 1, "item": 2, "gemLevel": 3, "level": 3,
            "replaceSupport": 4, "addSupport": 5, "addGroup": 6}
 _REASONS = {"slot": "same slot", "group": "same skill", "gem": "same gem",
-            "node": "one adds and one removes the same passive nodes"}
+            "node": "one adds and one removes the same passive nodes",
+            "capacity": "no free socket for both; a link never gets a 7th gem"}
 _METRICS = ("dps", "ehp", "manaMargin", "maxHit")
 
 
@@ -82,11 +84,24 @@ def _path_plan(changes: list[dict]) -> list[dict]:
     return kept
 
 
+def _alloc_plan(changes: list[dict], removed: set[int]) -> list[dict]:
+    """Adds after a removal are re-pathed by PoB, so none may be skipped as covered by another path."""
+    if not removed:
+        return _path_plan(changes)
+    ordered = sorted(changes, key=lambda value: -len(value.get("nodes") or []))
+    unique = {}
+    for change in ordered:
+        unique.setdefault(change.get("target"), {**change, "afterRemoval": True, "removedNodes": sorted(removed)})
+    return list(unique.values())
+
+
 def plan_changes(rows: list[dict]) -> list[dict]:
     """Flatten rows and return the stable mutation order expected by PoB."""
     simple = [change for row in rows for change in _flatten(row["change"])]
-    paths = {kind: _path_plan([change for change in simple if change.get("type") == kind])
-             for kind in ("dealloc", "alloc")}
+    removals = [change for change in simple if change.get("type") == "dealloc"]
+    removed = {node for change in removals for node in change.get("nodes") or []}
+    paths = {"dealloc": _path_plan(removals),
+             "alloc": _alloc_plan([change for change in simple if change.get("type") == "alloc"], removed)}
     others = [change for change in simple if change.get("type") not in paths]
     items = sorted((change for change in others if change.get("type") == "item"),
                    key=lambda value: value.get("slot") or "")
@@ -96,11 +111,27 @@ def plan_changes(rows: list[dict]) -> list[dict]:
     return by_phase
 
 
+def _capacity_pairs(rows: list[dict]) -> list[dict]:
+    """More added supports than the group has free sockets: every add past the last free one conflicts."""
+    adds: dict = {}
+    for row in rows:
+        for change in _flatten(row["change"]):
+            if change.get("type") == "addSupport":
+                adds.setdefault(change.get("group"), []).append((row["id"], change))
+    found = []
+    for entries in adds.values():
+        free = min(change.get("freeSockets", 1) for _, change in entries)
+        found += [{"keys": (entries[0][0], key), "kind": "capacity", "detail": str(entries[0][1].get("group"))}
+                  for key, _ in entries[max(free, 1):] if key != entries[0][0]]
+    return found
+
+
 def conflicts(rows: list[dict]) -> list[dict]:
     """Return pairwise conflicts phrased for the first row in each pair."""
     indexed = {row["id"]: row for row in rows}
     result, seen = [], set()
-    for pair in optimize.conflict_pairs([(row["id"], row["change"]) for row in rows]):
+    pairs = optimize.conflict_pairs([(row["id"], row["change"]) for row in rows]) + _capacity_pairs(rows)
+    for pair in pairs:
         key = (pair["keys"], pair["kind"])
         if key in seen or pair["kind"] not in _REASONS:
             continue
@@ -176,7 +207,7 @@ def _run(auditor, rows: list[dict], want_xml: bool) -> tuple[dict, str | None]:
     needs = after["used"] - after["available"] if over else 0
     points = {"before": before["used"], "after": after["used"], "available": after["available"],
               "over": over, "needs": needs}
-    violations = auditor.breaks(ctx)
+    violations = rule_breaks(auditor, base_ctx, ctx)
     refused = ({"reason": "budget", "message": f"needs {needs} more points; also tick a removal"} if over
                else {"reason": "rule", "message": "Breaks a rule: " + "; ".join(violations)}
                if violations else None)

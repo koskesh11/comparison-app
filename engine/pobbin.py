@@ -1,6 +1,7 @@
 """pobb.in import for the guide check: parse a link, fetch the build code, decode it. Stdlib only.
 
-Limits (spec A1-A4, F1-F3): fixed host pobb.in, id ^[A-Za-z0-9_-]{4,32}$, 15 s timeout, code <= 256 KB, inflated
+Limits (spec A1-A4, F1-F3): fixed host pobb.in over https port 443, id ^[A-Za-z0-9_-]{4,32}$, 15 s per read and
+30 s in total, code <= 256 KB, inflated
 XML <= 4 MB (zlib bomb guard), no DOCTYPE/ENTITY, root tag PathOfBuilding. PoB parses the XML; Python never does.
 Imported XML is saved only under <AutoBuilder dir>/imports/.
 """
@@ -8,6 +9,7 @@ Imported XML is saved only under <AutoBuilder dir>/imports/.
 import base64
 import binascii
 import re
+import time
 import urllib.error
 import urllib.request
 import zlib
@@ -17,6 +19,8 @@ from api_errors import ApiError, InvalidRequest
 
 HOST = "pobb.in"
 TIMEOUT_S = 15
+TOTAL_S = 30
+CHUNK_BYTES = 16 * 1024
 MAX_CODE_BYTES = 256 * 1024
 MAX_XML_BYTES = 4 * 1024 * 1024
 ID_PATTERN = re.compile(r"^[A-Za-z0-9_-]{4,32}$")
@@ -58,9 +62,9 @@ def parse_link(text) -> str:
 
 class _SameHostRedirect(urllib.request.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
-        host = urllib.request.urlparse(newurl).hostname or ""
-        if host.lower() not in (HOST, "www." + HOST):
-            raise urllib.error.URLError("redirect to another host refused")
+        target = urllib.request.urlparse(newurl)
+        if (target.hostname or "").lower() not in (HOST, "www." + HOST) or target.scheme != "https"                 or target.port not in (None, 443) or target.username or target.password:
+            raise urllib.error.URLError("redirect to another host, scheme, port or login refused")
         return super().redirect_request(req, fp, code, msg, headers, newurl)
 
 
@@ -69,14 +73,27 @@ def _open(url: str, timeout: int):
     return urllib.request.build_opener(_SameHostRedirect).open(request, timeout=timeout)
 
 
-def fetch(build_id: str) -> str:
+def _read_limited(response, clock) -> bytes:
+    """Read at most MAX_CODE_BYTES + 1 within TOTAL_S seconds (a slow server cannot hold a job open)."""
+    deadline, body = clock() + TOTAL_S, b""
+    while len(body) <= MAX_CODE_BYTES:
+        if clock() > deadline:
+            raise FetchFailed("Couldn’t fetch the guide (pobb.in is too slow). Try again later.")
+        chunk = response.read1(min(CHUNK_BYTES, MAX_CODE_BYTES + 1 - len(body)))
+        if not chunk:
+            break
+        body += chunk
+    return body
+
+
+def fetch(build_id: str, clock=time.monotonic) -> str:
     """Download the raw PoB code of a pobb.in build (at most MAX_CODE_BYTES)."""
     try:
         with _open(f"https://{HOST}/{build_id}/raw", timeout=TIMEOUT_S) as response:
             status = getattr(response, "status", 200)
             if status != 200:
                 raise FetchFailed(f"Couldn\u2019t fetch the guide (pobb.in answered {status}). Try again later.")
-            body = response.read(MAX_CODE_BYTES + 1)
+            body = _read_limited(response, clock)
     except urllib.error.HTTPError as error:
         raise FetchFailed(f"Couldn\u2019t fetch the guide (pobb.in answered {error.code}). Try again later.") from error
     except (urllib.error.URLError, OSError) as error:  # URLError, timeouts, resets

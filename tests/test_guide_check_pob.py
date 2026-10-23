@@ -414,6 +414,73 @@ class RealPobbContractTests(_EkCase):
         self.assertTrue(compound)
         self.assertTrue(all(row["result"] is not None for row in compound))
 
+    def _rows_by_id(self):
+        return {row["id"]: row for row in self.result["rows"] + self.result["noChange"]}
+
+    def test_removal_and_add_in_one_set_keep_both_and_reload_equal(self):
+        """GATE 2 H2: PoB prunes a path that lost its connection; the add used to vanish silently (EK 118 -> 116)."""
+        import guide_apply
+        import guide_lua
+        from guide_check_eval import restore_player
+
+        self.addCleanup(restore_player, self.auditor)  # save() leaves the reloaded copy in the shared engine
+        rows = self._rows_by_id()
+        remove, add = rows["tree-remove:46897"], rows["tree-add:40508"]
+        self.assertFalse(remove["locked"] or add["locked"])
+        before = self.result["header"]["points"]["used"]
+        out = self.temp / "h2-out"
+        predicted = guide_apply.predict(self.auditor, [remove, add])
+        saved = guide_apply.save(self.auditor, [remove, add], out)
+        self.assertTrue(predicted["ok"] and saved["saved"], saved.get("refused"))
+        # PoB re-paths the add after the removal (the stored one-node path lost its connection): the fresh path is
+        # longer, so the budget is whatever PoB really allocates, and it equals the reloaded file.
+        after = predicted["points"]["after"]
+        self.assertEqual(before - len(remove["change"]["nodes"]) + 3, after)  # 118 - 2 removed + 3 fresh path nodes
+        reloaded = guide_lua.snapshot(self.auditor.engine, "player")["points"]["used"]
+        self.assertEqual(after, reloaded)
+        self.assertEqual(predicted["combined"], saved["combined"])
+        self.assertTrue(saved["reload"]["equal"], saved["reload"])
+        nodes = {value["id"] for value in guide_lua.snapshot(self.auditor.engine, "player")["nodes"]}
+        self.assertIn(40508, nodes)
+        self.assertTrue(nodes.isdisjoint(remove["change"]["nodes"]))
+
+    def test_add_that_needs_a_node_the_removal_drops_is_refused_not_half_applied(self):
+        """The same set when the only way to the add runs through a dropped node: PoB gave 58244 back silently."""
+        import guide_apply
+        from guide_check_eval import restore_player
+
+        self.addCleanup(restore_player, self.auditor)
+        rows = self._rows_by_id()
+        remove, add = rows["tree-remove:58244"], rows["tree-add:32176"]
+        result = guide_apply.predict(self.auditor, [remove, add])
+        self.assertFalse(result["ok"])
+        self.assertEqual("pob", result["refused"]["reason"])
+        self.assertIn("which a ticked removal drops", result["refused"]["message"])
+        self.assertIsNone(result["combined"])
+
+    def test_jewel_row_conflicts_with_a_removal_of_its_socket(self):
+        """GATE 2 H2: a jewel in an allocated socket silently went inactive when a ticked removal dropped the socket."""
+        import copy
+        import guide_apply
+
+        rows = self._rows_by_id()
+        jewel, remove = rows["jewel:Jewel 59585"], rows["tree-remove:32710"]
+        self.assertIn(59585, remove["change"]["nodes"])
+        found = guide_apply.conflicts([jewel, remove])
+        self.assertEqual([[jewel["id"], remove["id"]]], [value["ids"] for value in found])
+        loose = copy.deepcopy(jewel)
+        loose["change"].pop("socketNode")
+        self.assertEqual([], guide_apply.conflicts([loose, remove]))
+
+    def test_flask_rows_are_tested_with_the_uptime_note_and_without_the_mageblood_note(self):
+        """GATE 2 H5 control and M8: no Mageblood on EK, so flasks are tested; the 100% uptime gap note now reaches them."""
+        flasks = [row for row in self.result["rows"] + self.result["noChange"] if row["category"] == "flask"]
+        self.assertTrue(flasks)
+        self.assertFalse(any(row["category"] == "flask" for row in self.result["notTested"]))
+        refs = lambda row: (row["interaction"] or {}).get("vaultRefs") or []
+        self.assertTrue(any("Mods PoB can't value" in refs(row) for row in flasks))
+        self.assertFalse(any("Mageblood flasks" in refs(row) for row in flasks))
+
 
 class RealWorbTests(helpers.PobGuardedTestCase):
     @classmethod
@@ -456,6 +523,27 @@ class RealWorbTests(helpers.PobGuardedTestCase):
             expected = self.auditor.main_out(self.auditor.base_context())[self.auditor.dps_key]
         self.assertEqual(expected, result["base"]["dps"])
         self.assertIn("model not applied", row["interaction"]["note"])
+
+    def test_zero_rows_stay_in_no_change_despite_the_model_note(self):
+        """GATE 2 M4: the Winter Orb model note used to lift every zero tree row out of No change in PoB."""
+        from guide_check import run_check
+        from tests.guide_testlib import decode_guide
+
+        guide = decode_guide()
+        try:
+            result = run_check(self.auditor, guide, "pobb fixture")
+        finally:
+            shutil.rmtree(guide.parent)
+        self.assertTrue(result["noChange"])
+        noted = [row for row in result["noChange"]
+                 if "model not applied" in str((row.get("interaction") or {}).get("note"))]
+        self.assertTrue(noted, "the model note stays on the row, it just does not rank it")
+        for row in result["noChange"]:
+            self.assertFalse(row["locked"])
+            self.assertEqual([], (row.get("interaction") or {}).get("carries") or [])
+        for row in result["rows"]:
+            if row.get("zeroNote"):
+                self.assertTrue(row["locked"] or row["interaction"]["carries"], row["id"])
 
     def test_full_winter_orb_group_never_adds_seventh_gem(self):
         from guide_check import run_check
@@ -604,6 +692,29 @@ class RealConditionalRetestTests(helpers.PobGuardedTestCase):
             expected = self.auditor.dimensions(ctx, base)["ehp"]
         self.assertAlmostEqual(expected, row["conditional"]["ehpPct"],
                                delta=1e-6 * max(1, abs(expected)))
+
+    def test_a_reloading_row_does_not_drop_the_guide_setting_for_later_rows(self):
+        """GATE 2 M2: an apply-path (compound) row reloads the build, which dropped the setting for every later row."""
+        import copy
+        import guide_lua
+        from guide_check import run_check
+        from guide_check_retest import retest_zero_rows
+        from guide_diff_items import _item_change
+
+        result = run_check(self.auditor, self.original, "original")
+        tree = next(value for value in result["noChange"] if value["id"] == "tree-add:11730")
+        config = [value for value in result["config"] if value.get("change")]
+        items = {value["slot"]: value for value in guide_lua.snapshot(self.auditor.engine, "player")["items"]}
+        same_pair = {"type": "compound", "changes": [_item_change(items[slot], slot)
+                                                     for slot in ("Weapon 1", "Weapon 2")]}
+        reloading = {"id": "same-weapons", "change": same_pair, "zeroNote": "zero"}
+        alone, after_reload = copy.deepcopy(tree), copy.deepcopy(tree)
+        alone["conditional"] = after_reload["conditional"] = None
+        retest_zero_rows(self.auditor, [alone], config)
+        retest_zero_rows(self.auditor, [reloading, after_reload], config)
+        self.assertIsNotNone(alone["conditional"])
+        self.assertEqual(alone["conditional"], after_reload["conditional"])
+        self.assertIsNone(reloading.get("conditional"))
 
 
 if __name__ == "__main__":

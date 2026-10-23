@@ -81,6 +81,11 @@ end
 
 local function applyAddSupport(change)
 	local group = groupAt(change.group)
+	-- A guide never adds a 7th gem: guide rows carry the item's sockets (snapshot socketLimit) or 6 without an item.
+	local limit = change.socketLimit
+	if limit ~= nil and #group.gemList >= limit then
+		error("did not accept: group " .. change.group .. " has no free socket (" .. #group.gemList .. " of " .. limit .. ")", 0)
+	end
 	local gem = gemInstance(change.gem)
 	table.insert(group.gemList, gem)
 	local ok, err = pcall(function()
@@ -146,11 +151,11 @@ for name, apply in pairs(GuideCore.gemChange) do
 	applyChange[name] = function(change) apply(change) end
 end
 
-applyChange.alloc = function(change)
-	local target = build.spec.nodes[change.target]
-	if not target then error("unknown node " .. tostring(change.target)) end
-	if build.spec.allocNodes[change.target] then error("node already allocated " .. change.target) end
-	if not target.path then error("no path to node " .. change.target) end
+-- PoB prunes allocated nodes that lose their connection (PassiveSpec.lua:1548-1575). After a ticked removal the
+-- stored path can run through pruned nodes, so afterRemoval allocs use PoB's fresh path (recomputed by
+-- DeallocNode) and refuse when the target is no longer reachable. Every alloc is verified, never silently lost.
+local function allocationPath(change, target)
+	if change.afterRemoval then return nil end
 	local path, includes = {}, false
 	for _, id in ipairs(change.nodes or {}) do
 		local node = build.spec.nodes[id]
@@ -159,7 +164,37 @@ applyChange.alloc = function(change)
 		table.insert(path, node)
 	end
 	if not includes then error("allocation path must include target " .. change.target) end
+	return path
+end
+
+applyChange.alloc = function(change)
+	local target = build.spec.nodes[change.target]
+	if not target then error("unknown node " .. tostring(change.target)) end
+	if build.spec.allocNodes[change.target] then
+		if change.afterRemoval then return end
+		error("node already allocated " .. change.target)
+	end
+	if not target.path then
+		if change.afterRemoval then
+			error("did not accept: node " .. change.target .. " can no longer be reached after the removals", 0)
+		end
+		error("no path to node " .. change.target)
+	end
+	local path = allocationPath(change, target)
+	if change.afterRemoval then
+		local dropped = {}
+		for _, id in ipairs(change.removedNodes or {}) do dropped[id] = true end
+		for _, node in ipairs(target.path) do
+			if dropped[node.id] then
+				error("did not accept: node " .. change.target .. " can only be reached through node " .. node.id
+					.. ", which a ticked removal drops", 0)
+			end
+		end
+	end
 	build.spec:AllocNode(target, path)
+	if not build.spec.allocNodes[change.target] then
+		error("did not accept: node " .. change.target .. " was not allocated (it lost its connection)", 0)
+	end
 	build:EstimatePlayerProgress()
 end
 
@@ -171,18 +206,35 @@ applyChange.dealloc = function(change)
 	build:EstimatePlayerProgress()
 end
 
+-- The guide's item brings its own abyss jewels (PoB CompareTab copies item and jewels together); an abyssal socket
+-- the guide leaves empty empties yours too, exactly as the check measures it (GuideCore.itemOverride).
+local function emptiedSockets(item, change)
+	local given, rows = {}, {}
+	for _, jewel in ipairs(change.abyssJewels or {}) do given[jewel.slot] = true end
+	for index = 1, item.abyssalSocketCount or 0 do
+		local name = change.slot .. " Abyssal Socket " .. index
+		if not given[name] and build.itemsTab.slots[name] then table.insert(rows, { slot = requireSlot(name), clear = true }) end
+	end
+	return rows
+end
+
 applyChange.item = function(change)
 	local specs = { { slot = requireSlot(change.slot), item = parseItem(change.raw, change.slot) } }
 	for _, jewel in ipairs(change.abyssJewels or {}) do
 		table.insert(specs, { slot = requireSlot(jewel.slot), item = parseItem(jewel.raw, jewel.slot) })
 	end
+	for _, row in ipairs(emptiedSockets(specs[1].item, change)) do table.insert(specs, row) end
 	for _, row in ipairs(specs) do row.old = row.slot.selItemId end
 	local flaskOld = specs[1].slot.active
 	local flaskSetOld = build.itemsTab.activeItemSet[change.slot]
 		and build.itemsTab.activeItemSet[change.slot].active
 	local ok, err = pcall(function()
 		for _, row in ipairs(specs) do
-			row.added = true; build.itemsTab:AddItem(row.item, true); row.slot:SetSelItemId(row.item.id)
+			if row.clear then
+				row.slot:SetSelItemId(0)
+			else
+				row.added = true; build.itemsTab:AddItem(row.item, true); row.slot:SetSelItemId(row.item.id)
+			end
 		end
 		if change.flaskActive ~= nil and change.slot:match("^Flask") then
 			local slot = specs[1].slot
@@ -191,8 +243,11 @@ applyChange.item = function(change)
 		end
 		build.itemsTab:PopulateSlots()
 		for _, row in ipairs(specs) do
-			if row.slot.selItemId ~= row.item.id then
+			if not row.clear and row.slot.selItemId ~= row.item.id then
 				error("PoB did not accept item " .. tostring(row.item.name) .. " in slot " .. row.slot.slotName)
+			end
+			if not row.clear and row.slot.nodeId and not build.spec.allocNodes[row.slot.nodeId] then
+				error("did not accept: jewel socket " .. row.slot.nodeId .. " is not allocated for " .. tostring(row.item.name), 0)
 			end
 		end
 		build.buildFlag = true
