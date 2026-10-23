@@ -468,3 +468,4 @@ end
 dofile(ENGINE_DIR .. "/audit_tree.lua")
 dofile(ENGINE_DIR .. "/audit_costs.lua")
 dofile(ENGINE_DIR .. "/audit_gems.lua")
+dofile(ENGINE_DIR .. "/guide.lua")
