@@ -40,11 +40,14 @@ Never mark work done or state a fact without evidence: command output, PoB numbe
 source with patch version. If something is undocumented or unverified, say so instead of guessing."""
 
 LEAD_NOTE = """## How you delegate
-The orchestrator (main session) gives you a task. Break it into specialist tasks and dispatch your own
-specialists with the Agent tool — independent tasks in parallel (several Agent calls in one message). Give each
-specialist precise inputs and the expected output. Check their results against the evidence rule and the
-failure modes, then return ONE consolidated report to the orchestrator: outcome, evidence, decisions needed
-from the user, open risks. Only dispatch specialists of your own department."""
+The orchestrator (main session) gives you a task. Do small items yourself; dispatch your own specialists with the
+Agent tool only for work that needs their depth — at most 2 per dispatch, in parallel when independent (token
+budget, user 2026-10-23: every spawn re-reads ~30k tokens of context). Reuse a specialist via SendMessage instead of
+a new one; never use general-purpose agents. Give each specialist precise inputs and the expected output and ask
+for a reply of at most 15 lines (details go to a file). Read files in excerpts (grep, offset/limit), never whole
+logs. Check their results against the evidence rule and the failure modes, then return ONE consolidated report to
+the orchestrator (at most 15 lines; long evidence in tasks/reports/): outcome, evidence, decisions needed from the
+user, open risks. Only dispatch specialists of your own department."""
 
 SPECIALIST_NOTE = """## How you work
 You are dispatched by your department lead. Do exactly the task you were given, then report back concisely:
@@ -280,43 +283,46 @@ left-out skills, gem counts)? Flag anything that would make the user say "you're
 # Agents not listed inherit the session model. Codex coding runs are fixed in tools/codex_task.py.
 OPUS, SONNET, HAIKU = "claude-opus-5-5", "claude-sonnet-5-5", "claude-haiku-5-5"
 # Reasons per agent: docs/agent-models.md (task 001). Code itself is written by Codex (tools/codex_task.py).
+# Task 019 (user 2026-10-23: cut token use 50%): Opus only where a wrong call slips past every later check —
+# the main thread, GATE 1/4 (interactions-lead), the mechanics models and the two GATE 2 reviewers. Everything an
+# Opus gate re-checks runs on Sonnet; purely mechanical checks on Haiku. Effort xhigh -> high.
 MODELS = {
-    "orchestrator": (OPUS, "xhigh"),  # user decision
-    # Game Interactions: most past failures were misread interactions -> deepest reasoning
-    "interactions-lead": (OPUS, "xhigh"),
-    "skill-gem-analyst": (OPUS, "high"),
-    "item-analyst": (OPUS, "high"),
-    "tree-ascendancy-analyst": (OPUS, "high"),
-    "mechanics-modeler": (OPUS, "high"),
-    "build-strategist": (OPUS, "medium"),
-    "mechanics-researcher": (OPUS, "high"),  # orchestrator decision 2026-10-22: research feeds GATE 1
-    "pob-coverage-auditor": (SONNET, "high"),
+    "orchestrator": (OPUS, "high"),  # was xhigh (user decision); lowered by task 019
+    # Game Interactions: the lead (Opus) gates every specialist result at GATE 1/4
+    "interactions-lead": (OPUS, "high"),
+    "skill-gem-analyst": (SONNET, "high"),
+    "item-analyst": (SONNET, "high"),
+    "tree-ascendancy-analyst": (SONNET, "high"),
+    "mechanics-modeler": (OPUS, "high"),  # calibrated models: errors are silent in every number
+    "build-strategist": (SONNET, "medium"),
+    "mechanics-researcher": (SONNET, "high"),
+    "pob-coverage-auditor": (SONNET, "medium"),
     "vault-curator": (SONNET, "medium"),
     # Features
-    "product-lead": (OPUS, "high"),
-    "spec-writer": (SONNET, "high"),
-    "data-sources-analyst": (SONNET, "medium"),
-    "user-advocate": (SONNET, "medium"),
+    "product-lead": (SONNET, "high"),
+    "spec-writer": (SONNET, "medium"),
+    "data-sources-analyst": (HAIKU, "medium"),
+    "user-advocate": (HAIKU, "medium"),
     # UI/UX
-    "uiux-lead": (SONNET, "high"),
-    "ux-designer": (SONNET, "high"),
+    "uiux-lead": (SONNET, "medium"),
+    "ux-designer": (SONNET, "medium"),
     "frontend-dev": (SONNET, "medium"),
-    "ui-qa": (SONNET, "medium"),
-    # Engineering (Claude side: briefs for Codex + verification)
-    "engineering-lead": (OPUS, "high"),
-    "pob-engine-dev": (OPUS, "high"),
+    "ui-qa": (HAIKU, "medium"),
+    # Engineering (Claude side: briefs for Codex + verification; GATE 2 re-checks)
+    "engineering-lead": (SONNET, "high"),
+    "pob-engine-dev": (SONNET, "high"),
     "optimizer-dev": (SONNET, "high"),
     "integration-dev": (SONNET, "medium"),
     # Code Review (GATE 2)
-    "review-lead": (OPUS, "high"),
+    "review-lead": (SONNET, "high"),
     "correctness-reviewer": (OPUS, "high"),
     "truth-reviewer": (OPUS, "high"),
-    "security-reviewer": (SONNET, "high"),
+    "security-reviewer": (SONNET, "medium"),
     # QA (GATE 3)
-    "qa-lead": (SONNET, "high"),
-    "player-sanity-tester": (OPUS, "medium"),
-    "regression-tester": (SONNET, "medium"),
-    "api-tester": (HAIKU, "medium"),
+    "qa-lead": (SONNET, "medium"),
+    "player-sanity-tester": (SONNET, "medium"),
+    "regression-tester": (HAIKU, "medium"),
+    "api-tester": (HAIKU, "low"),
 }
 
 ORCHESTRATOR_DESCRIPTION = ("Orchestrator of the PoB Autobuilder studio (main thread): turns the user's instructions and "
@@ -371,8 +377,14 @@ then mark the task blocked and tell the user why.
 - You may pass a per-invocation `effort` to an agent when a task is unusually hard or trivial.
 - You choose the effort per task, the user does not: light lane (no game logic: skip product/GATE 1/4) or
   full workflow, how many agents, and their effort. Write the choice in one line in the task file and report.
-  Keep token use low (the user's usage limit runs out): reuse agents via SendMessage instead of new ones, no
-  duplicate research, short reports, reviews only where they pay off.
+- Token budget (user, 2026-10-23, task 019: half the tokens). Most cost is context re-read on every call, not output:
+  - Main thread: after each gate or finished task, write a resume point in the task file and tell the user
+    "/clear now" in your report. Never read whole large files, logs or diffs here: grep, excerpts (offset/limit),
+    `git diff --stat`, or ask an agent for a short answer.
+  - Agents: one lead per gate; reuse agents via SendMessage instead of new ones; never general-purpose agents (use
+    the department agents; Explore only for searches); ask for replies of at most 15 lines (details to
+    tasks/reports/). No duplicate research, reviews only where they pay off, tests before AI reviews.
+  - Measure: in the retro run `python tools/token_usage.py --since <task start date>` and log the total.
 - Coach the user's prompts: when a big request lacks a start, goal or "done when", or doesn't say brainstorm
   vs build, say so in one line and restate it as a task card (Start / Goal / Done when / Not / Mode), then
   proceed with that interpretation.
@@ -392,7 +404,7 @@ then mark the task blocked and tell the user why.
 README = """# PoB Autobuilder — agent studio
 
 Every Claude Code session started in this folder runs as the **orchestrator** (`.claude/settings.json` →
-`"agent": "orchestrator"`, Opus 5.5, xhigh effort). Tell it "go" to work the next task in `tasks/`, or give it a
+`"agent": "orchestrator"`, Opus 5.5, high effort). Tell it "go" to work the next task in `tasks/`, or give it a
 new request. The orchestrator dispatches department leads; leads dispatch their own specialists (nesting:
 orchestrator → lead → specialist, within Claude Code's 3-layer limit). Coding specialists hand the actual code
 to **Codex (gpt-5.6-sol, medium effort)** via `tools/codex_task.py` and verify the result.
@@ -401,7 +413,7 @@ Agent files are generated: edit `tools/make_agents.py` (incl. the MODELS table) 
 `python tools/make_agents.py .` from the project root.
 
 ```
-user ──► orchestrator (Opus 5.5, xhigh) ── tasks/ queue
+user ──► orchestrator (Opus 5.5, high) ── tasks/ queue
   │
   ▼
 product-lead ── spec + acceptance criteria
