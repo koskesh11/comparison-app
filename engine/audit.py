@@ -48,10 +48,11 @@ class Auditor:
     multi_part = False
 
     def __init__(self, build_path: Path, include_drafts: bool, progress: Callable[[str], None] = lambda _: None,
-                 disabled_skills: list[str] | None = None, scenario: str = DEFAULT_SCENARIO):
+                 disabled_skills: list[str] | None = None, scenario: str = DEFAULT_SCENARIO,
+                 engine: PobEngine | None = None, obtainable: Obtainability | None = None):
         self.progress = progress
         progress("Starting Path of Building")
-        self.engine = PobEngine()
+        self.engine = engine if engine is not None else PobEngine()
         self.build_path = build_path
         self.source_sha256 = file_sha256(build_path)
         self.summary = self.engine.load_build(build_path)
@@ -74,7 +75,8 @@ class Auditor:
         self.multi_part = any((skill.get("partCount") or 0) >= 2 for skill in ctx["skills"])
         self.dps_key = self.dps_measure["key"]
         progress("Loading league data")
-        self.obtainable = Obtainability.load()
+        # apply reuses the audit's league data, so it needs no network
+        self.obtainable = obtainable if obtainable is not None else Obtainability.load()
         self.suggestions: list[dict] = []
         self._base_broken: set[str] | None = None
         self._swap_levels: dict[str, dict] | None = None

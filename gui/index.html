@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="api-token" content="__API_TOKEN__">
 <title>PoB Autobuilder</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -294,7 +295,15 @@ function partsLine(dims) {
 }
 
 async function api(path, body) {
-  const res = await fetch(path, body ? { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) } : {});
+  const token = document.querySelector('meta[name="api-token"]').getAttribute("content");
+  const headers = { "X-Api-Token": token };
+  const options = { headers };
+  if (body) {
+    options.method = "POST";
+    headers["Content-Type"] = "application/json";
+    options.body = JSON.stringify(body);
+  }
+  const res = await fetch(path, options);
   const data = await res.json();
   if (!res.ok) {
     const error = new Error(data.error || res.statusText);

@@ -7,10 +7,12 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import golden_common as gc  # noqa: E402
 
+import audit  # noqa: E402
 import optimize  # noqa: E402
 
 
@@ -86,6 +88,52 @@ class ApplyChangesTests(unittest.TestCase):
             self.apply()
 
         self.assertTrue(not self.out_dir.exists() or not any(self.out_dir.iterdir()))
+
+    def violations_stub(self, adds_new_break: bool):
+        """Rules stub: one violation already on the untouched build; optionally one more once the build changed."""
+        with gc.pob_cwd():
+            os.chdir(gc.POB_INSTALL)
+            base_ctx = self.auditor.evaluate()
+
+        def stub(rules, ctx):
+            found = ["[Existing rule] already broken before apply"]
+            if adds_new_break and ctx != base_ctx:
+                found.append("[New rule] broken by the change")
+            return found
+        return mock.patch.object(audit, "violations", stub)
+
+    def test_apply_accepts_change_that_adds_no_new_break(self):
+        with self.violations_stub(adds_new_break=False):
+            outcome = self.apply_unforced()
+
+        self.assertEqual(outcome["violations"], [])
+        self.assertTrue(outcome["saved"])
+
+    def test_apply_rejects_change_that_adds_a_new_break(self):
+        with self.violations_stub(adds_new_break=True):
+            outcome = self.apply_unforced()
+
+        self.assertEqual(outcome["violations"], ["[New rule] broken by the change"])
+        self.assertFalse(outcome["saved"])
+        self.assertTrue(not self.out_dir.exists() or not any(self.out_dir.iterdir()))
+
+    def test_apply_auditor_reuses_given_obtainability_without_network(self):
+        given = self.auditor.obtainable
+        with mock.patch.object(audit.Obtainability, "load", side_effect=AssertionError("network")):
+            with gc.pob_cwd():
+                os.chdir(gc.POB_INSTALL)
+                second = audit.Auditor(self.build_path, True, disabled_skills=[], scenario="Pinnacle Boss",
+                                       engine=self.auditor.engine, obtainable=given)
+            os.chdir(self.saved_cwd)
+
+        self.assertIs(second.obtainable, given)
+
+    def apply_unforced(self):
+        # Brutality at level 1 / quality 0 really changes this build (level 20 does not), so the context differs
+        self.auditor.suggestions = [{"type": "gem", "name": "Brutality", "level": 1, "quality": 0}]
+        with gc.pob_cwd():
+            os.chdir(gc.POB_INSTALL)
+            return optimize.apply_changes(self.auditor, [1], out_dir=self.out_dir, force=False)
 
     def test_source_sha256_matches_file(self):
         expected = hashlib.sha256(self.build_path.read_bytes()).hexdigest()

@@ -10,7 +10,7 @@ local POB_DIR = POB_DIR
 -- Keep PoB's user data (Settings.xml) out of the install and out of Documents.
 function GetScriptPath() return POB_DIR end
 function GetRuntimePath() return POB_DIR end
-function GetUserPath() return ENGINE_DIR .. "/userdata" end
+function GetUserPath() return USERDATA_DIR or (ENGINE_DIR .. "/userdata") end
 function GetVirtualScreenSize() return 1920, 1080 end
 arg = arg or {} -- Main.lua reads command-line args
 
