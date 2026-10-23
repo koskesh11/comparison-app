@@ -1258,7 +1258,8 @@ function barMetrics(out) {
   if (!out.combined) return h("div", {}, "Combined effect is checked when you save.");
   return h("div", {}, h("span", { class: "m", title: TIP.dps }, "DPS " + gPct(d.dpsPct)), h("span", { class: "m", title: TIP.ehp }, "EHP " + gPct(d.ehpPct)),
     h("span", { class: "m", title: TIP.mana }, "Mana margin " + gMargin(d.manaMargin)), h("span", { class: "muted" }, "(all ticked together)"),
-    Number.isFinite(pts.after) && Number.isFinite(pts.available) ? h("span", { class: "m muted" }, ` Points ${pts.after} of ${pts.available}`) : null);
+    Number.isFinite(pts.after) && Number.isFinite(pts.available) ? h("span", { class: "m muted" }, ` Points ${pts.after} of ${pts.available}`) : null,
+    str(pts.note) ? h("div", { class: "muted" }, pts.note) : null);
 }
 
 function barLines() {

@@ -436,6 +436,9 @@ class RealPobbContractTests(_EkCase):
         # longer, so the budget is whatever PoB really allocates, and it equals the reloaded file.
         after = predicted["points"]["after"]
         self.assertEqual(before - len(remove["change"]["nodes"]) + 3, after)  # 118 - 2 removed + 3 fresh path nodes
+        self.assertEqual(2, predicted["points"]["rerouted"])
+        self.assertEqual("Path re-routed: +2 nodes after removing " + remove["label"], predicted["points"]["note"])
+        self.assertEqual(predicted["points"], saved["points"])
         reloaded = guide_lua.snapshot(self.auditor.engine, "player")["points"]["used"]
         self.assertEqual(after, reloaded)
         self.assertEqual(predicted["combined"], saved["combined"])

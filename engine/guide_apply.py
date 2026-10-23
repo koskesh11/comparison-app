@@ -180,6 +180,20 @@ def _pob_message(error: Exception) -> str:
     return f"Path of Building did not accept this combination: {detail}"
 
 
+def _reroute_note(plan: list[dict], rows: list[dict], before: int, after: int) -> tuple[int, str | None]:
+    """Extra path nodes PoB allocated because a ticked removal changed the route to a ticked add (same calc)."""
+    adds = [change for change in plan if change.get("afterRemoval")]
+    if not adds:
+        return 0, None
+    removed = {node for change in adds for node in change.get("removedNodes") or []}
+    stored = {node for change in adds for node in change.get("nodes") or []}
+    extra = after - (before - len(removed) + len(stored))
+    if extra <= 0:
+        return 0, None
+    names = ", ".join(str(row.get("label")) for row in rows if row.get("category") == "tree-remove")
+    return extra, f"Path re-routed: +{extra} node{'' if extra == 1 else 's'} after removing {names or 'passives'}"
+
+
 def _run(auditor, rows: list[dict], want_xml: bool) -> tuple[dict, str | None]:
     found = conflicts(rows)
     if found:
@@ -192,7 +206,8 @@ def _run(auditor, rows: list[dict], want_xml: bool) -> tuple[dict, str | None]:
     before = guide_lua.snapshot(engine, "player")["points"]
     name = f"{auditor.summary['buildName']} (guide check)"
     try:
-        applied = guide_lua.apply_changes(engine, plan_changes(rows), auditor.keys, name,
+        plan = plan_changes(rows)
+        applied = guide_lua.apply_changes(engine, plan, auditor.keys, name,
                                           extra_skills=auditor.extra_request(), save=want_xml)
     except LuaError as error:
         if "did not accept" not in str(error):
@@ -205,8 +220,9 @@ def _run(auditor, rows: list[dict], want_xml: bool) -> tuple[dict, str | None]:
     combined = _combined(_dimensions(auditor, base_ctx), _dimensions(auditor, ctx))
     over = after["used"] > after["available"] and after["used"] > before["used"]
     needs = after["used"] - after["available"] if over else 0
+    extra, note = _reroute_note(plan, rows, before["used"], after["used"])
     points = {"before": before["used"], "after": after["used"], "available": after["available"],
-              "over": over, "needs": needs}
+              "over": over, "needs": needs, "rerouted": extra, "note": note}
     violations = rule_breaks(auditor, base_ctx, ctx)
     refused = ({"reason": "budget", "message": f"needs {needs} more points; also tick a removal"} if over
                else {"reason": "rule", "message": "Breaks a rule: " + "; ".join(violations)}

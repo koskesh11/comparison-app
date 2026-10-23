@@ -89,6 +89,7 @@ class GuideCheckViewTest(unittest.TestCase):
 
     def test_header_shows_the_settings_the_numbers_were_measured_with(self) -> None:
         text = guide_script()
+        self.assertIn("pts.note", text)
         for field in ("hd.scenario", "hd.leaveOut", "hd.skippedDrafts", ".dpsStat"):
             self.assertIn(field, text)
 
