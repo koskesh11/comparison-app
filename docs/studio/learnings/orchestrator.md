@@ -21,3 +21,9 @@ Process lessons only (game facts go to the vault). Format: date · task · trigg
   `python -m unittest discover -s tests` (slow: AUTOBUILDER_SLOW=1) → check: the command is in the dispatch. · active
 - 2026-10-23 · 003 · Both loop-2 gate agents stopped without writing reports (usage limit) → Log the dispatch before
   waiting; re-dispatch from the log → check: resume point names the report paths. · active
+- 2026-10-23 · 004 · The task file was untracked in main when the worktree was made, so engineering created a forked
+  copy in the worktree (merge needed a manual reconcile) → Commit the task file to main before `git worktree add`
+  → check: `git status --short tasks/` is clean before dispatch. · active
+- 2026-10-23 · 004 · A light-lane GATE 2 could carry small MEDIUMs; fixing M1-M3 + L1 before merge cost one short
+  engineering loop and removed a regression (apply needed network) → Fix a MEDIUM before merge when the change
+  itself introduced it. · active

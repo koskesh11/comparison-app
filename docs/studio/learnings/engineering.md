@@ -13,3 +13,9 @@ Process lessons only (game facts go to the vault). Format: date · task · trigg
 - 2026-10-23 · 003 · GATE 3: new report keys (base.costs, scenario.conditional) not in the golden snapshot, so
   runEquivalence went false silently → Extend golden_common.audit_snapshot in the same change → check:
   pin_golden --verify-run shows runEquivalence.equal true. · promoted (with the line above)
+- 2026-10-23 · 004 · GATE 2: apply started rebuilding an Auditor and silently gained a network call
+  (Obtainability.load) → When a path starts constructing an object, list what its constructor fetches and pass it
+  in → check: run the path with the fetch patched to raise. · active
+- 2026-10-23 · 004 · GATE 2: rewrite flipped engine/server.py CRLF → LF (whole-file diff); Python write_text turned
+  LF files into CRLF → Byte-level edits; match main's eol → check: `git ls-files --eol` on every changed file vs main.
+  · active
