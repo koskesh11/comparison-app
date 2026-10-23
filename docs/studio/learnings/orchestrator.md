@@ -10,3 +10,7 @@ Process lessons only (game facts go to the vault). Format: date · task · trigg
 - 2026-10-22 · 013 · Usage limit hit mid-session with an agent running → Save state to the task file before
   starting expensive work when usage is low; prefer SendMessage resumes over new agents → check: task file
   has a resumable "Findings/Plan" section. · active
+- 2026-10-23 · 003 · User: "why do we need to get this interaction right, when PoB already does it?" — I had
+  ordered a label workaround for Greater Volley instead of asking PoB about the other skill part → Before any fix
+  for a wrong number, first check whether PoB can give the right number with different inputs (skill part, config,
+  enemy) → check: the fix names the PoB input that changes, or says why PoB can't. · active

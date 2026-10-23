@@ -65,6 +65,7 @@ def stat_keys(models: list[Model]) -> set[str]:
 def apply_models(models: list[Model], ctx: dict, equipped: set[str]) -> dict:
     """Return a copy of ctx with model multipliers applied to matching skills."""
     skills = []
+    modelled_counts = {}
     for skill in ctx["skills"]:
         out = dict(skill["out"])
         applied = []
@@ -82,7 +83,14 @@ def apply_models(models: list[Model], ctx: dict, equipped: set[str]) -> dict:
             for key in model.spec.get("multiplies") or []:
                 if out.get(key) is not None:
                     out[key] = out[key] * (hits / pob_count if key == "FullDPS" else hits)
+                    if key == "FullDPS":
+                        modelled_counts[skill["name"]] = hits
             applied.append({"model": model.name, "multiplier": hits, "expected": result["expected"],
                             "range": [result["min"], result["max"]], "pobCount": pob_count})
         skills.append({**skill, "out": out, "models": applied})
-    return {**ctx, "skills": skills}
+    result = {**ctx, "skills": skills}
+    if "skillDPS" in ctx:
+        rows = [{**row, "count": modelled_counts[row["name"]], "pobCount": row.get("count") or 1}
+                if row["name"] in modelled_counts else {**row} for row in ctx["skillDPS"]]
+        result = {**result, "skillDPS": rows}
+    return result

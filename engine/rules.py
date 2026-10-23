@@ -1,13 +1,21 @@
 """Check a calculated build context against vault rules.
 
 Context (from audit.lua evaluate):
-  skills:    [{name, isMain, isAttack, out: {stat: value}}]   # skills used together
+  skills:       [{name, isMain, isAttack, out: {stat: value}}]   # main socket group
+  usedTogether: [{name, group, index, out: {stat: value}}]       # requested other-group skills
   supports:  [granted effect ids linked to the main skill]
   keystones: [allocated keystone names]
+
+Rule specs may use top-level ``when_support_linked`` to require one of a list of
+granted effect ids, independently of ``when.linked_support_any``.
 """
 
+import math
 import operator
 
+import costs
+from display import fmt
+from scoring import skill_out
 from vault import Rule
 
 OPS = {">=": operator.ge, "<=": operator.le, ">": operator.gt, "<": operator.lt, "==": operator.eq}
@@ -28,7 +36,13 @@ def stat_keys(rules: list[Rule]) -> set[str]:
 def applies(rule: Rule, ctx: dict) -> bool:
     when = rule.spec.get("when") or {}
     wanted = when.get("linked_support_any")
-    return not wanted or any(s in ctx["supports"] for s in wanted)
+    linked = rule.spec.get("when_support_linked")
+    if linked is not None and (not isinstance(linked, list)
+                               or not all(isinstance(item, str) for item in linked)):
+        raise ValueError(f"rule {rule.name!r}: when_support_linked must be a list of granted effect ids")
+    nested_matches = not wanted or any(s in ctx["supports"] for s in wanted)
+    top_level_matches = linked is None or any(s in ctx["supports"] for s in linked)
+    return nested_matches and top_level_matches
 
 
 def _targets(rule: Rule, ctx: dict) -> list[dict]:
@@ -42,31 +56,38 @@ def _compare(value, op: str, limit) -> bool:
 
 
 def _check_requirement(req: dict, targets: list[dict], ctx: dict) -> list[str]:
-    main = next(s for s in ctx["skills"] if s["isMain"])["out"]
+    main = skill_out(next(s for s in ctx["skills"] if s["isMain"]))
     op = req["op"]
     if "sum_over_skill_set" in req:
         stat = req["sum_over_skill_set"]
-        total = sum(s["out"].get(stat) or 0 for s in ctx["skills"])
+        total = sum(skill_out(s).get(stat) or 0 for s in costs.used_together(ctx))
         limit = main.get(req["ref"])
+        note = costs.es_unverified(ctx) if stat == costs.KEYS["ES"]["cost"] else None
+        suffix = f" [{note}]" if note else ""
+        if total == 0:
+            return []
         if _compare(total, op, limit):
             return []
         deficit = req.get("allow_deficit")
         if deficit and limit is not None:
             pool = main.get(deficit["pool"]) or 0
             if pool <= 0:
-                return [f"total {stat} {total:.1f} vs {req['ref']} {limit:.1f} and no free {deficit['pool']} to cover it"]
-            seconds = pool / (total - limit)
+                return [f"total {stat} {fmt(total, 1)} vs {req['ref']} {fmt(limit, 1)} "
+                        f"and no free {deficit['pool']} to cover it{suffix}"]
+            seconds = math.floor(pool / (total - limit))
             if seconds >= deficit["min_seconds"]:
                 return []
-            return [f"total {stat} {total:.1f} vs {req['ref']} {limit:.1f}: pool empty after {seconds:.0f}s"]
-        return [f"total {stat} {total:.1f} vs {req['ref']} {limit:.1f}"]
+            return [f"total {stat} {fmt(total, 1)} vs {req['ref']} {fmt(limit, 1)}: "
+                    f"pool empty after {seconds}s{suffix}"]
+        return [f"total {stat} {fmt(total, 1)} vs {req['ref']} {fmt(limit, 1)}{suffix}"]
     failures = []
     stat = req.get("each_skill") or req["stat"]
-    for skill in targets if "stat" in req else ctx["skills"]:
-        value = skill["out"].get(stat)
-        limit = req["value"] if "value" in req else skill["out"].get(req["ref"])
+    for skill in targets if "stat" in req else costs.used_together(ctx):
+        out = skill_out(skill)
+        value = out.get(stat)
+        limit = req["value"] if "value" in req else out.get(req["ref"])
         if not _compare(value, op, limit):
-            failures.append(f"{skill['name']}: {stat} {value:.1f} {op} {limit:.1f} failed")
+            failures.append(f"{skill['name']}: {stat} {fmt(value, 1)} {op} {fmt(limit, 1)} failed")
     return failures
 
 
