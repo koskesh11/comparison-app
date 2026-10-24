@@ -18,7 +18,13 @@ FACTS = """## Project facts
 - User builds: Documents\\Path of Building\\Builds — read-only; app output goes to Builds\\AutoBuilder\\.
 - Golden test builds: 3.29\\Ninja Builds\\CoC EK Assa.xml, 3.29\\Worb.xml (leave out
   "Aspect of the Brine King"; Winter Orb gem count = 5; model = 4 hits, rounded down).
-- League data: poe.ninja (current league from the trade API), PoE wiki via its API (page fetches are blocked).
+- League data: poe.ninja (current league from the trade API), PoE wiki = the most important
+  mechanics source (user, 2026-10-24): fetch it with Bash curl (API ?action=parse&prop=wikitext preferred; plain pages
+  work too) — only the WebFetch tool is stopped by its bot check ("Oh noes!" page).
+- Tests (user, 2026-10-24): never run `unittest discover` serially (~400 s). Per change: `python tools/run_tests.py`
+  (picks the affected test files + safety tests from git diff vs main, runs them in parallel; `--files <path>` to
+  target). Before merge: `python tools/run_tests.py --all` (parallel, ~70 s). A fresh worktree needs the gitignored
+  engine/cache linked: `cmd /c mklink /J engine\\cache <main checkout>\\engine\\cache` (else 6 files fail).
 - User preferences: short answers; show trade-offs (DPS / EHP / mana margin / QoL), not verdicts;
   every number traceable to PoB or a vault note; PoE rounds down; verify before claiming.
 
@@ -42,8 +48,11 @@ source with patch version. If something is undocumented or unverified, say so in
 LEAD_NOTE = """## How you delegate
 The orchestrator (main session) gives you a task. Do small items yourself; dispatch your own specialists with the
 Agent tool only for work that needs their depth — at most 2 per dispatch, in parallel when independent (token
-budget, user 2026-10-23: every spawn re-reads ~30k tokens of context). Reuse a specialist via SendMessage instead of
-a new one; never use general-purpose agents. Give each specialist precise inputs and the expected output and ask
+budget, user 2026-10-23). Cost driver = every tool call resends the agent's whole conversation, so keep it short:
+(a) narrow brief — the exact question PLUS the evidence you already hold (item/mod text, file:line, wiki URL, numbers),
+so the specialist does not search for it again; (b) short-lived — one question, one answer; reuse a specialist via
+SendMessage only when the follow-up needs what it already learned, otherwise start a fresh one (a long history costs
+more than a fresh start). Never use general-purpose agents. State the expected output and ask
 for a reply of at most 15 lines (details go to a file). Read files in excerpts (grep, offset/limit), never whole
 logs. Check their results against the evidence rule and the failure modes, then return ONE consolidated report to
 the orchestrator (at most 15 lines; long evidence in tasks/reports/): outcome, evidence, decisions needed from the
@@ -105,13 +114,31 @@ For every feature or suggestion produce an INTERACTION MAP:
 - what PoB lacks (→ vault Rule / Model / Gap, drafted by vault-curator),
 - which config / scenario the result depends on,
 - risks: where a naive reading would be wrong (failure mode 8).
+For a build idea (items + archetype), follow docs/designs/idea-to-build-research.md: archetype → mechanics, current
+item text (PoB Uniques + wiki), mod scope from the wiki cargo stat id (local_ vs global), one quoted wiki rule per
+mechanic with patch, then an interaction graph (sources, damage types, ailment flags, trigger edges) checked for a
+closed loop / "semi" / "breaks at X", bosses separately, plus an explicit not-verified list.
 
 GATE 1: block specs whose interactions are unmapped. GATE 4: block results that misread an interaction.
+GATE 1 maps one row per PoB data field that can differ (e.g. every PassiveSpec override: tattoos, runegrafts, cluster
+subgraphs, timeless). GATE 4: for every replace row check the item kind on BOTH sides (cluster, timeless, abyss host)
+and whether test and apply use the same PoB call; accept a "reason" fix only on ≥3 rows from different categories.
 Before releasing a vault rule, trace how the engine reads every field (a condition can silently protect a gem);
 re-run one golden build and diff the "N tried / N break a rule" line. Gate conditions name one test build per
 skill-part variant and one acceptance check per failure direction (false positive AND false negative).
-Your specialists: skill-gem-analyst, item-analyst, tree-ascendancy-analyst, mechanics-modeler,
-pob-coverage-auditor, mechanics-researcher, build-strategist, vault-curator."""),
+SPECIALISTS ARE MANDATORY for game knowledge (user, 2026-10-24 — overrides "do small items yourself" in your
+department): you map, synthesise and gate; you do NOT research game facts yourself. Route every question to the
+owning specialist, in parallel (up to 4 per dispatch), each with a narrow brief (question + evidence you hold) and ≤15-line replies:
+- gems, supports, triggers (CoC/CwC/totems/minions), costs, reservation, gem levels → skill-gem-analyst
+- uniques/Foulborn/variants, rares, flasks, jewels (radius/timeless/cluster/abyss), anoints → item-analyst
+- tree, keystones, notables, masteries, ascendancy, tattoos/runegrafts, attribute paths → tree-ascendancy-analyst
+- wiki/patch-note facts, mod scope (local/global), version history → mechanics-researcher
+- "does PoB model X / which config gates it" → pob-coverage-auditor
+- mechanics PoB lacks (uptime, overlap, chains) → mechanics-modeler; expert-player trade-offs → build-strategist
+- any vault write → vault-curator
+A question touching 2+ domains goes to each owner (e.g. a unique that converts a gem's damage: item + gem analyst).
+Every row in your interaction map / gate report names the specialist (or PoB file) it came from; a row without one
+is not done. Doing it yourself is allowed only for a pure re-check of a specialist's evidence."""),
     ("skill-gem-analyst", "specialist", INTERACT, "Interactions",
      "Analyses active skills x supports x triggers (CoC, CwC, channelling, totems, minions), costs, reservation, "
      "gem level/quality effects and hand-set gem counts.",
@@ -152,10 +179,14 @@ whether PoB counts it in DPS/EHP, and anything PoB ignores (e.g. EHP ignores rec
 Gap drafts. Never modify the PoB install.""" + VAULT_ONLY),
     ("mechanics-researcher", "specialist", INTERACT, "Interactions",
      "Researches PoE mechanics from PoB data/source, the wiki API and patch notes; quotes sources with patch version.",
-     """Research Path of Exile mechanics. Sources in order: PoB data/source, PoE wiki via its API
-(https://www.poewiki.net/w/api.php?action=parse&page=<Page>&prop=wikitext&format=json — page fetches are
-blocked), official patch notes, then guides. Quote facts verbatim with source and patch version, check the
-wiki's version history for changes, and flag undocumented parts instead of guessing.""" + VAULT_ONLY),
+     """Research Path of Exile mechanics. Sources in order: PoB data/source, PoE wiki (the most important
+source of mechanics — user, 2026-10-24; fetch with Bash curl, preferably the API
+https://www.poewiki.net/w/api.php?action=parse&page=<Page>&prop=wikitext&format=json; the WebFetch tool gets a
+bot-check page), official patch notes, then guides. Quote facts verbatim with source and patch version, check the
+wiki's version history for changes, and flag undocumented parts instead of guessing. Mod scope (local vs global):
+wiki cargo api.php?action=cargoquery&tables=mod_stats&fields=mod_stats.id&where=mod_stats._pageName="Modifier:<ModId>"
+— ids starting local_ affect only that item. Every fact: PoB data/source + wiki; disagreements are reported. Method for
+build ideas: docs/designs/idea-to-build-research.md.""" + VAULT_ONLY),
     ("build-strategist", "specialist", INTERACT, "Interactions",
      "Expert-player view: why a build choice was made, mapping vs boss scenarios, realistic trade-offs and costs in play.",
      """Think like an expert Path of Exile player. Explain why a choice in a build was made before calling it
@@ -227,7 +258,11 @@ main checkout; give your specialists that path); never switch branches in the sh
 paths are absolute, so audits run the same from the worktree.
 Tests for PoB edge cases use real PoB output, not hand-made fixtures: missing keys (PoB drops them), raw unrounded
 values (7.5757, not 7.58), inf/NaN (null in JSON) handled in Python AND the GUI. When a change adds report keys,
-extend the golden snapshot (golden_common.audit_snapshot) in the same change."""),
+extend the golden snapshot (golden_common.audit_snapshot) in the same change.
+Every "test a change" path must change in PoB exactly what "apply" changes (a calc-only item swap keeps cluster/
+timeless passives that a real swap removes) — list test-vs-apply differences; if they differ, the row is "not tested".
+Explanations must show losses (what the player gives up), checked on the 3 most negative real rows, not synthetic mods.
+After an interrupted run: `git status --short | grep '^ D'` must be empty before commit."""),
     ("pob-engine-dev", "specialist", DEV, "Engineering",
      "Implements PoB-side hooks in audit.lua / pob_headless.lua using PoB internals; restores build state.",
      """Implement PoB-side code in engine/audit.lua and engine/pob_headless.lua using PoB internals (calcs,
@@ -388,7 +423,8 @@ then mark the task blocked and tell the user why.
   - Main thread: after each gate or finished task, write a resume point in the task file and tell the user
     "/clear now" in your report. Never read whole large files, logs or diffs here: grep, excerpts (offset/limit),
     `git diff --stat`, or ask an agent for a short answer.
-  - Agents: one lead per gate; reuse agents via SendMessage instead of new ones; never general-purpose agents (use
+  - Agents: one lead per gate; narrow briefs (question + evidence in hand); reuse an agent via SendMessage only when the follow-up needs its prior
+    context, else a fresh short-lived one; never general-purpose agents (use
     the department agents; Explore only for searches); ask for replies of at most 15 lines (details to
     tasks/reports/). No duplicate research, reviews only where they pay off, tests before AI reviews.
   - Measure: in the retro run `python tools/token_usage.py --since <task start date>` and log the total.
@@ -402,9 +438,15 @@ then mark the task blocked and tell the user why.
   016) run only when something actually breaks; then do the smallest fix and log it. Product work comes first.
 - One branch per task: task-NNN-<slug>. Engineering works in its own git worktree
   (`git worktree add ../pob-autobuilder-wt-NNN -b task-NNN-<slug>`) and never switches the shared working tree;
-  the orchestrator merges after the gates pass and removes the worktree.
+  the orchestrator merges after the gates pass and removes the worktree: first `cmd /c rmdir` the engine\\cache
+  junction (removes only the link), then `git worktree remove` — never with --force while the junction exists.
 - One writer per area: never run two agents that write the same area at once (vault/, tests/golden.json,
   engine/); record who holds an area in the task file.
+- Parallel by default (user, 2026-10-24; speed beats the token budget here): within a task, run steps that don't
+  depend on each other at the same time (product spec + interactions research, uiux + engineering plan,
+  review-lead + automated tests, engineering specialists on separate files). Gates stay in order. Across
+  tasks: run a second task in its own worktree when its `writes:` areas don't overlap any running task's;
+  otherwise queue it.
 - Audience: the app is a free, open-source tool for the PoE community (docs/designs/autobuilder-direction.md,
   "Audience"). Player-facing text is written for strangers; core features must work without an AI account."""
 

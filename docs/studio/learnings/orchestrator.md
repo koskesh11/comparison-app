@@ -27,3 +27,11 @@ Process lessons only (game facts go to the vault). Format: date · task · trigg
 - 2026-10-23 · 004 · A light-lane GATE 2 could carry small MEDIUMs; fixing M1-M3 + L1 before merge cost one short
   engineering loop and removed a regression (apply needed network) → Fix a MEDIUM before merge when the change
   itself introduced it. · active
+- 2026-10-24: a project fact ("wiki page fetches are blocked") was repeated to the user unverified; it was wrong (curl
+  works, only WebFetch hits a bot check). Lesson: verify a stated project fact before repeating it as a limit. Fixed in
+  tools/make_agents.py (wiki = most important mechanics source, user).
+- 2026-10-24 (010 resume): an interrupted agent run left uncommitted partial work and no report → at resume
+  check the worktree (git status, diff --stat) and hand the partial work to the re-dispatched agent · active.
+- 2026-10-24 (user): agent cost = conversation resent per tool call, not start-up (cached). Leads give narrow briefs with
+  the evidence in hand; specialists short-lived; SendMessage reuse only when prior context is needed · promoted (all
+  leads + orchestrator). Measure in the 021 retro vs 010 gates.

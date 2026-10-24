@@ -19,3 +19,13 @@ Process lessons only (game facts go to the vault). Format: date · task · trigg
 - 2026-10-23 · 004 · GATE 2: rewrite flipped engine/server.py CRLF → LF (whole-file diff); Python write_text turned
   LF files into CRLF → Byte-level edits; match main's eol → check: `git ls-files --eol` on every changed file vs main.
   · active
+- 2026-10-24 (010 GATE 4 loops 1-2): why-lines hid every loss ("+ lines cut at 4") → show losses, test on the 3 most
+  negative real rows · promoted. Test ≠ apply (calc-only jewel swap kept cluster passives, H4) → list test-vs-apply
+  differences per swap · promoted. Interrupted run left ~43 stray deletions → `git status | grep '^ D'` empty before
+  commit · promoted. Cluster node ownership: read spec.subGraphs, not node ids · active.
+- 2026-10-24 (from review, 010 re-review): sort/score rule changed but GUI tooltip kept old wording → grep gui/ for the
+  old description · active. A verdict derived from a PoB list (curse "limit full" = len(curseSlots)) must use PoB's
+  own rule (CalcPerform) · active.
+- 2026-10-24 (024): subprocess stdout pipe deadlocked on chatty PoB output → child output to a temp file + per-job
+  timeout · active. Fresh worktree lacks gitignored engine/cache (6 files fail) → junction from main · promoted.
+  Baseline measured on an old base (170 vs 395 tests) → rebase onto main and compare test counts first · active.
