@@ -29,3 +29,6 @@ Process lessons only (game facts go to the vault). Format: date · task · trigg
 - 2026-10-24 (024): subprocess stdout pipe deadlocked on chatty PoB output → child output to a temp file + per-job
   timeout · active. Fresh worktree lacks gitignored engine/cache (6 files fail) → junction from main · promoted.
   Baseline measured on an old base (170 vs 395 tests) → rebase onto main and compare test counts first · active.
+- 2026-10-24 (025): Bash heredocs halve backslashes (broke Lua escapes) → write backslash content via a Python patch,
+  then grep the file · active. mklink in a worktree printed a banner but no link (17 files failed) → `ls engine/cache`
+  after linking · active.
