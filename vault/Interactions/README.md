@@ -94,13 +94,13 @@ data = yaml.safe_load(BLOCK.search(text).group(1))   # required keys: id, mechan
 
 Validator (scratchpad of task 027): `python -I validate.py vault/Interactions` checks frontmatter, one parseable block, required keys, provider role and source, uptime values and unique ids.
 
-## Notes (23 ids)
+## Notes (24 ids)
 
 Written so far: [[Freeze]] (freeze), [[Chill]] (chill, with Bonechill and chill effect), [[Shatter]] (shatter), [[Shock]] (shock), [[Damage type can ailment]] (damage-type-can-ailment), [[Elemental ailment count]] (elemental-ailment-count), [[Exposure]] (exposure), [[Enemy ailment threshold]] (enemy-ailment-threshold, new id from the coverage audit).
 
-Other notes of task 027 (written in parallel; ids): coc-trigger, frenzy-charges, power-charges, spell-impale, curse-limit, skill-cost-from-es, max-res-equalise, golem-buffs, arcane-surge, projectile-hits-single-target, returning-projectiles, rampage, flask-uptime, channelling, consecrated-ground.
+Other notes of task 027 (written in parallel; ids): coc-trigger, frenzy-charges, power-charges, spell-impale, curse-limit, skill-cost-from-es, max-res-equalise, golem-buffs, arcane-surge, projectile-hits-single-target, returning-projectiles, rampage, flask-uptime, channelling, consecrated-ground, fight-length ([[Fight length]]).
 
-All 23 ids: freeze, chill, shatter, shock, damage-type-can-ailment, elemental-ailment-count, exposure, enemy-ailment-threshold, coc-trigger, frenzy-charges, power-charges, spell-impale, curse-limit, skill-cost-from-es, max-res-equalise, golem-buffs, arcane-surge, projectile-hits-single-target, returning-projectiles, rampage, flask-uptime, channelling, consecrated-ground.
+All 24 ids: freeze, chill, shatter, shock, damage-type-can-ailment, elemental-ailment-count, exposure, enemy-ailment-threshold, coc-trigger, frenzy-charges, power-charges, spell-impale, curse-limit, skill-cost-from-es, max-res-equalise, golem-buffs, arcane-surge, projectile-hits-single-target, returning-projectiles, rampage, flask-uptime, channelling, consecrated-ground, fight-length.
 
 ## Backlog of candidate mechanics (no note yet)
 
