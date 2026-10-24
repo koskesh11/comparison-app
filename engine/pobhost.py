@@ -8,6 +8,8 @@ from pathlib import Path
 
 POB_DIR = Path(os.environ.get("POB_DIR", Path(os.environ["APPDATA"]) / "Path of Building Community"))
 ENGINE_DIR = Path(__file__).resolve().parent
+# The only folder (besides the engine's userdata and PoB's timeless cache) the Lua state may write to.
+AUTOBUILDER_DIR = Path.home() / "Documents" / "Path of Building" / "Builds" / "AutoBuilder"
 LUA_MULTRET = -1
 LUA_GLOBALSINDEX = -10002
 LUA_REGISTRYINDEX = -10000
@@ -18,11 +20,13 @@ class LuaError(RuntimeError):
 
 
 class PobEngine:
-    def __init__(self, pob_dir: Path = POB_DIR, userdata_dir: Path | None = None):
+    def __init__(self, pob_dir: Path = POB_DIR, userdata_dir: Path | None = None,
+                 autobuilder_dir: Path | None = None):
         if not (pob_dir / "Launch.lua").is_file():
             raise FileNotFoundError(f"Path of Building not found at {pob_dir}")
         userdata_dir = Path(userdata_dir) if userdata_dir is not None else ENGINE_DIR / "userdata"
         userdata_dir.mkdir(parents=True, exist_ok=True)
+        autobuilder_dir = Path(autobuilder_dir) if autobuilder_dir is not None else AUTOBUILDER_DIR
         os.add_dll_directory(str(pob_dir))
         os.chdir(pob_dir)  # PoB loads its modules relative to the install dir
         self._lua = ctypes.CDLL(str(pob_dir / "lua51.dll"))
@@ -40,7 +44,8 @@ class PobEngine:
             self._traceback_ref = self._lua.luaL_ref(self._L, LUA_REGISTRYINDEX)
             self.run(f"ENGINE_DIR = {_lua_str(ENGINE_DIR.as_posix())}; "
                      f"POB_DIR = {_lua_str(pob_dir.as_posix())}; "
-                     f"USERDATA_DIR = {_lua_str(userdata_dir.as_posix())}")
+                     f"USERDATA_DIR = {_lua_str(userdata_dir.as_posix())}; "
+                     f"AUTOBUILDER_DIR = {_lua_str(autobuilder_dir.as_posix())}")
             self.run(f"dofile(ENGINE_DIR .. '/pob_headless.lua')")
         except BaseException:
             self.close()

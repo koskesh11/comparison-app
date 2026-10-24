@@ -9,9 +9,9 @@ import json
 from pathlib import Path
 
 from audit import DEFAULT_SCENARIO, Auditor, file_sha256, fmt_dims, print_report
-from pobhost import ENGINE_DIR, _lua_str
+from pobhost import AUTOBUILDER_DIR, ENGINE_DIR, _lua_str
 
-DEFAULT_OUT_DIR = Path.home() / "Documents" / "Path of Building" / "Builds" / "AutoBuilder"
+DEFAULT_OUT_DIR = AUTOBUILDER_DIR
 
 
 class ChangeError(ValueError):

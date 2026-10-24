@@ -31,6 +31,7 @@ SAFETY_TESTS = ("test_gui_safety", "test_guard_readonly", "test_agents")
 GOLDEN_TEST = "test_golden"
 POB_MODULE = "pobhost"        # a test that reaches this module loads PoB's lua51.dll in-process
 VAULT_MODULE = "vault"
+IGNORED_PREFIXES = ("vault/.obsidian/",)   # Obsidian window state, not vault content
 CODE_DIRS = ("engine", "tests", "tools", "tools/hooks")
 MAX_WORKERS = 12              # total parallel test processes (16 CPU threads leave room for the OS)
 MAX_HEAVY_WORKERS = 8          # PoB-loading processes at once
@@ -129,6 +130,8 @@ def reasons_for(rel: str, test: str, graph: dict, reach: set[str]) -> str | None
         return "imported (directly or transitively)"
     if suffix == ".lua" and rel.startswith("engine/") and POB_MODULE in reach:
         return f"Lua runs inside PoB, which this test drives via {POB_MODULE}"
+    if rel.startswith(IGNORED_PREFIXES):
+        return None
     if rel.startswith("vault/") and VAULT_MODULE in reach:
         return f"vault loaded through {VAULT_MODULE}"
     if rel.startswith("gui/") and GUI_PATTERN.search(_own_text(graph, test)):
@@ -321,6 +324,9 @@ def print_summary(results: list[Result], wall: float) -> int:
 
 def print_selection(chosen: dict[str, list[str]], changed: list[str], miss: list[str]) -> None:
     print(f"changed files: {len(changed)}")
+    ignored = [c for c in changed if c.startswith(IGNORED_PREFIXES)]
+    if ignored:
+        print(f"ignored (not content, Obsidian window state): {len(ignored)} under " + ", ".join(IGNORED_PREFIXES))
     for t, rs in sorted(chosen.items()):
         shown = rs if len(rs) <= 3 else rs[:3] + [f"... and {len(rs) - 3} more"]
         print(f"  {t}: " + " | ".join(shown))

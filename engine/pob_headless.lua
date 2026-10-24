@@ -5,6 +5,7 @@
 
 dofile(ENGINE_DIR .. "/_SimpleGraphic.def.lua")
 dofile(ENGINE_DIR .. "/filesearch.lua")
+dofile(ENGINE_DIR .. "/write_sandbox.lua") -- before any PoB code: refuses file writes outside the allowed roots
 
 local POB_DIR = POB_DIR
 -- Keep PoB's user data (Settings.xml) out of the install and out of Documents.
@@ -70,6 +71,7 @@ if __mainObject__.promptMsg then
 end
 
 build = __mainObject__.main.modes["BUILD"]
+WriteSandbox.seal() -- PoB is loaded: hide debug.getupvalue and friends so the sandbox originals stay unreachable
 
 local dkjson = require("dkjson")
 
