@@ -71,6 +71,7 @@ if __mainObject__.promptMsg then
 end
 
 build = __mainObject__.main.modes["BUILD"]
+WriteSandbox.seal() -- PoB is loaded: hide debug.getupvalue and friends so the sandbox originals stay unreachable
 
 local dkjson = require("dkjson")
 

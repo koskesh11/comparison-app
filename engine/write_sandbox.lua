@@ -86,8 +86,16 @@ end
 local ioOpen, ioOutput, ioPopen = io.open, io.output, io.popen
 local osRemove, osRename, osExecute = os.remove, os.rename, os.execute
 
+-- Mode whitelist: r/w/a, optional "+" and "b" ("r+b" and "rb+" both exist in PoB). Anything else (for example
+-- "W" or a number) is refused here instead of reaching the C runtime, which aborts on an invalid mode.
+local function validMode(mode)
+	return type(mode) == "string" and (mode:match("^[rwa]%+?b?$") or mode:match("^[rwa]b%+$")) ~= nil
+end
+
 function io.open(path, mode)
-	if tostring(mode or "r"):find("[wa+]") then guard("io.open(" .. tostring(mode) .. ")", path) end
+	mode = mode == nil and "r" or mode
+	if not validMode(mode) then refuse("io.open (invalid mode " .. tostring(mode) .. ")", path) end
+	if mode:find("[wa+]") then guard("io.open(" .. mode .. ")", path) end
 	return ioOpen(path, mode)
 end
 
@@ -135,4 +143,12 @@ function RemoveDir(path, recurse)
 	if hostRemoveDir then return hostRemoveDir(path, recurse) end
 end
 
-WriteSandbox = { allowed = allowed, normalize = function(path) return normalize(path, workDir) end }
+-- Called once PoB has loaded: the originals above live in upvalues, so remove every way to read or rewrite
+-- upvalues. PoB and the engine only use debug.traceback (ItemsTab, pobhost error handler).
+local function seal()
+	local sealed = { traceback = debug.traceback }
+	debug = sealed
+	package.loaded.debug = sealed
+end
+
+WriteSandbox = { seal = seal, allowed = allowed, normalize = function(path) return normalize(path, workDir) end }

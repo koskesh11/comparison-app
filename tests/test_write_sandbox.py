@@ -113,6 +113,29 @@ class WriteSandboxTests(unittest.TestCase):
         self.refused("return io.open('Data/TimelessJewelData/x.zip', 'wb')")
         self.refused("return io.open('Data/TimelessJewelData/sub/x.bin', 'wb')")
 
+    def test_invalid_open_modes_are_refused_not_passed_to_the_c_runtime(self):
+        target = lua_path(POB_DIR / NO_SUCH / "x.txt")
+        for mode in ("'W'", "'R'", "'rw'", "'wbb'", "'x'", "''", "42", "true"):
+            message = self.refused(f"return io.open({target}, {mode})")
+            self.assertIn("invalid mode", message)
+        base = _lua_str(self.autobuilder.as_posix())
+        for mode in ("w", "wb", "w+b", "wb+", "a", "ab", "a+", "r+", "r+b", "rb+"):
+            self.engine.run(f"assert(io.open({base} .. '/mode-probe.xml', '{mode}')):close()")
+        for mode in ("r", "rb"):
+            self.engine.run(f"assert(io.open('Launch.lua', '{mode}')):close()")
+        self.assertEqual(self.engine.run("return tostring(io.open('Launch.lua'))")[:4], "file")  # default mode r
+
+    def test_originals_are_unreachable_through_the_debug_library(self):
+        report = self.engine.run(
+            "local names = {}; for _, name in ipairs({'getupvalue', 'setupvalue', 'upvaluejoin', 'upvalueid', "
+            "'getinfo', 'getlocal', 'sethook', 'getregistry', 'setmetatable'}) do "
+            "if debug[name] ~= nil then names[#names + 1] = name end end; return table.concat(names, ',')")
+        self.assertEqual(report, "")
+        self.assertEqual(self.engine.run("return type(debug.traceback)"), "function")  # PoB still needs this
+        self.assertEqual(self.engine.run("return tostring(package.loaded.debug.getupvalue) .. tostring(require('debug').getupvalue)"),
+                         "nilnil")
+        self.assertEqual(self.engine.run("return tostring(pcall(debug.getupvalue, io.open, 1))"), "false")
+
     def test_remove_rename_and_helpers_are_refused(self):
         self.refused(f"return os.remove({lua_path(POB_DIR / NO_SUCH / 'x')})")
         self.refused(f"return os.remove({lua_path(BUILDS_DIR / NO_SUCH / 'x.xml')})")
