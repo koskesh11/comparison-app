@@ -1,5 +1,6 @@
 """PoB-derived conditional and zero-result notes for guide rows."""
 
+DOWNSIDE_WORDING = "unaffected by"
 NEEDS_FLAGS = {
     "ElementalResistMaxIsHighestResistMax": "needs a raised maximum Elemental Resistance",
 }
@@ -14,17 +15,21 @@ def _gem_ids(row: dict) -> list[str]:
 
 
 def _curse_note(auditor, row: dict) -> str | None:
+    """Say the curse limit is used up only by PoB's own rule; anything it can't decide falls back to the neutral note."""
     if not row.get("zeroNote"):
         return None
     gem_ids = _gem_ids(row)
     if not gem_ids:
         return None
     state = auditor.call("curseStateJSON", {"gemIds": gem_ids})
-    curses = state.get("curse") or {}
+    curses, marks = state.get("curse") or {}, state.get("mark") or {}
     limit, slots = state.get("limit") or 0, state.get("slots") or []
+    if state.get("limitBypass") or any(marks.get(gem_id) is not False for gem_id in gem_ids):
+        return None
     if all(curses.get(gem_id) is True for gem_id in gem_ids) and limit > 0 and len(slots) >= limit:
         names = ", ".join(slots)
-        return f"PoB shows no effect here: your curse limit ({limit}) is already full ({names} hold the slots)."
+        return (f"PoB shows no effect here: your curse limit ({limit}) is used up by "
+                f"curses that count against it ({names}).")
     return None
 
 
@@ -35,12 +40,14 @@ def _guide_runs(guide: dict, name: str) -> bool:
 
 
 def _need_texts(parsed: list[dict] | dict, guide: dict) -> list[str]:
+    """"needs X" only for a skill gem the player could add; generic buffs (Aura, Arcane Surge) and downside mods are skipped."""
     texts = []
     for value in parsed or []:
+        if DOWNSIDE_WORDING in str(value.get("text") or "").lower():
+            continue
         for condition in value.get("conditions") or []:
-            var = condition.get("var") or ""
-            if var.startswith("AffectedBy") and condition.get("on") is False:
-                label = var[len("AffectedBy"):]
+            label = condition.get("skill")
+            if label and condition.get("on") is False:
                 suffix = "; the guide runs it" if _guide_runs(guide, label) else ""
                 texts.append(f"needs {label} (not in your build{suffix})")
         texts.extend(NEEDS_FLAGS[flag] for flag in value.get("flags") or []

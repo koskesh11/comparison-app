@@ -17,6 +17,7 @@ from tests.guide_testlib import decode_guide  # noqa: E402
 
 import guide_check  # noqa: E402
 from guide_check import _explain  # noqa: E402
+from guide_check_notes import _curse_note, _need_texts  # noqa: E402
 from guide_check_why import explain_row, item_why  # noqa: E402
 
 GENERIC_ZERO_NOTE = ("PoB shows no change from this alone; the reason is not determined "
@@ -122,13 +123,19 @@ class RealGate4WhyTests(helpers.PobGuardedTestCase):
         player, guide = _item(self.player, _slot(row)), _item(self.guide, _slot(row))
         added = [line for line in guide["mods"] if line not in player["mods"]]
         parsed = self.auditor.call("modNeedsJSON", {"lines": added})
-        expected = [condition["var"][len("AffectedBy"):]
-                    for value in parsed for condition in value.get("conditions") or []
-                    if condition["var"].startswith("AffectedBy") and not condition["on"]]
+        expected = [condition["skill"] for value in parsed
+                    for condition in value.get("conditions") or []
+                    if condition.get("skill") and not condition["on"]]
         text = row["conditional"]["text"]
         self.assertIn("needs Precision (not in your build", text)
         self.assertIn("needs Discipline (not in your build", text)
         self.assertTrue(all(f"needs {label} (not in your build" in text for label in expected))
+
+    def test_no_real_row_says_needs_a_generic_buff(self):
+        for row in self.rows:
+            text = (row.get("conditional") or {}).get("text") or ""
+            for generic in ("needs Aura", "needs ArcaneSurge", "needs GloriousMadness", "needs Herald"):
+                self.assertNotIn(generic, text, row["id"])
 
     def test_melding_needs_raised_max_res_without_build_claim(self):
         row = next(row for row in self.rows if "Melding of the Flesh" in row["label"])
@@ -136,17 +143,58 @@ class RealGate4WhyTests(helpers.PobGuardedTestCase):
         self.assertIn("needs a raised maximum Elemental Resistance", text)
         self.assertNotIn("not in your build", text)
 
-    def test_curse_zero_note_names_full_limit(self):
+    def test_curse_zero_note_follows_pobs_own_limit_rule(self):
+        """EK has a socketed-curse limit bypass and a Mark in the slots, so the note falls back to the neutral text."""
         row = next(row for row in self.result["noChange"]
                    if row["label"].startswith("Add skill Despair"))
-        ids = _gem_ids(row)
-        state = self.auditor.call("curseStateJSON", {"gemIds": ids})
-        self.assertIn(f"curse limit ({state['limit']})", row["zeroNote"])
-        self.assertTrue(all(name in row["zeroNote"] for name in state["slots"]))
-        self.assertNotEqual(GENERIC_ZERO_NOTE, row["zeroNote"])
+        state = self.auditor.call("curseStateJSON", {"gemIds": _gem_ids(row)})
+        self.assertTrue(state["limitBypass"])
+        self.assertEqual(GENERIC_ZERO_NOTE, row["zeroNote"])
+        self.assertNotIn("full", row["zeroNote"])
         non_curse = next(value for value in self.result["noChange"]
                          if "Grand Spectrum" in value["label"])
         self.assertEqual(GENERIC_ZERO_NOTE, non_curse["zeroNote"])
+
+
+class _State:
+    def __init__(self, state):
+        self.state = state
+
+    def call(self, name, _request):
+        return self.state
+
+
+def _curse_row():
+    return {"zeroNote": GENERIC_ZERO_NOTE, "change": {"gem": {"gemId": "G"}}}
+
+
+def _state(**changes):
+    return {"limit": 2, "slots": ["Enfeeble", "Despair"], "curse": {"G": True},
+            "mark": {"G": False}, "limitBypass": False, **changes}
+
+
+class CurseAndNeedsNoteTests(unittest.TestCase):
+    def test_limited_slots_at_limit_say_used_up(self):
+        note = _curse_note(_State(_state()), _curse_row())
+        self.assertIn("curse limit (2) is used up", note)
+        self.assertNotIn("full", note)
+
+    def test_fewer_limited_slots_than_limit_gives_no_claim(self):
+        """Lua now drops ignoreHexLimit / Blasphemy slots from "slots": one hex + one bypass curse -> 1 slot of 2."""
+        self.assertIsNone(_curse_note(_State(_state(slots=["Enfeeble"])), _curse_row()))
+
+    def test_mark_gem_and_limit_bypass_fall_back_to_the_neutral_note(self):
+        self.assertIsNone(_curse_note(_State(_state(mark={"G": True})), _curse_row()))
+        self.assertIsNone(_curse_note(_State(_state(limitBypass=True)), _curse_row()))
+        self.assertIsNone(_curse_note(_State(_state(mark={})), _curse_row()))
+
+    def test_needs_only_for_skill_gems_not_generic_buffs_or_downsides(self):
+        cond = lambda var, skill=None: {"var": var, "on": False, **({"skill": skill} if skill else {})}
+        parsed = [{"text": "x while affected by Precision", "conditions": [cond("AffectedByPrecision", "Precision")]},
+                  {"text": "y", "conditions": [cond("AffectedByAura"), cond("AffectedByArcaneSurge")]},
+                  {"text": "Unaffected by Curses while affected by Zealotry",
+                   "conditions": [cond("AffectedByZealotry", "Zealotry")]}]
+        self.assertEqual(["needs Precision (not in your build)"], _need_texts(parsed, {"groups": []}))
 
 
 class FastWhyTests(unittest.TestCase):

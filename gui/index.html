@@ -860,7 +860,7 @@ const PREVIEW_DELAY_MS = 500, POLL_MS = 600, SLOW_AFTER_S = 60, ZERO_PCT = 0.1, 
 const POBB = /^(?:https?:\/\/)?(?:www\.)?pobb\.in\/(?:pob\/)?[A-Za-z0-9_-]{4,32}\/?$/i;
 const TIP = { dps: "PoB Full DPS (all your skills used together)", ehp: "PoB Total EHP",
   mana: "Mana regeneration minus the mana cost per second of the skills you use together.",
-  best: "The larger of the DPS gain and the EHP gain." };
+  best: "Pure gains first (no axis goes down), then trade-offs; each block by the larger of the DPS gain and the EHP gain." };
 const CHIP_CLASS = { "helps": "ok", "trade-off": "warn", "breaks a rule": "bad" };
 const GEAR = ["item", "flask", "jewel"], TREE = ["tree-add", "tree-remove"];
 
@@ -1132,7 +1132,7 @@ function orderedRows() {
 }
 
 function groupTools() {
-  const sorts = [["best", "Biggest gain"], ["dps", "DPS"], ["ehp", "EHP"]];
+  const sorts = [["best", "Best (pure gains first)"], ["dps", "DPS"], ["ehp", "EHP"]];
   return h("div", { class: "gtools" }, h("span", {}, "Sort by:"),
     ...sorts.map(([k, text]) => h("label", { title: k === "best" ? TIP.best : null },
       h("input", { type: "radio", name: "gsort", value: k, checked: G.sort === k, onchange: () => { G.sort = k; renderGroupA(); } }), text)),
