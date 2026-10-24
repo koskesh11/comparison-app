@@ -53,16 +53,18 @@ makes_redundant:
 conflicts:
   - {with: "Bisco's Leash", effect: "same belt slot as Mageblood (rampage belt vs flask belt)", source: "build-strategist.md"}
 conditions:
+  - {text: "display rule (user 2026-10-25): the app must always show each flask's uptime: PoB's tooltip number (ItemsTab.lua:4830-4857) + the scenario reasoning", source: "user 2026-10-25"}
   - {text: "Mageblood applies only to MAGIC utility flasks (rare/unique utility flasks, life, mana and hybrid flasks are not auto-activated)", source: "PoB CalcPerform.lua:1578-1600; pob-coverage-auditor.md"}
   - {text: "crit charge: one charge to one flask, a single cooldown shared by all effects (local and global), not affected by cooldown recovery", source: "wiki Flask rev 1697263 (3.13.0 0.2 -> 0.1 s)"}
 uptime:
-  Mapping:       {value: model, config: {"flask slot active": "model: kill charges (1/3.5/6/11 by rarity) times an unknown map factor, or Mageblood = always"}, reasoning: "strategist: high, plausible but unverified (wiki: map monsters give fewer charges, no value); the model needs a map_charge_mult from the user", source: "build-strategist.md; wiki Flask rev 1697263"}
+  Mapping:       {value: model, config: {"flask slot active": always}, reasoning: "user 2026-10-25: 100% uptime in mapping (assumption, not derived from kill charges)", source: "build-strategist.md; wiki Flask rev 1697263"}
   Pinnacle Boss: {value: pob, config: {"flask slot active": "PoB tooltip number (ItemsTab.lua:4830-4857) as the floor; crit charges added as a labelled model; Mageblood flasks always on"}, reasoning: "tooltip counts timed generation only; a unique boss kill (11 charges) comes only at the end of the fight; crit charge is not in PoB", source: "ItemsTab.lua:4830-4857; build-strategist.md"}
 seeds: [FR, EK]
 sources:
   - {ref: "https://www.poewiki.net/wiki/Flask (rev 1697263, 2026-07-28)", kind: wiki, patch: "3.29"}
   - {ref: "PoB Classes/ItemsTab.lua:4784-4857; Modules/CalcPerform.lua:1578-1634; Modules/CalcSetup.lua:1028-1031; Modules/ModParser.lua:3585-3588, 5158-5170, 5269-5270", kind: pob, patch: "3.29"}
   - {ref: "vault/Gaps/Mageblood flasks.md", kind: pob, patch: "3.29"}
+  - {ref: "user answers U1-U6, tasks/027-interaction-database.md log", kind: user, patch: "3.29"}
 not_verified:
   - "map-monster kill-charge values and charges per second for a given clear speed"
   - "how crit charges are split across several flasks (random / first non-full / each Surgeon's to itself with the shared cooldown)"
@@ -71,6 +73,5 @@ not_verified:
   - "the 70% crafted Flask Effect source of the FR seed (seed note)"
   - "Alchemist's Mark charges at level 20 (wiki not read)"
   - "Mageblood with non-magic flasks activates none (code reading only)"
-open_questions:
-  - "Mapping: assume a flask is always on when its timed-generation floor is at least 50%, or require Mageblood/charge items? Need a map charge factor or a rule."
+open_questions: []
 ```

@@ -36,7 +36,7 @@ seed: Worb
 name: "Worb"
 sample: "3.29/Worb.xml"
 mechanics:
-  - {id: channelling, role: core, providers: ["Winter Orb + Focused Channelling (multiplierChannelling 0 in both samples -> PoB +0%; model: 3 s = +60%)"]}
+  - {id: channelling, role: core, providers: ["Winter Orb + Focused Channelling (multiplierChannelling 0 in both samples -> PoB +0%; boss 3 s = +60%, maps 0.5 s = +0% in PoB, user 2026-10-25)"]}
   - {id: projectile-hits-single-target, role: core, providers: ["Mystic Refractor (Skills fire (2-3) additional Projectiles; sample roll 3)", "vault Models/Winter Orb projectile overlap (count 5 hand-set; golden 4 hits)"]}
   - {id: freeze, role: core, providers: ["Winter Orb 3.29 base 25% + crits", "Cold Mastery 26782 (frozen seconds)", "modeler: Worb.xml crits freeze 0.533 s on a Pinnacle boss"]}
   - {id: chill, role: support, providers: ["cold hits"]}

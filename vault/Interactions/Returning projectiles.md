@@ -6,13 +6,13 @@ source: "wiki Return rev 1660588, Projectile rev 1642414, Nimis rev 1647792, Ret
 last_confirmed_patch: "3.29.x"
 ---
 
-Nimis and the Returning Projectiles support make projectiles come back. Whether the return pass adds a second hit on a boss is disputed (two readings below, both kept). PoB maps none of it: the return hit is not counted and neither is the support's damage penalty, so in PoB the support is pure cost (+50% cost) and a PoB DPS sort always drops it.
+Nimis and the Returning Projectiles support make projectiles come back. User chose reading B on 2026-10-25 (reading A rejected). PoB maps none of it: the return hit is not counted and neither is the support's damage penalty, so in PoB the support is pure cost (+50% cost) and a PoB DPS sort always drops it.
 
 Winter Orb and Forbidden Rite cannot return (they do not collide with enemies), so this mechanic never applies to the Worb or FR seeds. Overlap of the outbound projectiles: see [[Projectiles hitting a single target]].
 
 ```interaction
 id: returning-projectiles
-mechanic: "Projectiles that collide return once; the return pass may hit the same target again. Reading A (user): point blank each projectile hits out and back (~2x), even in a circle. Reading B (wiki): one collision out plus one back per simultaneous set, none if the projectile returned directly from that enemy; AoE explosions are not limited"
+mechanic: "Projectiles that collide return once; the return pass may hit the same target again. Reading A (rejected by the user 2026-10-25, was the user's first statement): point blank each projectile hits out and back (~2x), even in a circle. Reading B (wiki): one collision out plus one back per simultaneous set, none if the projectile returned directly from that enemy; AoE explosions are not limited"
 family: projectile
 target: enemy
 related: [projectile-hits-single-target]
@@ -33,7 +33,7 @@ model:
     from_scenario: [distance_u, sequential_sets]
     from_model: aoe_hit_fraction
   params:
-    reading: null          # NO default: A or B, the user chooses (open question); both stay visible in the UI
+    reading: B             # user 2026-10-25. Reading A (~2x at point blank, even in a circle) was rejected by the user 2026-10-25 (it was the user's first statement); kept only as described history in the mechanic text
     return_less: {support_lvl1: 0.70, support_lvl20: 0.66, nimis: 0.0}
     aoe_hit_fraction: 0.6  # explosions only; user-verified fraction of vault Models/Projectiles hitting a single target.md
   formula: "q_dir = 1 if distance_u <= enemy_radius_u else asin(enemy_radius_u / distance_u) / pi (random direction, Nimis). A: out_hits = back_hits = floor(P*q_dir). B: out_hits = sets * (1 if 1-(1-q_dir)^P_per_set >= 0.5 else 0); back_hits = sets * (0 if the outbound projectile returned directly from the target else 1); explosions = floor(P*aoe_hit_fraction*explosions_per_projectile), not shotgun-limited (explosions_per_projectile 1 UNVERIFIED). dps_mult = floor_2dp(out_hits + back_hits*(1-return_less)); feed: multiply only that skill's share of FullDPS by dps_mult / pob_count (engine/models.py:79-85 risk)"
@@ -61,7 +61,7 @@ conditions:
   - {text: "returning does not reset travel distance/duration; typical projectiles travel on 15 m then return", source: "wiki Return rev 1660588"}
 uptime:
   Mapping:       {value: partial, config: {}, reasoning: "skill-dependent; pack geometry not modelled", source: "build-strategist.md; mechanics-modeler.md"}
-  Pinnacle Boss: {value: model, config: {reading: "model: A or B, no default - user decides"}, reasoning: "1x to ~2x depending on reading; PoB models neither the extra hit nor the support penalty; explosion clause (B) is not shotgun-limited", source: "wiki Projectile rev 1642414 / Return rev 1660588; user statement 2026-10-24"}
+  Pinnacle Boss: {value: model, config: {reading: B}, reasoning: "reading B chosen by the user 2026-10-25 (wiki: shotgun rule per cast, no re-hit when returning from the target): ~1x at point blank, ~2x with outbound pierce; AoE explosions not limited; PoB models neither the extra hit nor the support penalty; explosion clause (B) is not shotgun-limited", source: "wiki Projectile rev 1642414 / Return rev 1660588; user statement 2026-10-24"}
 seeds: []
 sources:
   - {ref: "https://www.poewiki.net/wiki/Return (rev 1660588, 2026-07-07)", kind: wiki, patch: "3.29"}
@@ -72,6 +72,7 @@ sources:
   - {ref: "pathofexile.com forum thread 3510678 (2024-04, player thread, non-authoritative): 'with Nimis my dps is definitely more than an extra hit' (Ethereal Knives)", kind: discovery, patch: "3.24"}
   - {ref: "Maxroll Fireball CoC Deadeye guide (3.20-3.22, archived, search snippet only): returning AoE fireballs overlap on a boss", kind: discovery, patch: "3.20-3.22"}
   - {ref: "PoB Data/Skills/sup_dex.lua:3909-3938; Data/SkillStatMap.lua:1442-1447; Data/ModCache.lua:18705-18707", kind: pob, patch: "3.29"}
+  - {ref: "user answers U1-U6, tasks/027-interaction-database.md log", kind: user, patch: "3.29"}
 not_verified:
   - "3.29 in-game behaviour of Nimis on a boss at point blank (no GGG statement after the 3.21 rework; a test or dev statement is needed)"
   - "whether the random-direction circle changes grouping into simultaneous sets"
@@ -80,6 +81,5 @@ not_verified:
   - "whether the support's less damage applies to Nimis returns when both are linked (stat text says yes, no test)"
   - "Relic of the Cycle obtainability (race-only)"
   - "Mystic Refractor 'Projectiles cannot continue after colliding with targets' (wand.lua:218): whether it also stops a return after a collision"
-open_questions:
-  - "Which reading should scenarios use: A (your claim: ~2x at point blank, even in a circle) or B (wiki: one collision out + one back per set, none from a direct return, explosions not limited)? Both stay as model variants until you choose."
+open_questions: []
 ```

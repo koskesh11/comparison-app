@@ -51,19 +51,19 @@ conditions:
   - {text: "ticks at cast time / cast speed and action speed; instant skills (Frostblink) do not interrupt; cooldown starts when the channel is released", source: "wiki Channelling rev 1647943; PoB act_int.lua:20963-20975"}
   - {text: "Pathfinder Master Distiller 6038 applies only to non-channelling skills (not a block)", source: "PoB TreeData/3_29/tree.lua:83740"}
 uptime:
-  Mapping:       {value: partial, config: {multiplierChannelling: "model: segment_s (existing scenario value 1 s; no norm)"}, reasoning: "short channels, segment about 1-2 s gives 0-24% (no norm)", source: "build-strategist.md; mechanics-modeler.md"}
-  Pinnacle Boss: {value: model, config: {multiplierChannelling: "model: segment_s (existing scenario value 3 s hits the 60% cap; the channel time is an open question)"}, reasoning: "3 s = +60% but cost +60% too, mana deficit from 3 s; stuns/freezes on the player break the channel", source: "headless probe 2026-10-24; vault Scenarios/Pinnacle Boss.md; wiki Channelling rev 1647943"}
+  Mapping:       {value: partial, config: {multiplierChannelling: 0.5}, reasoning: "user 2026-10-25: 0.5 s channels in maps. PoB rounds channel time down to whole seconds (ModStore.lua:403, per the modeler), so 0.5 s gives Focused Channelling +0% in PoB; whether the game grows per whole second stays not_verified", source: "build-strategist.md; mechanics-modeler.md"}
+  Pinnacle Boss: {value: model, config: {multiplierChannelling: 3}, reasoning: "user 2026-10-25: 3 s on a boss = the 60% cap at L20 (+60% damage) but cost +60% too, mana deficit from 3 s; stuns/freezes on the player break the channel", source: "headless probe 2026-10-24; vault Scenarios/Pinnacle Boss.md; wiki Channelling rev 1647943"}
 seeds: [Worb]
 sources:
   - {ref: "https://www.poewiki.net/wiki/Channelling (rev 1647943)", kind: wiki, patch: "3.29"}
   - {ref: "https://www.poewiki.net/wiki/Focused_Channelling_Support", kind: wiki, patch: "3.29"}
   - {ref: "PoB Modules/ConfigOptions.lua:1271-1276; Classes/ModStore.lua:403; Data/Skills/sup_int.lua:2538-2600; Modules/CalcActiveSkill.lua:645-655", kind: pob, patch: "3.29"}
+  - {ref: "user answers U1-U6, tasks/027-interaction-database.md log", kind: user, patch: "3.29"}
 not_verified:
   - "whether Focused Channelling grows per whole second or continuously in game (PoB floors to whole seconds)"
   - "whether its timer resets on Winter Orb stage decay or re-channel"
   - "whether a Winter Orb stage is gained per channel tick (wiki silent; Worb would reach 11 stages in about 1.05 s if yes)"
   - "Winter Orb stage time to 8 stages in seconds (depends on cast speed); stage decay after release (no wiki section)"
   - "mana pool key name in the probe (not read); whether Worb.xml itself sets multiplierChannelling (PlayerStat read not done)"
-open_questions:
-  - "How long is one uninterrupted channel per scenario: Mapping (scenario says 1 s) and Pinnacle Boss (scenario says 3 s)? Only you know how the build is played."
+open_questions: []
 ```

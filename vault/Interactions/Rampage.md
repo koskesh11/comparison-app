@@ -39,18 +39,18 @@ conditions:
   - {text: "no Rampage stacks while an active killstreak exists but no source of Rampage is on the character (3.25.0; Dancing Dervish excepted)", source: "wiki Rampage rev 1702497"}
   - {text: "a boss fight without adds gives no new kills; stacks reset 5 s after the last kill", source: "wiki Rampage rev 1702497"}
 uptime:
-  Mapping:       {value: high, config: {multiplierRampage: "model: stacks parameter (open question), not auto 1000"}, reasoning: "user: Rampage is 'always active' in mapping. SUPPORTED for Condition:Rampage (the belt grants it); full +100% needs 1000 consecutive kills with gaps under 5 s, so the stack count is a parameter", source: "user statement 2026-10-24; wiki Rampage rev 1702497; ConfigOptions.lua:994-995"}
+  Mapping:       {value: high, config: {multiplierRampage: 500}, reasoning: "multiplierRampage 500 set by the user 2026-10-25 (not auto 1000). User: Rampage is 'always active' in mapping. SUPPORTED for Condition:Rampage (the belt grants it); full +100% needs 1000 consecutive kills with gaps under 5 s, so the stack count is a parameter", source: "user statement 2026-10-24; wiki Rampage rev 1702497; ConfigOptions.lua:994-995"}
   Pinnacle Boss: {value: none, config: {multiplierRampage: 0}, reasoning: "no kills on a lone boss, counter resets after 5 s; partial only if the fight has add phases", source: "wiki Rampage rev 1702497"}
 seeds: [Worb]
 sources:
   - {ref: "https://www.poewiki.net/wiki/Rampage (rev 1702497, 2026-09-20)", kind: wiki, patch: "3.29"}
   - {ref: "PoB Modules/ConfigOptions.lua:994-995; Modules/CalcSetup.lua:625-626; Data/Misc.lua:105-107; Classes/ModStore.lua:403", kind: pob, patch: "3.29"}
   - {ref: "PoB Data/Uniques/belt.lua:129-140", kind: pob, patch: "3.29"}
+  - {ref: "user answers U1-U6, tasks/027-interaction-database.md log", kind: user, patch: "3.29"}
 not_verified:
   - "any community norm for rampage stacks in mapping (searched, none found)"
   - "tier effects at 15..520 kills are not in PoB"
   - "that 3.29 changed nothing since 3.25.0 (wiki history lists nothing)"
   - "kills per second a Worb build sustains"
-open_questions:
-  - "Rampage stack count for the Mapping scenario: a fixed number (strategist suggests 300-500) or 1000?"
+open_questions: []
 ```

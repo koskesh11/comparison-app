@@ -40,6 +40,7 @@ model:
     from_pob: ["<Type>CritAverage", "<Type>HitAverage (Type = Cold + types with <Type>CanFreeze)", CritChance, HitChance, FreezeChanceOnHit, FreezeChanceOnCrit, FreezeDurationMod, "HitSpeed (Winter Orb) else Speed", "T from note enemy-ailment-threshold"]
     from_scenario: [fight_length_s, enemyIsBoss, enemyLevel, ailmentMode]
   params: {s_per_pct: 0.06, min_s: 0.3, max_s: 3.0, set_threshold: 0.99}
+  from_scenario_values: {fight_length_s: 30}   # user 2026-10-25, for multiplierFrozenByYouSeconds (Cold Mastery 26782, PoB cap 10 s)
   formula: "d = 6 * (D/T) * FreezeDurationMod seconds per source (crit D and non-crit D), 0 if d < 0.3, cap 3 (cap before or after the duration mods UNVERIFIED); qualifying_rate = rate * hits_per_cast * p_source for each source with d >= 0.3; uptime = floor_pct(1 - (1-p)^(rate * hits_per_cast * d)); feed: conditionEnemyFrozen true if uptime >= 0.99, false if ~0, blend two PoB runs in between; multiplierFrozenByYouSeconds = floor(avg_bonus / 5) with avg_bonus over fight_length of min(5*floor(uptime*t), 50) (replaces the user's hand-set value)"
   calibration: "Worb.xml (Pinnacle lvl 84, hits_per_cast 4 from the Winter Orb overlap model): ColdCritAverage 235,037, ColdHitAverage 45,550, Crit 93.39%, FreezeChanceOnHit 100, FreezeDurationMod 2.4, HitSpeed 6.45 -> crit d = 0.533 s (applies), non-crit d = 0.103 s (discarded), min D = T/(20*2.4) = 132,292, uptime 100% -> conditionEnemyFrozen justified (FullDPS 7,176,019 vs 6,925,090 off, +3.6%). Standard boss: d 0.457 s, still 100%. Hand-set multiplierFrozenByYouSeconds 24 = PoB cap 10 (identical FullDPS); model at 60 s fight, uptime 1 = 9 s -> 7,020,019 (-2.2%); off entirely 5,419,636. Day-1 snapshot worb-day1-poeninja.xml: ColdCritAverage 106,245, FreezeDurationMod 1.9 -> d = 0.191 s < 0.3 -> NO freeze on a pinnacle, needs D >= 167,105; setting conditionEnemyFrozen there would be wrong. D depends on configured shock/exposure (Worb has conditionShockEffect 57), so the verdict inherits the shock model's validity. No community norm found."
 providers:
@@ -172,7 +173,7 @@ uptime:
     source: "build-strategist freeze rule (tasks/reports/027-research.md); https://www.poewiki.net/wiki/Freeze rev 1630938; Modules/CalcOffence.lua:5333-5343 (No-boss T 35,295 at lvl 84)"
   Pinnacle Boss:
     value: model
-    config: {conditionEnemyFrozen: "model: ON only if the model gives >= 0.3 s per qualifying hit and uptime >= 0.99 (Worb.xml 0.533 s yes; day-1 snapshot 0.191 s no); OFF otherwise", multiplierFrozenByYouSeconds: "model: floor(avg_bonus / 5) over the fight length, replaces a hand-set value"}
+    config: {conditionEnemyFrozen: "worked out by the app with the model (user 2026-10-25): ON only if the model gives >= 0.3 s per qualifying hit and uptime >= 0.99, reason shown to the user (Worb.xml 0.533 s yes; day-1 snapshot 0.191 s no); OFF otherwise", multiplierFrozenByYouSeconds: "computed by the model with fight_length_s 30 (floor(avg_bonus / 5); Worb.xml uptime 1: avg_bonus 40.8 -> 8; Cold Mastery 26782, PoB cap 10 s), replaces a hand-set value"}
     reasoning: "boss threshold is huge (PoB 7.68 x 404%), so only big hits or crits freeze; the 50% action-speed floor means it is never a lockdown, but 'vs Frozen' conditions still hold; unique bosses cannot shatter"
     source: "lead ruling 2026-10-24; mechanics-modeler (Worb 0.533 s, day-1 0.191 s); https://www.poewiki.net/wiki/Freeze rev 1630938 (patch 3.25.0)"
 seeds: [Worb, FR]
@@ -183,6 +184,7 @@ sources:
   - {ref: "https://www.poewiki.net/wiki/The_Three_Dragons (rev 1675049) and Foulborn unique item (rev 1702126)", kind: wiki, patch: "3.29"}
   - {ref: "Modules/CalcOffence.lua:4231-4264,5333-5343,5398-5412; Modules/ConfigOptions.lua:1924-1930; Modules/ModParser.lua:3638-3645,3670-3672; Modules/Data.lua:426-431 (PoB 2.67.2)", kind: pob, patch: "3.29"}
   - {ref: "wiki version history: 3.21.1 (no 300 ms discard except freeze), 3.25.0 (boss action speed floor 50%), 3.29.0 (25% base freeze on many cold skills incl. Winter Orb)", kind: patch_notes, patch: "3.29"}
+  - {ref: "user answers U1-U6, tasks/027-interaction-database.md log", kind: user, patch: "3.29"}
 not_verified:
   - "exact ailment-threshold numbers for real pinnacle/uber bosses in 3.29 (wiki has none; PoB uses its own multipliers)"
   - "whether a freeze can be re-applied while a boss is in a 'cannot be fully slowed' phase (no phase table on the wiki); no boss freeze-immunity phase is documented except Rigwald wolf form"
@@ -195,6 +197,6 @@ not_verified:
   - "per-item DPS effect of the 'vs Frozen' lines (no PoB run done)"
   - "Ice Bite and Hypothermia sit in other link groups than Winter Orb in the day-1 snapshot (supports only affect their own group, CalcActiveSkill.lua:116-148)"
 open_questions:
-  - "Mapping: derive Frozen from chance/crit with the rule above, or let the user declare it per build?"
+  - "Mapping only (bosses answered 2026-10-25: app derives): derive Frozen from chance/crit with the rule above, or let the user declare it per build?"
   - "Pinnacle Boss: use PoB's 404% ailment-threshold multiplier for the freeze model, or a value the user trusts more?"
 ```
