@@ -105,6 +105,14 @@ local function snapshotGroups(buildObj)
 	return rows
 end
 
+local function tattooOverride(buildObj, id)
+	local override = (buildObj.spec.hashOverrides or {})[id]
+	if not override then return NULL end
+	local plainNode = buildObj.spec.tree.nodes[id]
+	local plainName = plainNode and plainNode.dn or NULL
+	return jsonObject({ name = override.dn or NULL, lines = override.sd or {}, plain = plainName })
+end
+
 local function snapshotNodes(buildObj)
 	local rows = {}
 	for _, id in ipairs(sortedKeys(buildObj.spec.allocNodes)) do
@@ -112,7 +120,8 @@ local function snapshotNodes(buildObj)
 		table.insert(rows, { id = id, name = node.dn, type = node.type,
 			ascendancy = node.ascendancyName or NULL, cluster = id >= 65536,
 			conquered = node.conqueredBy ~= nil, modKeyEmpty = (node.modKey or "") == "",
-			mastery = buildObj.spec.masterySelections[id] or NULL, socket = node.type == "Socket" })
+			mastery = buildObj.spec.masterySelections[id] or NULL, socket = node.type == "Socket",
+			override = tattooOverride(buildObj, id) })
 	end
 	return rows
 end

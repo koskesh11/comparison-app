@@ -5,6 +5,7 @@ import re
 CATEGORY_ORDER = ["item", "flask", "jewel", "group-add", "support-add",
                   "support-replace", "gem-level", "tree-add", "tree-remove", "config"]
 CLASS_START_TYPES = {"ClassStart", "AscendClassStart"}
+OVERRIDE_REASON = "Tattoos and runegrafts aren't tested yet."
 
 
 def validate_snapshot(snapshot: object) -> dict:
@@ -45,6 +46,17 @@ def node_name(node: dict | None, fallback: int | None = None) -> str:
     return str((node or {}).get("name") or (f"Node {fallback}" if fallback is not None else "node"))
 
 
+def override_facts(node: dict) -> dict | None:
+    """Return normalized tattoo or runegraft facts when present."""
+    override = node.get("override")
+    if not isinstance(override, dict):
+        return None
+    raw_lines = override.get("lines")
+    lines = [str(value) for value in raw_lines] if isinstance(raw_lines, list) else []
+    return {"name": str(override.get("name") or "Tattoo"), "lines": lines,
+            "plain": str(override.get("plain") or node_name(node))}
+
+
 def classify_node(node: dict) -> str:
     """Classify a snapshot node in the specification's first-match order."""
     if node.get("type") in CLASS_START_TYPES:
@@ -56,6 +68,8 @@ def classify_node(node: dict) -> str:
         return "cluster"
     if node.get("conquered"):
         return "conquered"
+    if node.get("override") is not None:
+        return "override"
     if node.get("socket") or node.get("type") == "Socket":
         return "socket"
     if node.get("type") == "Mastery":

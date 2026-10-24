@@ -183,6 +183,16 @@ def _missing_support(guide_gem: dict, player_group: dict, guide_names: set[str])
                info={"candidates": names, "options": options})
 
 
+def _missing_active(guide_gem: dict, guide_group: dict, player_group: dict) -> dict:
+    guide_index = number(guide_group.get("index"))
+    player_index = number(player_group.get("index"))
+    name = str(guide_gem.get("name"))
+    label = str(player_group.get("label") or f"Group {player_index}")
+    return not_tested(f"group-add:missing:{guide_index}:{name}", "group-add",
+                      f'Add skill {name} in "{label}"',
+                      f"you don't have {name} in that group", info={"group": player_index})
+
+
 def _matched_rows(guide: dict, player: dict) -> tuple[list[dict], list[dict]]:
     tested, untested = [], []
     player_gems = _gems(player)
@@ -209,6 +219,7 @@ def _matched_rows(guide: dict, player: dict) -> tuple[list[dict], list[dict]]:
                                            "Skill part or gem count is set by hand and differs"))
             continue
         if not guide_gem.get("isSupport"):
+            untested.append(_missing_active(guide_gem, guide, player))
             continue
         family = guide_gem.get("family")
         family_match = next((value for value in _supports(player)
@@ -248,11 +259,6 @@ def gem_rows(player: dict, guide: dict) -> tuple[list[dict], list[dict]]:
             tested.append(_add_group(guide_group, player))
             continue
         used.add(number(matched.get("index")))
-        if not set(_names(active)) <= set(_names(_active(matched))):
-            untested.append(not_tested(f"group-add:partial:{index}", "group-add",
-                                       str(guide_group.get("label") or f"Group {index}"),
-                                       "Group mixes skills the player has in different groups"))
-            continue
         found, skipped = _matched_rows(guide_group, matched)
         tested += found
         untested += skipped

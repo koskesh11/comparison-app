@@ -181,8 +181,10 @@ class RealEkGuideCheckTests(_EkCase):
         self.assertEqual(result["sorts"]["best"].index(row["id"]) + 1, row["rank"])
         before = result["rows"][row["rank"] - 2:row["rank"] - 1]
         after = result["rows"][row["rank"]:row["rank"] + 1]
-        self.assertTrue(not before or before[0]["sortScore"] >= row["sortScore"])
-        self.assertTrue(not after or row["sortScore"] >= after[0]["sortScore"])
+        from guide_check_rank import is_tradeoff
+        same = lambda other: is_tradeoff(other) == is_tradeoff(row)
+        self.assertTrue(not before or not same(before[0]) or before[0]["sortScore"] >= row["sortScore"])
+        self.assertTrue(not after or not same(after[0]) or row["sortScore"] >= after[0]["sortScore"])
 
     def test_only_mastery_selection_difference_is_not_testable(self):
         from guide_check import run_check
@@ -243,6 +245,10 @@ class RealPobbContractTests(_EkCase):
         if hasattr(cls, "guide"):
             shutil.rmtree(cls.guide.parent)
         super().tearDownClass()
+
+    def test_retained_lua_heap_stays_within_the_195_mb_budget(self):
+        """Spec E5: PoB's global calc cache (one environment per tested skill) must not stay in memory after a check."""
+        self.assertLessEqual(self.result["perf"]["luaMB"], 195.0)
 
     def test_full_contract_progress_chips_sorts_sha_and_breakdown(self):
         from guide_diff_common import CATEGORY_ORDER

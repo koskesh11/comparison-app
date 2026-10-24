@@ -1318,6 +1318,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Mystical Infusion",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -1329,6 +1330,7 @@
    "mastery": null,
    "modKeyEmpty": true,
    "name": "Small Jewel Socket",
+   "override": null,
    "socket": true,
    "type": "Socket"
   },
@@ -1340,6 +1342,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Curse Cast Speed",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1351,6 +1354,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Intelligence",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1362,6 +1366,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Unstable Infusion",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -1373,6 +1378,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Devotion",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1384,6 +1390,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Intelligence",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1395,6 +1402,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Intelligence",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1406,6 +1414,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Aura Area of Effect",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1417,6 +1426,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Curse Cast Speed",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1428,6 +1438,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Intelligence",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1439,6 +1450,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Arcane Guarding",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -1450,6 +1462,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Safeguard",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -1461,6 +1474,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Dexterity",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1472,6 +1486,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Intelligence",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1483,6 +1498,7 @@
    "mastery": null,
    "modKeyEmpty": true,
    "name": "Large Jewel Socket",
+   "override": null,
    "socket": true,
    "type": "Socket"
   },
@@ -1494,6 +1510,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Disciple of the Forbidden",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -1505,6 +1522,7 @@
    "mastery": null,
    "modKeyEmpty": true,
    "name": "Medium Jewel Socket",
+   "override": null,
    "socket": true,
    "type": "Socket"
   },
@@ -1516,6 +1534,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Physique",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -1527,6 +1546,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Intelligence",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1538,6 +1558,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Chaos Inoculation",
+   "override": null,
    "socket": false,
    "type": "Keystone"
   },
@@ -1549,6 +1570,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Endurance",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -1560,6 +1582,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Inner Conviction",
+   "override": null,
    "socket": false,
    "type": "Keystone"
   },
@@ -1571,6 +1594,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Influence",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -1582,6 +1606,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Energy Shield",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1593,6 +1618,7 @@
    "mastery": null,
    "modKeyEmpty": true,
    "name": "Small Jewel Socket",
+   "override": null,
    "socket": true,
    "type": "Socket"
   },
@@ -1604,6 +1630,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Critical Strike Multiplier per Power Charge",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1615,6 +1642,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Critical Strike Chance, Power Charge Duration",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1626,6 +1654,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Mana Regeneration per Power Charge",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1637,6 +1666,7 @@
    "mastery": null,
    "modKeyEmpty": true,
    "name": "Medium Jewel Socket",
+   "override": null,
    "socket": true,
    "type": "Socket"
   },
@@ -1648,6 +1678,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Devotion",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1659,6 +1690,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Intelligence",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1670,6 +1702,7 @@
    "mastery": 2987,
    "modKeyEmpty": false,
    "name": "Critical Mastery",
+   "override": null,
    "socket": false,
    "type": "Mastery"
   },
@@ -1681,6 +1714,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Critical Strike Chance per Power Charge",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1692,6 +1726,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Devotion",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1703,6 +1738,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Spell Block",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1714,6 +1750,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Instability",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -1725,6 +1762,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Intelligence",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1736,6 +1774,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Elemental Damage",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1747,6 +1786,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Mana",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1758,6 +1798,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Reservation Efficiency",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1769,6 +1810,7 @@
    "mastery": null,
    "modKeyEmpty": true,
    "name": "Large Jewel Socket",
+   "override": null,
    "socket": true,
    "type": "Socket"
   },
@@ -1780,6 +1822,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Whispers of Doom",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -1791,6 +1834,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Block Recovery and Energy Shield",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1802,6 +1846,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Mana",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1813,6 +1858,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Energy Shield",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1824,6 +1870,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Deep Thoughts",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -1835,6 +1882,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Infused",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -1846,6 +1894,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Reservation Efficiency",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1857,6 +1906,7 @@
    "mastery": null,
    "modKeyEmpty": true,
    "name": "Basic Jewel Socket",
+   "override": null,
    "socket": true,
    "type": "Socket"
   },
@@ -1868,6 +1918,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Intelligence",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1879,6 +1930,7 @@
    "mastery": 31556,
    "modKeyEmpty": false,
    "name": "Energy Shield Mastery",
+   "override": null,
    "socket": false,
    "type": "Mastery"
   },
@@ -1890,6 +1942,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Intelligence",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1901,6 +1954,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Assassination",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -1912,6 +1966,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Mistwalker",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -1923,6 +1978,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Reservation Efficiency",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1934,6 +1990,7 @@
    "mastery": null,
    "modKeyEmpty": true,
    "name": "Medium Jewel Socket",
+   "override": null,
    "socket": true,
    "type": "Socket"
   },
@@ -1945,6 +2002,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Mana",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1956,6 +2014,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Curse Effect",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1967,6 +2026,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Alacrity",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -1978,6 +2038,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Intelligence",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1989,6 +2050,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Sovereignty",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2000,6 +2062,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Intelligence",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2011,6 +2074,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Intelligence",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2022,6 +2086,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Energy Shield",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2033,6 +2098,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Critical Strike Chance, Spell Damage",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2044,6 +2110,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Strength",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2055,6 +2122,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Overcharge",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2066,6 +2134,7 @@
    "mastery": 29652,
    "modKeyEmpty": false,
    "name": "Charge Mastery",
+   "override": null,
    "socket": false,
    "type": "Mastery"
   },
@@ -2077,6 +2146,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Critical Strike Chance",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2088,6 +2158,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Trickery",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2099,6 +2170,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Faith and Steel",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2110,6 +2182,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Spell Critical Strike Multiplier",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2121,6 +2194,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Intelligence",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2132,6 +2206,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Intelligence",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2143,6 +2218,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Damage and Energy Shield",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2154,6 +2230,7 @@
    "mastery": 4500,
    "modKeyEmpty": false,
    "name": "Block Mastery",
+   "override": null,
    "socket": false,
    "type": "Mastery"
   },
@@ -2165,6 +2242,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Intelligence",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2176,6 +2254,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Intelligence",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2187,6 +2266,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Intelligence",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2198,6 +2278,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Critical Strike Chance, Elusive Effect",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2209,6 +2290,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Devotion",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2220,6 +2302,7 @@
    "mastery": null,
    "modKeyEmpty": true,
    "name": "SIX",
+   "override": null,
    "socket": false,
    "type": "ClassStart"
   },
@@ -2231,6 +2314,7 @@
    "mastery": 30612,
    "modKeyEmpty": false,
    "name": "Shield Mastery",
+   "override": null,
    "socket": false,
    "type": "Mastery"
   },
@@ -2242,6 +2326,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Arcane Potency",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2253,6 +2338,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Armour and Energy Shield",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2264,6 +2350,7 @@
    "mastery": 28638,
    "modKeyEmpty": false,
    "name": "Reservation Mastery",
+   "override": null,
    "socket": false,
    "type": "Mastery"
   },
@@ -2275,6 +2362,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Deathmarked",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2286,6 +2374,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Intelligence",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2297,6 +2386,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Unnatural Calm",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2308,6 +2398,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Energy Shield Leech",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2319,6 +2410,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Elemental Damage",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2330,6 +2422,7 @@
    "mastery": 12119,
    "modKeyEmpty": false,
    "name": "Mana Mastery",
+   "override": null,
    "socket": false,
    "type": "Mastery"
   },
@@ -2341,6 +2434,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Dexterity",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2352,6 +2446,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Aura Effect",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2363,6 +2458,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Critical Strike Chance, Mark Effect",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2374,6 +2470,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Spell Block",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2385,6 +2482,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Spell Damage per Power Charge",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2396,6 +2494,7 @@
    "mastery": null,
    "modKeyEmpty": true,
    "name": "Assassin",
+   "override": null,
    "socket": false,
    "type": "AscendClassStart"
   },
@@ -2407,6 +2506,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Intelligence",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2418,6 +2518,7 @@
    "mastery": null,
    "modKeyEmpty": true,
    "name": "Small Jewel Socket",
+   "override": null,
    "socket": true,
    "type": "Socket"
   },
@@ -2429,6 +2530,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Intelligence",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2440,6 +2542,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Strength",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2451,6 +2554,7 @@
    "mastery": null,
    "modKeyEmpty": true,
    "name": "Basic Jewel Socket",
+   "override": null,
    "socket": true,
    "type": "Socket"
   },
@@ -2462,6 +2566,7 @@
    "mastery": null,
    "modKeyEmpty": true,
    "name": "Basic Jewel Socket",
+   "override": null,
    "socket": true,
    "type": "Socket"
   },
@@ -2473,6 +2578,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Spell Critical Strike Chance",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2484,6 +2590,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Intelligence",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2495,6 +2602,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Intelligence",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2506,6 +2614,7 @@
    "mastery": null,
    "modKeyEmpty": true,
    "name": "Medium Jewel Socket",
+   "override": null,
    "socket": true,
    "type": "Socket"
   },
@@ -2517,6 +2626,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Projectile Damage",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2528,6 +2638,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Repeater",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2539,6 +2650,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Aerodynamics",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2550,6 +2662,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Physical Damage",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2561,6 +2674,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Iron Breaker",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2572,6 +2686,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Physical Damage",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2583,6 +2698,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Master the Fundamentals",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2594,6 +2710,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Furious Assault",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2605,6 +2722,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Physical Damage",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2616,6 +2734,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Iron Breaker",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2627,6 +2746,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Master the Fundamentals",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2638,6 +2758,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Physical Damage",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2649,6 +2770,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Furious Assault",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2660,6 +2782,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Projectile Damage",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2671,6 +2794,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Repeater",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2682,6 +2806,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Aerodynamics",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2693,6 +2818,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Projectile Damage",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2704,6 +2830,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Streamlined",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2715,6 +2842,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Repeater",
+   "override": null,
    "socket": false,
    "type": "Notable"
   }

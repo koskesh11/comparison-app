@@ -3,6 +3,11 @@
 from display import fmt_compact
 from scoring import skill_pcts_text
 
+ITEM_WHY_CAP = 8
+MINOR_SIDE_CAP = 2
+LOSS_LIMIT = -0.1
+JEWEL_NOTE = "you can keep your jewel in the empty socket - not tested"
+
 
 def _source_map(rows: list[dict]) -> dict:
     result = {}
@@ -59,19 +64,34 @@ def gem_why(auditor, row: dict, player_snapshot: dict) -> list[str]:
 def item_why(row: dict, player_item: dict | None, guide_item: dict | None) -> list[str]:
     old, new = (player_item or {}).get("mods") or [], (guide_item or {}).get("mods") or []
     added = [f"+ {line}" for line in new if line not in old]
-    removed = [f"- {line}" for line in old if line not in new]
-    return (added + removed)[:4]
+    delta = ((row.get("result") or {}).get("delta") or {})
+    dps, ehp = delta.get("dpsPct") or 0, delta.get("ehpPct") or 0
+    if dps >= LOSS_LIMIT and ehp >= LOSS_LIMIT:
+        return added[:ITEM_WHY_CAP]
+    guide_slots = {jewel.get("slot") for jewel in (guide_item or {}).get("abyssJewels") or []}
+    jewels = [f"- {jewel.get('slot') or ''}: {jewel.get('name') or ''} "
+              f"(stops counting; {JEWEL_NOTE})"
+              for jewel in (player_item or {}).get("abyssJewels") or []
+              if jewel.get("slot") not in guide_slots]
+    removed = jewels + [f"- {line}" for line in old if line not in new]
+    if not removed or not added:
+        return (removed or added)[:ITEM_WHY_CAP]
+    loss_bigger = -min(dps, ehp) > max(dps, ehp)
+    major, minor = (removed, added) if loss_bigger else (added, removed)
+    major_cap = ITEM_WHY_CAP - min(len(minor), MINOR_SIDE_CAP)
+    return major[:major_cap] + minor[:MINOR_SIDE_CAP]
 
 
 def explain_row(auditor, row: dict, player_snapshot: dict,
                 player_item=None, guide_item=None, allow_call: bool = True) -> list[str]:
-    lines = cheap_why(row.get("dims") or {})
+    lines = []
     if allow_call and row.get("category", "").startswith("tree-"):
-        lines = tree_why(auditor, row) + lines
+        lines = tree_why(auditor, row)
     elif allow_call and row.get("category") == "gem-level":
-        lines = gem_why(auditor, row, player_snapshot) + lines
+        lines = gem_why(auditor, row, player_snapshot)
     elif row.get("category") in {"item", "flask", "jewel"}:
-        lines = item_why(row, player_item, guide_item) + lines
+        lines = item_why(row, player_item, guide_item)
+    lines += cheap_why(row.get("dims") or {})
     if not lines and row.get("zeroNote") is None:
         lines = ["PoB: the change shows up in the totals only (no single modifier source)"]
-    return lines[:4]
+    return lines

@@ -14,6 +14,7 @@ from display import fmt_pct
 from guide_check_avail import row_availability
 from guide_check_eval import evaluate_options, lua_mb, models_not_applied, named_models
 from guide_check_log import log_check
+from guide_check_notes import apply_notes
 from guide_check_rank import rank_rows
 from guide_check_result import assemble_row, build_result, carries_value, kpis
 from guide_check_retest import evaluate_config, retest_zero_rows
@@ -268,11 +269,14 @@ def _explain(auditor, rows: list[dict], player: dict, guide: dict,
     players, guides = _items(player), _items(guide)
     for row in rows:
         slot = (row.get("info") or {}).get("slot") or (row.get("change") or {}).get("slot")
+        player_item, guide_item = players.get(str(slot)), guides.get(str(slot))
         category = row.get("category", "")
-        calls_pob = category.startswith("tree-") or category == "gem-level"
+        calls_pob = (category.startswith("tree-") or category == "gem-level"
+                     or category in {"item", "flask", "jewel"} or bool(row.get("zeroNote")))
         can_call = not calls_pob or clock() - start < deadline
-        row["why"] = explain_row(auditor, row, player, players.get(str(slot)),
-                                 guides.get(str(slot)), can_call)
+        if can_call:
+            row.update(apply_notes(auditor, row, player_item, guide_item, guide))
+        row["why"] = explain_row(auditor, row, player, player_item, guide_item, can_call)
         if not can_call and category.startswith("tree-"):
             row["whySkipped"] = True
 
@@ -320,6 +324,8 @@ def _finish(auditor, guide_label: str, state: dict, differences: dict,
     counts = {"found": differences["found"], "tested": tested,
               "notTested": len(state["not_tested"]), "noChange": len(no_change),
               "settings": len(config)}
+    # PoB's global calc cache keeps one full environment per tested skill; PoB itself wipes it on every build load
+    auditor.engine.run("if wipeGlobalCache then wipeGlobalCache() end")
     perf = {"seconds": final - start, "rowsTested": tested, "luaMB": lua_mb(auditor.engine),
             "luaMBGuideLoaded": guide_mb, "timeLimit": state["limited"],
             "deadlineSeconds": deadline_s}

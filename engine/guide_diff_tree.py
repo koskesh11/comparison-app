@@ -1,6 +1,7 @@
 """Passive-tree rows for guide snapshot comparison."""
 
-from guide_diff_common import classify_node, info_node, node_id, node_name, nodes_by_id, not_tested, row
+from guide_diff_common import (OVERRIDE_REASON, classify_node, info_node, node_id, node_name,
+                               nodes_by_id, not_tested, override_facts, row)
 
 
 def _ids(values: object, include: int, sort: bool = False) -> list[int]:
@@ -37,6 +38,13 @@ def _alloc_row(ident: int, target: dict, guides: dict[int, dict], guide_only: se
         label = f"Take {node_name(target, ident)}"
         return not_tested(f"tree-add:{ident}", "tree-add", label,
                           "no path to this node", info={"node": ident}), set()
+    overridden = next((override_facts(guides[value]) for value in path
+                       if value != ident and value in guide_only
+                       and override_facts(guides[value]) is not None), None)
+    if overridden:
+        detail = f"path includes {overridden['name']} on {overridden['plain']}"
+        return not_tested(f"tree-add:{ident}", "tree-add", f"Take {node_name(target, ident)}",
+                          OVERRIDE_REASON, detail=detail, info={"node": ident}), set()
     extras = sorted({node_name(guides[value], value) for value in path
                      if value != ident and value in guide_only}, key=str.casefold)
     path_nodes = max(0, len(path) - 1)
@@ -72,6 +80,12 @@ def _remove_row(ident: int, target: dict, players: dict[int, dict], player: dict
         return not_tested(f"tree-remove:{ident}", "tree-remove", f"Drop {node_name(target, ident)}",
                           "no dependency information", info={"node": ident}), set()
     depends = _ids(depends_raw, ident, sort=True)
+    overridden = next((value for value in depends if value != ident and value in players
+                       and override_facts(players[value]) is not None), None)
+    if overridden is not None:
+        return not_tested(f"tree-remove:{ident}", "tree-remove",
+                          f"Drop {node_name(target, ident)}", OVERRIDE_REASON,
+                          info={"node": ident}), set()
     also = sorted({node_name(players[value], value) for value in depends
                    if value != ident and value in players}, key=str.casefold)
     also += [name for name in _jewel_names(player, depends) if name not in also]
@@ -113,7 +127,14 @@ def _untested_rows(direction: str, values: list[tuple[int, dict]], covered: set[
     category = f"tree-{direction}"
     for ident, value in sorted(values):
         kind = classify_node(value)
-        if kind == "mastery":
+        if kind == "override":
+            facts = override_facts(value)
+            action = "Take" if direction == "add" else "Drop"
+            result.append(not_tested(f"{category}:{ident}", category,
+                                     f"{action} {facts['name']} on {facts['plain']}",
+                                     OVERRIDE_REASON, detail="; ".join(facts["lines"]) or None,
+                                     info={"node": ident, "override": facts["name"]}))
+        elif kind == "mastery":
             result.append(not_tested(f"{category}:{ident}", category,
                                      f"{'Take' if direction == 'add' else 'Drop'} {node_name(value, ident)}",
                                      "Mastery nodes are not tested", info={"node": ident}))
@@ -152,6 +173,14 @@ def tree_rows(player: dict, guide: dict, tree_info: dict | None,
     untested += _untested_rows("remove", remove_values, remove_covered, set())
     for ident in sorted(set(players) & set(guides)):
         left, right = players[ident], guides[ident]
+        if left.get("override") != right.get("override"):
+            yours, wanted = override_facts(left), override_facts(right)
+            facts = yours or wanted
+            label = (f"Tattoo or runegraft on {facts['plain']}: "
+                     f"yours {yours['name'] if yours else 'none'}, "
+                     f"the guide's {wanted['name'] if wanted else 'none'}")
+            untested.append(not_tested(f"tree-add:override:{ident}", "tree-add", label,
+                                       OVERRIDE_REASON, info={"node": ident}))
         if classify_node(left) == "mastery" and left.get("mastery") != right.get("mastery"):
             label = f"Mastery choice differs: yours {left.get('mastery')}, the guide's {right.get('mastery')}"
             untested.append(not_tested(f"tree-add:mastery-choice:{ident}", "tree-add", label,

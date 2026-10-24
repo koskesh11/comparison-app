@@ -1277,6 +1277,15 @@
    "mastery": 35810,
    "modKeyEmpty": false,
    "name": "Runegraft of the Fortress",
+   "override": {
+    "lines": [
+     "10% reduced Attributes",
+     "40% increased Defences",
+     "Limited to 1 Runegraft of the Fortress"
+    ],
+    "name": "Runegraft of the Fortress",
+    "plain": "Energy Shield Mastery"
+   },
    "socket": false,
    "type": "Mastery"
   },
@@ -1288,6 +1297,15 @@
    "mastery": 46099,
    "modKeyEmpty": false,
    "name": "Runegraft of Treachery",
+   "override": {
+    "lines": [
+     "15% increased Reservation Efficiency of Skills",
+     "Auras from your Skills which affect Allies also affect Enemies",
+     "Limited to 1 Runegraft of Treachery"
+    ],
+    "name": "Runegraft of Treachery",
+    "plain": "Evasion and Energy Shield Mastery"
+   },
    "socket": false,
    "type": "Mastery"
   },
@@ -1299,6 +1317,13 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Devotion",
+   "override": {
+    "lines": [
+     "3% increased maximum Energy Shield"
+    ],
+    "name": "Tattoo of the Hinekora Warrior",
+    "plain": "Intelligence"
+   },
    "socket": false,
    "type": "Normal"
   },
@@ -1310,6 +1335,13 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Tattoo of the Hinekora Warrior",
+   "override": {
+    "lines": [
+     "3% increased maximum Energy Shield"
+    ],
+    "name": "Tattoo of the Hinekora Warrior",
+    "plain": "Intelligence"
+   },
    "socket": false,
    "type": "Normal"
   },
@@ -1321,6 +1353,13 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Tattoo of the Hinekora Warrior",
+   "override": {
+    "lines": [
+     "3% increased maximum Energy Shield"
+    ],
+    "name": "Tattoo of the Hinekora Warrior",
+    "plain": "Intelligence"
+   },
    "socket": false,
    "type": "Normal"
   },
@@ -1332,6 +1371,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Energy Shield, Power Charge Duration",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1343,6 +1383,13 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Tattoo of the Hinekora Warrior",
+   "override": {
+    "lines": [
+     "3% increased maximum Energy Shield"
+    ],
+    "name": "Tattoo of the Hinekora Warrior",
+    "plain": "Intelligence"
+   },
    "socket": false,
    "type": "Normal"
   },
@@ -1354,6 +1401,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Arcane Guarding",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -1365,6 +1413,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Safeguard",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -1376,6 +1425,13 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Tattoo of the Hinekora Warrior",
+   "override": {
+    "lines": [
+     "3% increased maximum Energy Shield"
+    ],
+    "name": "Tattoo of the Hinekora Warrior",
+    "plain": "Intelligence"
+   },
    "socket": false,
    "type": "Normal"
   },
@@ -1387,6 +1443,13 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Tattoo of the Hinekora Warrior",
+   "override": {
+    "lines": [
+     "3% increased maximum Energy Shield"
+    ],
+    "name": "Tattoo of the Hinekora Warrior",
+    "plain": "Intelligence"
+   },
    "socket": false,
    "type": "Normal"
   },
@@ -1398,6 +1461,7 @@
    "mastery": null,
    "modKeyEmpty": true,
    "name": "Large Jewel Socket",
+   "override": null,
    "socket": true,
    "type": "Socket"
   },
@@ -1409,6 +1473,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Disciple of the Forbidden",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -1420,6 +1485,7 @@
    "mastery": null,
    "modKeyEmpty": true,
    "name": "Medium Jewel Socket",
+   "override": null,
    "socket": true,
    "type": "Socket"
   },
@@ -1431,6 +1497,7 @@
    "mastery": null,
    "modKeyEmpty": true,
    "name": "Small Jewel Socket",
+   "override": null,
    "socket": true,
    "type": "Socket"
   },
@@ -1442,6 +1509,13 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Tattoo of the Hinekora Warrior",
+   "override": {
+    "lines": [
+     "3% increased maximum Energy Shield"
+    ],
+    "name": "Tattoo of the Hinekora Warrior",
+    "plain": "Intelligence"
+   },
    "socket": false,
    "type": "Normal"
   },
@@ -1453,6 +1527,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Arcanist's Dominion",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -1464,6 +1539,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Chaos Inoculation",
+   "override": null,
    "socket": false,
    "type": "Keystone"
   },
@@ -1475,6 +1551,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Shield Spell Damage and Spell Block",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1486,6 +1563,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Energy Shield",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1497,6 +1575,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Critical Strike Multiplier per Power Charge",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1508,6 +1587,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Mana Regeneration per Power Charge",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1519,6 +1599,7 @@
    "mastery": null,
    "modKeyEmpty": true,
    "name": "Medium Jewel Socket",
+   "override": null,
    "socket": true,
    "type": "Socket"
   },
@@ -1530,6 +1611,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Devotion",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1541,6 +1623,7 @@
    "mastery": 38070,
    "modKeyEmpty": false,
    "name": "Critical Mastery",
+   "override": null,
    "socket": false,
    "type": "Mastery"
   },
@@ -1552,6 +1635,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Critical Strike Chance per Power Charge",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1563,6 +1647,13 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Tattoo of the Hinekora Warrior",
+   "override": {
+    "lines": [
+     "3% increased maximum Energy Shield"
+    ],
+    "name": "Tattoo of the Hinekora Warrior",
+    "plain": "Intelligence"
+   },
    "socket": false,
    "type": "Normal"
   },
@@ -1574,6 +1665,7 @@
    "mastery": null,
    "modKeyEmpty": true,
    "name": "Occultist",
+   "override": null,
    "socket": false,
    "type": "AscendClassStart"
   },
@@ -1585,6 +1677,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Written in Blood",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -1596,6 +1689,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Shield Spell Damage and Spell Block",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1607,6 +1701,13 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Devotion",
+   "override": {
+    "lines": [
+     "3% increased maximum Energy Shield"
+    ],
+    "name": "Tattoo of the Hinekora Warrior",
+    "plain": "Intelligence"
+   },
    "socket": false,
    "type": "Normal"
   },
@@ -1618,6 +1719,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Spell Block",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1629,6 +1731,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Instability",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -1640,6 +1743,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Elemental Damage",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1651,6 +1755,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Mana",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1662,6 +1767,7 @@
    "mastery": null,
    "modKeyEmpty": true,
    "name": "Large Jewel Socket",
+   "override": null,
    "socket": true,
    "type": "Socket"
   },
@@ -1673,6 +1779,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Block Recovery and Energy Shield",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1684,6 +1791,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Mana",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1695,6 +1803,7 @@
    "mastery": 59574,
    "modKeyEmpty": false,
    "name": "Chaos Mastery",
+   "override": null,
    "socket": false,
    "type": "Mastery"
   },
@@ -1706,6 +1815,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Energy Shield",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1717,6 +1827,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Withering Presence",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -1728,6 +1839,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Infused",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -1739,6 +1851,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Spell Critical Strike Chance",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1750,6 +1863,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Energy Shield Leech",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1761,6 +1875,7 @@
    "mastery": null,
    "modKeyEmpty": true,
    "name": "Basic Jewel Socket",
+   "override": null,
    "socket": true,
    "type": "Socket"
   },
@@ -1772,6 +1887,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Void Beacon",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -1783,6 +1899,7 @@
    "mastery": 31556,
    "modKeyEmpty": false,
    "name": "Energy Shield Mastery",
+   "override": null,
    "socket": false,
    "type": "Mastery"
   },
@@ -1794,6 +1911,13 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Tattoo of the Hinekora Warrior",
+   "override": {
+    "lines": [
+     "3% increased maximum Energy Shield"
+    ],
+    "name": "Tattoo of the Hinekora Warrior",
+    "plain": "Intelligence"
+   },
    "socket": false,
    "type": "Normal"
   },
@@ -1805,6 +1929,13 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Tattoo of the Hinekora Warrior",
+   "override": {
+    "lines": [
+     "3% increased maximum Energy Shield"
+    ],
+    "name": "Tattoo of the Hinekora Warrior",
+    "plain": "Intelligence"
+   },
    "socket": false,
    "type": "Normal"
   },
@@ -1816,6 +1947,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Chaos Damage",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1827,6 +1959,7 @@
    "mastery": null,
    "modKeyEmpty": true,
    "name": "Medium Jewel Socket",
+   "override": null,
    "socket": true,
    "type": "Socket"
   },
@@ -1838,6 +1971,14 @@
    "mastery": 37614,
    "modKeyEmpty": false,
    "name": "Runegraft of Gemcraft",
+   "override": {
+    "lines": [
+     "+1 to Level of all non-Exceptional Support Gems",
+     "Limited to 1 Runegraft of Gemcraft"
+    ],
+    "name": "Runegraft of Gemcraft",
+    "plain": "Armour and Energy Shield Mastery"
+   },
    "socket": false,
    "type": "Mastery"
   },
@@ -1849,6 +1990,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Energy Shield, Chaos Damage",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1860,6 +2002,13 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Tattoo of the Valako Shieldbearer",
+   "override": {
+    "lines": [
+     "+1% Chance to Block Attack Damage"
+    ],
+    "name": "Tattoo of the Valako Shieldbearer",
+    "plain": "Strength"
+   },
    "socket": false,
    "type": "Normal"
   },
@@ -1871,6 +2020,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Soul Thief",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -1882,6 +2032,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Energy Shield, Cold and Chaos Damage",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1893,6 +2044,13 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Tattoo of the Hinekora Warrior",
+   "override": {
+    "lines": [
+     "3% increased maximum Energy Shield"
+    ],
+    "name": "Tattoo of the Hinekora Warrior",
+    "plain": "Intelligence"
+   },
    "socket": false,
    "type": "Normal"
   },
@@ -1904,6 +2062,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Energy Shield",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1915,6 +2074,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Overcharge",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -1926,6 +2086,7 @@
    "mastery": 40307,
    "modKeyEmpty": false,
    "name": "Charge Mastery",
+   "override": null,
    "socket": false,
    "type": "Mastery"
   },
@@ -1937,6 +2098,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Faith and Steel",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -1948,6 +2110,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Spell Critical Strike Multiplier",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -1959,6 +2122,13 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Tattoo of the Hinekora Warrior",
+   "override": {
+    "lines": [
+     "3% increased maximum Energy Shield"
+    ],
+    "name": "Tattoo of the Hinekora Warrior",
+    "plain": "Intelligence"
+   },
    "socket": false,
    "type": "Normal"
   },
@@ -1970,6 +2140,7 @@
    "mastery": null,
    "modKeyEmpty": true,
    "name": "Basic Jewel Socket",
+   "override": null,
    "socket": true,
    "type": "Socket"
   },
@@ -1981,6 +2152,13 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Tattoo of the Hinekora Warrior",
+   "override": {
+    "lines": [
+     "3% increased maximum Energy Shield"
+    ],
+    "name": "Tattoo of the Hinekora Warrior",
+    "plain": "Intelligence"
+   },
    "socket": false,
    "type": "Normal"
   },
@@ -1992,6 +2170,13 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Tattoo of the Hinekora Warrior",
+   "override": {
+    "lines": [
+     "3% increased maximum Energy Shield"
+    ],
+    "name": "Tattoo of the Hinekora Warrior",
+    "plain": "Intelligence"
+   },
    "socket": false,
    "type": "Normal"
   },
@@ -2003,6 +2188,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Vile Bastion",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2014,6 +2200,13 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Tattoo of the Hinekora Warrior",
+   "override": {
+    "lines": [
+     "3% increased maximum Energy Shield"
+    ],
+    "name": "Tattoo of the Hinekora Warrior",
+    "plain": "Intelligence"
+   },
    "socket": false,
    "type": "Normal"
   },
@@ -2025,6 +2218,13 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Tattoo of the Hinekora Warrior",
+   "override": {
+    "lines": [
+     "3% increased maximum Energy Shield"
+    ],
+    "name": "Tattoo of the Hinekora Warrior",
+    "plain": "Intelligence"
+   },
    "socket": false,
    "type": "Normal"
   },
@@ -2036,6 +2236,7 @@
    "mastery": 4500,
    "modKeyEmpty": false,
    "name": "Block Mastery",
+   "override": null,
    "socket": false,
    "type": "Mastery"
   },
@@ -2047,6 +2248,13 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Tattoo of the Hinekora Warrior",
+   "override": {
+    "lines": [
+     "3% increased maximum Energy Shield"
+    ],
+    "name": "Tattoo of the Hinekora Warrior",
+    "plain": "Intelligence"
+   },
    "socket": false,
    "type": "Normal"
   },
@@ -2058,6 +2266,13 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Tattoo of the Hinekora Warrior",
+   "override": {
+    "lines": [
+     "3% increased maximum Energy Shield"
+    ],
+    "name": "Tattoo of the Hinekora Warrior",
+    "plain": "Intelligence"
+   },
    "socket": false,
    "type": "Normal"
   },
@@ -2069,6 +2284,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Armour and Energy Shield",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2080,6 +2296,13 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Tattoo of the Hinekora Warrior",
+   "override": {
+    "lines": [
+     "3% increased maximum Energy Shield"
+    ],
+    "name": "Tattoo of the Hinekora Warrior",
+    "plain": "Intelligence"
+   },
    "socket": false,
    "type": "Normal"
   },
@@ -2091,6 +2314,13 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Devotion",
+   "override": {
+    "lines": [
+     "3% increased maximum Energy Shield"
+    ],
+    "name": "Tattoo of the Hinekora Warrior",
+    "plain": "Intelligence"
+   },
    "socket": false,
    "type": "Normal"
   },
@@ -2102,6 +2332,7 @@
    "mastery": 45307,
    "modKeyEmpty": false,
    "name": "Shield Mastery",
+   "override": null,
    "socket": false,
    "type": "Mastery"
   },
@@ -2113,6 +2344,13 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Tattoo of the Hinekora Warrior",
+   "override": {
+    "lines": [
+     "3% increased maximum Energy Shield"
+    ],
+    "name": "Tattoo of the Hinekora Warrior",
+    "plain": "Intelligence"
+   },
    "socket": false,
    "type": "Normal"
   },
@@ -2124,6 +2362,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Arcane Potency",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2135,6 +2374,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Arcane Sanctuary",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2146,6 +2386,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Chaos Damage",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2157,6 +2398,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Energy Shield, Energy Shield Recharge Rate",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2168,6 +2410,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Heart of Darkness",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2179,6 +2422,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Chaos Damage",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2190,6 +2434,13 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Tattoo of the Hinekora Warrior",
+   "override": {
+    "lines": [
+     "3% increased maximum Energy Shield"
+    ],
+    "name": "Tattoo of the Hinekora Warrior",
+    "plain": "Intelligence"
+   },
    "socket": false,
    "type": "Normal"
   },
@@ -2201,6 +2452,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Unnatural Calm",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2212,6 +2464,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Elemental Damage",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2223,6 +2476,13 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Tattoo of the Hinekora Warrior",
+   "override": {
+    "lines": [
+     "3% increased maximum Energy Shield"
+    ],
+    "name": "Tattoo of the Hinekora Warrior",
+    "plain": "Intelligence"
+   },
    "socket": false,
    "type": "Normal"
   },
@@ -2234,6 +2494,7 @@
    "mastery": null,
    "modKeyEmpty": true,
    "name": "WITCH",
+   "override": null,
    "socket": false,
    "type": "ClassStart"
   },
@@ -2245,6 +2506,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Spell Block",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2256,6 +2518,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Spell Damage per Power Charge",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2267,6 +2530,13 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Tattoo of the Hinekora Warrior",
+   "override": {
+    "lines": [
+     "3% increased maximum Energy Shield"
+    ],
+    "name": "Tattoo of the Hinekora Warrior",
+    "plain": "Intelligence"
+   },
    "socket": false,
    "type": "Normal"
   },
@@ -2278,6 +2548,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Spell Damage and Mana",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2289,6 +2560,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Shield Spell Damage",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2300,6 +2572,13 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Tattoo of the Hinekora Warrior",
+   "override": {
+    "lines": [
+     "3% increased maximum Energy Shield"
+    ],
+    "name": "Tattoo of the Hinekora Warrior",
+    "plain": "Intelligence"
+   },
    "socket": false,
    "type": "Normal"
   },
@@ -2311,6 +2590,7 @@
    "mastery": null,
    "modKeyEmpty": true,
    "name": "Small Jewel Socket",
+   "override": null,
    "socket": true,
    "type": "Socket"
   },
@@ -2322,6 +2602,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Evasion and Energy Shield",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2333,6 +2614,13 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Tattoo of the Hinekora Warrior",
+   "override": {
+    "lines": [
+     "3% increased maximum Energy Shield"
+    ],
+    "name": "Tattoo of the Hinekora Warrior",
+    "plain": "Intelligence"
+   },
    "socket": false,
    "type": "Normal"
   },
@@ -2344,6 +2632,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Spell Critical Strike Chance",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2355,6 +2644,13 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Tattoo of the Hinekora Warrior",
+   "override": {
+    "lines": [
+     "3% increased maximum Energy Shield"
+    ],
+    "name": "Tattoo of the Hinekora Warrior",
+    "plain": "Intelligence"
+   },
    "socket": false,
    "type": "Normal"
   },
@@ -2366,6 +2662,7 @@
    "mastery": null,
    "modKeyEmpty": true,
    "name": "Basic Jewel Socket",
+   "override": null,
    "socket": true,
    "type": "Socket"
   },
@@ -2377,6 +2674,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Life and Energy Shield",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2388,6 +2686,7 @@
    "mastery": null,
    "modKeyEmpty": true,
    "name": "Basic Jewel Socket",
+   "override": null,
    "socket": true,
    "type": "Socket"
   },
@@ -2399,6 +2698,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Doom Cast",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2410,6 +2710,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Forbidden Power",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2421,6 +2722,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Spell Critical Strike Chance",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2432,6 +2734,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Zealot's Oath",
+   "override": null,
    "socket": false,
    "type": "Keystone"
   },
@@ -2443,6 +2746,13 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Tattoo of the Hinekora Warrior",
+   "override": {
+    "lines": [
+     "3% increased maximum Energy Shield"
+    ],
+    "name": "Tattoo of the Hinekora Warrior",
+    "plain": "Intelligence"
+   },
    "socket": false,
    "type": "Normal"
   },
@@ -2454,6 +2764,7 @@
    "mastery": 2987,
    "modKeyEmpty": false,
    "name": "Critical Mastery",
+   "override": null,
    "socket": false,
    "type": "Mastery"
   },
@@ -2465,6 +2776,7 @@
    "mastery": null,
    "modKeyEmpty": true,
    "name": "Medium Jewel Socket",
+   "override": null,
    "socket": true,
    "type": "Socket"
   },
@@ -2476,6 +2788,7 @@
    "mastery": null,
    "modKeyEmpty": true,
    "name": "Nothingness",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2487,6 +2800,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Pressure Points",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2498,6 +2812,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Spring Back",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2509,6 +2824,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Pure Aptitude",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2520,6 +2836,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Chaos Damage",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2531,6 +2848,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Chaos Damage",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2542,6 +2860,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Chaos Damage",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2553,6 +2872,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Chaos Damage",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2564,6 +2884,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Chaos Damage",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2575,6 +2896,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Chaos Damage",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2586,6 +2908,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Chaos Damage",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2597,6 +2920,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Chaos Damage",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2608,6 +2932,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Chaos Damage",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2619,6 +2944,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Chaos Damage",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2630,6 +2956,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Critical Chance",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2641,6 +2968,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Pressure Points",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2652,6 +2980,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Basics of Pain",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2663,6 +2992,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Spell Damage",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2674,6 +3004,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Conjured Wall",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2685,6 +3016,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Mage Hunter",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2696,6 +3028,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Critical Chance",
+   "override": null,
    "socket": false,
    "type": "Normal"
   },
@@ -2707,6 +3040,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Pressure Points",
+   "override": null,
    "socket": false,
    "type": "Notable"
   },
@@ -2718,6 +3052,7 @@
    "mastery": null,
    "modKeyEmpty": false,
    "name": "Basics of Pain",
+   "override": null,
    "socket": false,
    "type": "Notable"
   }

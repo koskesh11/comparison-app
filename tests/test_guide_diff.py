@@ -203,7 +203,11 @@ class GemDiffTests(unittest.TestCase):
         guide = snap(groups=[group(1, "A", [gem("A"), gem("B")]),
                              group(2, "A", [gem("A"), gem("New", True)])])
         result = guide_diff.diff(player, guide, None)
-        self.assertTrue(any(value["id"] == "group-add:partial:1" for value in result["notTested"]))
+        missing = next(value for value in result["notTested"]
+                       if value["id"] == "group-add:missing:1:B")
+        self.assertEqual(missing["reason"], "you don't have B in that group")
+        self.assertFalse(any(value["id"].startswith("group-add:partial:")
+                             for value in result["rows"] + result["notTested"]))
         self.assertEqual(rows(result, "support-add")[0]["change"]["group"], 2)
 
 

@@ -87,7 +87,7 @@ def assemble_row(row: dict, result: dict, dims: dict, breaks: list[str],
             "why": [], "breakdown": breakdown, "interaction": interaction,
             "availability": availability, "price": None, "breaks": breaks,
             "nodeAlone": node_alone, "conditional": None,
-            "zeroNote": ("PoB shows no effect here; it may still matter for a requirement or a jewel."
+            "zeroNote": ("PoB shows no change from this alone; the reason is not determined (a cap, a missing condition, or a stat PoB does not count)."
                          if zero else None), "dims": dims}
 
 
