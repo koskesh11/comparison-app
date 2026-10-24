@@ -12,6 +12,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 import build_settings
+import guide_routes
 import runlog
 from api_errors import ApiError, Forbidden, InvalidRequest, Unauthorized, classify
 from audit import DEFAULT_SCENARIO, Auditor
@@ -29,12 +30,14 @@ VALID_HOSTS = {f"127.0.0.1:{PORT}", f"localhost:{PORT}"}
 VALID_ORIGINS = {f"http://127.0.0.1:{PORT}", f"http://localhost:{PORT}"}
 COMMON_HEADERS = (("X-Frame-Options", "DENY"), ("Content-Security-Policy", "frame-ancestors 'none'"),
                   ("Cache-Control", "no-store"), ("X-Content-Type-Options", "nosniff"))
-PUBLIC_JOB_KEYS = ("id", "status", "progress", "build", "error", "report")
+PUBLIC_JOB_KEYS = ("id", "status", "progress", "build", "error", "report", "kind", "stage",
+                   "done", "total", "stages", "errorKind", "referenceId")
 
 API_TOKEN = ""
 pool = None
 engine_lock = threading.Lock()
 jobs: dict[str, dict] = {}
+guide_capability = None
 
 
 def list_builds() -> list[dict]:
@@ -155,7 +158,8 @@ class Handler(BaseHTTPRequestHandler):
         elif self.path == "/api/builds":
             self.send_json({"builds": list_builds(), "outDir": str(DEFAULT_OUT_DIR),
                             "scenarios": sorted(load_scenarios()), "defaultScenario": DEFAULT_SCENARIO,
-                            "settings": build_settings._load_all()})
+                            "settings": build_settings._load_all(),
+                            "guideCheck": guide_routes.capability(sys.modules[__name__])})
         elif self.path.startswith("/api/jobs/"):
             job = jobs.get(self.path.removeprefix("/api/jobs/"))
             if job:
@@ -187,6 +191,9 @@ class Handler(BaseHTTPRequestHandler):
             self._start_audit(self.read_json())
         elif self.path.startswith("/api/jobs/") and self.path.endswith("/apply"):
             self._apply(self.read_json())
+        elif self.path in guide_routes.GUIDE_POST_PATHS:
+            result = guide_routes.handle_post(sys.modules[__name__], self.path, self.read_json())
+            self.send_json(result)
         else:
             self._not_found("not found")
 
@@ -262,6 +269,7 @@ def main() -> None:
     TOKEN_FILE.write_text(API_TOKEN, encoding="utf-8")
     runlog.setup(token=API_TOKEN)
     pool = EnginePool()
+    guide_routes.probe_capability(sys.modules[__name__])
     server = ThreadingHTTPServer((HOST, PORT), Handler)
     url = f"http://{HOST}:{PORT}"
     print(f"PoB Autobuilder running at {url}  (Ctrl+C to stop)")

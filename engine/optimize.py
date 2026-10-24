@@ -39,6 +39,99 @@ def _gem_touch(change: dict) -> tuple[str, tuple[int, int] | None] | None:
     return name, socket
 
 
+def _item_touches(change: dict) -> list[tuple[str, object, str]]:
+    slots = [change.get("slot")]
+    slots += [jewel.get("slot") for jewel in change.get("abyssJewels") or []]
+    touches = [("slot", slot, "set") for slot in slots if slot is not None]
+    if change.get("socketNode") is not None:  # a jewel needs its tree socket: a removal of it conflicts
+        touches.append(("node", change["socketNode"], "add"))
+    return touches
+
+
+def _compound_touches(change: dict) -> list[tuple[str, object, str]]:
+    return [touch for sub in change.get("changes") or [] for touch in _touches(sub)]
+
+
+def _group_touches(change: dict) -> list[tuple[str, object, str]]:
+    return [("group", gem.get("name"), "set") for gem in change.get("gems") or []
+            if not gem.get("isSupport") and gem.get("name") is not None]
+
+
+def _node_touches(change: dict) -> list[tuple[str, object, str]]:
+    mode = "add" if change.get("type") == "alloc" else "remove"
+    return [("node", node, mode) for node in change.get("nodes") or []]
+
+
+def _gem_level_touches(change: dict) -> list[tuple[str, object, str]]:
+    group, name = change.get("group"), change.get("name")
+    return [("gem", (group, name), "set"),
+            ("socket", (group, change.get("gemIndex")), "set")]
+
+
+def _add_support_touches(change: dict) -> list[tuple[str, object, str]]:
+    return [("gem", (change.get("group"), (change.get("gem") or {}).get("name")), "set")]
+
+
+def _replace_support_touches(change: dict) -> list[tuple[str, object, str]]:
+    group, gem = change.get("group"), change.get("gem") or {}
+    return [("gem", (group, change.get("replaced")), "set"),
+            ("gem", (group, gem.get("name")), "set"),
+            ("socket", (group, change.get("gemIndex")), "set")]
+
+
+TOUCHERS = {
+    "item": _item_touches,
+    "compound": _compound_touches,
+    "addGroup": _group_touches,
+    "alloc": _node_touches,
+    "dealloc": _node_touches,
+    "gemLevel": _gem_level_touches,
+    "level": _gem_level_touches,
+    "addSupport": _add_support_touches,
+    "replaceSupport": _replace_support_touches,
+    "config": lambda change: [("setting", "config", "set")],
+}
+
+
+def _touches(change: dict) -> list[tuple[str, object, str]]:
+    touches = TOUCHERS.get(change.get("type"), lambda value: [])(change)
+    return list(dict.fromkeys(touches))
+
+
+def _touches_conflict(left: tuple, right: tuple) -> bool:
+    kind, key, mode = left
+    other_kind, other_key, other_mode = right
+    if kind != other_kind or key != other_key:
+        return False
+    return kind != "node" or mode != other_mode
+
+
+def _pair_detail(left: list[tuple], right: list[tuple], kind: str, key: object) -> str:
+    if kind != "gem":
+        return str(key)
+    names = {touch_key[1] for touch_kind, touch_key, _ in left + right
+             if touch_kind == "gem" and isinstance(touch_key, tuple) and touch_key[1] is not None}
+    return ", ".join(sorted(map(str, names)))
+
+
+def conflict_pairs(entries: list[tuple[object, dict]]) -> list[dict]:
+    """Return deterministic pairs of guide changes that cannot be combined."""
+    prepared = [(key, _touches(change)) for key, change in entries]
+    found = []
+    for index, (left_key, left) in enumerate(prepared):
+        if any(kind == "setting" for kind, _, _ in left):
+            found.append({"keys": (left_key, left_key), "kind": "setting", "detail": "config"})
+        for right_key, right in prepared[index + 1:]:
+            shared = [(kind, key) for touch in left for other in right
+                      if _touches_conflict(touch, other) for kind, key, _ in [touch]]
+            for kind, key in sorted(set(shared), key=lambda value: (value[0], str(value[1]))):
+                report_kind = "gem" if kind == "socket" else kind
+                detail = _pair_detail(left, right, report_kind, key)
+                found.append({"keys": (left_key, right_key), "kind": report_kind, "detail": detail})
+    unique = {(row["keys"], row["kind"], row["detail"]): row for row in found}
+    return [unique[key] for key in sorted(unique, key=lambda value: (str(value[0]), value[1], value[2]))]
+
+
 def check_conflicts(changes: list[dict]) -> None:
     if sum(c["type"] == "repath" for c in changes) > 1:
         raise ChangeError("pick at most one re-path")
@@ -52,6 +145,19 @@ def check_conflicts(changes: list[dict]) -> None:
                 duplicates.update((name, other_name))
     if duplicates:
         raise ChangeError(f"several changes touch the same gem: {', '.join(sorted(duplicates))}")
+    pairs = conflict_pairs(list(enumerate(changes)))
+    if not pairs:
+        return
+    kind = pairs[0]["kind"]
+    details = sorted({pair["detail"] for pair in pairs if pair["kind"] == kind})
+    messages = {
+        "slot": f"several changes use the same slot: {', '.join(details)}",
+        "group": f"several changes add the same skill: {', '.join(details)}",
+        "gem": f"several changes touch the same gem: {', '.join(details)}",
+        "node": "several changes add and remove the same passive nodes",
+        "setting": "settings the guide assumes are never applied",
+    }
+    raise ChangeError(messages[kind])
 
 
 def save_xml(out_dir: Path, name: str, xml: str) -> Path:

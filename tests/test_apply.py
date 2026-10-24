@@ -16,6 +16,76 @@ import audit  # noqa: E402
 import optimize  # noqa: E402
 
 
+class ConflictTableTests(unittest.TestCase):
+    def assert_conflict(self, changes, message, kind=None):
+        with self.assertRaisesRegex(optimize.ChangeError, f"^{message}$"):
+            optimize.check_conflicts(changes)
+        if kind is not None:
+            self.assertEqual(optimize.conflict_pairs(list(enumerate(changes)))[0]["kind"], kind)
+
+    def test_table_driven_conflicts(self):
+        cases = [
+            ([{"type": "item", "slot": "Weapon 1"},
+              {"type": "item", "slot": "Weapon 1"}],
+             "several changes use the same slot: Weapon 1", "slot"),
+            ([{"type": "item", "slot": "Weapon 1"},
+              {"type": "compound", "changes": [{"type": "item", "slot": "Body Armour",
+                                                   "abyssJewels": [{"slot": "Weapon 1"}]}]}],
+             "several changes use the same slot: Weapon 1", "slot"),
+            ([{"type": "addGroup", "gems": [{"name": "A", "isSupport": False}]},
+              {"type": "addGroup", "gems": [{"name": "A", "isSupport": False},
+                                               {"name": "B", "isSupport": False}]}],
+             "several changes add the same skill: A", "group"),
+            ([{"type": "alloc", "nodes": [1, 2]}, {"type": "dealloc", "nodes": [2]}],
+             "several changes add and remove the same passive nodes", "node"),
+            ([{"type": "config"}], "settings the guide assumes are never applied", "setting"),
+            ([{"type": "gemLevel", "group": 1, "gemIndex": 2, "name": "A"},
+              {"type": "replaceSupport", "group": 1, "gemIndex": 2,
+               "replaced": "B", "gem": {"name": "C"}}],
+             "several changes touch the same gem: A, B, C", "gem"),
+        ]
+        for changes, message, kind in cases:
+            with self.subTest(message=message):
+                self.assert_conflict(changes, message, kind)
+
+    def test_non_conflicting_table_entries(self):
+        cases = [
+            [{"type": "alloc", "nodes": [1, 2]}, {"type": "alloc", "nodes": [2, 3]}],
+            [{"type": "gemLevel", "group": 1, "gemIndex": 2, "name": "A"},
+             {"type": "gemLevel", "group": 2, "gemIndex": 2, "name": "A"}],
+            [{"type": "future"}, {"type": "future"}],
+        ]
+        for changes in cases:
+            with self.subTest(changes=changes):
+                optimize.check_conflicts(changes)
+                self.assertEqual(optimize.conflict_pairs(list(enumerate(changes))), [])
+
+    def test_old_gem_conflicts_are_unchanged(self):
+        changes = [{"type": "gem", "name": "A"}, {"type": "swap", "name": "A"}]
+        self.assert_conflict(changes, "several changes touch the same gem: A")
+        replacements = [{"type": "replaceGem", "group": 1, "gemIndex": 2, "replaced": "A"},
+                        {"type": "replaceGem", "group": 1, "gemIndex": 2, "replaced": "B"}]
+        self.assert_conflict(replacements, "several changes touch the same gem: A, B")
+
+    def test_repath_conflict_is_unchanged(self):
+        self.assert_conflict([{"type": "repath"}, {"type": "repath"}], "pick at most one re-path")
+
+    def test_guide_check_filename_never_overwrites(self):
+        with tempfile.TemporaryDirectory() as folder:
+            out_dir = Path(folder)
+            sentinel = out_dir / "Build (guide check).xml"
+            sentinel.write_text("sentinel", encoding="utf-8")
+            saved = optimize.save_xml(out_dir, "Build (guide check)", "<xml/>")
+        self.assertEqual(saved.name, "Build (guide check 2).xml")
+
+    def test_check_source_fresh_reports_changed_file(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "build.xml"
+            path.write_text("changed", encoding="utf-8")
+            with self.assertRaisesRegex(optimize.StaleAudit, "re-run the audit"):
+                optimize.check_source_fresh(path, "old hash")
+
+
 class ApplyChangesTests(unittest.TestCase):
     def setUp(self):
         self.saved_cwd = os.getcwd()

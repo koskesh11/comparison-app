@@ -16,6 +16,8 @@ if str(ENGINE_DIR) not in sys.path:
 import optimize
 import runlog
 import server
+import guide_routes
+from tests.guide_apply_testlib import fake_result
 
 
 class FakeHandler(server.Handler):
@@ -115,6 +117,19 @@ class ServerSecurityTests(unittest.TestCase):
         self.assertEqual(wrong.status, 401)
         self.assertEqual(server.jobs, {})
 
+    def test_guide_posts_share_all_post_guards_and_body_limit(self):
+        for path in guide_routes.GUIDE_POST_PATHS:
+            with self.subTest(path=path):
+                self.assertEqual(self.post(path, {}).status, 401)
+                self.assertEqual(self.post(path, {}, {"X-Api-Token": "wrong"}).status, 401)
+                token = {"X-Api-Token": "t0ken"}
+                self.assertEqual(self.post(path, {}, {**token, "Host": "evil"}).status, 403)
+                self.assertEqual(self.post(path, {}, {**token, "Origin": "http://evil"}).status, 403)
+                body = b"{" + b" " * server.MAX_BODY_BYTES
+                handler = FakeHandler(path, body, token)
+                handler.do_POST()
+                self.assertEqual(handler.status, 400)
+
     def test_origin_null_is_forbidden(self):
         handler = self.get("/api/builds", {"X-Api-Token": "t0ken", "Origin": "null"})
         post = self.post("/api/audit", {"build": "x.xml"}, {"X-Api-Token": "t0ken", "Origin": "null"})
@@ -164,6 +179,41 @@ class ServerSecurityTests(unittest.TestCase):
         self.assertNotIn(engine, job.values())
         self.assertIs(job["obtainable"], auditor.obtainable)
         self.assertTrue({"sha", "settings", "auditor", "obtainable"}.isdisjoint(server.Handler.public_job(job)))
+
+    def test_builds_has_capability_and_guide_job_only_exposes_public_fields(self):
+        server.jobs["guide"] = {
+            "id": "guide", "kind": "guide", "status": "running", "progress": "Queued",
+            "stage": "Queued", "stages": [], "done": None, "total": None, "build": "x.xml",
+            "error": None, "errorKind": None, "referenceId": None, "report": None,
+            "sha": "private", "settings": {}, "obtainable": object(), "playerPath": "private.xml",
+        }
+        capability = {"available": False, "pobVersion": None, "reason": "not ready"}
+        with mock.patch.object(server, "list_builds", return_value=[]), \
+                mock.patch.object(server, "load_scenarios", return_value={"Mapping"}), \
+                mock.patch.object(server.build_settings, "_load_all", return_value={}), \
+                mock.patch.object(server, "guide_capability", capability):
+            builds = self.get("/api/builds", {"X-Api-Token": "t0ken"})
+            job = self.get("/api/jobs/guide", {"X-Api-Token": "t0ken"})
+        self.assertEqual(builds.response_json()["guideCheck"], capability)
+        self.assertEqual(set(builds.response_json()["guideCheck"]), {"available", "pobVersion", "reason"})
+        self.assertTrue({"kind", "stage", "done", "total", "stages", "errorKind", "referenceId"}
+                        <= set(job.response_json()))
+        self.assertTrue({"sha", "settings", "obtainable", "playerPath", "auditor"}
+                        .isdisjoint(job.response_json()))
+
+    def test_guide_ids_validation_is_guarded_by_the_route(self):
+        server.jobs["guide"] = {
+            "id": "guide", "kind": "guide", "status": "done", "report": fake_result(),
+            "build": "x.xml", "sha": "sha", "playerPath": Path("x.xml"), "obtainable": object(),
+            "settings": {"includeDrafts": False, "leaveOut": [], "scenario": "Mapping"},
+        }
+        cases = ["not-a-list", [str(index) for index in range(501)], ["x" * 201], [1]]
+        for ids in cases:
+            with self.subTest(ids=type(ids).__name__):
+                response = self.post("/api/guide-preview", {"jobId": "guide", "ids": ids},
+                                     {"X-Api-Token": "t0ken"})
+                self.assertEqual((response.status, response.response_json()["kind"]),
+                                 (400, "InvalidRequest"))
 
     def test_apply_rebuilds_auditor_using_pool(self):
         engine = object()
