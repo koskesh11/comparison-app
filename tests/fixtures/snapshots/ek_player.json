@@ -1320,6 +1320,7 @@
    "name": "Mystical Infusion",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1332,6 +1333,7 @@
    "name": "Small Jewel Socket",
    "override": null,
    "socket": true,
+   "socketNode": 9408,
    "type": "Socket"
   },
   {
@@ -1344,6 +1346,7 @@
    "name": "Curse Cast Speed",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1356,6 +1359,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1368,6 +1372,7 @@
    "name": "Unstable Infusion",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1380,6 +1385,7 @@
    "name": "Devotion",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1392,6 +1398,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1404,6 +1411,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1416,6 +1424,7 @@
    "name": "Aura Area of Effect",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1428,6 +1437,7 @@
    "name": "Curse Cast Speed",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1440,6 +1450,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1452,6 +1463,7 @@
    "name": "Arcane Guarding",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1464,6 +1476,7 @@
    "name": "Safeguard",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1476,6 +1489,7 @@
    "name": "Dexterity",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1488,6 +1502,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1500,6 +1515,7 @@
    "name": "Large Jewel Socket",
    "override": null,
    "socket": true,
+   "socketNode": null,
    "type": "Socket"
   },
   {
@@ -1512,6 +1528,7 @@
    "name": "Disciple of the Forbidden",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1524,6 +1541,7 @@
    "name": "Medium Jewel Socket",
    "override": null,
    "socket": true,
+   "socketNode": 7960,
    "type": "Socket"
   },
   {
@@ -1536,6 +1554,7 @@
    "name": "Physique",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1548,6 +1567,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1560,6 +1580,7 @@
    "name": "Chaos Inoculation",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Keystone"
   },
   {
@@ -1572,6 +1593,7 @@
    "name": "Endurance",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1584,6 +1606,7 @@
    "name": "Inner Conviction",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Keystone"
   },
   {
@@ -1596,6 +1619,7 @@
    "name": "Influence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1608,6 +1632,7 @@
    "name": "Energy Shield",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1620,6 +1645,7 @@
    "name": "Small Jewel Socket",
    "override": null,
    "socket": true,
+   "socketNode": 29712,
    "type": "Socket"
   },
   {
@@ -1632,6 +1658,7 @@
    "name": "Critical Strike Multiplier per Power Charge",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1644,6 +1671,7 @@
    "name": "Critical Strike Chance, Power Charge Duration",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1656,6 +1684,7 @@
    "name": "Mana Regeneration per Power Charge",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1668,6 +1697,7 @@
    "name": "Medium Jewel Socket",
    "override": null,
    "socket": true,
+   "socketNode": 21984,
    "type": "Socket"
   },
   {
@@ -1680,6 +1710,7 @@
    "name": "Devotion",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1692,6 +1723,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1704,6 +1736,7 @@
    "name": "Critical Mastery",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Mastery"
   },
   {
@@ -1716,6 +1749,7 @@
    "name": "Critical Strike Chance per Power Charge",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1728,6 +1762,7 @@
    "name": "Devotion",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1740,6 +1775,7 @@
    "name": "Spell Block",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1752,6 +1788,7 @@
    "name": "Instability",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1764,6 +1801,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1776,6 +1814,7 @@
    "name": "Elemental Damage",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1788,6 +1827,7 @@
    "name": "Mana",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1800,6 +1840,7 @@
    "name": "Reservation Efficiency",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1812,6 +1853,7 @@
    "name": "Large Jewel Socket",
    "override": null,
    "socket": true,
+   "socketNode": null,
    "type": "Socket"
   },
   {
@@ -1824,6 +1866,7 @@
    "name": "Whispers of Doom",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1836,6 +1879,7 @@
    "name": "Block Recovery and Energy Shield",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1848,6 +1892,7 @@
    "name": "Mana",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1860,6 +1905,7 @@
    "name": "Energy Shield",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1872,6 +1918,7 @@
    "name": "Deep Thoughts",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1884,6 +1931,7 @@
    "name": "Infused",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1896,6 +1944,7 @@
    "name": "Reservation Efficiency",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1908,6 +1957,7 @@
    "name": "Basic Jewel Socket",
    "override": null,
    "socket": true,
+   "socketNode": null,
    "type": "Socket"
   },
   {
@@ -1920,6 +1970,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1932,6 +1983,7 @@
    "name": "Energy Shield Mastery",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Mastery"
   },
   {
@@ -1944,6 +1996,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1956,6 +2009,7 @@
    "name": "Assassination",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1968,6 +2022,7 @@
    "name": "Mistwalker",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1980,6 +2035,7 @@
    "name": "Reservation Efficiency",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1992,6 +2048,7 @@
    "name": "Medium Jewel Socket",
    "override": null,
    "socket": true,
+   "socketNode": 7960,
    "type": "Socket"
   },
   {
@@ -2004,6 +2061,7 @@
    "name": "Mana",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2016,6 +2074,7 @@
    "name": "Curse Effect",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2028,6 +2087,7 @@
    "name": "Alacrity",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -2040,6 +2100,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2052,6 +2113,7 @@
    "name": "Sovereignty",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -2064,6 +2126,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2076,6 +2139,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2088,6 +2152,7 @@
    "name": "Energy Shield",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2100,6 +2165,7 @@
    "name": "Critical Strike Chance, Spell Damage",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2112,6 +2178,7 @@
    "name": "Strength",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2124,6 +2191,7 @@
    "name": "Overcharge",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -2136,6 +2204,7 @@
    "name": "Charge Mastery",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Mastery"
   },
   {
@@ -2148,6 +2217,7 @@
    "name": "Critical Strike Chance",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2160,6 +2230,7 @@
    "name": "Trickery",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -2172,6 +2243,7 @@
    "name": "Faith and Steel",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -2184,6 +2256,7 @@
    "name": "Spell Critical Strike Multiplier",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2196,6 +2269,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2208,6 +2282,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2220,6 +2295,7 @@
    "name": "Damage and Energy Shield",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2232,6 +2308,7 @@
    "name": "Block Mastery",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Mastery"
   },
   {
@@ -2244,6 +2321,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2256,6 +2334,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2268,6 +2347,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2280,6 +2360,7 @@
    "name": "Critical Strike Chance, Elusive Effect",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2292,6 +2373,7 @@
    "name": "Devotion",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2304,6 +2386,7 @@
    "name": "SIX",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "ClassStart"
   },
   {
@@ -2316,6 +2399,7 @@
    "name": "Shield Mastery",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Mastery"
   },
   {
@@ -2328,6 +2412,7 @@
    "name": "Arcane Potency",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -2340,6 +2425,7 @@
    "name": "Armour and Energy Shield",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2352,6 +2438,7 @@
    "name": "Reservation Mastery",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Mastery"
   },
   {
@@ -2364,6 +2451,7 @@
    "name": "Deathmarked",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -2376,6 +2464,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2388,6 +2477,7 @@
    "name": "Unnatural Calm",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -2400,6 +2490,7 @@
    "name": "Energy Shield Leech",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2412,6 +2503,7 @@
    "name": "Elemental Damage",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2424,6 +2516,7 @@
    "name": "Mana Mastery",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Mastery"
   },
   {
@@ -2436,6 +2529,7 @@
    "name": "Dexterity",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2448,6 +2542,7 @@
    "name": "Aura Effect",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2460,6 +2555,7 @@
    "name": "Critical Strike Chance, Mark Effect",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2472,6 +2568,7 @@
    "name": "Spell Block",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2484,6 +2581,7 @@
    "name": "Spell Damage per Power Charge",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2496,6 +2594,7 @@
    "name": "Assassin",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "AscendClassStart"
   },
   {
@@ -2508,6 +2607,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2520,6 +2620,7 @@
    "name": "Small Jewel Socket",
    "override": null,
    "socket": true,
+   "socketNode": 13170,
    "type": "Socket"
   },
   {
@@ -2532,6 +2633,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2544,6 +2646,7 @@
    "name": "Strength",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2556,6 +2659,7 @@
    "name": "Basic Jewel Socket",
    "override": null,
    "socket": true,
+   "socketNode": null,
    "type": "Socket"
   },
   {
@@ -2568,6 +2672,7 @@
    "name": "Basic Jewel Socket",
    "override": null,
    "socket": true,
+   "socketNode": null,
    "type": "Socket"
   },
   {
@@ -2580,6 +2685,7 @@
    "name": "Spell Critical Strike Chance",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2592,6 +2698,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2604,6 +2711,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2616,6 +2724,7 @@
    "name": "Medium Jewel Socket",
    "override": null,
    "socket": true,
+   "socketNode": 21984,
    "type": "Socket"
   },
   {
@@ -2628,6 +2737,7 @@
    "name": "Projectile Damage",
    "override": null,
    "socket": false,
+   "socketNode": 29712,
    "type": "Normal"
   },
   {
@@ -2640,6 +2750,7 @@
    "name": "Repeater",
    "override": null,
    "socket": false,
+   "socketNode": 29712,
    "type": "Notable"
   },
   {
@@ -2652,6 +2763,7 @@
    "name": "Aerodynamics",
    "override": null,
    "socket": false,
+   "socketNode": 29712,
    "type": "Notable"
   },
   {
@@ -2664,6 +2776,7 @@
    "name": "Physical Damage",
    "override": null,
    "socket": false,
+   "socketNode": 7960,
    "type": "Normal"
   },
   {
@@ -2676,6 +2789,7 @@
    "name": "Iron Breaker",
    "override": null,
    "socket": false,
+   "socketNode": 7960,
    "type": "Notable"
   },
   {
@@ -2688,6 +2802,7 @@
    "name": "Physical Damage",
    "override": null,
    "socket": false,
+   "socketNode": 7960,
    "type": "Normal"
   },
   {
@@ -2700,6 +2815,7 @@
    "name": "Master the Fundamentals",
    "override": null,
    "socket": false,
+   "socketNode": 7960,
    "type": "Notable"
   },
   {
@@ -2712,6 +2828,7 @@
    "name": "Furious Assault",
    "override": null,
    "socket": false,
+   "socketNode": 7960,
    "type": "Notable"
   },
   {
@@ -2724,6 +2841,7 @@
    "name": "Physical Damage",
    "override": null,
    "socket": false,
+   "socketNode": 21984,
    "type": "Normal"
   },
   {
@@ -2736,6 +2854,7 @@
    "name": "Iron Breaker",
    "override": null,
    "socket": false,
+   "socketNode": 21984,
    "type": "Notable"
   },
   {
@@ -2748,6 +2867,7 @@
    "name": "Master the Fundamentals",
    "override": null,
    "socket": false,
+   "socketNode": 21984,
    "type": "Notable"
   },
   {
@@ -2760,6 +2880,7 @@
    "name": "Physical Damage",
    "override": null,
    "socket": false,
+   "socketNode": 21984,
    "type": "Normal"
   },
   {
@@ -2772,6 +2893,7 @@
    "name": "Furious Assault",
    "override": null,
    "socket": false,
+   "socketNode": 21984,
    "type": "Notable"
   },
   {
@@ -2784,6 +2906,7 @@
    "name": "Projectile Damage",
    "override": null,
    "socket": false,
+   "socketNode": 9408,
    "type": "Normal"
   },
   {
@@ -2796,6 +2919,7 @@
    "name": "Repeater",
    "override": null,
    "socket": false,
+   "socketNode": 9408,
    "type": "Notable"
   },
   {
@@ -2808,6 +2932,7 @@
    "name": "Aerodynamics",
    "override": null,
    "socket": false,
+   "socketNode": 9408,
    "type": "Notable"
   },
   {
@@ -2820,6 +2945,7 @@
    "name": "Projectile Damage",
    "override": null,
    "socket": false,
+   "socketNode": 13170,
    "type": "Normal"
   },
   {
@@ -2832,6 +2958,7 @@
    "name": "Streamlined",
    "override": null,
    "socket": false,
+   "socketNode": 13170,
    "type": "Notable"
   },
   {
@@ -2844,6 +2971,7 @@
    "name": "Repeater",
    "override": null,
    "socket": false,
+   "socketNode": 13170,
    "type": "Notable"
   }
  ],

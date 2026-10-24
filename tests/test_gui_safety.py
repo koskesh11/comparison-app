@@ -177,13 +177,13 @@ class GuideRenderTest(unittest.TestCase):
             # the EK report has no real tiny loss, so a "-0.0" / "-0.1" would be float noise shown as a loss
             self.assertNotRegex(out[name], r"-0\.[01]", name)
         labels = [r["label"] for r in rep["notTested"]]
-        self.assertEqual(len(labels), 63)
+        self.assertEqual(len(labels), 64)
         for label in labels:
             self.assertIn(label, out["c"])
         self.assertTrue(any(r["reason"] in out["c"] for r in rep["notTested"] if r.get("reason")))
         for r in rep["rows"] + rep["noChange"]:
             self.assertIn(r["label"], out["a"])
-        self.assertEqual((len(rep["rows"]), len(rep["noChange"])), (65, 8))
+        self.assertEqual((len(rep["rows"]), len(rep["noChange"])), (64, 8))
         self.assertEqual(out["bRows"], len(rep["config"]))
         self.assertEqual(out["bRows"], 15)
 

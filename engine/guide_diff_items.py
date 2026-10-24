@@ -224,6 +224,39 @@ def _path(tree_info: dict | None, socket: int) -> list[int] | None:
     return result
 
 
+def _cluster_notables(player: dict, socket: int | None) -> list[str]:
+    """Allocated notables provided by the cluster jewel in this socket, including nested clusters."""
+    parents = {node_id(value.get("id")): node_id(value.get("socketNode")) for value in player.get("nodes") or []
+               if isinstance(value, dict) and value.get("socketNode") is not None}
+    names = []
+    for ident, value in sorted(nodes_by_id(player).items()):
+        parent, seen = parents.get(ident), set()
+        while parent is not None and parent != socket and parent not in seen:
+            seen.add(parent)
+            parent = parents.get(parent)
+        if parent == socket and socket is not None and value.get("type") == "Notable":
+            names.append(str(value.get("name") or f"Node {ident}"))
+    return names
+
+
+def _player_jewel_blocker(player: dict, player_at: dict | None, label: str, slot: str,
+                          row_id: str) -> dict | None:
+    """A guide jewel over the player's cluster/timeless jewel is not tested: apply swaps the item for real and PoB
+    then removes (cluster) or reverts (timeless) the passives, while the test keeps them allocated."""
+    if not player_at or not (player_at.get("cluster") or player_at.get("timeless")):
+        return None
+    name, socket = display_name(player_at), node_id(player_at.get("socketNode"))
+    if player_at.get("cluster"):
+        notables = _cluster_notables(player, socket)
+        detail = f"{name} gives: {', '.join(notables)}" if notables else f"{name} (cluster jewel)"
+        reason = "PoB removes your cluster jewel's passives when it is swapped; not tested"
+    else:
+        detail = f"{name} (timeless jewel)"
+        reason = "PoB changes the passives your timeless jewel converted when it is swapped; not tested"
+    return not_tested(row_id, "jewel", label, reason, detail=detail,
+                      info={"slot": slot, "node": socket, "playerJewel": name})
+
+
 def _single_jewel(player: dict, guide: dict, jewel: dict, tree_info: dict | None,
                   unmatched: list[dict]) -> dict:
     slot = str(jewel.get("slot") or "socket")
@@ -234,6 +267,10 @@ def _single_jewel(player: dict, guide: dict, jewel: dict, tree_info: dict | None
     allocated = set(nodes_by_id(player))
     player_at = next((value for value in _items(player, jewels=True)
                       if node_id(value.get("socketNode")) == socket), None)
+    blocked = _player_jewel_blocker(player, player_at, f"Replace {display_name(player_at)} with {name} in {slot}"
+                                    if player_at else "", slot, f"jewel:{slot}")
+    if blocked:
+        return blocked
     other_guides = [value for value in _items(guide, jewels=True) if value is not jewel]
     if player_at and any(signature(player_at) == signature(value) for value in other_guides):
         return not_tested(f"jewel:{slot}", "jewel", name, "Socket is used by another jewel")
@@ -271,6 +308,11 @@ def _paired_row(first: dict, second: dict, tree_info: dict | None, player: dict)
     label = f"{names[0]} + {names[1]} (needs both)"
     for jewel in (first, second):
         socket = node_id(jewel.get("socketNode"))
+        player_at = next((value for value in _items(player, jewels=True)
+                          if node_id(value.get("socketNode")) == socket), None)
+        blocked = _player_jewel_blocker(player, player_at, label, str(jewel.get("slot") or "socket"), row_id)
+        if blocked:
+            return {**blocked, "flags": ["paired"]}
         touches += _touches(jewel, str(jewel.get("slot") or "socket"))
         if socket not in allocated:
             path = _path(tree_info, socket) if socket is not None else None

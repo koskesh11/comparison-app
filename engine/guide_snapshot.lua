@@ -113,15 +113,27 @@ local function tattooOverride(buildObj, id)
 	return jsonObject({ name = override.dn or NULL, lines = override.sd or {}, plain = plainName })
 end
 
+-- node id -> the socket whose cluster jewel provides it (nested clusters are followed by walking up this map)
+local function clusterSockets(buildObj)
+	local parents = {}
+	for _, subGraph in pairs(buildObj.spec.subGraphs or {}) do
+		for _, node in ipairs(subGraph.nodes) do
+			parents[node.id] = subGraph.parentSocket.id
+		end
+	end
+	return parents
+end
+
 local function snapshotNodes(buildObj)
 	local rows = {}
+	local sockets = clusterSockets(buildObj)
 	for _, id in ipairs(sortedKeys(buildObj.spec.allocNodes)) do
 		local node = buildObj.spec.allocNodes[id]
 		table.insert(rows, { id = id, name = node.dn, type = node.type,
 			ascendancy = node.ascendancyName or NULL, cluster = id >= 65536,
 			conquered = node.conqueredBy ~= nil, modKeyEmpty = (node.modKey or "") == "",
 			mastery = buildObj.spec.masterySelections[id] or NULL, socket = node.type == "Socket",
-			override = tattooOverride(buildObj, id) })
+			override = tattooOverride(buildObj, id), socketNode = sockets[id] or NULL })
 	end
 	return rows
 end

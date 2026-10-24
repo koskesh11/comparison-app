@@ -43,11 +43,12 @@ def _validate_nodes(nodes: list[dict]) -> None:
     node_ids = [node["id"] for node in nodes]
     assert node_ids == sorted(node_ids) and all(isinstance(node_id, int) for node_id in node_ids)
     keys = {"id", "name", "type", "ascendancy", "cluster", "conquered", "modKeyEmpty",
-            "mastery", "socket", "override"}
+            "mastery", "socket", "override", "socketNode"}
     for node in nodes:
         assert set(node) == keys
         assert isinstance(node["name"], str) and isinstance(node["type"], str)
         assert _nullable(node["ascendancy"], str) and _nullable(node["mastery"], int)
+        assert _nullable(node["socketNode"], int)
         assert all(isinstance(node[key], bool) for key in
                    ("cluster", "conquered", "modKeyEmpty", "socket"))
         override = node["override"]

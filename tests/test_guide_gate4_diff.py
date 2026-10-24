@@ -154,6 +154,44 @@ class RealSnapshotOverrideTests(unittest.TestCase):
         self.assertFalse(any("Cyclone" in row["id"].removeprefix("group-add:")
                              for row in group_adds))
 
+    def test_guide_jewel_over_player_cluster_jewel_is_not_tested(self):
+        """H4: the test keeps the cluster passives, apply removes them, so the row must not be tickable."""
+        _, _, result = _real_diff()
+        found = next(row for row in result["notTested"] if row["id"] == "jewel:Jewel 9408")
+        self.assertEqual("Replace Behemoth Bliss with Melding of the Flesh in Jewel 9408", found["label"])
+        self.assertIn("Repeater", found["detail"])
+        self.assertIn("Aerodynamics", found["detail"])
+        self.assertIn("cluster jewel's passives", found["reason"])
+        self.assertFalse(any(row["id"] == "jewel:Jewel 9408" for row in result["rows"]))
+        ranked = {row["id"] for row in result["rows"]}
+        self.assertTrue({"jewel:Jewel 59585", "jewel:Jewel 26196"} <= ranked | {
+            row["id"] for row in result["notTested"]})
+        self.assertIn("jewel:Jewel 59585", ranked)
+        with self.assertRaisesRegex(Exception, "not tested, so it can't be applied"):
+            guide_apply.resolve_ticks({"rows": result["rows"], "noChange": [],
+                                       "notTested": result["notTested"], "config": []},
+                                      ["jewel:Jewel 9408"])
+
+    def test_guide_jewel_over_player_timeless_jewel_is_not_tested(self):
+        player, guide = _load("ek_player.json"), _load("pobb_guide.json")
+        timeless = next(item for item in player["items"] if item.get("timeless"))
+        watcher = next(item for item in guide["items"] if "Watcher's Eye" in item["name"])
+        moved = {**watcher, "socketNode": timeless["socketNode"], "slot": timeless["slot"]}
+        guide = {**guide, "items": [item for item in guide["items"]
+                                    if item.get("slot") != timeless["slot"]] + [moved]}
+        result = guide_diff.diff(player, guide, _tree_info(player, guide))
+        found = next(row for row in result["notTested"] if row["id"] == f"jewel:{timeless['slot']}")
+        self.assertIn("Militant Faith", found["label"])
+        self.assertIn("timeless jewel", found["reason"])
+        self.assertFalse(any(row["id"] == found["id"] for row in result["rows"]))
+
+    def test_snapshot_cluster_nodes_name_their_socket(self):
+        player = _load("ek_player.json")
+        by_id = _node_map(player)
+        self.assertEqual(9408, by_id[66578]["socketNode"])  # Repeater of Behemoth Bliss
+        self.assertEqual(7960, by_id[9408]["socketNode"])   # a medium cluster sits in a large one
+
+
     def test_override_row_cannot_be_applied(self):
         _, _, result = _real_diff()
         report = {"rows": result["rows"], "noChange": [],

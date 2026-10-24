@@ -137,11 +137,9 @@ class RealGate4WhyTests(helpers.PobGuardedTestCase):
             for generic in ("needs Aura", "needs ArcaneSurge", "needs GloriousMadness", "needs Herald"):
                 self.assertNotIn(generic, text, row["id"])
 
-    def test_melding_needs_raised_max_res_without_build_claim(self):
-        row = next(row for row in self.rows if "Melding of the Flesh" in row["label"])
-        text = row["conditional"]["text"]
-        self.assertIn("needs a raised maximum Elemental Resistance", text)
-        self.assertNotIn("not in your build", text)
+    def test_melding_over_player_cluster_jewel_is_not_tested_now(self):
+        """H4: Melding replaces the player's cluster jewel, so the "needs" note moved to the unit test below."""
+        self.assertFalse(any("Melding of the Flesh" in row["label"] for row in self.rows))
 
     def test_curse_zero_note_follows_pobs_own_limit_rule(self):
         """EK has a socketed-curse limit bypass and a Mark in the slots, so the note falls back to the neutral text."""
@@ -187,6 +185,11 @@ class CurseAndNeedsNoteTests(unittest.TestCase):
         self.assertIsNone(_curse_note(_State(_state(mark={"G": True})), _curse_row()))
         self.assertIsNone(_curse_note(_State(_state(limitBypass=True)), _curse_row()))
         self.assertIsNone(_curse_note(_State(_state(mark={})), _curse_row()))
+
+    def test_max_res_flag_gives_the_raised_max_res_note_without_build_claim(self):
+        parsed = [{"text": "x", "conditions": [], "flags": ["ElementalResistMaxIsHighestResistMax"]}]
+        texts = _need_texts(parsed, {"groups": []})
+        self.assertEqual(["needs a raised maximum Elemental Resistance"], texts)
 
     def test_needs_only_for_skill_gems_not_generic_buffs_or_downsides(self):
         cond = lambda var, skill=None: {"var": var, "on": False, **({"skill": skill} if skill else {})}

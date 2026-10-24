@@ -1099,6 +1099,7 @@
    "name": "Cast Speed",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1111,6 +1112,7 @@
    "name": "Spell Critical Strike Chance",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1123,6 +1125,7 @@
    "name": "Life and Energy Shield",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1135,6 +1138,7 @@
    "name": "Cast Speed",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1147,6 +1151,7 @@
    "name": "Mana and Life",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1159,6 +1164,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1171,6 +1177,7 @@
    "name": "Critical Strike Multiplier",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1183,6 +1190,7 @@
    "name": "Elemental Damage",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1201,6 +1209,7 @@
     "plain": "Intelligence"
    },
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1213,6 +1222,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1225,6 +1235,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1237,6 +1248,7 @@
    "name": "Life and Energy Shield",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1249,6 +1261,7 @@
    "name": "Coordination",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1261,6 +1274,7 @@
    "name": "Cold Damage",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1273,6 +1287,7 @@
    "name": "Arcane Guarding",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1285,6 +1300,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1297,6 +1313,7 @@
    "name": "Practical Application",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1309,6 +1326,7 @@
    "name": "Heart of Ice",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1321,6 +1339,7 @@
    "name": "Disciple of the Forbidden",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1333,6 +1352,7 @@
    "name": "Life and Energy Shield",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1345,6 +1365,7 @@
    "name": "Light Eater",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1357,6 +1378,7 @@
    "name": "Critical Mastery",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Mastery"
   },
   {
@@ -1369,6 +1391,7 @@
    "name": "Life",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1381,6 +1404,7 @@
    "name": "Critical Strike Chance",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1393,6 +1417,7 @@
    "name": "Avoid Interruption while Casting and Elemental Resistances",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1405,6 +1430,7 @@
    "name": "Arcanist's Dominion",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1417,6 +1443,7 @@
    "name": "Shield Spell Damage and Spell Block",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1429,6 +1456,7 @@
    "name": "Life Mastery",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Mastery"
   },
   {
@@ -1441,6 +1469,7 @@
    "name": "Bitter Frost",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Keystone"
   },
   {
@@ -1453,6 +1482,7 @@
    "name": "Energy Shield",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1465,6 +1495,7 @@
    "name": "Cold Damage and Freeze Chance",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1477,6 +1508,7 @@
    "name": "Critical Strike Multiplier per Power Charge",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1489,6 +1521,7 @@
    "name": "Freeze Chance",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1501,6 +1534,7 @@
    "name": "Mana Regeneration per Power Charge",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1513,6 +1547,7 @@
    "name": "Increased Energy Shield Leeched",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1525,6 +1560,7 @@
    "name": "Lightning Ailment Effect",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1537,6 +1573,7 @@
    "name": "Caster Mastery",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Mastery"
   },
   {
@@ -1549,6 +1586,7 @@
    "name": "Spell Area of Effect",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1561,6 +1599,7 @@
    "name": "Life",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1573,6 +1612,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1585,6 +1625,7 @@
    "name": "Golem Life and Buff Effect",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1597,6 +1638,7 @@
    "name": "Critical Strike Multiplier",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1609,6 +1651,7 @@
    "name": "Blast Radius",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1621,6 +1664,7 @@
    "name": "Elementalist",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "AscendClassStart"
   },
   {
@@ -1633,6 +1677,7 @@
    "name": "Critical Mastery",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Mastery"
   },
   {
@@ -1645,6 +1690,7 @@
    "name": "Spell Critical Strike Chance",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1657,6 +1703,7 @@
    "name": "Critical Strike Chance per Power Charge",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1669,6 +1716,7 @@
    "name": "Written in Blood",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1681,6 +1729,7 @@
    "name": "Cast Speed",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1693,6 +1742,7 @@
    "name": "Shield Spell Damage and Spell Block",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1705,6 +1755,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1717,6 +1768,7 @@
    "name": "Elemental Damage, Attack and Cast Speed",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1729,6 +1781,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1741,6 +1794,7 @@
    "name": "Instability",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1753,6 +1807,7 @@
    "name": "Fire and Cold Damage",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1765,6 +1820,7 @@
    "name": "Area of Effect Damage",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1777,6 +1833,7 @@
    "name": "Breath of Rime",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1789,6 +1846,7 @@
    "name": "Elemental Damage",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1801,6 +1859,7 @@
    "name": "Life",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1813,6 +1872,7 @@
    "name": "Cruel Preparation",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1825,6 +1885,7 @@
    "name": "Cold Damage",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1837,6 +1898,7 @@
    "name": "Coldhearted Calculation",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1849,6 +1911,7 @@
    "name": "Deep Thoughts",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1861,6 +1924,7 @@
    "name": "Golem Life and Buff Effect",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1873,6 +1937,7 @@
    "name": "Blood Siphon",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1885,6 +1950,7 @@
    "name": "Static Blows",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1897,6 +1963,7 @@
    "name": "Shaper of Storms",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1909,6 +1976,7 @@
    "name": "Heart and Soul",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1921,6 +1989,7 @@
    "name": "Shield Spell Block",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1933,6 +2002,7 @@
    "name": "Deep Wisdom",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1945,6 +2015,7 @@
    "name": "Assassination",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -1957,6 +2028,7 @@
    "name": "Mana",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1969,6 +2041,7 @@
    "name": "Life Mastery",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Mastery"
   },
   {
@@ -1981,6 +2054,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -1993,6 +2067,7 @@
    "name": "Spell Damage",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2005,6 +2080,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2017,6 +2093,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2029,6 +2106,7 @@
    "name": "Golem Commander",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -2041,6 +2119,7 @@
    "name": "Charge Mastery",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Mastery"
   },
   {
@@ -2053,6 +2132,7 @@
    "name": "Trickery",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -2065,6 +2145,7 @@
    "name": "Cold Damage and Freeze Chance",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2077,6 +2158,7 @@
    "name": "Cold Damage",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2089,6 +2171,7 @@
    "name": "Spell Critical Strike Multiplier",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2101,6 +2184,7 @@
    "name": "Cold Damage",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2113,6 +2197,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2125,6 +2210,7 @@
    "name": "Elemental Damage, Attack and Cast Speed",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2137,6 +2223,7 @@
    "name": "Life and Energy Shield",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2149,6 +2236,7 @@
    "name": "Cold Mastery",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Mastery"
   },
   {
@@ -2161,6 +2249,7 @@
    "name": "Area of Effect",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2173,6 +2262,7 @@
    "name": "Area of Effect",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2185,6 +2275,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2197,6 +2288,7 @@
    "name": "Cold Damage",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2209,6 +2301,7 @@
    "name": "Elemental Damage",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2221,6 +2314,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2233,6 +2327,7 @@
    "name": "Winter's Embrace",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -2245,6 +2340,7 @@
    "name": "Snowforged",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -2257,6 +2353,7 @@
    "name": "Elemental Focus",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -2269,6 +2366,7 @@
    "name": "Shield Spell Block",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2281,6 +2379,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2293,6 +2392,7 @@
    "name": "Frost Walker",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -2305,6 +2405,7 @@
    "name": "Shield Mastery",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Mastery"
   },
   {
@@ -2317,6 +2418,7 @@
    "name": "Arcane Potency",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -2329,6 +2431,7 @@
    "name": "Arcane Sanctuary",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -2341,6 +2444,7 @@
    "name": "Throatseeker",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -2353,6 +2457,7 @@
    "name": "Mana and Life",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2365,6 +2470,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2377,6 +2483,7 @@
    "name": "Energy Shield Leech",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2389,6 +2496,7 @@
    "name": "Spell Area of Effect",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2401,6 +2509,7 @@
    "name": "Freeze Chance",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2413,6 +2522,7 @@
    "name": "Mana Mastery",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Mastery"
   },
   {
@@ -2425,6 +2535,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2437,6 +2548,7 @@
    "name": "Annihilation",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -2449,6 +2561,7 @@
    "name": "Arcane Expanse",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -2461,6 +2574,7 @@
    "name": "Elemental Damage and Resistances",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2473,6 +2587,7 @@
    "name": "WITCH",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "ClassStart"
   },
   {
@@ -2485,6 +2600,7 @@
    "name": "Leech Mastery",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Mastery"
   },
   {
@@ -2497,6 +2613,7 @@
    "name": "Spell Damage per Power Charge",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2509,6 +2626,7 @@
    "name": "Liege of the Primordial",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -2521,6 +2639,7 @@
    "name": "Heart of Destruction",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -2533,6 +2652,7 @@
    "name": "Spell Damage and Mana",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2545,6 +2665,7 @@
    "name": "Shield Spell Damage",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2557,6 +2678,7 @@
    "name": "Purity of Flesh",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -2569,6 +2691,7 @@
    "name": "Elemental Damage, Lightning Ailment Effect",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2581,6 +2704,7 @@
    "name": "Cold Mastery",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Mastery"
   },
   {
@@ -2593,6 +2717,7 @@
    "name": "Mastermind of Discord",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Notable"
   },
   {
@@ -2605,6 +2730,7 @@
    "name": "Basic Jewel Socket",
    "override": null,
    "socket": true,
+   "socketNode": null,
    "type": "Socket"
   },
   {
@@ -2617,6 +2743,7 @@
    "name": "Life and Energy Shield",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2629,6 +2756,7 @@
    "name": "Shock Chance",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2641,6 +2769,7 @@
    "name": "Spell Critical Strike Chance",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2653,6 +2782,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   },
   {
@@ -2665,6 +2795,7 @@
    "name": "Breachlord",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "AscendClassStart"
   },
   {
@@ -2677,6 +2808,7 @@
    "name": "Intelligence",
    "override": null,
    "socket": false,
+   "socketNode": null,
    "type": "Normal"
   }
  ],
