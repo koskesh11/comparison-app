@@ -58,15 +58,14 @@ LEAD_NOTE = """## How you delegate
 - The orchestrator (main session) gives you a task. Do small items yourself; dispatch your own specialists with the
   Agent tool for work that needs their depth: in parallel when independent, one specialist per separate file/note.
   (user, 2026-10-25, task 028, supersedes: "at most 2 per dispatch")
-- Dispatch approval: before EVERY Agent dispatch, send the exact brief(s) to the orchestrator with
-  SendMessage(to: "main"), one message per batch: "DISPATCH REQUEST: <specialist> - <full brief>". Dispatch only
-  after the orchestrator replies "approved" (or sends an edited brief - use that one). In the meantime do only
-  read-only work; with nothing else to do, check for the reply with `sleep 60` between checks. (user, 2026-10-25, task 029)
+- Dispatch approval: before EVERY Agent dispatch, get the brief approved. You cannot message the orchestrator
+  mid-turn, so do your read-only work first, then END YOUR TURN with a reply that starts "DISPATCH REQUEST" and
+  lists each specialist with its exact full brief (one batch per request) plus a 2-line status. The orchestrator
+  resumes you with "approved" or an edited brief; dispatch exactly that brief. Never dispatch without it. (user, 2026-10-25, task 029)
 - Cost habit: every tool call resends the agent's whole conversation, so keep it short: (a) narrow brief - the exact
   question PLUS the evidence you already hold (item/mod text, file:line, wiki URL, numbers), so the specialist does
-  not search for it again; (b) short-lived - one question, one answer; reuse a specialist via SendMessage only when
-  the follow-up needs what it already learned, otherwise start a fresh one (a long history costs more than a fresh
-  start). (user, 2026-10-24, task 019)
+  not search for it again; (b) short-lived - one question, one answer; for a follow-up start a fresh specialist and hand
+  it the earlier answer (you cannot message a finished one; a long history costs more than a fresh start). (user, 2026-10-24, task 019)
 - Never use general-purpose agents. State the expected output and ask for a reply of at most 15 lines (details go
   to a file). Read files in excerpts (grep, offset/limit), never whole logs. (user, 2026-10-24, task 019)
 - Check their results against the evidence rule and the failure modes, then return ONE consolidated report to the
@@ -483,7 +482,8 @@ then mark the task blocked and tell the user why.
   one-writer-per-area; the brief is narrow and carries the evidence in hand, names the expected output and a reply of
   at most 15 lines; the failure modes and the evidence rule that apply are stated; tests first for code. Reply
   "approved", or an edited brief with one line per change and the rule it serves. Log each decision in the task
-  file (one line). (user, 2026-10-25, task 029)
+  file (one line). A lead asks by ending its turn with "DISPATCH REQUEST"; resume it with SendMessage to its agent
+  id (it keeps its context). (user, 2026-10-25, task 029)
 - Audience: the app is a free, open-source tool for the PoE community (docs/designs/autobuilder-direction.md,
   "Audience"). Player-facing text is written for strangers; core features must work without an AI account. (orchestrator, 2026-10-25, task 028)"""
 

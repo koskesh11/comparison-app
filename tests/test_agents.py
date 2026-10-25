@@ -100,6 +100,10 @@ def active_lessons(markdown: str) -> int:
     return count
 
 
+# A tool named as something to call: "SendMessage(to: ...)" or "via SendMessage" (not "the WebFetch tool is ...").
+TOOL_MENTION = re.compile(r"\b(SendMessage|WebFetch|WebSearch|Agent|Edit|Write)\((?=\w)"
+                          r"|(?<=\bvia )(SendMessage|WebFetch|WebSearch)\b")
+
 def load_make_agents():
     spec = importlib.util.spec_from_file_location("make_agents_under_test", ROOT / "tools" / "make_agents.py")
     module = importlib.util.module_from_spec(spec)
@@ -143,6 +147,18 @@ class AgentFilesTest(unittest.TestCase):
                     self.assertEqual(path.read_text(encoding="utf-8"),
                                      (generated / path.name).read_text(encoding="utf-8"),
                                      "agent file out of sync: run python tools/make_agents.py .")
+
+    def test_prompts_only_name_tools_the_agent_has(self) -> None:
+        """A rule that tells an agent to call a tool it lacks can never be followed (task 029)."""
+        for path in self.agent_files():
+            data = frontmatter(path)
+            if "tools" not in data:  # no tools line = all tools
+                continue
+            own = {t.strip() for t in str(data["tools"]).split(",")}
+            body = path.read_text(encoding="utf-8").split("---", 2)[2]
+            for name in sorted({a or b for a, b in TOOL_MENTION.findall(body)} - own):
+                with self.subTest(agent=path.name, tool=name):
+                    self.fail(f"{path.name} tells the agent to use {name}, but its tools are {sorted(own)}")
 
 
 class RuleHygieneTest(unittest.TestCase):
