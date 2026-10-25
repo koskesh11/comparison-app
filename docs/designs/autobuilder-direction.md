@@ -298,7 +298,7 @@ tool to make their builds."
 ### NOT in scope
 - E1 full verification checklist (deferred → tasks/008).
 - Building our own trade engine (reuse PoB's trade code; E5 gated by a spike).
-- Generating builds from scratch (user chose: start from own or imported builds).
+- Generating builds from scratch (user chose: start from own or imported builds). SUPERSEDED by "Direction override 2026-10-24": the generator is the paramount goal.
 - Genetic/greedy tree search like poe-optimizer (PoB's PowerBuilder already used; interaction knowledge is the edge).
 
 ### What already exists (reused)
