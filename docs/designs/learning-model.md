@@ -113,6 +113,10 @@ explains any notable in plain words, with the evidence behind it, and gets smart
 - M4 "Learn overnight" button with the engine queue (E3).
 - M5 trained surrogate (approach B): only after records cover several independent build lineages and the model beats
   the evidence table, rule retrieval and nearest-neighbour baselines on untouched archetypes (thresholds preregistered).
+- M6 (user 2026-10-25, goals check): the learned knowledge steers the generator. It ranks tree candidates during tree
+  growth and PoB checks only the top N, so generated builds improve as the app learns and the generator gets faster.
+  Ranking source = the best learned knowledge available (M1 evidence table first, the M5 model once it passes); can
+  start after M1. Gate: on the 3 seeds, builds at least as good (FullDPS, TotalEHP) as without ranking, in less time.
 If the M1 spike forces "notables only", M2 runs only after its own spike passes. E1 is not dropped, just gated.
 
 ## Open Questions
@@ -174,7 +178,7 @@ own self-play runs. The existing local server (server.py) and gui/index.html ser
 4. Trainer + model file + held-out check.
 5. "Why this notable" panel (server route + GUI): end of M1.
 6. M2 gems/supports/items, M3 corrections, M4 learn button + engine queue.
-7. Later: candidate ranking in tree growth, guide-compare reasons.
+7. M6: candidate ranking in tree growth (user 2026-10-25). Later: guide-compare reasons.
 
 ## What I noticed about how you think
 - You framed the whole product around one idea: "why in certain scenarios a notable is good and in others bad".
