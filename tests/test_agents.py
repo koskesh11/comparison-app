@@ -1,6 +1,8 @@
 """Agent files load: valid frontmatter, generated output in sync, and rule hygiene (task 028).
 
-Rule hygiene: every rule bullet in the prompt sections of tools/make_agents.py carries a source tag
+Rule hygiene (tasks 028, 029): every rule unit in the prompt text of tools/make_agents.py (all uppercase string
+constants except README, found automatically, plus every agent body) is a top-level bullet or a whole numbered
+list; a list of output formats opts out with a `<!-- not-a-rule: reason -->` line right before it. Each unit carries a source tag
 `(user|orchestrator, YYYY-MM-DD[, task NNN][, supersedes: "old text"])`; a conditional rule says
 `until task NNN done` and fails once that task is done; a `supersedes:` text must be gone from the prompts;
 a learnings file has at most MAX_ACTIVE_LESSONS active lessons (bullets outside "## Promoted"/"## Retired").
@@ -21,9 +23,9 @@ VALID_EFFORT = {"low", "medium", "high", "xhigh", "max"}
 TASKS = ROOT / "tasks"
 LEARNINGS = ROOT / "docs" / "studio" / "learnings"
 MAX_ACTIVE_LESSONS = 30
-# Prompt constants in tools/make_agents.py whose top-level bullets are rules/facts and need a source tag.
-RULE_CONSTANTS = ("FACTS", "LEAD_NOTE", "SPECIALIST_NOTE", "LEARNING_LEAD", "LEARNING_SPECIALIST",
-                  "CODEX_NOTE", "ORCHESTRATOR_BODY")
+# Uppercase string constants of tools/make_agents.py that are documentation, not agent prompt text. Everything else
+# (a new prompt constant too) is checked without being listed anywhere.
+NOT_PROMPT = ("README",)
 TAG_RE = re.compile(r'\((user|orchestrator), (\d{4}-\d{2}-\d{2})(?:, task (\d{3}))?'
                     r'(?:, supersedes: "([^"]+)")?\)')
 UNTIL_RE = re.compile(r"\buntil\b(?! task \d{3} done)", re.IGNORECASE)
@@ -32,19 +34,57 @@ TEMPORARY_RE = re.compile(r"\b(for now|temporar(?:y|ily)|while|once|until furthe
 UNTIL_TASK_RE = re.compile(r"\buntil task (\d{3}) done", re.IGNORECASE)
 
 
-def rule_bullets(text: str) -> list[str]:
-    """Top-level bullets ("- " at column 0) with their indented continuation lines."""
-    bullets: list[list[str]] = []
-    open_bullet = False
+NOT_A_RULE_RE = re.compile(r"^<!-- not-a-rule: \S.* -->$")
+NUMBERED_RE = re.compile(r"^\d+\. ")
+
+
+def rule_units(text: str) -> list[str]:
+    """Rule units: a top-level bullet ("- " at column 0) or a whole numbered list ("1. " ...), each with its
+    indented continuation lines. A list right after a `<!-- not-a-rule: reason -->` line is skipped."""
+    units: list[list[str]] = []
+    kind, skipping = "", False  # kind of the open unit: "bullet", "number" or ""
     for line in text.splitlines():
-        if line.startswith("- "):
-            bullets.append([line])
-            open_bullet = True
-        elif open_bullet and line.startswith((" ", "\t")) and line.strip():
-            bullets[-1].append(line)
+        if NOT_A_RULE_RE.match(line.strip()):
+            kind, skipping = "", True
+        elif line.startswith("- ") or NUMBERED_RE.match(line):
+            now = "bullet" if line.startswith("- ") else "number"
+            if not skipping and not (now == "number" and kind == "number"):
+                units.append([])
+            if not skipping:
+                units[-1].append(line)
+            kind = now
+        elif kind and line.startswith((" ", "\t")) and line.strip():
+            if not skipping:
+                units[-1].append(line)
         else:
-            open_bullet = False  # blank line, heading or plain paragraph ends the bullet
-    return ["\n".join(b) for b in bullets]
+            kind, skipping = "", False  # blank line, heading or plain paragraph ends the list
+    return ["\n".join(u) for u in units]
+
+
+def prompt_texts(module) -> dict[str, str]:
+    """Every text the agents get: uppercase string constants (found by scan) and each agent body."""
+    texts = {name: value for name, value in vars(module).items()
+             if name.isupper() and isinstance(value, str) and name not in NOT_PROMPT}
+    texts.update({f"body of {agent[0]}": agent[5] for agent in module.AGENTS})
+    return texts
+
+
+def read_repo_file(path: str) -> str | None:
+    target = ROOT / path
+    return target.read_text(encoding="utf-8") if target.exists() else None
+
+
+def backlog_problems(module, read=read_repo_file) -> list[str]:
+    """product-lead's backlog names draft vault values awaiting the user; each note must still say draft."""
+    problems = []
+    for label, path in module.BACKLOG_DRAFTS.items():
+        note = read(path)
+        if note is None:
+            problems.append(f"backlog '{label}': {path} does not exist")
+        elif not re.search(r"^status:\s*draft\b|draft value", note, re.MULTILINE):
+            problems.append(f"backlog '{label}' is stale: {path} is no longer a draft (status, or 'draft value' "
+                            "in the text); drop it from BACKLOG_DRAFTS")
+    return problems
 
 
 def task_status(number: str) -> str | None:
@@ -165,20 +205,30 @@ class RuleHygieneTest(unittest.TestCase):
     """Checks on the real prompts, then fail-before cases on small bad fixtures."""
 
     def real_bullets(self) -> list[str]:
-        module = load_make_agents()
-        return [b for name in RULE_CONSTANTS for b in rule_bullets(getattr(module, name))]
+        return [u for text in prompt_texts(load_make_agents()).values() for u in rule_units(text)]
 
     def test_every_real_rule_is_tagged_and_unexpired(self) -> None:
         bullets = self.real_bullets()
-        self.assertGreaterEqual(len(bullets), 25)
+        self.assertGreaterEqual(len(bullets), 40)
         problems = [p for b in bullets for p in rule_problems(b)]
         self.assertEqual(problems, [])
 
     def test_no_superseded_text_survives(self) -> None:
         module = load_make_agents()
-        prompt = "\n".join(str(getattr(module, n)) for n in RULE_CONSTANTS)
-        prompt += "\n".join(agent[5] for agent in module.AGENTS) + module.README
+        prompt = "\n".join(prompt_texts(module).values()) + module.README
         self.assertEqual(superseded_problems(self.real_bullets(), prompt), [])
+
+    def test_product_lead_backlog_drafts_are_still_drafts(self) -> None:
+        module = load_make_agents()
+        self.assertGreaterEqual(len(module.BACKLOG_DRAFTS), 3)
+        self.assertEqual(backlog_problems(module), [])
+        body = next(a[5] for a in module.AGENTS if a[0] == "product-lead")
+        for label in module.BACKLOG_DRAFTS:
+            self.assertIn(label, body)
+
+    def test_markers_are_not_in_the_generated_files(self) -> None:
+        for path in AGENTS.glob("*.md"):
+            self.assertNotIn("not-a-rule", path.read_text(encoding="utf-8"), path.name)
 
     def test_learnings_files_stay_small(self) -> None:
         files = sorted(LEARNINGS.glob("*.md"))
@@ -191,7 +241,7 @@ class RuleHygieneTest(unittest.TestCase):
 
     # ---- fail-before fixtures: each check must catch its own break ----
     def test_missing_tag_is_caught(self) -> None:
-        bullets = rule_bullets("## Rules\n- Do X.\n  more words\n- Do Y. (user, 2026-10-24)\n")
+        bullets = rule_units("## Rules\n- Do X.\n  more words\n- Do Y. (user, 2026-10-24)\n")
         self.assertEqual(len(bullets), 2)
         self.assertEqual(len(rule_problems(bullets[0])), 1)
         self.assertEqual(rule_problems(bullets[1]), [])
@@ -223,6 +273,39 @@ class RuleHygieneTest(unittest.TestCase):
         self.assertEqual(superseded_problems(bullets, "parallel when independent"), [])
         # the tag's own quote must not count as "still exists"
         self.assertEqual(superseded_problems(bullets, bullets[0]), [])
+
+    def test_numbered_list_is_one_unit_and_needs_a_tag(self) -> None:
+        text = "## Modes\n1. First thing\n   more\n2. Second thing\n\nplain paragraph\n"
+        units = rule_units(text)
+        self.assertEqual(len(units), 1)
+        self.assertEqual(len(rule_problems(units[0])), 1)
+        tagged = text.replace("Second thing\n", "Second thing (user, 2026-10-24)\n")
+        self.assertEqual(rule_problems(rule_units(tagged)[0]), [])
+
+    def test_format_list_marker_exempts_exactly_that_list(self) -> None:
+        text = ("Produce a map:\n<!-- not-a-rule: output format -->\n- part one\n- part two\n\n"
+                "- a real rule. (user, 2026-10-24)\n- an untagged rule\n")
+        self.assertEqual([u.splitlines()[0] for u in rule_units(text)],
+                         ["- a real rule. (user, 2026-10-24)", "- an untagged rule"])
+        self.assertEqual(len(rule_units(text.replace("<!-- not-a-rule: output format -->\n", ""))), 4)
+
+    def test_new_prompt_constant_and_agent_body_are_found_without_a_list(self) -> None:
+        class Fake:  # a make_agents stand-in: one new constant, one agent body, two non-prompt names
+            NEW_NOTE = "- rule without a tag"
+            README = "- docs"
+            lower = "- not a constant"
+            AGENTS = [("x", "lead", "", "D", "desc", "- body rule without a tag")]
+        texts = prompt_texts(Fake)
+        self.assertEqual(sorted(texts), ["NEW_NOTE", "body of x"])
+        self.assertEqual(sum(len(rule_problems(u)) for t in texts.values() for u in rule_units(t)), 2)
+
+    def test_stale_backlog_item_is_caught(self) -> None:
+        class Fake:
+            BACKLOG_DRAFTS = {"A rule": "vault/a.md", "B model": "vault/b.md", "C gone": "vault/c.md"}
+        notes = {"vault/a.md": "---\nstatus: draft\n---", "vault/b.md": "---\nstatus: verified\n---"}
+        problems = backlog_problems(Fake, notes.get)
+        self.assertEqual(len(problems), 2)
+        self.assertTrue("B model" in problems[0] and "C gone" in problems[1])
 
     def test_lesson_cap_is_caught(self) -> None:
         many = "# L\n" + "- lesson\n" * (MAX_ACTIVE_LESSONS + 1)
