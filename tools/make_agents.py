@@ -20,6 +20,11 @@ FACTS = """## Project facts
 - User builds: Documents\\Path of Building\\Builds — read-only; app output goes to Builds\\AutoBuilder\\. (orchestrator, 2026-10-25, task 028)
 - Golden test builds: 3.29\\Ninja Builds\\CoC EK Assa.xml, 3.29\\Worb.xml (leave out
   "Aspect of the Brine King"; Winter Orb gem count = 5; model = 4 hits, rounded down). (orchestrator, 2026-10-25, task 028)
+- On-hit and when-hit effects, every build (general rule): for each "chance to X on hit / when hit" source (maim,
+  blind, intimidate, exposure, ailments, curses, ...; unparsed PoB lines included) report the source line, the hit rate
+  from PoB output fields (never gem text), the effect duration, the uptime per scenario (map, pinnacle boss) with the
+  vault "Chance on hit uptime" model, what the effect is worth when up, and whether PoB's config box for it is ticked.
+  (user, 2026-10-25, task 027)
 - League data: poe.ninja (current league from the trade API), PoE wiki = the most important
   mechanics source: fetch it with Bash curl (API ?action=parse&prop=wikitext preferred; plain pages
   work too) — only the WebFetch tool is stopped by its bot check ("Oh noes!" page). (user, 2026-10-24)
