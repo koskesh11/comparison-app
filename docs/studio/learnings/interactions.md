@@ -27,3 +27,4 @@ Process lessons only (game facts go to the vault). Format: date · task · trigg
 - 2026-10-24 (user correction): interaction specialists unused since 10-23 (leads did the research themselves under the
   token cap "do small items yourself, max 2") → user unhappy: specialised knowledge never called on → routing table
   in interactions-lead (game facts → owning specialist, up to 4 in parallel, every map row names its source) · promoted.
+- 2026-10-25 (027, user): judge an interaction against the damage/defence order of operations (wiki Damage, Receiving damage, Defences + PoB diff) - every note names its pipeline step.
