@@ -28,7 +28,7 @@ pob:
     - {var: ailmentMode, default: "AVERAGE", ref: "Modules/ConfigOptions.lua:210", class: b}
     - {var: enemyIsBoss, default: "Pinnacle (list index 3)", ref: "Modules/ConfigOptions.lua:2086", class: b}
   unparsed:
-    - "Shaper of Storms: PoB value for Worb is 0% per 021-gate1 N4 (not re-measured here)"
+    - "Shaper of Storms: all three lines parse; the effect is inert without the config box. ShockMinimum is not a ShockOverride, so the loop does not set Condition:Shocked for it (CalcPerform.lua:3565-3606; Shaper node 27038 allocated in Worb.xml). M4 on Worb (Aspect of the Brine King left out, TotalDPS, task 027 batch 1, 2026-10-26): box conditionEnemyShocked off = 932,580 (equals the run with the node deallocated, so 0% from Shaper); box on with conditionShockEffect empty = 1,314,291 (+40.9% over box off, Shaper's floor alone = 25 x 1.8 shock effect mod = 45%); as in the file (box on, effect 57) = 1,343,498 (+44.1% over box off), the 57 is above the floor and the 50 max so the node adds nothing there. Default of the box false (ConfigOptions.lua:1943). The sidebar CurrentShock shows 45 while the box is off although nothing is applied (display/DPS mismatch). Replaces the earlier '0% per 021-gate1 N4, not re-measured'. Source: b1-pob-coverage-auditor.md"
 model: null
 providers:
   # seed: Foulborn The Three Dragons (FR)
@@ -96,6 +96,8 @@ not_verified:
   - "real shock effect for a given hit vs boss threshold (breakdown only in PoB); the generic boss threshold"
   - "whether chaos shock from Forbidden Rite applies in game as PoB computes it (user to test)"
   - "whether PoB models multiple shocks (Oath of Spring) beyond the ShockCanStack flag; only parse text read"
+  - "Shaper of Storms (wiki rev 1537040): the patch number of the 15% -> 25% minimum change is not shown in the fetched text; whether the in-game floor is applied after 'increased Effect of Shock' (wiki and PoB say it is scaled; the Shock page says the 5% minimum comes first); why PoB shows CurrentShock 45 while the condition is off was read from code, not looked up (b1-pob-coverage-auditor.md)"
 open_questions:
   - "Which source gives the shock in the Worb sample (conditionShockEffect 57)?"
+  - "Impact of Shaper of Storms: EK 'CoC EK Assa' has no Shaper and no shock (CurrentShock 0, enemy ShockVal 0, DamageTaken INC 0), so nothing. Fireball Elementalist: +40.9% TotalDPS in PoB terms only if conditionEnemyShocked is ticked (measured on Worb, not on a fire build; Shaper's All Damage can Shock makes fire hits shock at 100%); the generator must tick the box and leave conditionShockEffect below 45 or empty so the floor decides, otherwise the audit sees 0. Whether a fire build gains the same +40.9% is not measured (Worb's enemy already carries DamageTaken 50 from tree 60170). Which Fireball config should the generator assume for the shock box?"
 ```

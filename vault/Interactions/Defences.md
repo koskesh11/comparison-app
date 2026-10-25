@@ -44,7 +44,7 @@ Wiki step: Defences: spell suppression. Quote (Dodge rev 1595031; Spell suppress
 
 > The only source of dodge is the Acrobatics keystone, which provides a chance to dodge spell hits from spell suppression modifiers.
 
-PoB: Modules/CalcDefence.lua:1137-1189; Data.lua:248, 250, 251 - MATCH. SuppressionChanceCap 100, SuppressionEffect 40, DodgeChanceCap 75; Acrobatics via suppression/2 -> SpellDodgeChance (1143).
+PoB: Modules/CalcDefence.lua:1137-1189; Data.lua:248, 250, 251 - MATCH. SuppressionChanceCap 100, SuppressionEffect 40, DodgeChanceCap 75; Acrobatics via suppression/2 -> SpellDodgeChance (1143). Maximum hit credits suppression ONLY at 100% effective chance (and only half of the effect under the default damage type Average): CalcDefence.lua:2068-2076; TotalEHP uses the expected value (2814-2829); see [[Spell suppression]].
 
 Why it matters for building: Over 100% chance is wasted; extra effect mods raise the 40% instead. Order in [[Receiving damage#Spell suppression]].
 
@@ -56,7 +56,7 @@ Wiki step: Defences: armour. Quote (Armour rev 1625574; patch 3.16.0):
 
 > When the damage of a hit significantly exceeds Armour, it will never prevent more damage than its value divided by 5
 
-PoB: Modules/CalcDefence.lua:67-72, 2030; Data.lua:243 - DIFFERS. Same formula; D is the configured enemy hit, int-rounded (70-72), capped at DamageReductionMax 90.
+PoB: Modules/CalcDefence.lua:67-72, 2030; Data.lua:243 - DIFFERS. Same formula, int-rounded (70-72), capped at DamageReductionMax 90. The displayed reduction and TotalEHP use the configured enemy hit D (2030); PhysicalMaximumHitTaken does not: it solves the hit size in reverse, so it is armour-correct for the hit that exactly kills you (quadratic, CalcDefence.lua:3235-3261; with damage shifted, up to 8 smoothing passes, 3273-3300, shown as approximate) and ignores block, evasion, avoidance and dodge (task 027 b1-mechanics-researcher.md; see [[Armour and physical max hit]]).
 
 Gap: [[Armour vs one configured hit]].
 
