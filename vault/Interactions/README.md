@@ -28,7 +28,7 @@ Then 2 to 6 lines of plain prose (what it is, why it matters for building), then
 ```yaml
 id: freeze                         # kebab-case, unique; other notes and seeds reference this id
 mechanic: "Cold hits freeze: enemy action speed 100% less (bosses keep a 50% floor) for 0.06 s per 1% of ailment threshold, max 3 s"
-family: ailment                    # ailment | trigger | charge | projectile | buff | resource | defence | uptime
+family: ailment                    # ailment | trigger | charge | projectile | buff | resource | defence | uptime | pipeline
 target: enemy                      # whom the mechanic is on: enemy | self
 related: [chill, shatter, enemy-ailment-threshold]
 pob:
@@ -63,7 +63,7 @@ open_questions: ["..."]            # questions only the user can answer
 
 ## Vocabulary
 
-- `family`: ailment, trigger, charge, projectile, buff, resource, defence, uptime.
+- `family`: ailment, trigger, charge, projectile, buff, resource, defence, uptime, pipeline (the three order-of-operations notes [[Damage calculation]], [[Receiving damage]], [[Defences]]; they carry `steps:` and `pipeline_step: [self]`).
 - `target` (note and provider): `enemy` or `self`. A line such as Berek's Pass "+5000 Armour while Frozen" is target `self`, not a freeze payoff on enemies.
 - `pob.measured`: full (PoB computes it), partial, config (only through a config tick or a hand-set value), none.
 - `pob.config[].class`: a = sourced by gear or gem, b = scenario, c = hand-set.
@@ -72,6 +72,17 @@ open_questions: ["..."]            # questions only the user can answer
 - provider `pob`: full (PoB parses and counts it), partial, config (counted only with a config tick), none (unparsed or not modelled).
 - `uptime[scenario].value`: always, high, partial, low, none, pob (use PoB's own number), model (the `model:` above decides).
 - `sources[].kind`: pob, wiki, patch_notes, forum, github, discovery (poe.ninja or guides are discovery only and never decide).
+
+## Pipeline step
+
+The three pipeline notes ([[Damage calculation]] outgoing, [[Receiving damage]] incoming order, [[Defences]] per-layer formulas and caps) are the foundation for judging whether an interaction works. Every heading in them is one named step in the wiki order and can be linked, e.g. [[Damage calculation#More and less]].
+
+Every other interaction note names where it acts in that order:
+
+- In the block: `pipeline_step: ["Damage calculation#More and less", ...]` (note#heading, plain strings, no brackets) and `pipeline_why: "one line: why it acts there"`. The pipeline notes themselves use `pipeline_step: [self]` and a `steps:` list of `{id, heading, wiki_order, pob_ref, pob_status}`.
+- In the prose: a line `Pipeline: [[Damage calculation#More and less]] - why`.
+
+Examples of why it matters: increased vs more (additive pool vs own multiplier), taken-as vs conversion (defender-side shift vs offensive conversion), armour not against DoT, block after all mitigation.
 
 ## Writer rules
 
