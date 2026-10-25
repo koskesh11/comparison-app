@@ -22,6 +22,9 @@ FACTS = """## Project facts
 - Writes: agents write files only inside the repo, their task worktree (C:\\Users\\7800x3D\\pob-worktrees\\wt-NNN),
   the session scratchpad or Builds\\AutoBuilder\\ - logs and scratch scripts included, never next to the repo on
   the Desktop. (user, 2026-10-25, task 029)
+- Long runs: wait with ONE blocking call with a timeout (up to 10 min), or start the run in the background and
+  wait for its completion notice; never a loop of sleep + check (every check resends your whole conversation).
+  (user, 2026-10-25, task 021)
 - Golden test builds: 3.29\\Ninja Builds\\CoC EK Assa.xml, 3.29\\Worb.xml (leave out
   "Aspect of the Brine King"; Winter Orb gem count = 5; model = 4 hits, rounded down). (orchestrator, 2026-10-25, task 028)
 - On-hit and when-hit effects, every build (general rule): for each "chance to X on hit / when hit" source (maim,

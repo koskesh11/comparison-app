@@ -51,3 +51,6 @@ Already in the agent prompts (tools/make_agents.py); kept for the record, not co
   check `ast.parse` after each edit · active.
 - 2026-10-25 · 021 · A test that patches the rating function must count its calls (that is how the post-restore rate
   showed as fail-before) · active.
+- 2026-10-25 · 021 · optimizer-dev waited on a 10-min EK verify with a loop of sleep + check (user flagged it as
+  "stuck in a loop") → one blocking wait with a timeout, or background + completion notice → check: no repeated
+  wait/check pairs in a transcript · promoted (shared fact "Long runs", all agents).
