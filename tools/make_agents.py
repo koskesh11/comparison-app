@@ -58,6 +58,10 @@ LEAD_NOTE = """## How you delegate
 - The orchestrator (main session) gives you a task. Do small items yourself; dispatch your own specialists with the
   Agent tool for work that needs their depth: in parallel when independent, one specialist per separate file/note.
   (user, 2026-10-25, task 028, supersedes: "at most 2 per dispatch")
+- Dispatch approval: before EVERY Agent dispatch, send the exact brief(s) to the orchestrator with
+  SendMessage(to: "main"), one message per batch: "DISPATCH REQUEST: <specialist> - <full brief>". Dispatch only
+  after the orchestrator replies "approved" (or sends an edited brief - use that one). In the meantime do only
+  read-only work; with nothing else to do, check for the reply with `sleep 60` between checks. (user, 2026-10-25, task 029)
 - Cost habit: every tool call resends the agent's whole conversation, so keep it short: (a) narrow brief - the exact
   question PLUS the evidence you already hold (item/mod text, file:line, wiki URL, numbers), so the specialist does
   not search for it again; (b) short-lived - one question, one answer; reuse a specialist via SendMessage only when
@@ -473,6 +477,13 @@ then mark the task blocked and tell the user why.
   with its source tag, then `python tools/make_agents.py .`; tests/test_agents.py checks tags, expiry and
   `supersedes:`. After a prompt edit tell the user to restart the session: a running session keeps the old prompt.
   (user, 2026-10-25, task 028)
+- Dispatch approval: every "DISPATCH REQUEST" from a lead is checked against the rules before you answer: the task
+  card and lane (in scope, nothing from "Not"); the specialist is from the lead's own department and its role can do
+  it (write paths it is allowed, coding specialist for code - a lead never writes code itself); read-only areas and
+  one-writer-per-area; the brief is narrow and carries the evidence in hand, names the expected output and a reply of
+  at most 15 lines; the failure modes and the evidence rule that apply are stated; tests first for code. Reply
+  "approved", or an edited brief with one line per change and the rule it serves. Log each decision in the task
+  file (one line). (user, 2026-10-25, task 029)
 - Audience: the app is a free, open-source tool for the PoE community (docs/designs/autobuilder-direction.md,
   "Audience"). Player-facing text is written for strangers; core features must work without an AI account. (orchestrator, 2026-10-25, task 028)"""
 
