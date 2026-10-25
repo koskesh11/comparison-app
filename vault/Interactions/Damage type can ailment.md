@@ -8,10 +8,14 @@ last_confirmed_patch: "3.29.x"
 
 Each ailment has a default damage type (freeze and chill: cold, shock: lightning, ignite: fire). Some items, gems and ascendancies change that: "Your Chaos Damage can Freeze", "but not Freeze or Chill". These are global flags (stat ids without a local_ prefix, also on weapons). The ailment magnitude counts only the damage of the types that can inflict it. This is the core of the Foulborn The Three Dragons seed (FR): the mutation lines let chaos hits freeze, shock and ignite, but PoB gives no DPS for freeze and only config-gated DPS for shock. Related: [[Freeze]], [[Shock]], [[Chill]], [[Foulborn The Three Dragons]], [[Own shock effect]]. Providers beyond the seed set: see tasks/reports/027-research.md.
 
+Pipeline: [[Damage calculation#Ailments from hits]] - which damage types may inflict an ailment decides the damage that sizes it (ailment chance and magnitude use only those types), which is evaluated in the ailments-from-hits step
+
 ```interaction
 id: damage-type-can-ailment
 mechanic: "A damage type other than the ailment's own can be allowed (or forbidden) to inflict it; the ailment's chance and magnitude then use only the damage of the types that can inflict it; a Foulborn mutation REPLACES one original line, so a 'but not' drawback disappears only if its own line is the one mutated"
 family: ailment
+pipeline_step: ["Damage calculation#Ailments from hits"]
+pipeline_why: "which damage types may inflict an ailment decides the damage that sizes it (ailment chance and magnitude use only those types), which is evaluated in the ailments-from-hits step"
 target: enemy
 related: [freeze, shock, chill, enemy-ailment-threshold, elemental-ailment-count]
 pob:

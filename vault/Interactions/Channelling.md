@@ -8,12 +8,16 @@ last_confirmed_patch: "3.29.x"
 
 Channelling is one continuous cast whose length is chosen by the player. Focused Channelling adds more damage and more cost per second channelled (lvl 20: 24% per second, damage cap +60% after 2.5 s, cost +20% per second, cap +100% after 5 s). PoB gives Focused Channelling 0 damage and 0 cost until the config 'Channeling for # seconds' is set, and it floors that to whole seconds (3 s = +60% at lvl 20).
 
+Pipeline: [[Damage calculation#More and less]] - Focused Channelling is damage more per second channelled (its own multiplier) paid for with rising cost; the cost side has no damage step, so the gain only counts for the channel time the mana pool can pay
+
 On Worb.xml (Pinnacle, Winter Orb, count 5, stage 11) the support is worth +60% at 3 s (FullDPS 7,176,019 -> 11,506,468) but the mana deficit starts at 3 s. Judge the deficit by duration. See also [[Total skill cost must be sustainable]].
 
 ```interaction
 id: channelling
 mechanic: "Channelling skills tick at cast time / cast speed until released, stunned, frozen or unable to pay the cost; Focused Channelling: damage more per second channelled (lvl 20: 24%/s, cap 60%) and cost more (20%/s, cap 100%); costs are paid at start and on every tick"
 family: buff
+pipeline_step: ["Damage calculation#More and less"]
+pipeline_why: "Focused Channelling is damage more per second channelled (its own multiplier) paid for with rising cost; the cost side has no damage step, so the gain only counts for the channel time the mana pool can pay"
 target: self
 related: [arcane-surge, coc-trigger]
 pob:

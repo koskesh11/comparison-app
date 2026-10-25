@@ -8,10 +8,14 @@ last_confirmed_patch: "3.29.x"
 
 How often a "x% chance on hit" or "when hit" effect is actually up on the enemy (or on you). PoB drops the chance: the Eye of Malice 25% exposure becomes a checkbox with 100% uptime. Calling it a risk without hit rate x duration was wrong (user correction 2026-10-25, tasks/021 log). Uptime comes from p, hits on one target per use (m), uses per second (V) and the duration (d); fast skills (Worb) are about 100%, slow single-hit skills are not. Do not apply this to ignite, bleed, poison or impale chance: PoB already expects those.
 
+Pipeline: [[Damage calculation#Resistance, exposure and penetration]] - meta model: it times a chance-on-hit effect and acts at the step of that effect, e.g. Eye of Malice exposure (25%) lowers resistance in the resistance step; the uptime only scales how often that step's bonus is up
+
 ```interaction
 id: chance-on-hit-uptime
 mechanic: "A chance-on-hit effect with chance p and duration d is up on a target when at least one earlier hit inside the last d seconds applied it (the applying hit does not benefit from its own debuff, wiki Hit rev 1650022); uptime depends on hit rate on ONE target, not on the config checkbox"
 family: uptime
+pipeline_step: ["Damage calculation#Resistance, exposure and penetration"]
+pipeline_why: "meta model: it times a chance-on-hit effect and acts at the step of that effect, e.g. Eye of Malice exposure (25%) lowers resistance in the resistance step; the uptime only scales how often that step's bonus is up"
 target: enemy
 related: [exposure, freeze, shock, chill, power-charges, frenzy-charges, flask-uptime]
 pob:

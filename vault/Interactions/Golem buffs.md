@@ -8,10 +8,14 @@ last_confirmed_patch: "3.29.x"
 
 Each summoned golem skill gives the player a buff while the golem lives. PoB applies the buff of every enabled golem skill but does NOT enforce the golem limit (the limit is only parsed and shown), so enforcing count <= limit is the app's job: [[Golem count within limit]] (task 021, not merged). The Worb seed runs 4 golems = 1 base + Golem Commander + Liege of the Primordial (+2).
 
+Pipeline: none - no single step: each golem gives a different buff (crit, speed, damage, defence) that acts in that buff's own step; check the individual golem rather than the group
+
 ```interaction
 id: golem-buffs
 mechanic: "Summoned golems grant the player a buff each (crit, speed, damage, defence); the number of golems is capped by ActiveGolemLimit; golem buff effect is scaled by 'effect of buffs granted by your golems'"
 family: buff
+pipeline_step: []
+pipeline_why: "no single step: each golem gives a different buff (crit, speed, damage, defence) that acts in that buff's own step; check the individual golem rather than the group"
 target: self
 related: [arcane-surge, power-charges]
 pob:

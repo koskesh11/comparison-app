@@ -8,10 +8,14 @@ last_confirmed_patch: "3.29.x"
 
 How often a flask is actually on. PoB treats a flask as on or off (a checkbox); Mageblood forces the leftmost magic utility flasks on. PoB's own flask-tooltip uptime (ItemsTab.lua:4830-4857) counts timed charge generation only, so it is a floor: it ignores charges on critical strike and on kill. Use PoB's number as the floor; add crit and kill charges as a labelled model. Mageblood flasks need no model (always on); see [[Mageblood flasks]].
 
+Pipeline: none - no damage/defence step: a flask only times effects whose own lines act in their usual step (increased, more, resistance, recovery); this note decides how long they are up, not where they act
+
 ```interaction
 id: flask-uptime
 mechanic: "Flask effect is up while charges cover use: charge sources are timed generation, chance on critical strike (one charge to one flask, shared 0.1 s cooldown = 0.132 s in server frames, about 7.5 charges/s cap), and kills (1 / 3.5 / 6 / 11 charges by rarity, fewer in maps)"
 family: uptime
+pipeline_step: []
+pipeline_why: "no damage/defence step: a flask only times effects whose own lines act in their usual step (increased, more, resistance, recovery); this note decides how long they are up, not where they act"
 target: self
 related: [rampage, consecrated-ground]
 pob:

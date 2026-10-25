@@ -8,10 +8,14 @@ last_confirmed_patch: "3.29.x"
 
 Cast On Critical Strike (CoC) makes an attack skill's crit trigger a linked spell. The trigger rate is the attack rate x crit chance, but the spell has a 0.15 s cooldown that is rounded up to 33 ms server frames, so there are hard rate breakpoints. Attacking faster than the cap loses procs. Rules: [[CoC requires 100% crit and hit]], [[Trigger attack under the CoC cap]], [[Trigger attack stays at cheapest level]].
 
+Pipeline: [[Damage calculation#Hit rate]], [[Damage calculation#Critical strike]] - the trigger fires from a crit, so it needs crit chance (Critical strike) and its proc rate is capped by the 0.15 s cooldown (hit rate of the triggered spell); attacking faster than the cap adds no damage
+
 ```interaction
 id: coc-trigger
 mechanic: "Attack crit triggers one linked spell; 0.15 s cooldown in 33 ms frames = max 6.06 / 7.57 / 10.10 / 15.15 triggers per s at 0 / 14 / 52 / 128% cooldown recovery; faster attacks lose procs"
 family: trigger
+pipeline_step: ["Damage calculation#Hit rate", "Damage calculation#Critical strike"]
+pipeline_why: "the trigger fires from a crit, so it needs crit chance (Critical strike) and its proc rate is capped by the 0.15 s cooldown (hit rate of the triggered spell); attacking faster than the cap adds no damage"
 target: self
 related: [channelling, returning-projectiles]
 pob:

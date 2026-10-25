@@ -8,10 +8,14 @@ last_confirmed_patch: "3.29.x"
 
 Rampage grants 2% increased Damage and 1% increased Movement Speed per 20 consecutive kills (cap 1000 = +100% damage, +50% movement speed). The counter resets to 0 when no kill happens within 5 seconds, so it is a mapping bonus and nothing on a lone boss. PoB shows 0 until the user types a kill count (config gap).
 
+Pipeline: [[Damage calculation#Increased and reduced]] - 2% increased Damage per 20 kills joins the one additive increased pool; the movement speed part has no damage step, and the counter resets after 5 s without a kill so a lone boss gets none
+
 ```interaction
 id: rampage
 mechanic: "Consecutive-kill counter (kills incl. minions and proxies); 2% increased Damage and 1% increased Movement Speed per 20 stacks, cap 1000; resets to 0 if no kill within 5 s; kills at cap renew the timer"
 family: buff
+pipeline_step: ["Damage calculation#Increased and reduced"]
+pipeline_why: "2% increased Damage per 20 kills joins the one additive increased pool; the movement speed part has no damage step, and the counter resets after 5 s without a kill so a lone boss gets none"
 target: self
 related: [flask-uptime]
 pob:

@@ -8,10 +8,14 @@ last_confirmed_patch: "3.29.x"
 
 Every hit with cold damage tries to chill (100%, crit or not): the enemy gets reduced action speed for 2 s, strength = 50% x (hit damage / ailment threshold)^0.4 x (1 + effect mods), capped at 30% (40% with Shaper of Winter), minimum 5%. Chill is independent of freeze. It matters because many mods pay off "against Chilled enemies" (Hypothermia, Bonechill, Hyperboreus and others) and because Bonechill folds chill effect into cold damage taken. Bonechill and the chill-effect nodes are folded into this note. Related: [[Freeze]], [[Shock]], [[Enemy ailment threshold]], [[Damage type can ailment]], [[Elemental ailment count]]. Providers beyond the seed set: see tasks/reports/027-research.md.
 
+Pipeline: [[Damage calculation#Ailments from hits]] - chill is applied after the hit from the post-mitigation cold damage vs ailment threshold; it slows the enemy (action speed, no damage step of its own) and only pays off through the vs-Chilled mods that sit in Increased/More
+
 ```interaction
 id: chill
 mechanic: "Cold hits chill (100% chance, crit or not); action speed reduction E = 50% x (D/T)^0.4 x (1+M), D = cold damage dealt, T = ailment threshold; min 5% (lower is discarded), cap 30% (40% with Shaper of Winter), base duration 2 s; chill is applied AFTER the hit; non-damaging chill (Chilled ground, Skitterbots) base effect 10%"
 family: ailment
+pipeline_step: ["Damage calculation#Ailments from hits"]
+pipeline_why: "chill is applied after the hit from the post-mitigation cold damage vs ailment threshold; it slows the enemy (action speed, no damage step of its own) and only pays off through the vs-Chilled mods that sit in Increased/More"
 target: enemy
 related: [freeze, shock, shatter, enemy-ailment-threshold, damage-type-can-ailment, elemental-ailment-count]
 pob:

@@ -8,10 +8,14 @@ last_confirmed_patch: "3.29.x"
 
 Melding of the Flesh (jewel) and the Reliquarian notable of the same name cap all three elemental resistances at your highest maximum elemental resistance. The big resistance and max-res malus is the price; the line only pays off if one element has a high maximum from another source. Never "fix" the malus: it is the item.
 
+Pipeline: [[Defences#Resistance caps]], [[Receiving damage#Resistances]] - the cap on all three elemental resistances becomes the highest maximum, which moves the resistance step's cap; it pays only when one element has a high maximum from another source
+
 ```interaction
 id: max-res-equalise
 mechanic: "Elemental Resistances are capped by your highest Maximum Elemental Resistance instead: fire, cold and lightning max all become the highest one"
 family: defence
+pipeline_step: ["Defences#Resistance caps", "Receiving damage#Resistances"]
+pipeline_why: "the cap on all three elemental resistances becomes the highest maximum, which moves the resistance step's cap; it pays only when one element has a high maximum from another source"
 target: self
 related: [skill-cost-from-es]
 pob:

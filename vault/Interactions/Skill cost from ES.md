@@ -8,10 +8,14 @@ last_confirmed_patch: "3.29.x"
 
 Whispers of Infinity turns every skill's mana (and life) cost into an ES cost and cuts max mana by 40-60%. That "downside" is the point of the item: never "fix" it by adding mana. PoB checks only the cost per use against the ES pool, not how much ES is spent per second versus recharge. Rules: [[Total skill cost must be sustainable]], [[Reservation must fit the pool]].
 
+Pipeline: [[Receiving damage#Energy shield]] - skill costs are paid from the energy shield pool, so each use drains the same ES that protects against hits; recharge only helps between uses
+
 ```interaction
 id: skill-cost-from-es
 mechanic: "Skills Cost Energy Shield instead of Mana or Life (Whispers of Infinity; also Eldritch Battery keystone spends ES before mana)"
 family: resource
+pipeline_step: ["Receiving damage#Energy shield"]
+pipeline_why: "skill costs are paid from the energy shield pool, so each use drains the same ES that protects against hits; recharge only helps between uses"
 target: self
 related: [max-res-equalise, arcane-surge]
 pob:

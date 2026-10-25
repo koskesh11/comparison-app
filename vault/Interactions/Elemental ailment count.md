@@ -8,10 +8,14 @@ last_confirmed_patch: "3.29.x"
 
 Some items scale with the number of different elemental ailment TYPES on the enemy: The Taming gives (30-40)% increased Elemental Damage with Hits and Ailments for each type (max 7: Ignite, Chill, Freeze, Shock, Scorch, Brittle, Sap). Extra stacks of the same type do not count; bleed and poison do not count. PoB adds the mod once per enemy condition (Frozen, Chilled, Ignited, Shocked, Scorched, Brittle, Sapped), but each condition is a config tick (or a guaranteed source), never derived from the build. So the Taming only shows value for the types the user ticks, and the real uptime of each type (esp. freeze on bosses, and scorch/brittle/sap which need dedicated sources) is not modelled. Related: [[Freeze]], [[Chill]], [[Shock]], [[Enemy ailment threshold]]. Providers beyond the seed set: see tasks/reports/027-research.md.
 
+Pipeline: [[Damage calculation#Increased and reduced]] - the Taming adds increased Elemental Damage per ailment type, which joins the one additive increased pool; the count comes from config ticks in PoB, not from the build
+
 ```interaction
 id: elemental-ailment-count
 mechanic: "Damage scales per DIFFERENT elemental ailment type on the enemy (Ignite, Chill, Freeze, Shock, Scorch, Brittle, Sap = max 7; bleed and poison do not count; extra stacks of one type do not add): The Taming (30-40)% increased Elemental Damage with Hits and Ailments per type"
 family: ailment
+pipeline_step: ["Damage calculation#Increased and reduced"]
+pipeline_why: "the Taming adds increased Elemental Damage per ailment type, which joins the one additive increased pool; the count comes from config ticks in PoB, not from the build"
 target: enemy
 related: [freeze, chill, shock, enemy-ailment-threshold, damage-type-can-ailment]
 pob:

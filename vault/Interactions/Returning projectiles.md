@@ -8,12 +8,16 @@ last_confirmed_patch: "3.29.x"
 
 Nimis and the Returning Projectiles support make projectiles come back. User chose reading B on 2026-10-25 (reading A rejected). PoB maps none of it: the return hit is not counted and neither is the support's damage penalty, so in PoB the support is pure cost (+50% cost) and a PoB DPS sort always drops it.
 
+Pipeline: none - no damage step: the return pass is an extra hit-count chance outside the per-hit order and PoB does not count it, so the support looks like pure cost in PoB
+
 Winter Orb and Forbidden Rite cannot return (they do not collide with enemies), so this mechanic never applies to the Worb or FR seeds. Overlap of the outbound projectiles: see [[Projectiles hitting a single target]].
 
 ```interaction
 id: returning-projectiles
 mechanic: "Projectiles that collide return once; the return pass may hit the same target again. Reading A (rejected by the user 2026-10-25, was the user's first statement): point blank each projectile hits out and back (~2x), even in a circle. Reading B (wiki): one collision out plus one back per simultaneous set, none if the projectile returned directly from that enemy; AoE explosions are not limited"
 family: projectile
+pipeline_step: []
+pipeline_why: "no damage step: the return pass is an extra hit-count chance outside the per-hit order and PoB does not count it, so the support looks like pure cost in PoB"
 target: enemy
 related: [projectile-hits-single-target]
 pob:

@@ -8,10 +8,14 @@ last_confirmed_patch: "3.29.x"
 
 Exposure is a debuff that lowers one elemental resistance on the enemy: -10% by default when the player or a skill inflicts it, lasting 4 s unless a skill sets another duration. Only the strongest exposure per element applies; different elements coexist. PoB takes the strongest per element, applies the debuff automatically for socketed debuff skills (Frost Bomb), and for on-hit chance sources (tree, items) only when the matching config box is ticked. Elemental Equilibrium is the main conflict: the wiki and PoB disagree on same-element on-hit exposure and both readings stay visible below. Related: [[Own shock effect]], [[Freeze]], [[Chill]]. Providers beyond the seed set: see tasks/reports/027-research.md.
 
+Pipeline: [[Damage calculation#Resistance, exposure and penetration]] - exposure lowers the enemy's elemental resistance (strongest per element), so it multiplies all hits and DoT of that element and, unlike penetration, also works against low-resist enemies
+
 ```interaction
 id: exposure
 mechanic: "Exposure lowers one elemental resistance on the enemy: -10% by default (overrides: Elemental Equilibrium -25% per element not dealt, Scorching Ray -25% fire, Frost Bomb -15% cold, Wave of Conviction -15%); only the strongest exposure per element applies, different elements coexist; default duration 4 s"
 family: ailment
+pipeline_step: ["Damage calculation#Resistance, exposure and penetration"]
+pipeline_why: "exposure lowers the enemy's elemental resistance (strongest per element), so it multiplies all hits and DoT of that element and, unlike penetration, also works against low-resist enemies"
 target: enemy
 related: [freeze, chill, shock, elemental-ailment-count]
 pob:

@@ -8,10 +8,14 @@ last_confirmed_patch: "3.29.x"
 
 Monsters killed by a HIT while frozen shatter: no corpse, loot still drops. Unique bosses cannot shatter and damage-over-time kills never shatter, so shatter is a pack-clearing payoff (Herald of Ice explosion, Winter's Embrace damage, corpse-denial) and has no boss value. PoB does not simulate it at all; it only has the config box "Have you Shattered an enemy Recently?" that unlocks the conditional mods. Related: [[Freeze]], [[Chill]], [[Enemy ailment threshold]].
 
+Pipeline: none - no damage/defence step: shatter is a kill condition (corpse removal after a hit on a Frozen non-unique), it adds no damage and never applies to unique bosses or DoT kills
+
 ```interaction
 id: shatter
 mechanic: "Non-unique monsters killed by a hit while Frozen shatter (no corpse, loot still drops, no corpse effects); unique bosses cannot shatter; kills from damage over time never shatter, only hits"
 family: ailment
+pipeline_step: []
+pipeline_why: "no damage/defence step: shatter is a kill condition (corpse removal after a hit on a Frozen non-unique), it adds no damage and never applies to unique bosses or DoT kills"
 target: enemy
 related: [freeze, chill, enemy-ailment-threshold]
 pob:

@@ -8,10 +8,14 @@ last_confirmed_patch: "3.29.x"
 
 Arcane Surge support tracks the mana the supported spell spends and grants a timed buff when a threshold is reached. PoB models it as an on/off config tick only: the 400-mana threshold and 4 s duration are not modelled, and the support gem alone does not turn the buff on. Rule: [[Arcane Surge support needs mana spent]] (it checks the main group only).
 
+Pipeline: [[Damage calculation#More and less]], [[Damage calculation#Hit rate]] - the buff is 35% more spell damage (its own multiplier, not in the increased pool) and +20% cast speed (speed effect, no per-hit step); PoB shows both only when the config tick is set, so the step is correct only while the buff is actually up
+
 ```interaction
 id: arcane-surge
 mechanic: "Supported spell tracks mana spent; at the threshold (400 at L20, 15 at L1) you gain Arcane Surge for 4 s: 35% more spell damage, +20% cast speed, +30% mana regeneration (L20)"
 family: buff
+pipeline_step: ["Damage calculation#More and less", "Damage calculation#Hit rate"]
+pipeline_why: "the buff is 35% more spell damage (its own multiplier, not in the increased pool) and +20% cast speed (speed effect, no per-hit step); PoB shows both only when the config tick is set, so the step is correct only while the buff is actually up"
 target: self
 related: [skill-cost-from-es, golem-buffs]
 pob:

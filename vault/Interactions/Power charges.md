@@ -8,10 +8,14 @@ last_confirmed_patch: "3.29.x"
 
 Power charges count in PoB only when usePowerCharges is ticked (then max, or the override); gain on kill or crit is not parsed, except that the Power Charge On Critical gem is recognised. Max charges (PowerChargesMax) come from tree and items and feed other mechanics, e.g. [[Curse limit]] with Anathema, and [[Frenzy charges]] with Badge of the Brotherhood.
 
+Pipeline: [[Damage calculation#Critical strike]] - power charges raise crit chance, so they act in the critical strike step; PoB counts them only from a config tick and does not model charge gain
+
 ```interaction
 id: power-charges
 mechanic: "Power charges (crit chance / spell damage scaling per charge); PoB counts max charges only when usePowerCharges is ticked, gain is not modelled"
 family: charge
+pipeline_step: ["Damage calculation#Critical strike"]
+pipeline_why: "power charges raise crit chance, so they act in the critical strike step; PoB counts them only from a config tick and does not model charge gain"
 target: self
 related: [frenzy-charges, curse-limit, arcane-surge]
 pob:

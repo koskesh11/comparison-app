@@ -8,10 +8,14 @@ last_confirmed_patch: "3.29.x"
 
 Impale normally comes from attacks. Spells can impale only through a few sources (Entropic Devastation, Bladefall of Impaling, Replica Heartbreaker); no tree node gives spell impale. The impale needs physical damage on the hit. In the EK sample ImpaleDPS is 49% of total (strategist/seed draft).
 
+Pipeline: [[Damage calculation#Ailments from hits]], [[Damage calculation#Armour against hits]] - impale stores a share of the physical hit and replays it later, so it needs physical damage on the hit and the replayed damage meets enemy armour like a hit
+
 ```interaction
 id: spell-impale
 mechanic: "Spell crits (or spell hits) inflict Impale; each Impale stores 10% of the physical hit (scaled by effect) and lasts a number of hits; needs physical damage"
 family: buff
+pipeline_step: ["Damage calculation#Ailments from hits", "Damage calculation#Armour against hits"]
+pipeline_why: "impale stores a share of the physical hit and replays it later, so it needs physical damage on the hit and the replayed damage meets enemy armour like a hit"
 target: enemy
 related: [coc-trigger, power-charges]
 pob:
@@ -19,7 +23,8 @@ pob:
   how: "ModParser.lua:3904 (Critical Strikes with Spells inflict Impale -> ImpaleChance 100, Spell flag, CriticalStrike condition), 581 (chance to impale on spell hit); CalcOffence.lua:5596-5600, 3502-3510 (needs canDeal.Physical), Data.lua:268 (stored 10%), 1639-1655 (duration), 5614 (armour reduction); stack count CalcPerform.lua:3387-3391 defaults to 5"
   config:
     - {var: multiplierImpalesOnEnemy, default: unset (forced to ImpaleStacksMax = 5), ref: "ConfigOptions.lua:1651", class: b}
-  unparsed: []
+  unparsed:
+    - "Deliberate Brutality (node 56146): Impales you inflict gain 50% increased Effect once 1 second of Duration has expired (Data/ModCache.lua:17109, parsed to nil)"
 model: null
 providers:
   - {kind: unique, name: "Entropic Devastation (Assassin's Mitts)", slot: gloves, role: enables, target: enemy, text: "Critical Strikes with Spells inflict Impale; (30-50)% increased Effect of Impales inflicted with Spells; grants Call of Steel", source: "PoB Data/Uniques/gloves.lua:1141-1144; ModParser.lua:3904, 582-585", pob: full}
@@ -28,7 +33,7 @@ providers:
   - {kind: unique, name: "Replica Heartbreaker", slot: dagger, role: enables, target: enemy, text: "20% chance to Impale on Spell Hit; 20% inc Impale Effect", source: "PoB Data/Uniques/dagger.lua:195-196; ModParser.lua:581", pob: full}
   - {kind: notable, name: "Savage Skewering 6783", slot: tree, role: scales, target: enemy, text: "15% increased Impale Effect (not Attack-scoped)", source: "tree-ascendancy-analyst; TREE L61169", pob: full}
   - {kind: notable, name: "Brutal Skewering 39904", slot: tree, role: scales, target: enemy, text: "Impales you inflict last 1 additional Hit", source: "tree-ascendancy-analyst; TREE L43388", pob: full}
-  - {kind: notable, name: "Deliberate Brutality 56146", slot: tree, role: scales, target: enemy, text: "Impales gain 50% increased Effect once 1 s of Duration has expired", source: "tree-ascendancy-analyst; TREE L54417", pob: full}
+  - {kind: notable, name: "Deliberate Brutality 56146", slot: tree, role: scales, target: enemy, text: "Impales gain 50% increased Effect once 1 s of Duration has expired", source: "tree-ascendancy-analyst; TREE L54417", pob: none}
   - {kind: unique, name: "Woespike", slot: ring, role: scales, target: enemy, text: "(20-30)% chance on Melee Hit for the Strongest Impale to last 1 additional Hit; (40-50)% less Impale Duration", source: "PoB Data/Uniques/ring.lua:1821-1822 (variant 2)", pob: full}
   - {kind: support, name: "Impale", slot: any, role: blocks, target: enemy, text: "requires an Attack skill; cannot be linked to a spell, so spell impale and the support are mutually exclusive on one skill", source: "PoB sup_dex.lua:2472-2519; skill-gem-analyst", pob: full}
 makes_redundant: []

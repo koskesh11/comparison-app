@@ -8,12 +8,16 @@ last_confirmed_patch: "3.29.x"
 
 Consecrated ground heals the player standing on it (5% life per second, 50% reduced curse effect on you). Ground created by a flask like Bottled Faith also hurts the enemy: increased damage taken and increased critical strike chance against enemies on it, but only while the flask is active and only if the enemy stands on the ground. Trap in PoB: the effect needs the ENEMY-side config, not the player-side one.
 
+Pipeline: [[Damage calculation#Damage taken]], [[Damage calculation#Critical strike]], [[Receiving damage#Recovery]] - the flask ground adds increased damage taken (additive with other taken mods) and increased crit chance on the enemy; the 5% life regen on the player is a Recovery effect; enemy-side config is needed or PoB shows none of it
+
 Config trap: Bottled Faith needs `conditionEnemyOnConsecratedGround` (ConfigOptions.lua:2012). vault/Scenarios/Pinnacle Boss.md sets `conditionOnConsecratedGround` (the player side, ConfigOptions.lua:1148), which gives life regeneration and accuracy and does nothing for the flask's enemy mods. Recorded in not_verified / open_questions; the Scenarios note was not edited.
 
 ```interaction
 id: consecrated-ground
 mechanic: "Ground the player (or a flask) creates: own effect 5% life regen per second and 50% reduced curse effect on you; created by an enemy it affects enemies instead. Bottled Faith adds 7-10% increased damage taken by enemies on it and 100-150% increased critical strike chance against them, during flask effect only"
 family: buff
+pipeline_step: ["Damage calculation#Damage taken", "Damage calculation#Critical strike", "Receiving damage#Recovery"]
+pipeline_why: "the flask ground adds increased damage taken (additive with other taken mods) and increased crit chance on the enemy; the 5% life regen on the player is a Recovery effect; enemy-side config is needed or PoB shows none of it"
 target: enemy
 related: [flask-uptime]
 pob:

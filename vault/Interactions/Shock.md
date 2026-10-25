@@ -8,10 +8,14 @@ last_confirmed_patch: "3.29.x"
 
 Shock is a debuff that makes the enemy take more damage (default max 50%, 2 s base duration). Hits with lightning damage (or damage allowed to shock) shock; crits shock 100%. Strength = 50% x (hit damage / ailment threshold)^0.4 x (1 + effect mods), minimum 5%. PoB computes the effect only in a breakdown table; DPS changes only through the config pair `conditionEnemyShocked` + `conditionShockEffect` or a guaranteed source. The existing verified chain for how big your own shock is: [[Own shock effect]] (reuse, do not redo). The Foulborn The Three Dragons chaos-shock mutation is described in [[Foulborn The Three Dragons]]. Related: [[Freeze]], [[Chill]], [[Enemy ailment threshold]], [[Damage type can ailment]], [[Elemental ailment count]]. Providers beyond the seed set: see tasks/reports/027-research.md.
 
+Pipeline: [[Damage calculation#Damage taken]] - shock is increased damage taken by the enemy, additive with other taken mods (not a more multiplier), applied after the hit that caused it; PoB counts it only through the shock config pair
+
 ```interaction
 id: shock
 mechanic: "Hits with lightning damage (or damage allowed to shock) shock: enemy takes increased damage, E = 50% x (D/T)^0.4 x (1+M), min 5%, default max 50%, base duration 2 s; crits shock 100%; shocks do not stack (strongest applies) except with Oath of Spring; a hit applies shock AFTER its damage"
 family: ailment
+pipeline_step: ["Damage calculation#Damage taken"]
+pipeline_why: "shock is increased damage taken by the enemy, additive with other taken mods (not a more multiplier), applied after the hit that caused it; PoB counts it only through the shock config pair"
 target: enemy
 related: [freeze, chill, enemy-ailment-threshold, damage-type-can-ailment, elemental-ailment-count, exposure]
 pob:

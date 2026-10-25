@@ -8,10 +8,14 @@ last_confirmed_patch: "3.29.x"
 
 PoB counts frenzy charges only from a config tick (max charges when ticked); gaining them on kill, crit or frozen kill is not parsed. So the charge count is a scenario assumption, not a PoB result. Items that make charges "count as maximum" make the assumption true.
 
+Pipeline: [[Damage calculation#More and less]], [[Damage calculation#Hit rate]] - each charge is 4% more damage (own multiplier) and speed (hit rate); PoB counts them only from a config tick, so the step applies only to the assumed charge count
+
 ```interaction
 id: frenzy-charges
 mechanic: "Frenzy charges give 4% more damage and speed per charge (PoB); PoB uses max charges only if useFrenzyCharges is ticked, charge gain is not modelled"
 family: charge
+pipeline_step: ["Damage calculation#More and less", "Damage calculation#Hit rate"]
+pipeline_why: "each charge is 4% more damage (own multiplier) and speed (hit rate); PoB counts them only from a config tick, so the step applies only to the assumed charge count"
 target: self
 related: [power-charges, rampage]
 pob:

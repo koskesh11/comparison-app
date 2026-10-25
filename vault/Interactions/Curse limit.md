@@ -8,10 +8,14 @@ last_confirmed_patch: "3.29.x"
 
 By default one curse can be active on an enemy (marks are separate). Anathema REPLACES the curse limit with your maximum power charges, so every "additional curse" item or node is wasted while it is worn, and zero max charges means no curses at all. Wiki and PoB disagree on the Moonstone Ring implicit at 3.29 (see not_verified); both are kept.
 
+Pipeline: [[Damage calculation#Resistance, exposure and penetration]], [[Damage calculation#Damage taken]] - curses act through enemy resistance and damage taken; the limit only gates how many of those debuffs apply, so an extra curse is worth nothing when Anathema replaces the limit
+
 ```interaction
 id: curse-limit
 mechanic: "Enemy curse limit is 1 by default; +1 per 'additional Curse'; Anathema sets it to maximum Power Charges, overriding all other modifiers; limit 0 = curses do not apply"
 family: buff
+pipeline_step: ["Damage calculation#Resistance, exposure and penetration", "Damage calculation#Damage taken"]
+pipeline_why: "curses act through enemy resistance and damage taken; the limit only gates how many of those debuffs apply, so an extra curse is worth nothing when Anathema replaces the limit"
 target: enemy
 related: [power-charges, coc-trigger]
 pob:

@@ -8,10 +8,14 @@ last_confirmed_patch: "3.29.x"
 
 The ailment threshold T is the number every non-damaging ailment is measured against: freeze duration (0.06 s per 1% of T in one hit), shock and chill strength ((D/T)^0.4), and the 5% / 0.3 s minimums. The wiki only says T is "typically equal to the monster's maximum life, reduced for especially high-life monsters" (3.15.0 rebalance); PoB multiplies the level table by its own boss factors. This note is shared by [[Freeze]], [[Shock]], [[Chill]]; the vault already carries the PoB chain in [[Own shock effect]]. The boss factors are PoB data that could not be checked against the wiki.
 
+Pipeline: [[Damage calculation#Ailments from hits]] - the threshold is the divisor of every non-damaging ailment (freeze duration, shock and chill strength), so a bigger boss threshold shrinks them in the ailments-from-hits step
+
 ```interaction
 id: enemy-ailment-threshold
 mechanic: "T = monsterAilmentThresholdTable[level] x 7.68 (any boss) x mapLevelBossLifeMult x mapLevelBossAilmentMult x enemy Life more x AilmentThreshold more (config Boss +488%, Pinnacle/Uber +404%); wiki: roughly the monster's maximum life, reduced for especially high-life monsters (3.15.0), maximum about 800 million"
 family: ailment
+pipeline_step: ["Damage calculation#Ailments from hits"]
+pipeline_why: "the threshold is the divisor of every non-damaging ailment (freeze duration, shock and chill strength), so a bigger boss threshold shrinks them in the ailments-from-hits step"
 target: enemy
 related: [freeze, shock, chill, shatter, elemental-ailment-count]
 pob:

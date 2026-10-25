@@ -8,12 +8,16 @@ last_confirmed_patch: "3.29.x"
 
 Freeze is a hit-only cold ailment: the enemy gets 100% less action speed for 0.06 s per 1% of its ailment threshold dealt by one hit (max 3 s, discarded under 0.3 s). Crits inherently freeze. PoB computes chance and the duration modifier but never sets the enemy Frozen condition, so every "vs Frozen" payoff shows 0 until conditionEnemyFrozen is ticked. Bosses keep a 50% action-speed floor (3.25.0): they still count as Frozen for conditions, but it is a slow, not a lock.
 
+Pipeline: [[Damage calculation#Ailments from hits]] - freeze is applied after the hit and sized by the post-mitigation cold hit vs ailment threshold; it removes enemy action speed (no damage step of its own, closest step is ailments from hits), and its value comes from vs-Frozen mods and shatter, which PoB shows only when the Frozen condition is ticked
+
 Lead rulings encoded here (2026-10-24): for a boss, `conditionEnemyFrozen` is set only when the model below gives a duration of at least 0.3 s (Worb.xml 0.604 s at model inputs: yes; day-1 snapshot 0.305 s at channel 3 s: yes, but no payoff in that build; on Uber neither sample freezes). Unique bosses cannot shatter. Berek's Pass "+5000 Armour while Frozen" is a self-state line, not a payoff. Foulborn The Three Dragons mutations replace lines; the cold line stays unless mutated. Providers PoB leaves unparsed say so in `text`. Paths in `source` are relative to the PoB install unless a URL is given. See [[Chill]], [[Shatter]], [[Enemy ailment threshold]], [[Damage type can ailment]], [[Elemental ailment count]], [[Own shock effect]], [[Foulborn The Three Dragons]].
 
 ```interaction
 id: freeze
 mechanic: "Hits with cold damage (or damage allowed to freeze) freeze: enemy action speed 100% less for 0.06 s per 1% of ailment threshold dealt by that hit (max 3 s = 50%), a hit below 0.3 s (5% of threshold) is discarded; crits freeze 100%; bosses keep a 50% action-speed floor (3.25.0) but still count as Frozen; unique bosses cannot shatter"
 family: ailment
+pipeline_step: ["Damage calculation#Ailments from hits"]
+pipeline_why: "freeze is applied after the hit and sized by the post-mitigation cold hit vs ailment threshold; it removes enemy action speed (no damage step of its own, closest step is ailments from hits), and its value comes from vs-Frozen mods and shatter, which PoB shows only when the Frozen condition is ticked"
 target: enemy
 related: [chill, shatter, enemy-ailment-threshold, damage-type-can-ailment, elemental-ailment-count, shock]
 pob:

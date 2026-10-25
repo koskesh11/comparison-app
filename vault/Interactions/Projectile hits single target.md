@@ -8,12 +8,16 @@ last_confirmed_patch: "3.29.x"
 
 Several projectiles of one cast reach one enemy, but PoB counts one hit (Winter Orb: one per volley, Forbidden Rite part 1: one projectile) or multiplies by a hand-set count. How many really land is geometry plus shotgun prevention (only one collision per simultaneous set; explosions are not limited). This decides how much a projectile-count source is worth on a boss.
 
+Pipeline: none - no damage step: it sets how many hits land on one boss per cast, a hit-count multiplier outside the per-hit order; the per-hit chain in PoB is unchanged and the count is a hand-set input
+
 The numbers live in existing vault models, not here: [[Projectiles hitting a single target]] (user-verified 0.6 hit fraction, Forbidden Rite + Greater Volley), [[Winter Orb projectile overlap]] (line overlap, count 5 is hand-set), [[Fireball explosion overlap]]. Use those; this note only records providers, PoB coverage and uptime.
 
 ```interaction
 id: projectile-hits-single-target
 mechanic: "Of the projectiles of one cast, only some hit a single boss: collisions are capped by shotgun prevention, explosions overlap by geometry; user-verified ~60% of projectiles hit for Forbidden Rite / Fireball style AoE explosions"
 family: projectile
+pipeline_step: []
+pipeline_why: "no damage step: it sets how many hits land on one boss per cast, a hit-count multiplier outside the per-hit order; the per-hit chain in PoB is unchanged and the count is a hand-set input"
 target: enemy
 related: [returning-projectiles, coc-trigger]
 pob:

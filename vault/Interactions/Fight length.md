@@ -8,10 +8,14 @@ last_confirmed_patch: "3.29.x"
 
 PoB has no enemy life and no time-to-kill, so the length of a boss fight (damage time plus immunity windows) cannot come from PoB. Some inputs grow with fight time, mainly Cold Mastery 26782 (5% increased damage per second the boss was ever Frozen, max 50%), so the fight length feeds [[Freeze]] (multiplierFrozenByYouSeconds) and the freeze result feeds back into FullDPS: a short fixed-point loop (HP / FullDPS). Boss HP comes from the vault (default Sirus); a boss without a row is a gap, see [[Boss life]]. Uber divides raw HP by the Uber-preset FullDPS, which already holds the 70% less damage taken. See also [[Channelling]], [[Flask uptime]].
 
+Pipeline: none - no damage/defence step: fight length is a time input (boss HP / FullDPS) outside the per-hit order; it only decides how long time-scaled inputs (frozen seconds, channel time) are up
+
 ```interaction
 id: fight-length
 mechanic: "Time to kill a single-target boss = boss HP (life + ES) / PoB FullDPS, plus the boss's invulnerable windows; fight-length-dependent inputs (Cold Mastery 26782 frozen seconds) are fed back until the length settles"
 family: uptime
+pipeline_step: []
+pipeline_why: "no damage/defence step: fight length is a time input (boss HP / FullDPS) outside the per-hit order; it only decides how long time-scaled inputs (frozen seconds, channel time) are up"
 target: enemy
 related: [freeze, channelling, flask-uptime]
 pob:
