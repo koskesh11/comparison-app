@@ -55,12 +55,12 @@ conditions:
 uptime:
   Mapping:
     value: partial
-    config: {conditionEnemyFireExposure: "ON only if a source exists", conditionEnemyColdExposure: "ON only if a source exists (Frost Bomb is automatic)", conditionEnemyLightningExposure: "ON only if a source exists"}
+    config: {conditionEnemyFireExposure: "ON only if a source exists", conditionEnemyColdExposure: "ON only if a source exists (Frost Bomb is automatic) (chance sources: box state by the uptime rule of user 2026-10-25, see [[Chance on hit uptime]]: u >= 80% ticked, no notice; 50-80% ticked + user informed with u; < 50% unticked + warning with u)", conditionEnemyLightningExposure: "ON only if a source exists"}
     reasoning: "partial-high where the source is an on-hit chance (Eye of Malice 25%) or a debuff skill; the config box needs a source; -10% default"
     source: "build-strategist table (tasks/reports/027-research.md); Modules/ConfigOptions.lua:1973-1981"
   Pinnacle Boss:
     value: high
-    config: {conditionEnemyColdExposure: "ON only if a source exists; Frost Bomb cast on the boss is high; on-hit % sources effectively high in a long fight"}
+    config: {conditionEnemyColdExposure: "ON only if a source exists (chance sources: box state by the uptime rule of user 2026-10-25, see [[Chance on hit uptime]]: u >= 80% ticked, no notice; 50-80% ticked + user informed with u; < 50% unticked + warning with u); Frost Bomb cast on the boss is high; on-hit % sources effectively high in a long fight"}
     reasoning: "skill/curse-like debuffs are high; a 25% on-hit chance is hit often on a boss; exposure lasts 4 s so continuous hits are needed"
     source: "build-strategist table (tasks/reports/027-research.md); https://www.poewiki.net/wiki/Exposure rev 1673498"
 seeds: [Worb]

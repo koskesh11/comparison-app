@@ -102,15 +102,15 @@ Why it matters for building: Armour beyond the 90 cap is wasted, but Overwhelm b
 
 Rule: 'Avoid X damage from hits' is a chance to reduce that damage to 0; hard cap 75%. Projectile avoidance prevents the projectile hit itself.
 
-Wiki step: Defences: avoidance. Quote (Avoidance rev 1675590; patch 3.29.0 (avoid-all additive with avoid-type, cap bug fixed)):
+Wiki step: Defences: avoidance. Quote (Avoidance rev 1675590; patch 3.29.0 (official notes: avoid-all additive with avoid-type; separate bug fix for some sources not capped at 75%; see [[Avoidance additive 3.29.0]])):
 
 > The chance to avoid damage from hits is hard capped at 75%.
 
-PoB: Modules/CalcDefence.lua:1575-1585, 2829-2836; Data.lua:252 - DIFFERS. 75 cap matches; 3.29.0 additivity is not modelled (see [[Receiving damage#Immunity and avoidance]]). Projectile cap 75 is PoB-only.
+PoB: Modules/CalcDefence.lua:1575-1585, 2829-2836; Data.lua:252 - DIFFERS. 75 cap matches; 3.29.0 additivity: PoB keeps avoid-all as its own not-hit factor and its per-type path never reads avoid-all (CalcDefence.lua:1689-1693, 2831-2855), so the official additive wording is not modelled as stated (narrower claim, see [[Receiving damage#Immunity and avoidance]]). Projectile cap 75 is PoB-only.
 
 Gap: [[Avoidance additive 3.29.0]].
 
-Why it matters for building: Past 75% it is wasted; two different avoid lines add on the 3.29.0 wiki instead of multiplying.
+Why it matters for building: Past 75% it is wasted; per the official 3.29.0 notes avoid-all adds to specific-type avoidance (which sources/types is not named); PoB multiplies avoid-all as its own factor.
 
 ## Ailment avoidance
 

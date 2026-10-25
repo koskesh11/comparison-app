@@ -40,15 +40,15 @@ Why it matters for building: Taken-as vs conversion: it changes which resistance
 
 Rule: Immunities and 'cannot take X' zero the damage (6.1, 6.2). Damage avoidance ('avoid X damage from hits') reduces that damage to 0 AFTER the hit landed and BEFORE resistance; hard cap 75%.
 
-Wiki step: 6.1 Cannot take X / 6.2 Immunities / 6.3 Damage avoidance. Quote (Avoidance rev 1675590; patch 3.29.0 (avoid-all-damage now additive with avoid-type damage, cap bug fixed)):
+Wiki step: 6.1 Cannot take X / 6.2 Immunities / 6.3 Damage avoidance. Quote (Avoidance rev 1675590; patch 3.29.0 (official notes: avoid-all additive with avoid-type damage; separate bug fix for some sources not capped at 75%; see [[Avoidance additive 3.29.0]])):
 
 > Avoiding all damage from hits does not prevent or undo the hit; on-hit/when-hit effects will still occur for both the attacker and defender.
 
-PoB: Modules/CalcDefence.lua:1031-1045, 1575-1585, 1689-1693, 2829-2836, 2935 - DIFFERS. PoB keeps AvoidAllDamageFromHitsChance as its own factor in NotHitChance while the per-type EHP path reads only Avoid<Type>DamageChance + projectile, so the two never add; the 3.29.0 wiki says they are additive. The 75 cap for projectile avoidance is PoB-only (the wiki states it for damage avoidance). Whether ModParser adds avoid-all into each type was not checked (ModParser.lua:386-387).
+PoB: Modules/CalcDefence.lua:1031-1045, 1575-1585, 1689-1693, 2829-2836, 2935 - DIFFERS. PoB keeps AvoidAllDamageFromHitsChance as its own factor in NotHitChance while the per-type EHP path reads only Avoid<Type>DamageChance + projectile, so the two never add; the official 3.29.0 notes say avoid-all is additive with specific-type avoidance (no types or sources named). The 75 cap for projectile avoidance is PoB-only (the wiki states it for damage avoidance). Whether ModParser adds avoid-all into each type was not checked (ModParser.lua:386-387).
 
 Gap: [[Avoidance additive 3.29.0]].
 
-Why it matters for building: Avoid-all plus avoid-type: additive on the wiki (3.29.0), multiplicative in PoB, so PoB understates a build that stacks both.
+Why it matters for building: Avoid-all plus avoid-type: additive in the official 3.29.0 notes, multiplicative in PoB's not-hit path; whether PoB understates a build that stacks both depends on how EHP combines the two paths (unverified).
 
 ## Resistances
 

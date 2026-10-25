@@ -54,7 +54,7 @@ conditions:
 uptime:
   Mapping:
     value: pob
-    config: {conditionEnemyPoisoned: "model: tick only when the poison is up >= 0.99 of the time (see chance-on-hit-uptime); multiplierPoisonOnEnemy: use PoB's PoisonStacks output as the count for per-Poison payoffs"}
+    config: {conditionEnemyPoisoned: "model: box state by the uptime rule (user rule 2026-10-25: u >= 80% ticked, no notice; 50-80% ticked + user informed with u; < 50% unticked + warning with u) (see chance-on-hit-uptime); multiplierPoisonOnEnemy: use PoB's PoisonStacks output as the count for per-Poison payoffs"}
     reasoning: "PoB expects poison from chance, hit rate and 2 s duration (CalcOffence.lua:4727-4731); fast skills (Worb 6.45 volleys/s, CoC 17.85 uses/s per the uptime notes) fill the stacks within 2 s; packs that die in under 2 s get no ramp, see [[Fight length]]"
     source: "Modules/CalcOffence.lua:4726-4745,6252-6256; vault Interactions/Chance on hit uptime, Fight length"
   Pinnacle Boss:

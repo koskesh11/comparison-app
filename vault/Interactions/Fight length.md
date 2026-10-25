@@ -54,7 +54,7 @@ model:
     hp: "life + es (ES removed first and counted once; no ES recharge during immunity assumed)"
     damage_s: "damage_s(n) = floor(hp / floor(FullDPS(n)))"
     t_fight: "t(n) = damage_s(n) + windows * low_s   (range: damage_s(n) + windows * high_s)"
-    feed_next: "multiplierFrozenByYouSeconds(n+1) = floor(avg_bonus(damage_s(n)) / 5) if Freeze.md gives uptime >= 0.99 AND Cold Mastery 26782 is allocated, else 0 (set 0 explicitly)"
+    feed_next: "multiplierFrozenByYouSeconds(n+1) = floor(avg_bonus(damage_s(n)) / 5) if Freeze.md gives uptime >= 0.50 (box ticked by the user rule 2026-10-25) AND Cold Mastery 26782 is allocated, else 0 (set 0 explicitly)"
     avg_bonus: "avg_bonus(L) = (1/L) * integral_0^L min(5 * floor(uptime * t), 50) dt   (uptime 1: L <= 10 -> 2.5*(floor(L)-1)*floor(L)/L approx; L > 10 -> 50 - 275/L)"
     loop: "round 0 with start_inputs; stop when |t(n) - t(n-1)| < 1 s; after round 3 show t(3) with 'not converged' and the spread [min, max] of t(2), t(3)"
     no_dependent_input: "if no fight-length input applies (no freeze or no mastery 26782): one round only"

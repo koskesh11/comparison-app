@@ -60,7 +60,7 @@ conditions:
 uptime:
   Mapping:
     value: pob
-    config: {conditionEnemyMoving: "scenario input (class b): PoB default is a stationary target (70%); pack monsters are not measured here, do not assume x3", conditionEnemyBleeding: "model: tick only when the bleed is up >= 0.99 of the time (see chance-on-hit-uptime)"}
+    config: {conditionEnemyMoving: "scenario input (class b): PoB default is a stationary target (70%); pack monsters are not measured here, do not assume x3", conditionEnemyBleeding: "model: box state by the uptime rule (user rule 2026-10-25: u >= 80% ticked, no notice; 50-80% ticked + user informed with u; < 50% unticked + warning with u) (see chance-on-hit-uptime)"}
     reasoning: "PoB expects bleed from chance, hit rate and 5 s duration (CalcOffence.lua:4444-4458) so packs with fast attacks keep it up; how long a pack stands still is not sourced; short pack life cuts the 5 s window (see [[Fight length]])"
     source: "Modules/CalcOffence.lua:4444-4458,6252-6256; Modules/ConfigOptions.lua:1797; vault Interactions/Fight length"
   Pinnacle Boss:

@@ -38,7 +38,7 @@ model:
   proposed_kind: alt_ailment_effect_uptime
   inputs: {from_pob: ["<Fire|Cold|Lightning>HitAverage and CritAverage", ScorchEffectMod, BrittleEffectMod, SapEffectMod, ScorchChanceOnHit, BrittleChanceOnHit, SapChanceOnHit, ScorchChanceOnCrit, Speed, HitChance, CritChance, ScorchDuration], from_scenario: [enemy ailment threshold T (enemy-ailment-threshold), "m = hits per use on ONE target (chance-on-hit-uptime)"]}
   params: {scorch: {base: 50, max: 30, default: 10}, brittle: {base: 10, max: 6, default: 2}, sap: {base: 33.33, max: 20, default: 6}, exponent: 0.4, duration_s: 4}
-  formula: "per ailment: raw = base x (D/T)^0.4 x (1 + M); effect = min(raw, max), rounded down (Scorch/Sap to whole %, Brittle to 0.01); D = that element's hit damage (crit damage on crits); applied only when the chance rolls; uptime u from [[Chance on hit uptime]] (p = chance, d = 4 s, refresh): u = 1-(1-p)^(m*n); feed PoB: tick the condition box and set the effect box to floor(u x effect) only when u >= 0.99, otherwise blend two PoB runs"
+  formula: "per ailment: raw = base x (D/T)^0.4 x (1 + M); effect = min(raw, max), rounded down (Scorch/Sap to whole %, Brittle to 0.01); D = that element's hit damage (crit damage on crits); applied only when the chance rolls; uptime u from [[Chance on hit uptime]] (p = chance, d = 4 s, refresh): u = 1-(1-p)^(m*n); feed PoB: tick the condition box and set the effect box to floor(u x effect) by the uptime rule (user rule 2026-10-25: u >= 80% ticked, no notice; 50-80% ticked + user informed with u; < 50% unticked + warning with u) (the effect box = floor(u x effect))"
   calibration: "wiki and PoB use the same formulas and maxima (Scorch 1/2, Brittle 10, Sap 1/3 times (D/T)^0.4; maximum at D/T about 27.89%); no in-game norm found for u"
 providers:
   - {kind: keystone, name: "Secrets of Suffering", slot: tree, role: enables, target: enemy, text: "Cannot Ignite, Chill, Freeze or Shock; Critical Strikes inflict Scorch, Brittle and Sapped (the only crit source; PoB: CritAlwaysAltAilments)", source: "TreeData/3_29/tree.lua:85638 (node 57280); Modules/ModParser.lua:2369; Modules/CalcOffence.lua:4247-4250", pob: full}
@@ -67,7 +67,7 @@ conditions:
 uptime:
   Mapping:
     value: model
-    config: {conditionEnemyScorched: "model: tick only when u >= 0.99", conditionScorchedEffect: "model: floor(u x effect) with effect from D/T of the fire hit (non-boss T, usually at the cap for pack hits)", conditionEnemyBrittle: "same with conditionBrittleEffect", conditionEnemySapped: "same with conditionSapEffect"}
+    config: {conditionEnemyScorched: "model: box state by the uptime rule (user rule 2026-10-25: u >= 80% ticked, no notice; 50-80% ticked + user informed with u; < 50% unticked + warning with u)", conditionScorchedEffect: "model: floor(u x effect) with effect from D/T of the fire hit (non-boss T, usually at the cap for pack hits)", conditionEnemyBrittle: "same with conditionBrittleEffect", conditionEnemySapped: "same with conditionSapEffect"}
     reasoning: "PoB drops the chance, so a 25-50% helmet line is a checkbox of 100% uptime or nothing; fast skills keep 4 s ailments up, slow single hits do not; pack T is about monster life so the effect is often at its cap; the Own shock effect model gives the same chain"
     source: "Modules/CalcOffence.lua:4231-4264,5344-5376; vault Interactions/Chance on hit uptime; vault Models/Own shock effect"
   Pinnacle Boss:

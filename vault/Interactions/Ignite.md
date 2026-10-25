@@ -57,7 +57,7 @@ conditions:
 uptime:
   Mapping:
     value: pob
-    config: {conditionEnemyIgnited: "model: tick only when the ignite is up >= 0.99 of the time (see chance-on-hit-uptime); the ignite DPS itself needs no tick"}
+    config: {conditionEnemyIgnited: "model: box state by the uptime rule (user rule 2026-10-25: u >= 80% ticked, no notice; 50-80% ticked + user informed with u; < 50% unticked + warning with u) (see chance-on-hit-uptime); the ignite DPS itself needs no tick"}
     reasoning: "PoB expects ignite from chance, hit rate and 4 s duration (CalcOffence.lua:5030-5040) and shows IgniteDPS in TotalDotDPS; packs that die before 4 s waste part of it (see [[Fight length]]); payoff mods that need the Ignited condition follow [[Chance on hit uptime]]"
     source: "Modules/CalcOffence.lua:5030-5040,6252-6256; vault Interactions/Chance on hit uptime, Fight length"
   Pinnacle Boss:
