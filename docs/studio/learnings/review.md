@@ -8,3 +8,6 @@ Process lessons only (game facts go to the vault). Format: date · task · trigg
   or require a test that makes it non-trivial → check: the equality evidence names a case with non-empty state. · active
 - 2026-10-23 · 004 · Review real diff size, not eol noise → `git diff --stat --ignore-space-at-eol main` at every gate.
   · active
+- 2026-10-25 · 029 · Rule scan treats a numbered list or a marker-skipped list as one unit, so new untagged items
+  pass → count tags per item, pin the marker count → check: feed the scan an untagged item appended to a tagged
+  list · active (029 MEDIUMs parked). The 004 eol lesson recurred in 021/029 → promoted (engineering CODEX_NOTE).

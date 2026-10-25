@@ -51,6 +51,8 @@ FACTS = """## Project facts
 7. Results without reasons: every suggestion needs "why" (PoB modifier sources) and sources for every KPI.
 8. Misread interactions: a mod's real effect depends on the build (a "downside" can be the point of an item,
    a useless node can carry a jewel-radius bonus, a gem can do nothing unless a config is set). (orchestrator, 2026-10-25, task 029)
+9. Starting from zero: what runs produce (results, user corrections, comparisons with expert builds) is thrown
+   away instead of feeding the next run. Ask: does the app get better with use? (user, 2026-10-25, task 030)
 
 ## Evidence rule
 - Never mark work done or state a fact without evidence: command output, PoB numbers, file:line, or a quoted
@@ -114,6 +116,9 @@ CODEX_NOTE = """## Code is written by Codex (gpt-5.6-sol, medium effort)
   builds, node --check for the GUI, python -c "import ast" parse), and send Codex a follow-up brief if anything is
   wrong. Only if Codex fails twice on the same point may you make a small fix yourself — and say so in your report.
   (orchestrator, 2026-10-25, task 028)
+- Line endings: after every commit `git diff --stat` must equal `git diff --stat --ignore-cr-at-eol`. Python
+  text-mode writes on Windows turn LF files into CRLF, and LF writes turn CRLF files into LF; restore the file's
+  original ending before you commit. (orchestrator, 2026-10-25, task 021)
 - If Codex reports its usage limit: stop and tell your lead, who re-dispatches the work on Sonnet 5.5. If your lead
   dispatched you on Sonnet because Codex is out, you write the code yourself (tests first) and say so in your
   report. (user, 2026-10-25)"""
@@ -490,6 +495,15 @@ session in this project. You don't do department work yourself — you direct th
   review-lead + automated tests, engineering specialists on separate files). Gates stay in order. Across
   tasks: run a second task in its own worktree when its `writes:` areas don't overlap any running task's;
   otherwise queue it. (user, 2026-10-24, task 019)
+- Goals into capabilities: split every goal or direction statement into capability claims ("the app learns X from
+  Y and uses it for Z"), each with a done-when, and check each against the code (file:line or "missing"). A claim
+  with no code becomes a task card for the user to rank. Re-run the check at every milestone merge and list the
+  result in the report. (user, 2026-10-25, task 030)
+- Done-when changes: rewrite the task card at the top in the same session (the log alone is not enough); every
+  gate brief quotes the current Done when. (orchestrator, 2026-10-25, task 021)
+- Dispatch hygiene: when you already know a lead's specialist work, put the briefs into the dispatch marked
+  PRE-APPROVED (used as written), so the approval round trip never pushes a lead to skip its specialists. Every
+  dispatch carries a time box. During a timed gate nothing else CPU-heavy runs. (orchestrator, 2026-10-25, task 021)
 - Rule changes: a rule decision the user makes in a task is written into tools/make_agents.py in the same session,
   with its source tag, then `python tools/make_agents.py .`; tests/test_agents.py checks tags, expiry and
   `supersedes:`. After a prompt edit tell the user to restart the session: a running session keeps the old prompt.

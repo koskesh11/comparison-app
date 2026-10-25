@@ -44,3 +44,10 @@ Already in the agent prompts (tools/make_agents.py); kept for the record, not co
 - 2026-10-23 · 003 · GATE 3: new report keys (base.costs, scenario.conditional) not in the golden snapshot, so
   runEquivalence went false silently → Extend golden_common.audit_snapshot in the same change → check:
   pin_golden --verify-run shows runEquivalence.equal true. · promoted (with the line above)
+- 2026-10-25 · 021/029 · Line endings flipped twice (4 files LF to CRLF; make_agents.py CRLF to LF), hiding the real
+  diff (also review lesson 004) → after each commit `git diff --stat` equals `--ignore-cr-at-eol` → check: equal
+  stats · promoted (CODEX_NOTE "Line endings").
+- 2026-10-25 · 029 · Bash heredocs halve backslashes and truncate long text → write patch scripts with placeholders;
+  check `ast.parse` after each edit · active.
+- 2026-10-25 · 021 · A test that patches the rating function must count its calls (that is how the post-restore rate
+  showed as fail-before) · active.

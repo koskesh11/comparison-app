@@ -55,3 +55,17 @@ Already in the agent prompts (tools/make_agents.py); kept for the record, not co
 - 2026-10-24 (user): agent cost = conversation resent per tool call, not start-up (cached). Leads give narrow briefs with
   the evidence in hand; specialists short-lived; SendMessage reuse only when prior context is needed · promoted (all
   leads + orchestrator). Measure in the 021 retro vs 010 gates.
+- 2026-10-25 · 030 · User: "the app never learns". The goal said the sample builds are "learning material" and the
+  direction doc says "a build coach that learns"; I read it as test data → split goals into capability claims with a
+  done-when and check each against the code at every milestone merge → check: milestone report lists every claim
+  with file:line or "missing" · promoted (orchestrator rule "Goals into capabilities" + failure mode 9).
+- 2026-10-25 · 021 · Dispatch-approval rule relied on SendMessage, which leads do not have → before relying on a rule,
+  check its mechanism exists in the agents' tool lists → check: test_prompts_only_name_tools_the_agent_has · promoted.
+- 2026-10-25 · 021 · A lead wrote code itself to avoid the approval round trip → put PRE-APPROVED specialist briefs
+  into the dispatch → check: dispatch text carries the briefs when the work is known · promoted ("Dispatch hygiene").
+- 2026-10-25 · 021 · GATE 3 judged against the outdated card at the top (2 wrong findings) → rewrite the card when
+  Done when changes; gate briefs quote the current Done when → check: brief contains the Done-when text · promoted.
+- 2026-10-25 · 021 · Timed GATE 3 overlapped another agent's --all; speed work ran 147 min (user: unacceptable) →
+  every dispatch has a time box; nothing CPU-heavy during a timed gate → check: time box in every brief · promoted.
+- 2026-10-25 · 029 · Worktrees and logs landed on the user's Desktop → worktrees under pob-worktrees, writes only in
+  allowed folders · promoted (task 029).
