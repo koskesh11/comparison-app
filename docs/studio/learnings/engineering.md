@@ -54,3 +54,6 @@ Already in the agent prompts (tools/make_agents.py); kept for the record, not co
 - 2026-10-25 · 021 · optimizer-dev waited on a 10-min EK verify with a loop of sleep + check (user flagged it as
   "stuck in a loop") → one blocking wait with a timeout, or background + completion notice → check: no repeated
   wait/check pairs in a transcript · promoted (shared fact "Long runs", all agents).
+- 2026-10-25 · 021 · Two specialists in one worktree each held the other's uncommitted work → give parallel
+  specialists disjoint file lists and tell each the other's files → check: `git status` lists only briefed files
+  before a commit · active.
