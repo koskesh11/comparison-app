@@ -8,14 +8,14 @@ last_confirmed_patch: "3.29.x"
 
 Exposure is a debuff that lowers one elemental resistance on the enemy: -10% by default when the player or a skill inflicts it, lasting 4 s unless a skill sets another duration. Only the strongest exposure per element applies; different elements coexist. PoB takes the strongest per element, applies the debuff automatically for socketed debuff skills (Frost Bomb), and for on-hit chance sources (tree, items) only when the matching config box is ticked. Elemental Equilibrium is the main conflict: the wiki and PoB disagree on same-element on-hit exposure and both readings stay visible below. Related: [[Own shock effect]], [[Freeze]], [[Chill]]. Providers beyond the seed set: see tasks/reports/027-research.md.
 
-Pipeline: [[Damage calculation#Resistance, exposure and penetration]] - exposure lowers the enemy's elemental resistance (strongest per element), so it multiplies all hits and DoT of that element and, unlike penetration, also works against low-resist enemies
+Pipeline: [[Damage calculation#Resistance, exposure and penetration]] - exposure lowers the enemy's elemental resistance (strongest per element), so it applies to hits, DoT and ailments of that element (penetration is hits only and is subtracted after the cap); exposure is partly absorbed while the enemy's uncapped resistance is above its cap
 
 ```interaction
 id: exposure
 mechanic: "Exposure lowers one elemental resistance on the enemy: -10% by default (overrides: Elemental Equilibrium -25% per element not dealt, Scorching Ray -25% fire, Frost Bomb -15% cold, Wave of Conviction -15%); only the strongest exposure per element applies, different elements coexist; default duration 4 s"
 family: ailment
 pipeline_step: ["Damage calculation#Resistance, exposure and penetration"]
-pipeline_why: "exposure lowers the enemy's elemental resistance (strongest per element), so it multiplies all hits and DoT of that element and, unlike penetration, also works against low-resist enemies"
+pipeline_why: "exposure lowers the enemy's elemental resistance (strongest per element), so it applies to hits, DoT and ailments of that element (penetration is hits only and is subtracted after the cap); exposure is partly absorbed while the enemy's uncapped resistance is above its cap"
 target: enemy
 related: [freeze, chill, shock, elemental-ailment-count]
 pob:
@@ -70,6 +70,7 @@ sources:
   - {ref: "Modules/CalcPerform.lua:3629-3658; Modules/ConfigOptions.lua:1973-1981; Modules/ModParser.lua:848-853,2675,4316 (PoB 2.67.2)", kind: pob, patch: "3.29"}
   - {ref: "wiki Version 3.6.0 (introduced), 3.21.0 (at least -18%), 3.22.0 (Mastermind of Discord), 3.25.0, 3.26.0, 3.27.0", kind: patch_notes, patch: "3.29"}
 not_verified:
+  - "'partly absorbed while uncapped resistance is above the cap' follows from the cap/penetration order in Damage calculation but has no direct quote"
   - "whether PoB's m_min(min, modDB:Override(nil, 'ExposureMin')) is nil-safe when no ExposureMin exists (CalcPerform.lua:3655); PoB evidently runs"
   - "exact exposure durations per provider; Wave of Conviction and Frost Bomb numbers beyond the PoB data rows"
   - "stacking of the 'extra -x%' mods against the 'at least -18%' floor (PoB read only through 021-gate1 N10)"

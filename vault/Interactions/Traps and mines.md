@@ -1,0 +1,79 @@
+---
+type: interaction
+status: draft
+pob_refs: [TrapThrowingSpeed, TrapThrowCount, ActiveTrapLimit, MineLayingSpeed, MineThrowCount, ActiveMineLimit, TotalDPS, Speed, trapsPerThrow, minesPerThrow, Trapped, RemoteMined]
+source: "poewiki Trap rev 1612395, Mine rev 1597240, Exerting rev 1660569 (fetched 2026-10-25); PoB 2.67.2 Modules/CalcOffence.lua, CalcSetup.lua, ConfigOptions.lua, Data.lua, ModParser.lua, Data/SkillStatMap.lua, Data/Skills/sup_dex.lua, sup_int.lua, sup_str.lua, Data/Uniques (task 027)"
+last_confirmed_patch: "3.29.x"
+---
+
+A trap is thrown, arms and fires when an enemy walks into its trigger radius (1 m); a mine is thrown and fires only when the PLAYER detonates it. Both are proxies: the skill runs with your stats, but the object does the casting, so they cannot be used with any trigger gem (Cast on Critical Strike, Cast when Damage Taken, Spell Echo for spells), cannot leech, and cannot give you on-hit or on-kill effects. PoB turns them into a rate: damage per second = average hit x traps (or mines) thrown per second, assuming every thrown object fires and hits; arming, trigger radius, duration, trap limit, detonation order and mana reserved per mine are not in the DPS.
+
+Pipeline: [[Damage calculation#Hit rate]] - PoB sets the skill time to throw time divided by the traps (mines) per throw, so hits per second = throws per second x objects per throw (CalcOffence.lua:1271,1368-1371,2276-2278), the same product as DPS = hit x rate (3801); the support gems' final damage and speed enter as [[Damage calculation#More and less]]. For on-hit chance effects use [[Chance on hit uptime]] with H = fired traps (detonated mines) per second on the target.
+
+```interaction
+id: traps-and-mines
+mechanic: "Trap: thrown (base 0.6 s), arms, fires when an enemy enters its 1 m trigger radius or at the end of its duration (4 s for Trap Support); up to 15 at once. Mine: thrown (base 0.3 s, +10% throw time per additional mine), fires on the player's detonate action (6 m target radius), up to 15 at once, reserves mana while placed. Both are proxies: stats of the player, hits and on-hit effects belong to the object, no trigger gem works with them. PoB DPS = hit x throws/s x objects per throw, every object assumed to fire"
+family: trigger
+target: self
+related: [totems, cast-when-damage-taken, coc-trigger, chance-on-hit-uptime, warcries]
+pipeline_step: ["Damage calculation#Hit rate", "Damage calculation#More and less"]
+pipeline_why: "PoB sets skillData.timeOverride = throwing time / objects per throw (CalcOffence.lua:1271 traps, 1368-1371 mines), so Speed = objects thrown per second and TotalDPS = AverageDamage x Speed (3801): the rate is the throw rate, not the trigger rate; Trap, Blastchain, High-Impact, Cluster, Multiple, Minefield and Trap and Mine Damage supports are final damage and speed multipliers (sup_dex.lua, sup_int.lua rows below)"
+pob:
+  measured: partial
+  how: "Trap: TrapThrowingSpeed = (1/TrapThrowingTime base 0.6, CalcSetup.lua:56) x inc/more TrapThrowingSpeed x action speed, capped at the server tick rate; TrapThrowCount = 'additional traps' stats, forced to 1 if the skill has a cooldown (CalcOffence.lua:1257-1271); extra traps come from supports and items via TrapThrowCount (SkillStatMap.lua:1809-1815, ModParser.lua:609-610,4394-4402). Mine: MineLayingTime base 0.3 (CalcSetup.lua:57), throw time x (1 + 0.1 x (count - 1)) as the wiki says (CalcOffence.lua:1345-1371), trap thrown by a mine multiplies both counts (1367-1368). Trap trigger radius 10 = 1 m and mine detonation radius 60 = 6 m are only display values (Data.lua:269-270; MineDetonationRadius 1395-1402). ActiveTrapLimit and ActiveMineLimit (15 each, CalcSetup.lua:627-628) are read only by 'per trap' and 'per mine' mods (ModParser.lua:3001-3002); traps and mines without a cooldown are flagged notAverage (1252-1256). Not computed: arming time, whether an enemy walks into the radius, trap duration vs the fight, detonation sequence (10% faster per mine), Detonate Mines 0.2 s cooldown, mana reserved per mine, limit exceeded (oldest destroyed). Supports exclude Trapped and RemoteMined from Cast on Critical Strike (sup_dex.lua:519-527) and Cast when Damage Taken (sup_str.lua:1153)"
+  config:
+    - {var: trapsPerThrow, default: "derived from supports and items", ref: "Modules/ConfigOptions.lua:1598-1599 (override of TrapThrowCount, only with the trap flag)", class: c}
+    - {var: minesPerThrow, default: "derived from supports and items", ref: "Modules/ConfigOptions.lua:1586-1587 (override of MineThrowCount, only with the mine flag)", class: c}
+    - {var: multiplierTrapTriggeredRecently, default: 0, ref: "Modules/ConfigOptions.lua:1592-1593 (also TriggeredTrapsRecently 1589, conditionThrownTrapOrMineRecently 1595, multiplierMineDetonatedRecently 1583)", class: c}
+  unparsed: []
+model:
+  proposed_kind: trap_mine_fire_rate
+  inputs: {from_pob: [TotalDPS, Speed, TrapThrowingSpeed, TrapThrowCount, MineLayingSpeed, MineThrowCount, ActiveTrapLimit, ActiveMineLimit], from_scenario: ["u_trap = share of thrown traps that an enemy walks into before the 4 s duration ends, on the target (class b)", "u_mine = share of placed mines inside the detonation target radius (6 m) when the player detonates (class b)", "mana reserved per mine versus the unreserved mana pool (class b)"]}
+  params: {trap_throw_s: 0.6, mine_throw_s: 0.3, extra_mine_throw_time: 0.1, trap_limit: 15, mine_limit: 15, trap_trigger_radius_m: 1, mine_target_radius_m: 6, trap_duration_s_support: 4, mine_duration_s_support: 5}
+  formula: "real DPS = TotalDPS (PoB) x u. For traps u = fraction of thrown traps that fire on the target (an enemy within 1 m before expiry; Trap Support duration 4 s; expiry fires the trap even with no enemy near, except Bear Trap and Conversion Trap); for mines u = fraction detonated while the target is inside the skill range; a standing object count is capped by the 15-object limit (oldest destroyed). Also cap the throw rate by mana: each placed mine reserves mana until it detonates or dies. Round down"
+  calibration: "no norm found for u on a pinnacle boss or a pack; PoB assumes u = 1"
+providers:
+  - {kind: support, name: "Trap Support", slot: any, role: enables, target: self, text: "throw a trap that uses the skill when an enemy walks near it; base_trap_duration 4000 ms; L20 +19% trap throwing speed and 6% less damage; supports spells and bow or wand attacks, not channelling, reservation or mines", source: "Data/Skills/sup_dex.lua:4082; wiki Trap rev 1612395", pob: full}
+  - {kind: support, name: "Cluster Traps Support", slot: any, role: scales, target: self, text: "+2 traps thrown randomly in a 2 m circle, +5 traps allowed; L20 55% less damage", source: "Data/Skills/sup_dex.lua:1244; Data/SkillStatMap.lua:1809", pob: full}
+  - {kind: support, name: "Multiple Traps Support", slot: any, role: scales, target: self, text: "+2 traps thrown in a line, +3 traps allowed; L20 52% less damage", source: "Data/Skills/sup_dex.lua:3262", pob: full}
+  - {kind: support, name: "Trap and Mine Damage Support", slot: any, role: scales, target: self, text: "L20 49% more damage; 10% less trap throwing speed and 10% less mine throwing speed", source: "Data/Skills/sup_dex.lua:4221", pob: full}
+  - {kind: support, name: "Charged Traps Support", slot: any, role: sustains, target: self, text: "chance to gain a Power or Frenzy Charge when a trap is triggered by an enemy (30% at L20); 10% trap throwing speed per Frenzy Charge; +15 trap crit multiplier per Power Charge", source: "Data/Skills/sup_dex.lua:1088", pob: partial}
+  - {kind: support, name: "High-Impact Mine Support", slot: any, role: enables, target: self, text: "throw a mine that uses the skill when you detonate it; mine duration 5000 ms; 2% chance to deal double damage against enemies near mines (constant); L20 55% less damage; not channelling, not reservation", source: "Data/Skills/sup_int.lua:3155; wiki Mine rev 1597240", pob: full}
+  - {kind: support, name: "Blastchain Mine Support", slot: any, role: enables, target: self, text: "mine with no aura; base mine duration 5000 ms; detonation time 250 ms; 5% more damage per mine detonated in the cascade; L20 55% less damage", source: "Data/Skills/sup_int.lua:5659; wiki Mine rev 1597240 (detonation sequence)", pob: partial}
+  - {kind: support, name: "Minefield Support", slot: any, role: scales, target: self, text: "+4 mines thrown per throw, +3 mines allowed; L20 46% less mine throwing speed", source: "Data/Skills/sup_int.lua:4733; Data/SkillStatMap.lua:1847", pob: full}
+  - {kind: unique, name: "Hand of the Lords", slot: Gloves, role: scales, target: self, text: "Can have up to (3-5) additional Traps placed at a time; (6-12)% increased Trap Throwing Speed; Inflict Socketed Hexes on Enemies that trigger your Traps; grants Will of the Lords", source: "Data/Uniques/gloves.lua:319-329", pob: full}
+  - {kind: unique, name: "Architect's Hand", slot: Gloves, role: scales, target: self, text: "(4-6)% chance to throw up to 4 additional Traps (variant 2); (20-30)% reduced Trap Throwing Speed; Cast Speed also applies to Trap Throwing Speed", variant: "variant 2", source: "Data/Uniques/gloves.lua:944-961; Modules/ModParser.lua:4395-4399", pob: full}
+  - {kind: unique, name: "Sunblast", slot: Belt, role: scales, target: self, text: "Skills which Throw Traps throw up to 2 additional Traps; Traps cannot be triggered by Enemies (variant 2: the player has to trigger them)", variant: "variant 2", source: "Data/Uniques/belt.lua:928-942", pob: partial}
+  - {kind: unique, name: "Curtain Call", slot: Helmet, role: scales, target: self, text: "Skills which throw Mines throw up to 1 additional Mine if you have at least 800 Dexterity, and another with 800 Intelligence; (10-15)% reduced Mine Throwing Speed", source: "Data/Uniques/helmet.lua:1433-1440", pob: partial}
+makes_redundant: []
+conflicts:
+  - {with: "Cast on Critical Strike, Cast when Damage Taken and other trigger supports", effect: "traps, mines and totems cannot be used with Cast on... trigger gems; the supports exclude Trapped, RemoteMined and SummonsTotem", source: "wiki Trap rev 1612395 'Trigger Conditions'; Data/Skills/sup_dex.lua:519-527; Data/Skills/sup_str.lua:1153"}
+  - {with: "Spell Echo Support", effect: "works only for self-cast spells: no effect on traps and mines", source: "wiki Trap rev 1612395 'Spell Echo'; wiki Mine rev 1597240 'Self-cast support gems'"}
+  - {with: "leech and on-hit or on-kill gains", effect: "the trap or mine hits, not the player: no leech (except Machina Mitts for mines), no player on-hit effects; damage over time kills are credited to the player", source: "wiki Trap rev 1612395 'Leech'; wiki Mine rev 1597240 'Gaining on hit or on kill'"}
+  - {with: "Warcry exerted attacks", effect: "the wiki says attacks used by proxies cannot be exerted and calls mines proxies; PoB's exert exclusion list names totems but not Trapped or RemoteMined (CalcOffence.lua:2628-2629): PoB may exert a trap attack that the game would not", source: "wiki Exerting rev 1660569; wiki Mine rev 1597240; Modules/CalcOffence.lua:2628-2629"}
+conditions:
+  - {text: "Traps fire when an enemy enters the trigger radius (base 1 metre, scaled only by Trap Trigger Area of Effect), and expire on their own after the duration (not scaled by skill effect duration); most traps fire at expiry, Bear Trap and Conversion Trap are destroyed instead. A trap is destroyed by any damage, is invulnerable for 2 s after being thrown (3.16.0) and while arming or firing", source: "wiki Trap rev 1612395"}
+  - {text: "Default limit 15 traps and 15 mines (up from 3 traps in 3.3.0 and 5 mines in 3.8.0); throwing more destroys the oldest", source: "wiki Trap rev 1612395 version 3.3.0; wiki Mine rev 1597240 version 3.8.0; PoB CalcSetup.lua:627-628 with Data/Misc.lua:100-101 (15 and 15; monsters 3 and 5 at Misc.lua:188-189)"}
+  - {text: "Mines: base throw time 0.3 s (raised from 0.25 in 3.10.0); throwing mines takes 10% more time per additional mine; the first detonated mine fires instantly, later mines in the sequence are 10% faster each; Detonate Mines has a 0.2 s cooldown; a placed mine reserves mana until it is detonated or destroyed", source: "wiki Mine rev 1597240 'Throwing mines', 'Detonating mines', version 3.10.0"}
+  - {text: "A skill with a cooldown limits traps or mines per use to the stored cooldown uses (extra throw counts do not exceed them); PoB sets the throw count to 1 for such skills", source: "wiki Mine rev 1597240 'Cooldowns'; Modules/CalcOffence.lua:1265-1267,1354-1356"}
+  - {text: "Trap and mine skills still receive the player's modifiers from gear, passives and buffs; trap or mine attacks use the player's accuracy; only ranged weapons (bows, wands) work with trap or mine attack skills", source: "wiki Trap rev 1612395 'Interaction with player stats'; wiki Trap 'Skill restrictions'"}
+uptime:
+  Mapping:       {value: high, config: {trapsPerThrow: "leave derived", multiplierTrapTriggeredRecently: "set only for builds that read it"}, reasoning: "a pack walks into a 1 m trigger radius and up to 15 traps can lie on the route; mines are fired by the player at will. The share is not quantified by any source, PoB assumes every object fires", source: "wiki Trap rev 1612395; Modules/CalcOffence.lua:1271,1368-1371"}
+  Pinnacle Boss: {value: partial, config: {trapsPerThrow: "leave derived"}, reasoning: "one target: a trap fires only if the boss steps within 1 m (or at expiry after 4 s), a mine only if the boss is inside the skill range at detonation; boss movement is the unknown and no source quantifies it, so the PoB rate is an upper bound", source: "wiki Trap rev 1612395; wiki Mine rev 1597240"}
+seeds: []
+sources:
+  - {ref: "https://www.poewiki.net/wiki/Trap (rev 1612395, fetched 2026-10-25); version history 2.2.2, 3.0.0, 3.2.0, 3.3.0, 3.16.0", kind: wiki, patch: "3.29"}
+  - {ref: "https://www.poewiki.net/wiki/Mine (rev 1597240, fetched 2026-10-25); version history 3.0.0, 3.3.0, 3.8.0, 3.10.0, 3.11.0, 3.16.0", kind: wiki, patch: "3.29"}
+  - {ref: "https://www.poewiki.net/wiki/Exerting (rev 1660569)", kind: wiki, patch: "3.29"}
+  - {ref: "Modules/CalcOffence.lua:1252-1271,1345-1411,2276-2278,3801; Modules/CalcSetup.lua:56-57,627-630; Modules/Data.lua:269-271; Modules/ConfigOptions.lua:1583-1599; Modules/ModParser.lua:609-616,3001-3002,4390-4402; Data/SkillStatMap.lua:1776-1865 (PoB 2.67.2)", kind: pob, patch: "3.29"}
+  - {ref: "Data/Skills/sup_dex.lua:519,1088,1244,3262,4082,4221; Data/Skills/sup_int.lua:3155,4733,5659; Data/Skills/sup_str.lua:1153; Data/Uniques/{gloves,belt,helmet}.lua", kind: pob, patch: "3.29"}
+not_verified:
+  - "that none of the three seed builds uses traps, mines or totems: confirmed only for their active PoB skills (probe 2026-10-25: no trap, mine or totem flag in CoC EK Assa, Worb or FR CoC v4)"
+  - "mana reserved per mine and its effect on the unreserved mana pool in PoB: the reservation code for mines was not traced (CalcPerform.lua reservation block only grepped)"
+  - "the L20 values of Trap Support (+19% speed, 6% less damage) and the High-Impact Mine Support damage row come from PoB level rows; the stat order was read from the stats list, wiki gem pages not read"
+  - "boss and pack trigger shares: no source; the model parameter u is an assumption"
+  - "whether PoB should exclude Trapped and RemoteMined skills from warcry exert (wiki Exerting says proxies cannot be exerted); PoB behaviour not run"
+  - "Sunblast and Curtain Call: only the item text was read, whether PoB parses 'Traps cannot be triggered by Enemies' and the 800 Dexterity and Intelligence conditions was not checked"
+open_questions:
+  - "Should the generator discount trap and mine DPS by an assumed u on a boss, or only report PoB's upper bound with the warning?"
+```

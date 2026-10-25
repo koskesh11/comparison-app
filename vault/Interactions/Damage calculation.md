@@ -142,7 +142,7 @@ Wiki step: 6.4 Damage mitigation: resistance (penetration applied here). Quote (
 
 PoB: Modules/CalcOffence.lua:494-508, 3497-3503, 3555-3597; Modules/CalcPerform.lua:~3631 - MATCH. effectiveResist = (resist - pen) x useResChance, no floor; exposure enters as enemy resist mods; DoT cfg excludes penetration.
 
-Why it matters for building: Penetration beats raw 'less resist' only while the enemy is at its cap; exposure and curses beat penetration vs low-resist enemies. See [[Exposure]].
+Why it matters for building: Penetration works on hits only (not DoT or ailments) and is subtracted after the cap; exposure and curses lower the uncapped resistance, so they also count for DoT and ailments, but are partly absorbed while the enemy's uncapped resistance is above its cap. See [[Exposure]].
 
 ## Armour against hits
 
@@ -231,6 +231,7 @@ not_verified:
   - "The wiki Armour page prints no explicit current coefficient (5); it comes from PoB CalcDefence.lua:71 and the wiki rule of thumb (open item 3)."
   - "Receiving damage has no version table: 'no version noted' is not 'never changed' (open item 4)."
   - "Exposure application in CalcPerform.lua (~3631) is approximate in the evidence."
+  - "'Partly absorbed while uncapped resistance is above the cap' follows from the cap/penetration order above but has no direct quote of its own."
 steps:
   - {"id": "damage-calculation-1", "heading": "Hit chance", "wiki_order": 1, "pob_ref": "Modules/CalcOffence.lua:2174-2249, 3146", "pob_status": "match"}
   - {"id": "damage-calculation-2", "heading": "Flat damage", "wiki_order": 2, "pob_ref": "Modules/CalcOffence.lua:3351-3356", "pob_status": "match"}
