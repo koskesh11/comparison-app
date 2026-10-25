@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Inbox/Foulborn Three Dragons - chaos shock and freeze.md",
+                "file": "Home.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Foulborn Three Dragons - chaos shock and freeze"
+              "title": "Home"
             }
           }
         ]
@@ -187,9 +187,12 @@
   },
   "active": "b18115ab0cb3f0d4",
   "lastOpenFiles": [
+    "Gaps/Foulborn The Three Dragons.md",
+    "_templates/Rule.md",
+    "_templates/Model.md",
+    "Inbox/Foulborn Three Dragons - chaos shock and freeze.md",
     "Inbox/FR CoC - ascendancy and tree.md",
     "Inbox/FR CoC Cyclone - skills and supports.md",
-    "Inbox/Foulborn Three Dragons - chaos shock and freeze.md",
     "Gaps/Mods PoB can't value.md",
     "Rules/Total skill cost must be sustainable.md",
     "Rules/Reservation must fit the pool.md",

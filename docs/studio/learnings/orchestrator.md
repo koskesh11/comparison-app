@@ -30,8 +30,18 @@ Process lessons only (game facts go to the vault). Format: date · task · trigg
 - 2026-10-24: a project fact ("wiki page fetches are blocked") was repeated to the user unverified; it was wrong (curl
   works, only WebFetch hits a bot check). Lesson: verify a stated project fact before repeating it as a limit. Fixed in
   tools/make_agents.py (wiki = most important mechanics source, user).
+  RECURRED 2026-10-24 (task 021): this session ran on a main-thread prompt loaded before the fix and passed the stale
+  line to data-sources-analyst; user caught it. Lesson: after editing agent prompts, the running session keeps the old
+  one — re-check facts in prompts against .claude/agents/orchestrator.md, or tell the user to restart. Already promoted.
 - 2026-10-24 (010 resume): an interrupted agent run left uncommitted partial work and no report → at resume
   check the worktree (git status, diff --stat) and hand the partial work to the re-dispatched agent · active.
 - 2026-10-24 (user): agent cost = conversation resent per tool call, not start-up (cached). Leads give narrow briefs with
   the evidence in hand; specialists short-lived; SendMessage reuse only when prior context is needed · promoted (all
   leads + orchestrator). Measure in the 021 retro vs 010 gates.
+- 2026-10-24 (task 021 brainstorm, user correction): claimed "PoB assumes 100% flask uptime" without checking; PoB
+  computes flask uptime (ItemsTab.lua:4830-4857, average/minimum from generated charges, tooltip only; kill/crit charges
+  not included; calcs still treat an active flask as fully on). Lesson: before saying "PoB doesn't do X", grep PoB
+  Modules/ and Classes/ for it (failure modes 4, 5).
+- 2026-10-25 (task 021, user correction): did not tell the user "/clear now" after GATE 1, the eng review or GATE 2,
+  because background agents were running. Agents write their reports to files, so a resume point naming those files
+  makes /clear safe. Lesson: after every gate or task, write the resume point and say "/clear now", even while agents run.
