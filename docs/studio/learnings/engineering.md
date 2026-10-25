@@ -7,12 +7,6 @@ Process lessons only (game facts go to the vault). Format: date · task · trigg
 - 2026-10-21 · 003 · Headless write into the PoB install found (A0) → Every new PoB call path gets a check that
   nothing is written outside Builds\AutoBuilder\ (guard hook covers Claude tools, not scripts) → check: test
   or audit run with a before/after listing of the PoB install. · active
-- 2026-10-23 · 003 · GATE 2 loop 1 FAIL: 3 of 5 HIGH came from hand-made fixtures (synthetic `FullDPS: 0` while PoB
-  drops the key; pre-rounded 7.58 input; inf → null crash in the GUI only) → Test PoB edge cases with real PoB output:
-  missing keys, raw values, inf/NaN in Python and GUI → check: fixture comes from an engine run. · promoted
-- 2026-10-23 · 003 · GATE 3: new report keys (base.costs, scenario.conditional) not in the golden snapshot, so
-  runEquivalence went false silently → Extend golden_common.audit_snapshot in the same change → check:
-  pin_golden --verify-run shows runEquivalence.equal true. · promoted (with the line above)
 - 2026-10-23 · 004 · GATE 2: apply started rebuilding an Auditor and silently gained a network call
   (Obtainability.load) → When a path starts constructing an object, list what its constructor fetches and pass it
   in → check: run the path with the fetch patched to raise. · active
@@ -32,3 +26,13 @@ Process lessons only (game facts go to the vault). Format: date · task · trigg
 - 2026-10-24 (025): Bash heredocs halve backslashes (broke Lua escapes) → write backslash content via a Python patch,
   then grep the file · active. mklink in a worktree printed a banner but no link (17 files failed) → `ls engine/cache`
   after linking · active.
+
+## Promoted
+Already in the agent prompts (tools/make_agents.py); kept for the record, not counted as active.
+
+- 2026-10-23 · 003 · GATE 2 loop 1 FAIL: 3 of 5 HIGH came from hand-made fixtures (synthetic `FullDPS: 0` while PoB
+  drops the key; pre-rounded 7.58 input; inf → null crash in the GUI only) → Test PoB edge cases with real PoB output:
+  missing keys, raw values, inf/NaN in Python and GUI → check: fixture comes from an engine run. · promoted
+- 2026-10-23 · 003 · GATE 3: new report keys (base.costs, scenario.conditional) not in the golden snapshot, so
+  runEquivalence went false silently → Extend golden_common.audit_snapshot in the same change → check:
+  pin_golden --verify-run shows runEquivalence.equal true. · promoted (with the line above)

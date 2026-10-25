@@ -1,8 +1,7 @@
 # Orchestrator — lessons
 Process lessons only (game facts go to the vault). Format: date · task · trigger → rule → check · status.
 
-- 2026-10-22 · session · User: "much shorter, way too much text" → Reports in a few lines; details live in
-  task files → check: final message fits on one screen. · promoted (memory feedback-short-answers)
+
 - 2026-10-22 · 001 · 14 of 30 agent files had invalid YAML (": " in descriptions) and silently didn't load →
   After regenerating agents, verify they load (frontmatter parse) → check: tests/test_agents.py (task 009). · active
 - 2026-10-22 · 013 · Said project skills would load next session; they loaded live → Verify before claiming,
@@ -14,9 +13,6 @@ Process lessons only (game facts go to the vault). Format: date · task · trigg
   ordered a label workaround for Greater Volley instead of asking PoB about the other skill part → Before any fix
   for a wrong number, first check whether PoB can give the right number with different inputs (skill part, config,
   enemy) → check: the fix names the PoB input that changes, or says why PoB can't. · active
-- 2026-10-23 · 003 · GATE 4 loop 2 F1: my M5 decision covered false sources only, not "instead of" cancelling a real
-  source → Split every gate-fix decision into one acceptance check per failure direction → check: the fix-loop log
-  entry has a test line per direction. · promoted (interactions-lead prompt)
 - 2026-10-23 · 003 · pytest isn't installed; the gate agents had to find that out themselves → Gate prompts say
   `python -m unittest discover -s tests` (slow: AUTOBUILDER_SLOW=1) → check: the command is in the dispatch. · active
 - 2026-10-23 · 003 · Both loop-2 gate agents stopped without writing reports (usage limit) → Log the dispatch before
@@ -27,21 +23,30 @@ Process lessons only (game facts go to the vault). Format: date · task · trigg
 - 2026-10-23 · 004 · A light-lane GATE 2 could carry small MEDIUMs; fixing M1-M3 + L1 before merge cost one short
   engineering loop and removed a regression (apply needed network) → Fix a MEDIUM before merge when the change
   itself introduced it. · active
+- 2026-10-24 (010 resume): an interrupted agent run left uncommitted partial work and no report → at resume
+  check the worktree (git status, diff --stat) and hand the partial work to the re-dispatched agent · active.
+- 2026-10-25 (task 021, user correction): did not tell the user "/clear now" after GATE 1, the eng review or GATE 2,
+  because background agents were running. Agents write their reports to files, so a resume point naming those files
+  makes /clear safe. Lesson: after every gate or task, write the resume point and say "/clear now", even while agents run.
+
+## Promoted
+Already in the agent prompts (tools/make_agents.py); kept for the record, not counted as active.
+
+- 2026-10-22 · session · User: "much shorter, way too much text" → Reports in a few lines; details live in
+  task files → check: final message fits on one screen. · promoted (memory feedback-short-answers)
+- 2026-10-23 · 003 · GATE 4 loop 2 F1: my M5 decision covered false sources only, not "instead of" cancelling a real
+  source → Split every gate-fix decision into one acceptance check per failure direction → check: the fix-loop log
+  entry has a test line per direction. · promoted (interactions-lead prompt)
 - 2026-10-24: a project fact ("wiki page fetches are blocked") was repeated to the user unverified; it was wrong (curl
   works, only WebFetch hits a bot check). Lesson: verify a stated project fact before repeating it as a limit. Fixed in
   tools/make_agents.py (wiki = most important mechanics source, user).
   RECURRED 2026-10-24 (task 021): this session ran on a main-thread prompt loaded before the fix and passed the stale
   line to data-sources-analyst; user caught it. Lesson: after editing agent prompts, the running session keeps the old
-  one — re-check facts in prompts against .claude/agents/orchestrator.md, or tell the user to restart. Already promoted.
-- 2026-10-24 (010 resume): an interrupted agent run left uncommitted partial work and no report → at resume
-  check the worktree (git status, diff --stat) and hand the partial work to the re-dispatched agent · active.
-- 2026-10-24 (user): agent cost = conversation resent per tool call, not start-up (cached). Leads give narrow briefs with
-  the evidence in hand; specialists short-lived; SendMessage reuse only when prior context is needed · promoted (all
-  leads + orchestrator). Measure in the 021 retro vs 010 gates.
+  one — re-check facts in prompts against .claude/agents/orchestrator.md, or tell the user to restart. Already promoted. · promoted (wiki rule in FACTS; evidence rule, task 028)
 - 2026-10-24 (task 021 brainstorm, user correction): claimed "PoB assumes 100% flask uptime" without checking; PoB
   computes flask uptime (ItemsTab.lua:4830-4857, average/minimum from generated charges, tooltip only; kill/crit charges
   not included; calcs still treat an active flask as fully on). Lesson: before saying "PoB doesn't do X", grep PoB
-  Modules/ and Classes/ for it (failure modes 4, 5).
-- 2026-10-25 (task 021, user correction): did not tell the user "/clear now" after GATE 1, the eng review or GATE 2,
-  because background agents were running. Agents write their reports to files, so a resume point naming those files
-  makes /clear safe. Lesson: after every gate or task, write the resume point and say "/clear now", even while agents run.
+  Modules/ and Classes/ for it (failure modes 4, 5). · promoted (evidence rule: cite file:line or say unverified, task 028)
+- 2026-10-24 (user): agent cost = conversation resent per tool call, not start-up (cached). Leads give narrow briefs with
+  the evidence in hand; specialists short-lived; SendMessage reuse only when prior context is needed · promoted (all
+  leads + orchestrator). Measure in the 021 retro vs 010 gates.
