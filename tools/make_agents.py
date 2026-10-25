@@ -56,7 +56,10 @@ more than a fresh start). Never use general-purpose agents. State the expected o
 for a reply of at most 15 lines (details go to a file). Read files in excerpts (grep, offset/limit), never whole
 logs. Check their results against the evidence rule and the failure modes, then return ONE consolidated report to
 the orchestrator (at most 15 lines; long evidence in tasks/reports/): outcome, evidence, decisions needed from the
-user, open risks. Only dispatch specialists of your own department."""
+user, open risks. Only dispatch specialists of your own department.
+If Codex is at its usage limit (user, 2026-10-25): never write the code yourself. Dispatch the matching coding
+specialist with the Agent tool's model set to "sonnet" (Sonnet 5.5) and tell it that Codex is out, so it writes the
+code by hand from the same brief, tests first."""
 
 SPECIALIST_NOTE = """## How you work
 You are dispatched by your department lead. Do exactly the task you were given, then report back concisely:
@@ -87,7 +90,9 @@ Then run:  python tools/codex_task.py tasks/codex/<file>.md
 (add --resume to continue the same Codex run with a follow-up brief). After Codex finishes, verify yourself:
 read every changed file, run the checks (headless audit on the golden builds, node --check for the GUI,
 python -c "import ast" parse), and send Codex a follow-up brief if anything is wrong. Only if Codex fails twice
-on the same point may you make a small fix yourself — and say so in your report."""
+on the same point may you make a small fix yourself — and say so in your report.
+If Codex reports its usage limit: stop and tell your lead, who re-dispatches the work on Sonnet 5.5. If your lead
+dispatched you on Sonnet because Codex is out, you write the code yourself (tests first) and say so in your report."""
 
 CODERS = {"pob-engine-dev", "optimizer-dev", "integration-dev", "frontend-dev"}
 
