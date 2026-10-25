@@ -119,6 +119,28 @@ explains any notable in plain words, with the evidence behind it, and gets smart
   start after M1. Gate: on the 3 seeds, builds at least as good (FullDPS, TotalEHP) as without ranking, in less time.
 If the M1 spike forces "notables only", M2 runs only after its own spike passes. E1 is not dropped, just gated.
 
+## Task 032 build contract (GATE 1 + eng review, 2026-10-25)
+Scope: the learning loop (M1 evidence store + M6 ranking), tree choices only. Details and tests:
+tasks/reports/032-eng-review.md (D1-D11), context definitions: tasks/reports/032-gate1.md.
+- Store: SQLite `engine/userdata/evidence/evidence.sqlite3` (gitignored); separate read/write store settings; one
+  snapshot per seed run; records committed per tier. Records from another PoB version or features_version are ignored.
+- Record: the choice (node id, kind, mastery effect id, add/remove, path nodes, cost, bundle flag), PoB base values and
+  absolute deltas for FullDPS / TotalEHP / CombinedDPS (NULL when PoB did not compute one, never 0), context F1-F11 +
+  exact-state key, config hash, the conditions the node reads, jewel key, threshold-crossed flag, cache-shared flag,
+  source (sweep / ranked / self_play / expert), seed, tier, lineage, PoB version.
+- Context (features_version 1): F1 delivery, F2 damage form + ailment tag, F3 dominant hit type, F4 crit chance
+  (<10 / 10-50 / 50-90 / >=90), F5 defence base (CI / ES / hybrid / life / low-life; MoM, EB tags), F6 capped avoidance
+  layers (0 / 1 / 2+), F7 value-flipping keystones (17) + 3 ascendancy nodes, F8 ascendancy, F9 scenario, F10 tier,
+  F11 tree stage (<=60 / 61-105 / >105). F1-F4 from the top SkillDPS row (>= 50% share), else multi_skill.
+- Back-off: L0 exact state -> L1 F1-F11 -> L2 drop F6, F11 -> L3 drop F7, F8, F10 -> L4 per target (DPS: F1-F4 + F9;
+  EHP: F5 + F6 + F9) -> L5 F1 + F2 or F5 -> L6 global. Only L0-L4 rank candidates; L5-L6 only order exploration, so
+  evidence from another context (e.g. crit, attack vs spell) never lifts a candidate here. Records with a jewel key
+  (socket + full jewel text) or a threshold-crossed flag aggregate only at L0 and never feed L1-L6.
+- Ranking: add records only; affordable candidates; top 48 + 8 exploration + 8 expert candidates; PoB evaluates each
+  with its misc calculator (the PowerBuilder machinery); PoB's numbers pick the paths. Sweep fallback when coverage is
+  under 60%, nothing gains, or nothing can be allocated.
+- Expert choices: filed under the generated build's context and config; the sample's context is kept for analysis only.
+
 ## Open Questions
 1. ML dependency: add scikit-learn / LightGBM (wheels for Python 3.14?) or a small pure-numpy GBDT. Decide in
    /plan-eng-review.
