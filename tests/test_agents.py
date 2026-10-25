@@ -160,6 +160,16 @@ class AgentFilesTest(unittest.TestCase):
                 with self.subTest(agent=path.name, tool=name):
                     self.fail(f"{path.name} tells the agent to use {name}, but its tools are {sorted(own)}")
 
+    def test_effort_floors(self) -> None:
+        """User 2026-10-25: every Sonnet agent runs at effort high or above, every Haiku agent at xhigh."""
+        floors = {"claude-sonnet-5-5": {"high", "xhigh", "max"}, "claude-haiku-5-5": {"xhigh"}}
+        for path in self.agent_files():
+            data = frontmatter(path)
+            allowed = floors.get(data.get("model"))
+            if allowed:
+                with self.subTest(agent=path.name):
+                    self.assertIn(data.get("effort"), allowed, f"{path.name}: effort below the user's floor")
+
 
 class RuleHygieneTest(unittest.TestCase):
     """Checks on the real prompts, then fail-before cases on small bad fixtures."""

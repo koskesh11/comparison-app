@@ -352,6 +352,8 @@ OPUS, SONNET, HAIKU = "claude-opus-5-5", "claude-sonnet-5-5", "claude-haiku-5-5"
 # Task 019 (user 2026-10-23: cut token use 50%): Opus only where a wrong call slips past every later check —
 # the main thread, GATE 1/4 (interactions-lead), the mechanics models and the two GATE 2 reviewers. Everything an
 # Opus gate re-checks runs on Sonnet; purely mechanical checks on Haiku. Effort xhigh -> high.
+# User 2026-10-25: every Sonnet agent at effort high or above, every Haiku agent at xhigh (second highest);
+# tests/test_agents.py test_effort_floors guards it.
 MODELS = {
     "orchestrator": (OPUS, "max"),  # user 2026-10-25: Opus 5.5, max effort (was high since task 019)
     # Game Interactions: the lead (Opus) gates every specialist result at GATE 1/4
@@ -360,36 +362,36 @@ MODELS = {
     "item-analyst": (SONNET, "high"),
     "tree-ascendancy-analyst": (SONNET, "high"),
     "mechanics-modeler": (OPUS, "high"),  # calibrated models: errors are silent in every number
-    "build-strategist": (SONNET, "medium"),
+    "build-strategist": (SONNET, "high"),
     "mechanics-researcher": (SONNET, "high"),
-    "pob-coverage-auditor": (SONNET, "medium"),
-    "vault-curator": (SONNET, "medium"),
+    "pob-coverage-auditor": (SONNET, "high"),
+    "vault-curator": (SONNET, "high"),
     # Features
     "product-lead": (SONNET, "high"),
-    "spec-writer": (SONNET, "medium"),
-    "data-sources-analyst": (HAIKU, "medium"),
-    "user-advocate": (HAIKU, "medium"),
+    "spec-writer": (SONNET, "high"),
+    "data-sources-analyst": (HAIKU, "xhigh"),
+    "user-advocate": (HAIKU, "xhigh"),
     # UI/UX
-    "uiux-lead": (SONNET, "medium"),
-    "ux-designer": (SONNET, "medium"),
-    "frontend-dev": (SONNET, "medium"),
-    "ui-qa": (HAIKU, "medium"),
+    "uiux-lead": (SONNET, "high"),
+    "ux-designer": (SONNET, "high"),
+    "frontend-dev": (SONNET, "high"),
+    "ui-qa": (HAIKU, "xhigh"),
     # Engineering (Claude side: briefs for Codex + verification; GATE 2 re-checks)
     "engineering-lead": (SONNET, "high"),
     # Haiku since 2026-10-23 (user, /usage: these were 17% of usage; Codex writes the code, Opus GATE 2 re-checks)
-    "pob-engine-dev": (HAIKU, "high"),
-    "optimizer-dev": (HAIKU, "high"),
-    "integration-dev": (HAIKU, "medium"),
+    "pob-engine-dev": (HAIKU, "xhigh"),
+    "optimizer-dev": (HAIKU, "xhigh"),
+    "integration-dev": (HAIKU, "xhigh"),
     # Code Review (GATE 2)
     "review-lead": (SONNET, "high"),
     "correctness-reviewer": (OPUS, "high"),
     "truth-reviewer": (OPUS, "high"),
-    "security-reviewer": (SONNET, "medium"),
+    "security-reviewer": (SONNET, "high"),
     # QA (GATE 3)
-    "qa-lead": (SONNET, "medium"),
-    "player-sanity-tester": (SONNET, "medium"),
-    "regression-tester": (HAIKU, "medium"),
-    "api-tester": (HAIKU, "low"),
+    "qa-lead": (SONNET, "high"),
+    "player-sanity-tester": (SONNET, "high"),
+    "regression-tester": (HAIKU, "xhigh"),
+    "api-tester": (HAIKU, "xhigh"),
 }
 
 ORCHESTRATOR_DESCRIPTION = ("Orchestrator of the PoB Autobuilder studio (main thread): turns the user's instructions and "
