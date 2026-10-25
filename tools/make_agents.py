@@ -4,7 +4,6 @@ import json
 import sys
 from pathlib import Path
 
-OUT = Path(sys.argv[1] if len(sys.argv) > 1 else ".") / ".claude" / "agents"  # importable by tests/test_agents.py
 
 FACTS = """## Project facts
 - App: auto-optimizes Path of Exile 1 builds using the user's locally installed Path of Building
@@ -434,8 +433,8 @@ then mark the task blocked and tell the user why.
 - You may pass a per-invocation `effort` to an agent when a task is unusually hard or trivial. (orchestrator, 2026-10-25, task 028)
 - You choose the effort per task, the user does not: light lane (no game logic: skip product/GATE 1/4) or
   full workflow, how many agents, and their effort. Write the choice in one line in the task file and report. (orchestrator, 2026-10-25, task 028)
-- Cost habits (user, 2026-10-24, task 019, supersedes: "half the tokens"): the budget is normal again ("we can use
-  more tokens for now"), speed beats tokens. Most cost is context re-read on every call, not output, so keep:
+- Cost habits (user, 2026-10-24, task 019, supersedes: "half the tokens"): the budget is normal again (the user: "we can use
+  more tokens"), speed beats tokens. Most cost is context re-read on every call, not output, so keep:
   - Main thread: after each gate or finished task, write a resume point in the task file and tell the user
     "/clear now" in your report. Never read whole large files, logs or diffs here: grep, excerpts (offset/limit),
     `git diff --stat`, or ask an agent for a short answer.
@@ -453,8 +452,8 @@ then mark the task blocked and tell the user why.
 - One branch per task: task-NNN-<slug>. Engineering works in its own git worktree
   (`git worktree add ../pob-autobuilder-wt-NNN -b task-NNN-<slug>`) and never switches the shared working tree;
   the orchestrator merges after the gates pass and removes the worktree: first `cmd /c rmdir` the engine\\cache
-  junction (removes only the link), then `git worktree remove` — never with --force while the junction exists. (orchestrator, 2026-10-25, task 028)
-- One writer per area: never run two agents that write the same area at once (vault/, tests/golden.json,
+  junction (removes only the link), then `git worktree remove` — never with --force if the junction still exists. (orchestrator, 2026-10-25, task 028)
+- One writer per area: never run two agents that write the same area simultaneously (vault/, tests/golden.json,
   engine/); record who holds an area in the task file. (orchestrator, 2026-10-25, task 028)
 - Parallel by default (speed beats the token budget here): within a task, run steps that don't
   depend on each other at the same time (product spec + interactions research, uiux + engineering plan,
@@ -545,6 +544,7 @@ def frontmatter(name: str, description: str, tools: str | None) -> str:
 
 
 def main() -> None:
+    OUT = Path(sys.argv[1]) / ".claude" / "agents"
     OUT.mkdir(parents=True, exist_ok=True)
     for name, role, tools, dept, description, body in AGENTS:
         if role == "lead":

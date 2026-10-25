@@ -25,9 +25,6 @@ Process lessons only (game facts go to the vault). Format: date · task · trigg
   itself introduced it. · active
 - 2026-10-24 (010 resume): an interrupted agent run left uncommitted partial work and no report → at resume
   check the worktree (git status, diff --stat) and hand the partial work to the re-dispatched agent · active.
-- 2026-10-24 (user): agent cost = conversation resent per tool call, not start-up (cached). Leads give narrow briefs with
-  the evidence in hand; specialists short-lived; SendMessage reuse only when prior context is needed · promoted (all
-  leads + orchestrator). Measure in the 021 retro vs 010 gates.
 - 2026-10-25 (task 021, user correction): did not tell the user "/clear now" after GATE 1, the eng review or GATE 2,
   because background agents were running. Agents write their reports to files, so a resume point naming those files
   makes /clear safe. Lesson: after every gate or task, write the resume point and say "/clear now", even while agents run.
@@ -50,3 +47,6 @@ Already in the agent prompts (tools/make_agents.py); kept for the record, not co
   computes flask uptime (ItemsTab.lua:4830-4857, average/minimum from generated charges, tooltip only; kill/crit charges
   not included; calcs still treat an active flask as fully on). Lesson: before saying "PoB doesn't do X", grep PoB
   Modules/ and Classes/ for it (failure modes 4, 5). · promoted (evidence rule: cite file:line or say unverified, task 028)
+- 2026-10-24 (user): agent cost = conversation resent per tool call, not start-up (cached). Leads give narrow briefs with
+  the evidence in hand; specialists short-lived; SendMessage reuse only when prior context is needed · promoted (all
+  leads + orchestrator). Measure in the 021 retro vs 010 gates.

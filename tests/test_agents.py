@@ -27,6 +27,8 @@ RULE_CONSTANTS = ("FACTS", "LEAD_NOTE", "SPECIALIST_NOTE", "LEARNING_LEAD", "LEA
 TAG_RE = re.compile(r'\((user|orchestrator), (\d{4}-\d{2}-\d{2})(?:, task (\d{3}))?'
                     r'(?:, supersedes: "([^"]+)")?\)')
 UNTIL_RE = re.compile(r"\buntil\b(?! task \d{3} done)", re.IGNORECASE)
+# other ways to say a rule is temporary; they must be written as `until task NNN done` too
+TEMPORARY_RE = re.compile(r"\b(for now|temporar(?:y|ily)|while|once|until further notice)\b", re.IGNORECASE)
 UNTIL_TASK_RE = re.compile(r"\buntil task (\d{3}) done", re.IGNORECASE)
 
 
@@ -64,7 +66,7 @@ def rule_problems(bullet: str, status_of=task_status) -> list[str]:
     if origin and status_of(origin) is None:
         problems.append(f"tag names task {origin} but tasks/{origin}-*.md does not exist: {head}")
     untagged = TAG_RE.sub("", bullet)
-    if UNTIL_RE.search(untagged):
+    if UNTIL_RE.search(untagged) or TEMPORARY_RE.search(untagged):
         problems.append(f"conditional rule must say 'until task NNN done': {head}")
     for number in UNTIL_TASK_RE.findall(untagged):
         state = status_of(number)
@@ -187,6 +189,14 @@ class RuleHygieneTest(unittest.TestCase):
 
     def test_conditional_rule_must_name_a_task(self) -> None:
         self.assertEqual(len(rule_problems("- No meta tasks until P1 is done. (user, 2026-10-22)", {}.get)), 1)
+
+    def test_other_temporary_wordings_are_caught(self) -> None:
+        for phrase in ("for now", "temporarily", "while the pilot runs", "once P1 is done", "until further notice"):
+            with self.subTest(phrase=phrase):
+                bullet = f"- Budget is relaxed {phrase}. (user, 2026-10-24)"
+                self.assertEqual(len(rule_problems(bullet, {}.get)), 1)
+        ok = "- Relaxed until task 019 done. (user, 2026-10-24)"
+        self.assertEqual(rule_problems(ok, {"019": "doing"}.get), [])
 
     def test_tag_task_must_exist(self) -> None:
         self.assertEqual(len(rule_problems("- Do X. (user, 2026-10-22, task 004)", {}.get)), 1)
