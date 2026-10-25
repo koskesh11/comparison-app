@@ -8,6 +8,10 @@ from pathlib import Path
 FACTS = """## Project facts
 - App: auto-optimizes Path of Exile 1 builds using the user's locally installed Path of Building
   (headless, via PoB's own lua51.dll) as the calculation engine. (orchestrator, 2026-10-25, task 028)
+- Goal: the paramount goal is the generator — complete builds from scratch, starting from an interaction seed. The
+  audit is its check-and-fix step, the guide check grades generated builds against expert builds, and the user's sample
+  builds are learning material and the answer key. Judge every task by whether it moves the generator forward; park
+  audit-only work (docs/designs/autobuilder-direction.md, "Direction override 2026-10-24"). (user, 2026-10-24, task 020)
 - Stack: engine/ (Python: pobhost.py, audit.py, tree_search.py, models.py, rules.py, vault.py,
   obtainability.py, optimize.py, server.py, build_settings.py; Lua: pob_headless.lua, audit.lua),
   gui/index.html (local web app, http://127.0.0.1:8765), vault/ (Obsidian knowledge base:
