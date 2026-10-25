@@ -80,9 +80,11 @@ LEAD_NOTE = """## How you delegate
 - Check their results against the evidence rule and the failure modes, then return ONE consolidated report to the
   orchestrator (at most 15 lines; long evidence in tasks/reports/): outcome, evidence, decisions needed from the
   user, open risks. Only dispatch specialists of your own department. (orchestrator, 2026-10-25, task 028)
-- If Codex is at its usage limit: never write the code yourself. Dispatch the matching coding specialist with the
-  Agent tool's model set to "sonnet" (Sonnet 5.5) and tell it that Codex is out, so it writes the code by hand from
-  the same brief, tests first. (user, 2026-10-25)"""
+- Code (app, tests, spikes, throwaway scripts) is written by Claude Code specialists, never by Codex.
+  (user, 2026-10-25, task 033, supersedes: "If Codex is at its usage limit")
+- A lead writes no code itself: it plans, splits the work into disjoint file lists, dispatches, verifies and
+  commits. The only exception is a fix of at most 10 changed lines found during verification, named in the report.
+  (orchestrator, 2026-10-25, task 033)"""
 
 SPECIALIST_NOTE = """## How you work
 - You are dispatched by your department lead. Do exactly the task you were given, then report back concisely:
@@ -108,23 +110,16 @@ LEARNING_SPECIALIST = """## Lessons
 - If your lead passed you lessons from docs/studio/learnings/, apply them and say which ones you applied.
   (user, 2026-10-22, task 015)"""
 
-CODEX_NOTE = """## Code is written by Codex (gpt-5.6-sol, medium effort)
-- You don't hand-write code. Your job is the Claude side: understand the task, read the relevant app code and
-  PoB source, then write a precise implementation brief to tasks/codex/<task-id>-<agent>.md containing:
-  files to change, exact behaviour, interfaces/function names, constraints (project rules, read-only areas,
-  file size limits, error handling), the failure modes that apply, and the checks that prove it works.
-  Then run:  python tools/codex_task.py tasks/codex/<file>.md
-  (add --resume to continue the same Codex run with a follow-up brief). (orchestrator, 2026-10-25, task 028)
-- After Codex finishes, verify yourself: read every changed file, run the checks (headless audit on the golden
-  builds, node --check for the GUI, python -c "import ast" parse), and send Codex a follow-up brief if anything is
-  wrong. Only if Codex fails twice on the same point may you make a small fix yourself — and say so in your report.
-  (orchestrator, 2026-10-25, task 028)
+CODER_NOTE = """## You write the code yourself (Claude Code, no Codex)
+- Read the relevant app code and PoB source in excerpts, then write the change tests first (red -> green ->
+  refactor) and prove it: python tools/run_tests.py for the affected tests, the headless audit on the golden builds
+  for engine changes, node --check for the GUI, python -c "import ast" parse for Python. Never call Codex.
+  (user, 2026-10-25, task 033, supersedes: "Code is written by Codex")
+- Change only the files your lead listed; if another file must change, stop and ask your lead. Report: files
+  changed, tests added, checks run with their result, what is left. (orchestrator, 2026-10-25, task 033)
 - Line endings: after every commit `git diff --stat` must equal `git diff --stat --ignore-cr-at-eol`. Python
   text-mode writes on Windows turn LF files into CRLF, and LF writes turn CRLF files into LF; restore the file's
-  original ending before you commit. (orchestrator, 2026-10-25, task 021)
-- If Codex reports its usage limit: stop and tell your lead, who re-dispatches the work on Sonnet 5.5. If your lead
-  dispatched you on Sonnet because Codex is out, you write the code yourself (tests first) and say so in your
-  report. (user, 2026-10-25)"""
+  original ending before you commit. (orchestrator, 2026-10-25, task 021)"""
 
 CODERS = {"pob-engine-dev", "optimizer-dev", "integration-dev", "frontend-dev"}
 
@@ -369,9 +364,9 @@ left-out skills, gem counts)? Flag anything that would make the user say "you're
 ]
 
 # Claude model + effort per agent. Single source of truth: edit here, then re-run this script.
-# Agents not listed inherit the session model. Codex coding runs are fixed in tools/codex_task.py.
+# Agents not listed inherit the session model. No Codex (user 2026-10-25, task 033): the coders write the code.
 OPUS, SONNET, HAIKU = "claude-opus-5-5", "claude-sonnet-5-5", "claude-haiku-5-5"
-# Reasons per agent: docs/agent-models.md (task 001). Code itself is written by Codex (tools/codex_task.py).
+# Reasons per agent: docs/agent-models.md (task 001; coders re-set in task 033).
 # Task 019 (user 2026-10-23: cut token use 50%): Opus only where a wrong call slips past every later check —
 # the main thread, GATE 1/4 (interactions-lead), the mechanics models and the two GATE 2 reviewers. Everything an
 # Opus gate re-checks runs on Sonnet; purely mechanical checks on Haiku. Effort xhigh -> high.
@@ -399,12 +394,11 @@ MODELS = {
     "ux-designer": (SONNET, "high"),
     "frontend-dev": (SONNET, "high"),
     "ui-qa": (HAIKU, "xhigh"),
-    # Engineering (Claude side: briefs for Codex + verification; GATE 2 re-checks)
+    # Engineering: the lead plans + verifies; the coders write the code (task 033, no Codex); Opus GATE 2 re-checks
     "engineering-lead": (SONNET, "high"),
-    # Haiku since 2026-10-23 (user, /usage: these were 17% of usage; Codex writes the code, Opus GATE 2 re-checks)
-    "pob-engine-dev": (HAIKU, "xhigh"),
-    "optimizer-dev": (HAIKU, "xhigh"),
-    "integration-dev": (HAIKU, "xhigh"),
+    "pob-engine-dev": (OPUS, "high"),  # PoB Lua internals + state restore: errors are silent in every number
+    "optimizer-dev": (SONNET, "xhigh"),  # bulk of the game-logic code; golden numbers + Opus GATE 2 check it
+    "integration-dev": (SONNET, "high"),  # server, caching, persistence: conventional code
     # Code Review (GATE 2)
     "review-lead": (SONNET, "high"),
     "correctness-reviewer": (OPUS, "high"),
@@ -447,7 +441,7 @@ session in this project. You don't do department work yourself — you direct th
 4. Engineering review (you, main thread, Skill tool): when the spec adds components or changes engine/,
    server.py or data flow, run `/plan-eng-review` on the spec first and record its decisions and test plan in
    the task file; decide technical findings yourself (user preference).
-   Then engineering-lead: plan + implementation through its specialists (code is written by Codex).
+   Then engineering-lead: plan + implementation through its specialists (they write the code; no Codex).
 5. review-lead — GATE 2. 6. qa-lead — GATE 3. 7. interactions-lead sign-off on results — GATE 4.
 8. Retro (you, cheap, every task incl. light lane): collect the leads' "Lessons:", every gate failure (lesson
    goes to the department that caused it, not the one that caught it), every user correction and blind-test
@@ -530,8 +524,8 @@ README = """# PoB Autobuilder — agent studio
 Every Claude Code session started in this folder runs as the **orchestrator** (`.claude/settings.json` →
 `"agent": "orchestrator"`, Opus 5.5, max effort). Tell it "go" to work the next task in `tasks/`, or give it a
 new request. The orchestrator dispatches department leads; leads dispatch their own specialists (nesting:
-orchestrator → lead → specialist, within Claude Code's 3-layer limit). Coding specialists hand the actual code
-to **Codex (gpt-5.6-sol, medium effort)** via `tools/codex_task.py` and verify the result.
+orchestrator → lead → specialist, within Claude Code's 3-layer limit). Coding specialists write the code
+themselves, tests first (Claude Code; no Codex since 2026-10-25); the lead plans, dispatches and verifies.
 
 Agent files are generated: edit `tools/make_agents.py` (incl. the MODELS table) and re-run
 `python tools/make_agents.py .` from the project root.
@@ -548,7 +542,7 @@ interactions-lead ── interaction map + risks ............ GATE 1
   ├─► uiux-lead (only if the UI is touched)
   ▼
 engineering-lead ── plan ──► pob-engine-dev / optimizer-dev / integration-dev / frontend-dev
-  │                              └─► brief ──► Codex gpt-5.6-sol (medium) ──► verify
+  │                              └─► code + tests ──► lead verifies
   │
   ▼
 review-lead ── correctness / security / truth ........... GATE 2
@@ -618,7 +612,7 @@ def main() -> None:
         else:
             note = SPECIALIST_NOTE + "\n\n" + LEARNING_SPECIALIST
         if name in CODERS:
-            note += "\n\n" + CODEX_NOTE
+            note += "\n\n" + CODER_NOTE
         tools = LEAD if role == "lead" else tools  # leads dispatch their own specialists
         title = f"You are {name}, {'lead of' if role == 'lead' else 'a specialist in'} the {dept} department of the PoB Autobuilder studio."
         text = f"{frontmatter(name, description, tools)}\n{title}\n\n{body}\n\n{note}\n\n{FACTS}\n"

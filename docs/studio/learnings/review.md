@@ -10,4 +10,4 @@ Process lessons only (game facts go to the vault). Format: date · task · trigg
   · active
 - 2026-10-25 · 029 · Rule scan treats a numbered list or a marker-skipped list as one unit, so new untagged items
   pass → count tags per item, pin the marker count → check: feed the scan an untagged item appended to a tagged
-  list · active (029 MEDIUMs parked). The 004 eol lesson recurred in 021/029 → promoted (engineering CODEX_NOTE).
+  list · active (029 MEDIUMs parked). The 004 eol lesson recurred in 021/029 → promoted (engineering CODER_NOTE).

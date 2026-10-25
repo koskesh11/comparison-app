@@ -3,10 +3,14 @@
 > Superseded 2026-10-23 by task 019 (token budget): current models and reasons are in the MODELS table of
 > tools/make_agents.py and in tasks/019-token-reduction.md. The table below is the task 001 state.
 > 2026-10-23 (user, /usage: 17% of usage): pob-engine-dev, optimizer-dev, integration-dev moved Sonnet -> Haiku.
+> 2026-10-25 (user, task 033): no Codex. The coding specialists write the code themselves, so they leave Haiku
+> (orchestrator's choice, delegated by the user): pob-engine-dev Opus high (PoB Lua internals and state restore,
+> errors are silent in every number), optimizer-dev Sonnet xhigh (the bulk of the game-logic code; golden numbers and
+> the Opus GATE 2 reviewers re-check it), integration-dev Sonnet high (server, caching, persistence), frontend-dev
+> Sonnet high (unchanged). Leads write no code (at most a 10-line fix found during verification).
 
 Source of truth: the `MODELS` table in `tools/make_agents.py`; regenerate with `python tools/make_agents.py .`.
-Code itself is always written by Codex (gpt-5.6-sol, medium) via `tools/codex_task.py`; the models below are the
-Claude side (judgment, briefs, verification).
+Since task 033 the code is written by the Claude coding specialists themselves; tools/codex_task.py is gone.
 
 ## Facts used (claude-api reference, cached 2026-10-06)
 | Model | ID | $/MTok in / out | Effort levels | Context |

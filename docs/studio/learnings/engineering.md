@@ -2,7 +2,7 @@
 Process lessons only (game facts go to the vault). Format: date · task · trigger → rule → check · status.
 
 - 2026-10-21 · 003 · Phase A was cut off twice by session/usage limits and had to be reconstructed → Append a
-  progress line to the task log after each major step (brief sent, Codex done, verified, tests run) → check:
+  progress line to the task log after each major step (brief sent, code done, verified, tests run) → check:
   log has a line per step; a resumed agent can continue from the log alone. · active
 - 2026-10-21 · 003 · Headless write into the PoB install found (A0) → Every new PoB call path gets a check that
   nothing is written outside Builds\AutoBuilder\ (guard hook covers Claude tools, not scripts) → check: test
@@ -46,7 +46,7 @@ Already in the agent prompts (tools/make_agents.py); kept for the record, not co
   pin_golden --verify-run shows runEquivalence.equal true. · promoted (with the line above)
 - 2026-10-25 · 021/029 · Line endings flipped twice (4 files LF to CRLF; make_agents.py CRLF to LF), hiding the real
   diff (also review lesson 004) → after each commit `git diff --stat` equals `--ignore-cr-at-eol` → check: equal
-  stats · promoted (CODEX_NOTE "Line endings").
+  stats · promoted (CODER_NOTE "Line endings").
 - 2026-10-25 · 029 · Bash heredocs halve backslashes and truncate long text → write patch scripts with placeholders;
   check `ast.parse` after each edit · active.
 - 2026-10-25 · 021 · A test that patches the rating function must count its calls (that is how the post-restore rate
@@ -57,3 +57,6 @@ Already in the agent prompts (tools/make_agents.py); kept for the record, not co
 - 2026-10-25 · 021 · Two specialists in one worktree each held the other's uncommitted work → give parallel
   specialists disjoint file lists and tell each the other's files → check: `git status` lists only briefed files
   before a commit · active.
+- 2026-10-25 · 032/033 · The lead wrote the 032 spike code itself although specialist briefs were pre-approved (2nd
+  time, after the 021 fix branch) → a lead writes no code; at most a 10-line fix found during verification, named
+  in the report → check: every changed file in the report names a specialist author · promoted (LEAD_NOTE, task 033).
