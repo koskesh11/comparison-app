@@ -198,6 +198,16 @@ PoB: Modules/CalcOffence.lua:4531, 4581-4583, 4832, 5149, 5725 - MATCH. DoT mult
 
 Why it matters for building: Damage over time multiplier is a different pool from increased and more; hit crit multi never reaches DoT.
 
+## Hit rate
+
+Rule: DPS = average damage per hit x hits per second; speed buffs (attack/cast speed, Onslaught, frenzy charges) act here, not in the damage per hit.
+
+Wiki step: Damage page toy formula with Hit_Rate (Damage rev 1551019; mechanics-researcher-damage-calc.md).
+
+PoB: TotalDPS = AverageDamage x (HitSpeed or Speed) x dpsMultiplier x quantityMultiplier (Modules/CalcOffence.lua:3801); uses per second CalcOffence.lua:2275-2294 / 2473-2485; triggered skills use SkillTriggerRate (Modules/CalcTriggers.lua:799-822) - MATCH. Source: tasks/reports/027-evidence/pob-coverage-auditor-uptime.md.
+
+Why it matters for building: A speed buff is worth its % only on hit DPS; DoT-only skills gain nothing from cast speed except via application rate. How often a buff is up is [[Chance on hit uptime]].
+
 ```interaction
 id: damage-calculation
 mechanic: "Order of operations for an outgoing hit and damage over time, in the wiki's order: hit chance, flat damage, conversion, increased and more, crit, roll, double damage, then enemy mitigation and ailments"
@@ -237,5 +247,6 @@ steps:
   - {"id": "damage-calculation-13", "heading": "Damage taken", "wiki_order": 13, "pob_ref": "Modules/CalcOffence.lua:3492-3493, 3562, 3572-3597", "pob_status": "omits"}
   - {"id": "damage-calculation-14", "heading": "Ailments from hits", "wiki_order": 14, "pob_ref": "Modules/CalcOffence.lua:143-155, 4256-4345, 4520-4565, 4820-4840, 5076-5152", "pob_status": "differs"}
   - {"id": "damage-calculation-15", "heading": "Damage over time", "wiki_order": 15, "pob_ref": "Modules/CalcOffence.lua:4531, 4581-4583, 4832, 5149, 5725", "pob_status": "match"}
+  - {"id": "damage-calculation-16", "heading": "Hit rate", "wiki_order": 16, "pob_ref": "Modules/CalcOffence.lua:3801, 2275-2294, 2473-2485; Modules/CalcTriggers.lua:799-822", "pob_status": "match"}
 pipeline_step: [self]
 ```
