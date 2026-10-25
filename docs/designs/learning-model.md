@@ -130,7 +130,7 @@ tasks/reports/032-eng-review.md (D1-D11), context definitions: tasks/reports/032
   source (sweep / ranked / self_play / expert), seed, tier, lineage, PoB version.
 - Context (features_version 1): F1 delivery, F2 damage form + ailment tag, F3 dominant hit type, F4 crit chance
   (<10 / 10-50 / 50-90 / >=90), F5 defence base (CI / ES / hybrid / life / low-life; MoM, EB tags), F6 capped avoidance
-  layers (0 / 1 / 2+), F7 value-flipping keystones (17) + 3 ascendancy nodes, F8 ascendancy, F9 scenario, F10 tier,
+  layers (0 / 1 / 2+), F7 value-flipping keystones (16) + 3 ascendancy nodes = 19 names (task 032 phase 2: 17 was a miscount), F8 ascendancy, F9 scenario, F10 tier,
   F11 tree stage (<=60 / 61-105 / >105). F1-F4 from the top SkillDPS row (>= 50% share), else multi_skill.
 - Back-off: L0 exact state -> L1 F1-F11 -> L2 drop F6, F11 -> L3 drop F7, F8, F10 -> L4 per target (DPS: F1-F4 + F9;
   EHP: F5 + F6 + F9) -> L5 F1 + F2 or F5 -> L6 global. Only L0-L4 rank candidates; L5-L6 only order exploration, so
