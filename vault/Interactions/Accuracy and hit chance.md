@@ -1,0 +1,68 @@
+---
+type: interaction
+status: draft
+pob_refs: [Accuracy, AccuracyHitChance, HitChance, enemyBlockChance, CannotBeEvaded, NeverCrit, PreciseTechnique, MainHandAccRatingHigherThanMaxLife, enemyIsBoss, enemyLevel, enemyEvasion, conditionEnemyBlinded]
+source: "poewiki Accuracy rev 1612031, Resolute Technique rev 1492423, Precise Technique rev 1446035, Blind rev 1697260, Evasion rev 1611557 (fetched 2026-10-26); PoB 2.67.2 CalcOffence.lua / CalcDefence.lua / CalcSetup.lua / ConfigOptions.lua / Data/Misc.lua / ModCache.lua / TreeData 3_29; headless runs on CoC EK Assa.xml and FR CoC Occu Three Dragons v4.xml (scratchpad b3/acc_run.py, acc_why.py, acc_whatif.py)"
+last_confirmed_patch: "3.29.x"
+---
+
+An attack hit rolls against the enemy's Evasion with your Accuracy; if it fails it is a miss, and accuracy is rolled a second time for the crit. Spells and minion attacks skip the roll. For a crit-trigger build this is a hidden multiplier: Cast On Critical Strike needs a hit AND a crit, so every point of missing hit chance is lost twice (measured below). Both seeds (EK, FR) sit at 100% only because their dagger carries the crafted mod "Hits can't be Evaded"; without it the same gear hits 46% of the time against a Pinnacle boss and the CoC procs fall to 21% (0.46 x 0.46). Resolute Technique also gives 100% but forbids crits, so it cannot be combined with a CoC build.
+
+Pipeline: [[Damage calculation#Hit chance]] - the roll happens before damage is dealt and again at the crit, so it multiplies the rate of hits and of crits ([[Damage calculation#Critical strike]]); the trigger rate of [[CoC trigger]] and [[Trigger rate cap and cooldown]] inherits it. Related: [[Blind]] (enemy Evasion x 0.8).
+
+```interaction
+id: accuracy-hit-chance
+mechanic: "Attack chance to hit = 1.25 x Accuracy / (Accuracy + (enemy Evasion / 5)^0.9), rounded, clamped 5..100%; rolled again for the crit (crit chance x hit chance); spells and minion attacks always hit; 'Hits can't be Evaded' / Resolute Technique force 100% (block still applies); Precise Technique needs Accuracy > Life"
+family: defence
+pipeline_step: ["Damage calculation#Hit chance", "Damage calculation#Critical strike"]
+pipeline_why: "hit chance is the first roll of every attack hit (Hit chance) and is multiplied into the crit chance as the second accuracy roll (Critical strike); it scales hits and crits per second, never the damage of a hit"
+target: enemy
+related: [blind, coc-trigger, trigger-rate-cap, damage-calculation]
+pob:
+  measured: full
+  how: "CalcOffence.lua:2190-2249: Accuracy = floor(base x (1+inc) x more) (2196); AccuracyHitChance = calcs.hitChance(enemy Evasion, Accuracy vs enemy) x HitChance mods (2234); HitChance = AccuracyHitChance x (1 - enemy block) (2249); hitChance formula CalcDefence.lua:58-64 (rounds, floor 5, cap 100). Skipped (=100) for spells (not isAttack), for the CannotBeEvaded flag, skillData.cannotBeEvaded and an enemy CannotEvade flag (2230). Crit chance x AccuracyHitChance in effective mode (3146). Precise Technique: per hand, condition MainHandAccRatingHigherThanMaxLife = output.Accuracy > player Life (2268-2270; the vs-enemy accuracy is not used), 40% more Attack Damage via ModParser.lua:2450-2453. Enemy Evasion = enemyDB 'Evasion' BASE (config placeholder from the boss preset). PoB uses the expected hit chance; it does not model the wiki's entropy streak system (Evasion page), which only changes streaks (unverified)."
+  config:
+    - {var: enemyIsBoss, default: Pinnacle, ref: "Modules/ConfigOptions.lua:2086 (defaultIndex = 3 = Pinnacle; presets set enemy level and evasion placeholders 2098-2220)", class: b}
+    - {var: enemyLevel, default: "blank = preset level (None/Boss 83, Pinnacle 84, Uber 85; capped by character level)", ref: "Modules/ConfigOptions.lua:2082, Classes/ConfigTab.lua:1120-1126, CalcSetup.lua:511", class: b}
+    - {var: enemyEvasion, default: "blank = monster table x boss mean (Pinnacle level 84: 8120 x 124.909% = 10143, measured)", ref: "Modules/ConfigOptions.lua:2266-2268, 2186, Data/Misc.lua:6, Modules/Data.lua:990", class: c}
+    - {var: enemyBlockChance, default: 0, ref: "Modules/ConfigOptions.lua:2263 (HitChance includes enemy block, AccuracyHitChance does not)", class: b}
+    - {var: conditionEnemyBlinded, default: false, ref: "Modules/ConfigOptions.lua:1860", class: b}
+  unparsed: []
+model: null
+providers:
+  - {kind: mod, name: "Hits can't be Evaded (crafted on a weapon)", slot: weapon, role: enables, target: enemy, text: "CoC EK Assa.xml item 18 Armageddon Stinger and FR v4 item 2 Rune Needle both carry '{crafted}Hits can't be Evaded'; headless: the CannotBeEvaded FLAG tabulates to exactly that item in both builds; without it Cyclone AccuracyHitChance 100 -> 46", source: "Data/ModCache.lua:16914 (form: flags=0 FLAG CannotBeEvaded under Condition {Hand}Attack); CalcOffence.lua:2230; headless acc_why.py / acc_whatif.py", pob: full}
+  - {kind: keystone, name: "Resolute Technique", slot: tree, role: enables, target: enemy, text: "Your hits can't be Evaded; Never deal Critical Strikes (100% hit chance but zero crits: incompatible with Cast On Critical Strike)", source: "TreeData/3_29/tree.lua:21813-21826 (skill 31961); ModCache.lua:23134 (CannotBeEvaded) and 18419 (NeverCrit + Condition:NeverCrit); wiki Resolute Technique rev 1492423", pob: full}
+  - {kind: keystone, name: "Precise Technique", slot: tree, role: scales, target: self, text: "40% more Attack Damage if Accuracy Rating is higher than Maximum Life; Never deal Critical Strikes. A Chaos Inoculation build (Life 1) always meets it (both seeds have Life 1 in the run)", source: "TreeData/3_29/tree.lua:68369-68386 (skill 63620); ModCache.lua:9424, 18419, 18613; CalcOffence.lua:2002, 2268-2270; BuildDisplayStats.lua:153-154 (warning when Accuracy < Life); wiki Precise Technique rev 1446035", pob: full}
+  - {kind: mod, name: "Blind on the enemy", slot: any, role: applies, target: enemy, text: "enemy Evasion 20% less (and Accuracy 20% less); raises your hit chance only below 100%. Full detail in [[Blind]]; PoB never lowers a hit chance that Resolute / 'can't be Evaded' already forces to 100", source: "CalcPerform.lua:857-865 on the enemy actor (3625); ConfigOptions.lua:1860; wiki Blind rev 1697260", pob: config}
+  - {kind: mod, name: "Your Hits can't be Evaded by Blinded Enemies", slot: any, role: enables, target: enemy, text: "conditional form: 100% hit chance only while the enemy is Blinded (needs a Blind source or the config tick)", source: "Data/ModCache.lua:23044", pob: config}
+  - {kind: mod, name: "Your Melee Hits can't be Evaded while wielding a Sword", slot: weapon, role: enables, target: enemy, text: "melee-only, sword-only form", source: "Data/ModCache.lua:23086", pob: full}
+  - {kind: mod, name: "Base Accuracy: 2 per character level and 2 per Dexterity", slot: any, role: scales, target: self, text: "Accuracy base; increased Accuracy and 'more' (Blind on you) apply on top", source: "CalcSetup.lua:602 (accuracy_rating_per_level = 2, Data/Misc.lua:87); CalcPerform.lua:531 (AccuracyPerDexBase = 2, Modules/Data.lua:239); wiki Accuracy rev 1612031", pob: full}
+makes_redundant:
+  - {provider: "Accuracy gear and passives", when: "'Hits can't be Evaded' (crafted weapon mod) or Resolute Technique is active", why: "hit chance is forced to 100%, so extra Accuracy only matters for Precise Technique and Accuracy-scaled mods (wiki: such mods read the skill's Accuracy)", source: "CalcOffence.lua:2230; wiki Accuracy rev 1612031"}
+conflicts:
+  - {with: "Cast On Critical Strike / any crit scaling", effect: "Resolute Technique and Precise Technique set NeverCrit: no crit, no CoC trigger", source: "ModCache.lua:18419; CalcOffence.lua:3042; tree.lua:21813, 68369"}
+conditions:
+  - {text: "spells (Winter Orb, Ethereal Knives, Forbidden Rite of Soul Sacrifice) have AccuracyHitChance 100 by construction: the roll is skipped when the skill is not an attack", source: "CalcOffence.lua:2230; wiki Accuracy rev 1612031 ('Spells do not benefit from accuracy, as they cannot be evaded')"}
+  - {text: "minion attacks always hit (PoB sets CannotBeEvaded on minions)", source: "CalcPerform.lua:1178; wiki Accuracy rev 1612031"}
+  - {text: "attack hits can still be blocked: HitChance = AccuracyHitChance x (1 - enemy block), so 'can't be Evaded' does not give 100% HitChance against a blocking enemy", source: "CalcOffence.lua:2243-2249; wiki Resolute Technique rev 1492423"}
+  - {text: "100% displayed hit chance needs Accuracy >= 2939 vs a level 83 map monster (Evasion 7860), 3026 vs level 84 (8120), 3697 vs a Pinnacle boss (10143), 3116 vs level 85 (8388); computed by applying the PoB formula to Data/Misc.lua:6 (seed Accuracy 547-550 gives 46% vs the Pinnacle value)", source: "CalcDefence.lua:58-64; Data/Misc.lua:6; scratchpad b3/need_acc.py (own computation, not a PoB output)"}
+uptime:
+  Mapping:       {value: pob, config: {enemyIsBoss: None, enemyLevel: "blank (83)"}, reasoning: "use PoB's HitChance output; the roll applies to every attack hit. Unmeasured: the seeds were run only with the Pinnacle default (enemyIsBoss = Pinnacle), the level 83 value (Evasion 7860) is derived from the table", source: "CalcOffence.lua:2233-2249; ConfigOptions.lua:2082, 2098"}
+  Pinnacle Boss: {value: pob, config: {enemyIsBoss: Pinnacle, enemyLevel: "blank (84)"}, reasoning: "measured: Evasion 10143, EK Cyclone Accuracy 550 and FR Cyclone Accuracy 547, AccuracyHitChance 100 and HitChance 100 only because of the crafted 'Hits can't be Evaded'; 46% without it (acc_whatif.py)", source: "headless acc_run.py / acc_whatif.py; CalcOffence.lua:2230"}
+seeds: [EK, FR]
+sources:
+  - {ref: "PoB Modules/CalcOffence.lua, CalcDefence.lua, CalcSetup.lua, CalcPerform.lua, ConfigOptions.lua, Data/Misc.lua, Data/ModCache.lua, TreeData/3_29/tree.lua (2.67.2)", kind: pob, patch: "3.29"}
+  - {ref: "https://www.poewiki.net/wiki/Accuracy (rev 1612031)", kind: wiki, patch: "3.29"}
+  - {ref: "https://www.poewiki.net/wiki/Resolute_Technique (rev 1492423)", kind: wiki, patch: "3.29"}
+  - {ref: "https://www.poewiki.net/wiki/Precise_Technique (rev 1446035)", kind: wiki, patch: "3.29"}
+  - {ref: "https://www.poewiki.net/wiki/Blind (rev 1697260)", kind: wiki, patch: "3.29"}
+  - {ref: "https://www.poewiki.net/wiki/Evasion (rev 1611557)", kind: wiki, patch: "3.29"}
+not_verified:
+  - "Pinnacle Boss Evasion 10143 = Data/Misc.lua:6 level 84 value 8120 x PinnacleEvasionMean 124.909%: the formula is read from ConfigOptions.lua:2186 and the number matches the headless enemyDB value; how the placeholder enters enemyDB (ConfigTab) was not traced line by line"
+  - "Mapping enemy level 83 / Evasion 7860 and the other accuracy thresholds are computed from the table with the PoB formula, not run headless (the seeds are saved with Pinnacle)"
+  - "whether the in-game boss Evasion equals the PoB boss mean (PoB's Pinnacle boss evasion mean comes from Modules/Data.lua:990, source of that value not checked)"
+  - "wiki Evasion entropy (streak-limiting) system: stated for the evading actor; PoB uses the average, which should not change expected hits (not checked against the game)"
+  - "wiki Blind page: blind 'has no effect on chance to hit if Resolute Technique or Hits can't be Evaded'; PoB agrees (flag short-circuits 2230) but the blind 20% less Evasion still shows in the Evasion value"
+open_questions:
+  - "None for the user. Design question for the generator: a crit-trigger seed that is not Resolute / Precise must carry 'Hits can't be Evaded' (crafted on the weapon) or reach Accuracy >= ~3700 against a Pinnacle boss; should the generator treat the crafted mod as a requirement of CoC seeds?"
+```
