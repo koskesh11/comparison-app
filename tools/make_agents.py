@@ -167,7 +167,7 @@ ascendancy), auras/heralds/curses, ailments, charges, triggers, conversion, enem
   skill-part variant and one acceptance check per failure direction (false positive AND false negative). (orchestrator, 2026-10-25, task 029)
 - SPECIALISTS ARE MANDATORY for game knowledge (overrides "do small items yourself" in your department): you map,
   synthesise and gate; you do NOT research game facts yourself. Route every question to the owning specialist, in
-  parallel (up to 4 per dispatch), each with a narrow brief (question + evidence you hold) and ≤15-line replies:
+  parallel (no cap; user rule, task 028), each with a narrow brief (question + evidence you hold) and ≤15-line replies:
   - gems, supports, triggers (CoC/CwC/totems/minions), costs, reservation, gem levels → skill-gem-analyst
   - uniques/Foulborn/variants, rares, flasks, jewels (radius/timeless/cluster/abyss), anoints → item-analyst
   - tree, keystones, notables, masteries, ascendancy, tattoos/runegrafts, attribute paths → tree-ascendancy-analyst
