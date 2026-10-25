@@ -29,6 +29,10 @@ Process lessons only (game facts go to the vault). Format: date · task · trigg
   because background agents were running. Agents write their reports to files, so a resume point naming those files
   makes /clear safe. Lesson: after every gate or task, write the resume point and say "/clear now", even while agents run.
 
+- 2026-10-25 · 028 · 3rd unverified limit (wiki blocked, flask uptime, meta budget 'until P1' long expired) →
+  promoted as an enforced check: rules carry source tags + task-based expiry, tests/test_agents.py fails on an
+  expired rule; evidence before any 'limit/blocker' claim is a prompt rule for all agents. · promoted
+
 ## Promoted
 Already in the agent prompts (tools/make_agents.py); kept for the record, not counted as active.
 
@@ -42,7 +46,8 @@ Already in the agent prompts (tools/make_agents.py); kept for the record, not co
   tools/make_agents.py (wiki = most important mechanics source, user).
   RECURRED 2026-10-24 (task 021): this session ran on a main-thread prompt loaded before the fix and passed the stale
   line to data-sources-analyst; user caught it. Lesson: after editing agent prompts, the running session keeps the old
-  one — re-check facts in prompts against .claude/agents/orchestrator.md, or tell the user to restart. Already promoted. · promoted (wiki rule in FACTS; evidence rule, task 028)
+  one — re-check facts in prompts against .claude/agents/orchestrator.md, or tell the user to restart. Already promoted.
+ · promoted (wiki rule in FACTS; evidence rule, task 028)
 - 2026-10-24 (task 021 brainstorm, user correction): claimed "PoB assumes 100% flask uptime" without checking; PoB
   computes flask uptime (ItemsTab.lua:4830-4857, average/minimum from generated charges, tooltip only; kill/crit charges
   not included; calcs still treat an active flask as fully on). Lesson: before saying "PoB doesn't do X", grep PoB

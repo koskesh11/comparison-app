@@ -27,6 +27,14 @@ Process lessons only (game facts go to the vault). Format: date · task · trigg
   then grep the file · active. mklink in a worktree printed a banner but no link (17 files failed) → `ls engine/cache`
   after linking · active.
 
+- 2026-10-25 · 028 · A scripted prompt edit matched OLD strings exactly and left two bullets mis-indented; the
+  tag test caught one → after a scripted prompt edit, regenerate and run tests/test_agents.py before reading diffs
+  → check: that test run's summary line. · active
+- 2026-10-25 · 021 M3 · run_tests output piped through head hid 3 new failures until --all → read the runner's
+  summary line, never a truncated list → check: grep 'files,' and FAIL in a saved output file. · active
+- 2026-10-25 · 021 M3 · the 150 s critical path was one class re-running the same real job 5x → same real job
+  twice in a class = setUpClass → check: per-test timings grouped by identical setup. · active
+
 ## Promoted
 Already in the agent prompts (tools/make_agents.py); kept for the record, not counted as active.
 
