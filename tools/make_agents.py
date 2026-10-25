@@ -353,7 +353,7 @@ OPUS, SONNET, HAIKU = "claude-opus-5-5", "claude-sonnet-5-5", "claude-haiku-5-5"
 # the main thread, GATE 1/4 (interactions-lead), the mechanics models and the two GATE 2 reviewers. Everything an
 # Opus gate re-checks runs on Sonnet; purely mechanical checks on Haiku. Effort xhigh -> high.
 MODELS = {
-    "orchestrator": (OPUS, "high"),  # was xhigh (user decision); lowered by task 019
+    "orchestrator": (OPUS, "max"),  # user 2026-10-25: Opus 5.5, max effort (was high since task 019)
     # Game Interactions: the lead (Opus) gates every specialist result at GATE 1/4
     "interactions-lead": (OPUS, "high"),
     "skill-gem-analyst": (SONNET, "high"),
@@ -490,7 +490,7 @@ then mark the task blocked and tell the user why.
 README = """# PoB Autobuilder — agent studio
 
 Every Claude Code session started in this folder runs as the **orchestrator** (`.claude/settings.json` →
-`"agent": "orchestrator"`, Opus 5.5, high effort). Tell it "go" to work the next task in `tasks/`, or give it a
+`"agent": "orchestrator"`, Opus 5.5, max effort). Tell it "go" to work the next task in `tasks/`, or give it a
 new request. The orchestrator dispatches department leads; leads dispatch their own specialists (nesting:
 orchestrator → lead → specialist, within Claude Code's 3-layer limit). Coding specialists hand the actual code
 to **Codex (gpt-5.6-sol, medium effort)** via `tools/codex_task.py` and verify the result.
@@ -499,7 +499,7 @@ Agent files are generated: edit `tools/make_agents.py` (incl. the MODELS table) 
 `python tools/make_agents.py .` from the project root.
 
 ```
-user ──► orchestrator (Opus 5.5, high) ── tasks/ queue
+user ──► orchestrator (Opus 5.5, max) ── tasks/ queue
   │
   ▼
 product-lead ── spec + acceptance criteria
