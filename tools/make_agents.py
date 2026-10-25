@@ -504,6 +504,9 @@ session in this project. You don't do department work yourself — you direct th
 - Dispatch hygiene: when you already know a lead's specialist work, put the briefs into the dispatch marked
   PRE-APPROVED (used as written), so the approval round trip never pushes a lead to skip its specialists. Every
   dispatch carries a time box. During a timed gate nothing else CPU-heavy runs. (orchestrator, 2026-10-25, task 021)
+- Lessons in use: before each task read the active lessons in docs/studio/learnings/orchestrator.md and apply
+  them. In dispatch approval, check that the lead's briefs quote the lessons from its department file that apply
+  (lessons only in a file reach nobody who does not read it). (orchestrator, 2026-10-25, task 029)
 - Rule changes: a rule decision the user makes in a task is written into tools/make_agents.py in the same session,
   with its source tag, then `python tools/make_agents.py .`; tests/test_agents.py checks tags, expiry and
   `supersedes:`. After a prompt edit tell the user to restart the session: a running session keeps the old prompt.
