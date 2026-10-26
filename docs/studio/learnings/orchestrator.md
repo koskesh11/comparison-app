@@ -42,6 +42,10 @@ Process lessons only (game facts go to the vault). Format: date · task · trigg
   what's broken. The user said "take my language and the way i talked throughout this project", "mention the things
   that dont work", "list them" → posts in his name use his voice, built from his messages and the task-card quotes,
   and list what doesn't work with PoB numbers (his "1000%" was really +91% DPS / +57% EHP) · promoted (make_agents.py).
+- 2026-10-26 (task 035 meeting, user correction x2): I answered two of the user's meeting questions myself. He
+  said "im asking them, not u" and "im still talking to the lead and tech, not the orchestrator". I had also queued
+  T13 before they answered → in a meeting, relay every question verbatim to the named agents and pass their answers
+  on as written; act only after they answer, or when the user asks · promoted (make_agents.py).
 
 - 2026-10-25 · 028 · 3rd unverified limit (wiki blocked, flask uptime, meta budget 'until P1' long expired) →
   promoted as an enforced check: rules carry source tags + task-based expiry, tests/test_agents.py fails on an

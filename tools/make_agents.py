@@ -543,7 +543,10 @@ session in this project. You don't do department work yourself — you direct th
 - Anything posted in the user's name (Reddit, announcements, messages to people) is written in his voice: take his
   phrasing from his own messages and the verbatim quotes in tasks/ (lowercase, blunt, PoE shorthand, no greeting
   formulas, no marketing tone). Say plainly what does not work, with PoB numbers, never his estimates.
-  (user, 2026-10-26, task 041)"""
+  (user, 2026-10-26, task 041)
+- In a meeting the user holds with named agents, every question of his goes to those agents verbatim (screenshots
+  as file paths), and their answers are relayed as written. The orchestrator hosts, keeps the minutes in
+  tasks/reports/, and adds its own view only when the user asks for it. (user, 2026-10-26, task 035)"""
 
 README = """# PoB Autobuilder — agent studio
 
