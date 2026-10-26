@@ -23,9 +23,10 @@ Expect rough edges. Please open an issue when something looks wrong; include the
 
 - Windows with Path of Building Community installed (the code looks for it in `%APPDATA%\Path of Building Community`;
   set the `POB_DIR` environment variable if yours is elsewhere).
-- Python 3.10 or newer (the code uses `X | None` annotations). It is developed on Python 3.14; older versions are
-  untested.
-- Your builds are read from `Documents\Path of Building\Builds`.
+- 64-bit Python 3.10 or newer (the code uses `X | None` annotations and loads PoB's 64-bit `lua51.dll`). It is
+  developed on Python 3.14; older versions are untested.
+- Your builds are read from `Documents\Path of Building\Builds` in your user folder. A Documents folder moved by
+  OneDrive is not detected yet.
 
 ```
 pip install -r requirements.txt
@@ -44,7 +45,8 @@ http://127.0.0.1:8765 in your browser. Pick a build and run the audit.
   - `pathofexile.com/api/trade/data/leagues`: the name of the current league.
   - `poe.ninja`: prices, to tell what is obtainable in the current league (cached for 24 hours).
   - `pobb.in`: only when you paste a pobb.in link into the guide check.
-  - `fonts.googleapis.com`: your browser loads two web fonts when the page opens.
+  - Google Fonts (`fonts.googleapis.com` and `fonts.gstatic.com`): your browser loads two font families when the
+    page opens.
 - No telemetry, no account, no API keys in the code.
 
 ## Layout
