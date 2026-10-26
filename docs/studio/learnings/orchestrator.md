@@ -34,6 +34,10 @@ Process lessons only (game facts go to the vault). Format: date · task · trigg
 - 2026-10-26 (task 035/041, own gate failure): committed and pushed a make_agents.py rule without running its tests.
   The word "once" tripped test_agents' rule hygiene (TEMPORARY_RE), and main stayed red for about an hour → after
   any edit to make_agents.py, run `python tools/run_tests.py --files tests/test_agents.py` before committing · active.
+- 2026-10-26 (task 041, own rework): a history rewrite with sed in Git Bash changed CRLF on every line of the
+  rewritten file (42/42 lines instead of 2), caught before the push by `git diff --stat old new` → rewrite blob text
+  with a byte-exact Python replace (stdin.buffer/stdout.buffer), and check that the diff stat shows only the intended
+  lines before any force-push · active.
 
 - 2026-10-25 · 028 · 3rd unverified limit (wiki blocked, flask uptime, meta budget 'until P1' long expired) →
   promoted as an enforced check: rules carry source tags + task-based expiry, tests/test_agents.py fails on an
