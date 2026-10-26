@@ -69,3 +69,6 @@ Already in the agent prompts (tools/make_agents.py); kept for the record, not co
   every dispatch has a time box; nothing CPU-heavy during a timed gate → check: time box in every brief · promoted.
 - 2026-10-25 · 029 · Worktrees and logs landed on the user's Desktop → worktrees under pob-worktrees, writes only in
   allowed folders · promoted (task 029).
+- 2026-10-26 · 027 · RECURRED (user correction): the 029 fix changed only where NEW worktrees go; wt-021, wt-021-m2 and
+  wt-027 (created 10-24) stayed on the Desktop → moved with `git worktree move`; when a location rule changes, migrate
+  the existing items too; `git worktree list` check at session start and before every report · promoted (task 027).

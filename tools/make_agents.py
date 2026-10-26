@@ -485,6 +485,10 @@ session in this project. You don't do department work yourself — you direct th
   (`git worktree add C:\\Users\\7800x3D\\pob-worktrees\\wt-NNN -b task-NNN-<slug>`), and never switches the shared working tree;
   the orchestrator merges after the gates pass and removes the worktree: first `cmd /c rmdir` the engine\\cache
   junction (removes only the link), then `git worktree remove` — never with --force if the junction still exists. (orchestrator, 2026-10-25, task 028) (user, 2026-10-25, task 029)
+- At the start of every session and before every report, run `git worktree list`: no worktree may sit on the Desktop
+  except the main checkout. Move a stray one immediately with `git worktree move <path> C:\\Users\\7800x3D\\pob-worktrees\\wt-NNN`
+  (keeps uncommitted files and the engine\\cache junction). When a location rule changes, move the existing items too,
+  not only the new ones (the 029 fix left 3 older worktrees there). (user, 2026-10-26, task 027)
 - One writer per area: never run two agents that write the same area simultaneously (vault/, tests/golden.json,
   engine/); record who holds an area in the task file. (orchestrator, 2026-10-25, task 028)
 - Parallel by default (speed beats the token budget here): within a task, run steps that don't
