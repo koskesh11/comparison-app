@@ -44,3 +44,13 @@ Already in the agent prompts (tools/make_agents.py); kept for the record, not co
   yourself and grep its output for the new note names before accepting a curator reply.
 - 2026-10-26 · 027-2c · saved partial brief named no item list, so the resumed lane rebuilt its pick list → before
   saving work as partial, write the exact item list and every output file into the brief.
+- 2026-10-26 · 035 (user blind test: his 2-minute correction) · the seed had no curse group and GATE 1 no debuff row
+  (Flammability alone +29.8%) → one GATE 1 row per build layer for a seed without a sample · promoted.
+- 2026-10-26 · 035 · a GATE 1 hand estimate ("not league-start") became the seed claim "MoM is the main route" and
+  closed Determination + Flesh and Stone (+25.6% EHP) → name/close a route only with headless numbers for 2+ routes ·
+  promoted.
+- 2026-10-26 · 035 · Immolate never a candidate and enemy Ignited never in the map (+43.2% TotalDPS together; ignite
+  chance 40.86%, uptime ~100%); "non-crit" taken from the gem, PoB showed 21.15% crit → row per caused enemy
+  condition, conditional candidates tested with it, crit label from PoB's crit share · promoted.
+- 2026-10-26 · 035 · Added Fire Damage scored exactly 0 for Fireball (no physical damage) yet stayed in the 6-link →
+  flag a candidate that scores 0 for its skill as dead · active (engine check in the 035 loop-2 spec).

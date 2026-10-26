@@ -60,3 +60,9 @@ Already in the agent prompts (tools/make_agents.py); kept for the record, not co
 - 2026-10-25 · 032/033 · The lead wrote the 032 spike code itself although specialist briefs were pre-approved (2nd
   time, after the 021 fix branch) → a lead writes no code; at most a 10-line fix found during verification, named
   in the report → check: every changed file in the report names a specialist author · promoted (LEAD_NOTE, task 033).
+- 2026-10-26 · 035 · guide-check header showed "available 122" from a hardcoded 99+23 (guide_snapshot.lua:194) → derive
+  available points from the build level → check: non-level-100 build, header available = level-1+23 · active (fix queued).
+- 2026-10-26 · 035 · the Scrapped note kept only the failed goals, so no one could say which pass took MoM or Breath of
+  Flames → a saved rejected build carries its stage reasons · active (035 loop-2 spec).
+- 2026-10-26 · 035 · Pinnacle Boss pob_config/generator_config (channelling 3 s, EHP-on-block) applied to a
+  non-channelling Fireball build → scenario config only when the build has a use for it · active (035 loop-2 spec).

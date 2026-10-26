@@ -186,7 +186,14 @@ ascendancy), auras/heralds/curses, ailments, charges, triggers, conversion, enem
   implicit / influence) from the XML, PoB's single-enemy model, and what PoB keeps after the removal (an emptied slot
   keeps its gems active, CalcSetup.lua:1605-1608; ticked flasks stay on). (user, 2026-10-26, task 027)
 - "PoB doesn't parse X" cites the exact ModCache line of the rolled value (never the range text), and a quoted
-  tree.lua line is checked against the ["name"] line above it. (orchestrator, 2026-10-26, task 027)"""),
+  tree.lua line is checked against the ["name"] line above it. (orchestrator, 2026-10-26, task 027)
+- A seed without a sample build gets one GATE 1 row per build layer (curse, defensive aura, offensive aura/herald,
+  guard, movement, flask, enemy debuff): taken, declined with a reason, or not applicable. (user, 2026-10-26, task 035)
+- Name or close a route (defence, damage) only with headless numbers for at least 2 routes; a hand estimate never
+  becomes a seed claim. (user, 2026-10-26, task 035)
+- Every enemy condition the build causes (ignite, shock, chill, curse, exposure) gets a GATE 1 row with PoB's chance
+  and the uptime model, and conditional candidates (e.g. Immolate) are tested with that condition set. Label a build
+  crit / non-crit from PoB's output crit share, never from the gem's base crit. (user, 2026-10-26, task 035)"""),
     ("skill-gem-analyst", "specialist", INTERACT, "Interactions",
      "Analyses active skills x supports x triggers (CoC, CwC, channelling, totems, minions), costs, reservation, "
      "gem level/quality effects and hand-set gem counts.",
