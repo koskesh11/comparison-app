@@ -107,7 +107,7 @@ Validator (scratchpad of task 027): `python -I validate.py vault/Interactions` c
 
 Unique package notes (task 027 batch 2c): file "Unique - <Name>.md", id `unique-<kebab>`. Besides the usual keys the ```interaction``` block carries a top-level `package:` key {seed, slot, base, xml_item_id, variant, removal, lost_with_item, downsides_that_are_the_point, foulborn, obtainability}: the unique is valued as one package (every line, incl. downsides that are the point), measured by an in-memory removal on its seed. PoB keeps an emptied slot's gems active (CalcSetup.lua:1605-1608), so `removal` excludes the socket group; the note says so where it matters.
 
-## Notes (155 ids)
+## Notes (158 ids)
 
 Written so far: [[Freeze]] (freeze), [[Chill]] (chill, with Bonechill and chill effect), [[Shatter]] (shatter), [[Shock]] (shock), [[Damage type can ailment]] (damage-type-can-ailment), [[Elemental ailment count]] (elemental-ailment-count), [[Exposure]] (exposure), [[Enemy ailment threshold]] (enemy-ailment-threshold, new id from the coverage audit).
 
@@ -126,6 +126,8 @@ Batch 1d finish 2026-10-26 (task 027): ascendancy-deadeye ("Deadeye ascendancy")
 Batches 3d + 4e finish 2026-10-26 (task 027, merged by the orchestrator): ascendancy-necromancer ("Necromancer ascendancy"), pantheon-and-bandits ("Pantheon and bandits"), map-modifiers ("Map modifiers"), crafting-methods ("Crafting methods and obtainability"). New gap notes: "Unparsed item lines (task 027 batch 3)", "Pantheon lines PoB drops", "Map thorns damage taken", "Map mods PoB lists as no-ops", "Crafting spawn chance and cost" (vault/Gaps).
 
 Batch 5a 2026-10-26 (task 027): ascendancy-juggernaut ("Juggernaut ascendancy"), ascendancy-berserker ("Berserker ascendancy"), ascendancy-chieftain ("Chieftain ascendancy"), ascendancy-ascendant ("Ascendant ascendancy").
+
+Batch 5b 2026-10-26 (task 027): ascendancy-guardian ("Guardian ascendancy"), ascendancy-trickster ("Trickster ascendancy"), ascendancy-saboteur ("Saboteur ascendancy").
 
 Batch 2c finish 2026-10-26 (task 027, merged by the orchestrator; files "Unique - <Name>.md"): unique-anathema, unique-badge-of-the-brotherhood, unique-circle-of-guilt, unique-entropic-devastation, unique-eye-of-malice, unique-foulborn-three-dragons, unique-kalandras-touch, unique-mageblood, unique-mystic-refractor, unique-nyctas-lantern, unique-ralakeshs-impatience, unique-tabula-rasa, unique-the-light-of-meaning, unique-the-squire, unique-the-taming, unique-ungils-harmony, unique-whispers-of-infinity, unique-willclash. Seeds: EK 4, FR 4, Worb 4; league start 6 (NOT MEASURED headless: Tabula Rasa, The Squire, Nycta's Lantern, Kalandra's Touch, Ungil's Harmony, Willclash).
 
