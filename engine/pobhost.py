@@ -15,6 +15,72 @@ LUA_GLOBALSINDEX = -10002
 LUA_REGISTRYINDEX = -10000
 
 
+# Python write guard (task 037). PobEngine chdirs into the PoB install, so a relative-path write from any Python
+# code in this process would land there. One process-wide audit hook refuses Python writes into guarded folders.
+# PoB's own Lua writes are not Python audit events; the Lua write sandbox (write_sandbox.lua) covers those.
+GUARD_MESSAGE = "refused: write into the Path of Building install; use an absolute path outside it"
+_WRITE_MODE_CHARS = frozenset("wax+")
+_WRITE_FLAGS = os.O_WRONLY | os.O_RDWR | os.O_CREAT | os.O_APPEND | os.O_TRUNC
+_PATH_EVENTS = {"os.remove": 1, "os.mkdir": 1, "os.rmdir": 1, "os.rename": 2}   # event -> leading path args
+_guarded_dirs: frozenset[str] = frozenset()
+_guard_installed = False
+
+
+def _norm(path) -> str | None:
+    """Absolute, case-folded form of a path argument against the current cwd; None for non-paths (fds)."""
+    if isinstance(path, int) or path is None:
+        return None
+    try:
+        path = os.fsdecode(path)
+    except (TypeError, ValueError):
+        return None
+    return os.path.normcase(os.path.abspath(path))
+
+
+def _is_guarded(path) -> bool:
+    norm = _norm(path)
+    if norm is None:
+        return False
+    return any(norm == root or norm.startswith(root.rstrip(os.sep) + os.sep) for root in _guarded_dirs)
+
+
+def _is_write_open(mode, flags) -> bool:
+    if isinstance(mode, str):
+        return not _WRITE_MODE_CHARS.isdisjoint(mode)
+    return isinstance(flags, int) and bool(flags & _WRITE_FLAGS)
+
+
+def _write_guard_hook(event: str, args: tuple) -> None:
+    if not _guarded_dirs:
+        return
+    if event == "open":
+        if len(args) >= 3 and _is_write_open(args[1], args[2]) and _is_guarded(args[0]):
+            raise PermissionError(GUARD_MESSAGE)
+        return
+    count = _PATH_EVENTS.get(event)
+    if count and any(_is_guarded(arg) for arg in args[:count]):
+        raise PermissionError(GUARD_MESSAGE)
+
+
+def _guard_forms(path) -> set[str]:
+    return {os.path.normcase(os.path.abspath(path)), os.path.normcase(os.path.realpath(path))}
+
+
+def guard_pob_dir(path) -> None:
+    """Refuse Python writes into `path` for the rest of the process (installs the audit hook once)."""
+    global _guarded_dirs, _guard_installed
+    _guarded_dirs = _guarded_dirs | _guard_forms(path)
+    if not _guard_installed:
+        sys.addaudithook(_write_guard_hook)   # audit hooks cannot be removed
+        _guard_installed = True
+
+
+def unguard_pob_dir(path) -> None:
+    """Tests only: stop guarding `path` (e.g. before removing a temp stand-in folder)."""
+    global _guarded_dirs
+    _guarded_dirs = _guarded_dirs - _guard_forms(path)
+
+
 class LuaError(RuntimeError):
     pass
 
@@ -28,6 +94,7 @@ class PobEngine:
         userdata_dir.mkdir(parents=True, exist_ok=True)
         autobuilder_dir = Path(autobuilder_dir) if autobuilder_dir is not None else AUTOBUILDER_DIR
         os.add_dll_directory(str(pob_dir))
+        guard_pob_dir(pob_dir)
         os.chdir(pob_dir)  # PoB loads its modules relative to the install dir
         self._lua = ctypes.CDLL(str(pob_dir / "lua51.dll"))
         self._bind()
