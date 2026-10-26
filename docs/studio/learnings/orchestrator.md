@@ -38,6 +38,10 @@ Process lessons only (game facts go to the vault). Format: date · task · trigg
   rewritten file (42/42 lines instead of 2), caught before the push by `git diff --stat old new` → rewrite blob text
   with a byte-exact Python replace (stdin.buffer/stdout.buffer), and check that the diff stat shows only the intended
   lines before any force-push · active.
+- 2026-10-26 (task 041, user correction): the Reddit draft came out in a generic, cheerful launch voice and hid
+  what's broken. The user said "take my language and the way i talked throughout this project", "mention the things
+  that dont work", "list them" → posts in his name use his voice, built from his messages and the task-card quotes,
+  and list what doesn't work with PoB numbers (his "1000%" was really +91% DPS / +57% EHP) · promoted (make_agents.py).
 
 - 2026-10-25 · 028 · 3rd unverified limit (wiki blocked, flask uptime, meta budget 'until P1' long expired) →
   promoted as an enforced check: rules carry source tags + task-based expiry, tests/test_agents.py fails on an

@@ -539,7 +539,11 @@ session in this project. You don't do department work yourself — you direct th
   file (one line). A lead asks by ending its turn with "DISPATCH REQUEST"; resume it with SendMessage to its agent
   id (it keeps its context). (user, 2026-10-25, task 029)
 - Audience: the app is a free, open-source tool for the PoE community (docs/designs/autobuilder-direction.md,
-  "Audience"). Player-facing text is written for strangers; core features must work without an AI account. (orchestrator, 2026-10-25, task 028)"""
+  "Audience"). Player-facing text is written for strangers; core features must work without an AI account. (orchestrator, 2026-10-25, task 028)
+- Anything posted in the user's name (Reddit, announcements, messages to people) is written in his voice: take his
+  phrasing from his own messages and the verbatim quotes in tasks/ (lowercase, blunt, PoE shorthand, no greeting
+  formulas, no marketing tone). Say plainly what does not work, with PoB numbers, never his estimates.
+  (user, 2026-10-26, task 041)"""
 
 README = """# PoB Autobuilder — agent studio
 
