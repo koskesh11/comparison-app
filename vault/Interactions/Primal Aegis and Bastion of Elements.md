@@ -39,7 +39,7 @@ conditions:
 uptime:
   Mapping:       {value: partial, config: {}, reasoning: "continuous elemental pressure from packs keeps it empty because the restore needs 5 s without elemental hit damage; PoB shows the full pool anyway", source: "wiki Primal Aegis rev 1649363; Modules/CalcDefence.lua:3178-3179"}
   Pinnacle Boss: {value: partial, config: {}, reasoning: "the first big elemental hit meets a full pool, later hits only after 5 s without elemental hit damage; no PoB model for later hits", source: "wiki Primal Aegis rev 1649363"}
-seeds: []
+seeds: [Fireball]
 sources:
   - {ref: "https://www.poewiki.net/wiki/Primal_Aegis (rev 1649363; 3.13.0 introduced, 3.14.0 100 to 75 per notable, 3.22.0 Ruthless-only change)", kind: wiki, patch: "3.29"}
   - {ref: "https://www.poewiki.net/wiki/Bastion_of_Elements (rev 1579851)", kind: wiki, patch: "3.29"}

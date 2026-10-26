@@ -84,7 +84,7 @@ uptime:
     config: {conditionEnemyShocked: "per vault Models/Own shock effect", conditionShockEffect: "model: e.g. FR CoC v4 26% at Pinnacle T 6,349,995 (+14.4% FullDPS)"}
     reasoning: "boss threshold is huge (404%), so the real effect is often 5-15% for a small hit; the existing PoB-chain model decides"
     source: "vault Models/Own shock effect (verified by user 2026-10-22); Modules/CalcOffence.lua:5333-5343"
-seeds: [FR]
+seeds: [FR, Fireball]
 sources:
   - {ref: "https://www.poewiki.net/wiki/Shock (rev 1606037, 2026-01-25)", kind: wiki, patch: "3.29"}
   - {ref: "https://www.poewiki.net/wiki/Ailment (rev 1673310)", kind: wiki, patch: "3.29"}

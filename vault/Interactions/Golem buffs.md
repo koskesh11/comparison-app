@@ -53,7 +53,7 @@ conditions:
 uptime:
   Mapping:       {value: always, config: {}, reasoning: "Always while golems are alive; PoB applies the buff if the skill group is enabled", source: "build-strategist table"}
   Pinnacle Boss: {value: partial, config: {}, reasoning: "Golems die to boss one-shots and need respawn (6 s cooldown): buff lost until recast. Liege resummons after 4 s, so the buff is off for at least 4 s per death; PoB has no model for the resummon (unparsed line), use a scenario input. Elemental immunity helps against elemental damage; physical and chaos still kill golems. High where the golems survive", source: "build-strategist table; TreeData/3_29/tree.lua:50269-50285; Data/ModCache.lua:21966; b1-tree-ascendancy-analyst.md"}
-seeds: [Worb]
+seeds: [Worb, Fireball]
 sources:
   - {ref: "PoB CalcPerform.lua:1443-1448, SkillStatMap.lua:1991, 2086-2093, ModParser.lua:478-485, 4443-4445", kind: pob, patch: "3.29"}
   - {ref: "PoB Data/Skills act_dex/act_int/act_str.lua golem rows", kind: pob, patch: "3.29"}

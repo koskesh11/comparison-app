@@ -68,7 +68,7 @@ uptime:
     config: {enemyIsBoss: "Pinnacle (default index 3)"}
     reasoning: "same sources, but boss penetration (FireEnemyPen 3 in both samples) lowers each resistance by 3 in max hit: effective multiplier 1 - (max - 3)/100"
     source: "b1-mechanics-researcher.md (measured); Modules/CalcDefence.lua:2008,2078"
-seeds: [EK, Worb]
+seeds: [EK, Worb, Fireball]
 sources:
   - {ref: "https://www.poewiki.net/wiki/Resistance (rev 1659347, 2026-06-24); version rows 3.6.0 (max res cap 90 added), 3.16.0 (floor -200), 3.17.0 (reduced-resistance cap 100%), 3.26.0 (resistance mods no longer roll on weapons)", kind: wiki, patch: "3.29"}
   - {ref: "Modules/CalcDefence.lua:576-631,2008,2078,3224-3229; Modules/Data.lua:245,246; Modules/ModParser.lua:268-284,4838-4846 (PoB 2.67.2)", kind: pob, patch: "3.29"}

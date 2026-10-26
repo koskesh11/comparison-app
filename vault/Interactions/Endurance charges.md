@@ -64,7 +64,7 @@ conditions:
 uptime:
   Mapping:       {value: model, config: {useEnduranceCharges: "true when a gain source or 'count as max' exists; kill/block/hit chance sources: model u = 1-(1-p)^(R*10)", overrideEnduranceCharges: "leave at max by the uptime rule (user rule 2026-10-25: u >= 80% ticked, no notice; 50-80% ticked + user informed with u; < 50% unticked + warning with u)"}, reasoning: "kill rate in maps is high but not measured here; 'count as max' and minimum charges are always (u = 1). Chance providers use [[Chance on hit uptime]] (hits dealt per skill use, 1 charge per use)", source: "wiki Charge rev 1700592; mechanics-researcher-uptime.md table row 'Endurance / Frenzy / Power charge on hit'; Data/Uniques/boots.lua:933"}
   Pinnacle Boss: {value: model, config: {useEnduranceCharges: "true for 'count as max', minimum charges, or when-hit / on-crit-taken sources via E = 1 boss hit on the player per second (1000 ms, fixed default, labelled ASSUMPTION, user 2026-10-25; PoB enemySpeed 700 ms is not used); kill-based sources = none (no kills on a lone boss)"}, reasoning: "boss hits on you drive when-hit and crit-taken sources; no pinnacle hit-rate source found, so every when-hit uptime stays an assumption", source: "Modules/ConfigOptions.lua:2318-2320, 2362; mechanics-researcher-uptime.md section 'How often does a pinnacle boss hit the player per second'"}
-seeds: []
+seeds: [Fireball]
 sources:
   - {ref: "https://www.poewiki.net/wiki/Endurance_charge (rev 1697434)", kind: wiki, patch: "3.29"}
   - {ref: "https://www.poewiki.net/wiki/Charge (rev 1700592)", kind: wiki, patch: "3.29"}

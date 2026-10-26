@@ -64,7 +64,7 @@ uptime:
     config: {enemyRadius: "scenario preset; no PoB config for projectiles that hit the boss (only ShrapnelBallistaProjectileOverlap, ConfigOptions.lua:627, one skill)"}
     reasoning: "model: hits = projectiles * 6 // 10 per cast: GMP alone 5 -> 3 hits; LMP alone 3 -> 1 hit (no gain, still 6% less); base 1 projectile -> 1 hit; Spell Echo needs no model (counted by PoB)"
     source: "vault Models/Projectiles hitting a single target.md (hit_fraction 0.6, user-verified); skill-gem-analyst arithmetic"
-seeds: []
+seeds: [Fireball]
 sources:
   - {ref: "https://www.poewiki.net/wiki/Greater_Multiple_Projectiles_Support (rev 1681576)", kind: wiki, patch: "3.29"}
   - {ref: "https://www.poewiki.net/wiki/Multiple_Projectiles_Support (rev 1681577)", kind: wiki, patch: "3.29"}

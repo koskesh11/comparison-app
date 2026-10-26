@@ -48,7 +48,7 @@ conditions:
 uptime:
   Mapping:       {value: always, config: {}, reasoning: "keystone without a condition; effective only while current mana is above 0", source: "TreeData/3_29/tree.lua:40251-40262; wiki Mana before Life rev 1700557"}
   Pinnacle Boss: {value: always, config: {}, reasoning: "the pool is drained by every hit and by skill costs (Fireball spends the same pool) while PoB uses the full unreserved mana for max hit and EHP, so the number is a snapshot", source: "Modules/CalcDefence.lua:2351"}
-seeds: []
+seeds: [Fireball]
 sources:
   - {ref: "https://www.poewiki.net/wiki/Mana_before_Life (rev 1700557)", kind: wiki, patch: "3.29"}
   - {ref: "https://www.poewiki.net/wiki/Mind_Over_Matter (rev 1492420; 3.19.0 30 to 40%, 3.0.0 applies to DoT)", kind: wiki, patch: "3.29"}

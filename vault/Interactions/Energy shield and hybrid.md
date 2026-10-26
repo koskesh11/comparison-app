@@ -53,7 +53,7 @@ conditions:
 uptime:
   Mapping:       {value: high, config: {conditionEnergyShieldRechargePastTwoSec: "scenario tick, see Config"}, reasoning: "recharge works between packs once 2 s pass undamaged", source: "wiki Energy shield rev 1673450; Modules/ConfigOptions.lua:1435"}
   Pinnacle Boss: {value: low, config: {conditionEnergyShieldRechargePastTwoSec: "scenario tick, see Config"}, reasoning: "recharge is mostly interrupted in boss damage phases, but ES still works as a first buffer against each hit", source: "wiki Energy shield rev 1673450"}
-seeds: []
+seeds: [Fireball]
 sources:
   - {ref: "https://www.poewiki.net/wiki/Energy_shield (rev 1673450; 3.16.0 recharge rate, 3.5.0)", kind: wiki, patch: "3.29"}
   - {ref: "Modules/CalcDefence.lua:322-332,1235-1296,1343-1400,2904-2966; Data.lua:255-256; Data/Misc.lua:66; Modules/ConfigOptions.lua:1432,1435 (PoB 2.67.2)", kind: pob, patch: "3.29"}

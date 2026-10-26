@@ -18,7 +18,7 @@ family: defence
 pipeline_step: ["Receiving damage#Armour and damage reduction", "Defences#Armour formula", "Defences#Physical damage reduction cap"]
 pipeline_why: "armour acts after damage-taken-as and resistance, before damage-taken modifiers and suppression (wiki Armour: after damage shifts and resistances, before modifiers to damage taken and spell suppression); it is per hit size, so the max hit has to solve D itself"
 target: self
-related: [endurance-charges, damage-over-time-multiplier, spell-suppression, block, max-resistances]
+related: [endurance-charges, damage-over-time-multiplier, spell-suppression, block, max-resistances, flat-physical-damage-reduction, physical-taken-as-elemental, guard-skills, determination-grace]
 pob:
   measured: partial
   how: "formula calcs.armourReductionF CalcDefence.lua:67-72; DISPLAYED PhysicalDamageReduction / TakenHit and TotalEHP use the configured hit D (CalcDefence.lua:2030, armourReduction(effectiveAppliedArmour, damage*resMult); ConfigOptions.lua:2368 enemyPhysicalDamage overrides the default 1.5 x the enemy base damage); PhysicalMaximumHitTaken does NOT use the configured hit: CalcDefence.lua:3235-3261 solves the whole chain for RAW with a quadratic a = 5(1-flatDR+ow)*taken*(res*conv)^2, b = ((ow-flatDR)*A*taken - 5*(pool - flat*taken))*res*conv, c = -A*(pool - flat*taken), then 'tack on some caps' (3259-3261: noDRMaxHit floor, maxDRMaxHit with DamageReductionMax 90); when damage is shifted (conv != 100%) up to Data.lua:295 maxHitSmoothingPasses = 8 passes of calcs.takenHitFromDamage (3273-3302, shown as '(approximate)' in the breakdown 3350). Block, evasion, avoidance and dodge are not in this chain (3208-3266 has no reference)."
@@ -78,7 +78,7 @@ uptime:
     config: {enemyIsBoss: "Pinnacle (default index 3)"}
     reasoning: "same uptime, but the boss hits are larger so the armour reduction is worse (D grows, DR = A/(A+5D)); only the displayed DR and TotalEHP follow the boss hit config, the physical max hit does not"
     source: "Modules/ConfigOptions.lua:2086-2115,2368"
-seeds: [EK, Worb]
+seeds: [EK, Worb, Fireball]
 sources:
   - {ref: "https://www.poewiki.net/wiki/Armour (rev 1625574, 2026-03-03)", kind: wiki, patch: "3.29"}
   - {ref: "Modules/CalcDefence.lua:67-72,2030,3208-3350; Modules/Data.lua:243,295; Modules/ConfigOptions.lua:2086,2368 (PoB 2.67.2)", kind: pob, patch: "3.29"}

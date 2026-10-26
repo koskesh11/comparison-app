@@ -58,7 +58,7 @@ uptime:
     config: {enemyDamageType: "Spell / Projectile Spell vs Average changes the max-hit credit"}
     reasoning: "always as a stat but useful only if the boss hits are spells; for max hit PoB credits it only at 100% chance (60-90% shows 0 in PhysicalMaximumHitTaken / ElementalMaximumHitTaken while TotalEHP counts it)"
     source: "Modules/CalcDefence.lua:2068-2076,2814-2829"
-seeds: [EK]
+seeds: [EK, Fireball]
 sources:
   - {ref: "https://www.poewiki.net/wiki/Spell_suppression (rev 1675604, 2026-07-20); version rows 3.16.0 introduced, 3.19.0 item values reduced / passives increased, 3.27.0 now prevents 40% (previously 50%)", kind: wiki, patch: "3.29"}
   - {ref: "Modules/CalcDefence.lua:1137-1178,2068-2076,2814-2829; Modules/Data.lua:248,250,251; Modules/ModParser.lua:360-362,2210-2212,3022 (PoB 2.67.2)", kind: pob, patch: "3.29"}

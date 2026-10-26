@@ -65,7 +65,7 @@ uptime:
     config: {enemyIsBoss: "Pinnacle (default, enemy elemental res 50, chaos 30; ConfigOptions.lua:2162-2165)"}
     reasoning: "wiki efficacy I = p/(1 - min(r,m)): 10 penetration at res 50 = +20%, at res 15 = +11.8%, at res -40.5 = +6.8% (Worb measured); Pinnacle is where penetration gives the most per point unless exposure and curses already drove the total down"
     source: "https://www.poewiki.net/wiki/Resistance_penetration rev 1673467; Modules/ConfigOptions.lua:2128,2162; b1-pob-coverage-auditor.md M5"
-seeds: [Worb]
+seeds: [Worb, Fireball]
 sources:
   - {ref: "https://www.poewiki.net/wiki/Resistance_penetration (rev 1673467)", kind: wiki, patch: "3.29"}
   - {ref: "https://www.poewiki.net/wiki/Resistance (rev 1659347)", kind: wiki, patch: "3.29"}

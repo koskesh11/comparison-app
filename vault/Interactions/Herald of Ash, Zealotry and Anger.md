@@ -57,7 +57,7 @@ uptime:
     config: {conditionOnConsecratedGround: "Zealotry consecrated ground: take the frequency from the vault Consecrated ground note (the boss is unique, 10% per hit); PoB does not count it"}
     reasoning: "the buffs stay up while reserved; the Herald of Ash burn is none on a boss (no kill before the end, adds only)"
     source: "Data/Skills/act_int.lua:21433; vault Consecrated ground note (via skill-gem-analyst)"
-seeds: [EK]
+seeds: [EK, Fireball]
 sources:
   - {ref: "https://www.poewiki.net/wiki/Herald_of_Ash (rev 1681840)", kind: wiki, patch: "3.29"}
   - {ref: "https://www.poewiki.net/wiki/Zealotry (rev 1682036)", kind: wiki, patch: "3.29"}

@@ -51,7 +51,7 @@ conditions:
 uptime:
   Mapping:       {value: always, config: {}, reasoning: "regeneration has no condition; ES recharge works only after 2 s undamaged; use PoB's <Resource>Regen as the rate", source: "Modules/CalcDefence.lua:1235-1296; wiki Energy shield rev 1673450"}
   Pinnacle Boss: {value: partial, config: {}, reasoning: "regeneration always; recharge mostly down in boss damage phases", source: "Modules/CalcDefence.lua:1235-1296; wiki Energy shield rev 1673450"}
-seeds: []
+seeds: [Fireball]
 sources:
   - {ref: "https://www.poewiki.net/wiki/Recovery (rev 1618351; no version table)", kind: wiki, patch: "3.29"}
   - {ref: "Modules/CalcDefence.lua:1212-1217,1235-1296,1343-1400,2904-2966,3439-3525; Modules/ConfigOptions.lua:212,1432,1435; Data/Misc.lua:66 (PoB 2.67.2)", kind: pob, patch: "3.29"}

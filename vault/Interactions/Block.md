@@ -60,7 +60,7 @@ uptime:
     config: {CannotBeBlocked: "enemy flag exists in PoB, config box not located"}
     reasoning: "always as a stat, but some boss hits may be unblockable (undocumented in the evidence); enemy flags CannotBeBlocked / reduceEnemyBlock exist in PoB"
     source: "Modules/CalcDefence.lua:756,2796"
-seeds: [EK, Worb]
+seeds: [EK, Worb, Fireball]
 sources:
   - {ref: "https://www.poewiki.net/wiki/Blocking (rev 1648970, 2026-05-20); version rows 3.24.0 max block can no longer exceed 90%, 3.25.0 shield prefixes changed to 'increased Chance to Block', 3.4.0 attack and spell block reworked into two stats", kind: wiki, patch: "3.29"}
   - {ref: "Modules/CalcDefence.lua:679-785,2796-2813; Modules/Data.lua:249; Classes/Item.lua:2410-2411; Modules/ModParser.lua:2370-2372 (PoB 2.67.2)", kind: pob, patch: "3.29"}

@@ -14,7 +14,7 @@ The numbers live in existing vault models, not here: [[Projectiles hitting a sin
 
 ```interaction
 id: projectile-hits-single-target
-mechanic: "Of the projectiles of one cast, only some hit a single boss: collisions are capped by shotgun prevention, explosions overlap by geometry; user-verified ~60% of projectiles hit for Forbidden Rite / Fireball style AoE explosions"
+mechanic: "Of the projectiles of one cast, only some hit a single boss: collisions are capped by shotgun prevention, explosions overlap by geometry; user-verified ~60% of projectiles hit for Forbidden Rite (never-colliding explosions); Fireball + GMP on a lone boss = 1 hit per cast (collision-limited, see vault/Models/Fireball explosion overlap.md, draft 2026-10-26)"
 family: projectile
 pipeline_step: []
 pipeline_why: "no damage step: it sets how many hits land on one boss per cast, a hit-count multiplier outside the per-hit order; the per-hit chain in PoB is unchanged and the count is a hand-set input"
@@ -51,7 +51,7 @@ conditions:
 uptime:
   Mapping:       {value: low, config: {}, reasoning: "packs spread the hits (strategist: low-partial); overlap on one target matters for big enemies only; use the geometry models, not PoB", source: "build-strategist.md; vault Models"}
   Pinnacle Boss: {value: model, config: {count: "model: hit count of the vault model (golden 4, rounded down)"}, reasoning: "overlap on the lone boss is the whole question; the model replaces the hand-set gem count", source: "vault Models/Projectiles hitting a single target.md; Winter Orb projectile overlap.md"}
-seeds: [Worb, FR, EK]
+seeds: [Worb, FR, EK, Fireball]
 sources:
   - {ref: "https://www.poewiki.net/wiki/Projectile (rev 1642414)", kind: wiki, patch: "3.29"}
   - {ref: "vault/Models/Projectiles hitting a single target.md (user-verified 0.6)", kind: discovery, patch: "3.29"}

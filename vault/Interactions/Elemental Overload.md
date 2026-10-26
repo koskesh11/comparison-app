@@ -59,7 +59,7 @@ uptime:
     config: {CritInPast8Sec: "model: P(up) = 1 - (1 - c)^(8 * hits/s)"}
     reasoning: "PoB gives the full 40% whenever CritChance is not 0 (CalcOffence.lua:3273-3275); the model corrects this for low crit chance"
     source: "Modules/CalcOffence.lua:3273-3275; analyst derivation (no calibration found)"
-seeds: []
+seeds: [Fireball]
 sources:
   - {ref: "https://www.poewiki.net/wiki/Elemental_Overload (rev 1482027)", kind: wiki, patch: "3.29"}
   - {ref: "TreeData/3_29/tree.lua:39952-39958; Modules/ModParser.lua:993,1308,2237,3563; Modules/CalcOffence.lua:3204-3205,3273-3275,4296-4304; Modules/ConfigOptions.lua:1251,1668-1671 (PoB 2.67.2)", kind: pob, patch: "3.29"}

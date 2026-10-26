@@ -54,7 +54,7 @@ conditions:
 uptime:                            # keys = vault/Scenarios note names
   Mapping:       {value: high, config: {conditionEnemyFrozen: true}, reasoning: "...", source: "..."}
   Pinnacle Boss: {value: model, config: {conditionEnemyFrozen: "model: only if duration >= 0.3 s"}, reasoning: "...", source: "..."}
-seeds: [Worb]                      # seeds that use it: EK | Worb | FR (see Seeds-as-mechanics)
+seeds: [Worb]                      # seeds that use it: EK | Worb | FR | Fireball (see Seeds-as-mechanics)
 sources:
   - {ref: "https://www.poewiki.net/wiki/Freeze (rev NNN)", kind: wiki, patch: "3.29"}
 not_verified: ["..."]
@@ -86,7 +86,7 @@ Examples of why it matters: increased vs more (additive pool vs own multiplier),
 
 ## Writer rules
 
-- Never write bare yes/no/on/off as a value: YAML reads them as booleans. Use the vocabulary words (measured and provider pob: full | partial | config | none; seeds: EK | Worb | FR) or quote the string.
+- Never write bare yes/no/on/off as a value: YAML reads them as booleans. Use the vocabulary words (measured and provider pob: full | partial | config | none; seeds: EK | Worb | FR | Fireball) or quote the string.
 - Every provider, condition and uptime line has a source (PoB file:line, wiki revision, patch note, forum or GitHub URL). No source: put the claim in `not_verified`.
 - Foulborn: name the replaced original line in `variant`. A mutation REPLACES a line (PoB loads Data/ModFoulbornMap.jsonc; texts in Data/ModFoulborn.lua).
 - Conflicting readings (wiki vs PoB vs user) stay visible as params or readings plus an `open_questions` entry; never pick one silently.
