@@ -79,6 +79,42 @@ uncovered:
   - "brand-attached config (dead var, 021 N12)"
 ```
 
+Seed 4 - Fireball Elementalist (Witch / Elementalist). Sample: none (goals only; draft seed vault/Seeds/Fireball Elementalist.md on branch task-035-fireball-starter; measured on the scrapped build Builds/AutoBuilder/Scrapped/Fireball Elementalist - league_start (NOT VIABLE).xml, Fireball L20 effective quality 30, Pinnacle boss). User goal: 500k hit DPS (TotalDPS), 4-6 projectiles, life + ES hybrid, phys max hit 7,000.
+
+```seed_mechanics
+seed: Fireball
+name: "Fireball Elementalist"
+sample: null
+mechanics:
+  - {id: spell-projectile-supports, role: core, providers: ["Greater Multiple Projectiles (pinned: 5 projectiles for the 4-6 goal, 26% less Projectile Damage at L20)", "Fire Penetration / Added Fire Damage / Inspiration / Controlled Destruction candidates in the Fireball group"]}
+  - {id: projectile-hits-single-target, role: core, providers: ["Fireball + GMP on a lone Pinnacle boss = 1 hit per cast, x1.0 on PoB TotalDPS (tasks/reports/027-batch1b.md; vault Models/Fireball explosion overlap)"]}
+  - {id: ignite, role: support, providers: ["Fireball gem 25% on hit, 100% on crit = 40.86% per hit: IgniteDPS 33,468.58 of FullDPS 285,468.27 at Fireball L20 (b1c-pob-fireball.md); FullDPS keeps only the best ignite"]}
+  - {id: penetration, role: support, providers: ["Fire Penetration support (candidate, not pinned)"]}
+  - {id: shock, role: support, providers: ["Shaper of Storms 27038: hits always shock (config conditionEnemyShocked ticked; PoB never sets Shocked from hits)"]}
+  - {id: golem-buffs, role: support, providers: ["Golem Commander 34506 + Liege of the Primordial 56461: 4 golems (Flame, Lightning, Stone, Chaos); Lightning Golem Wrath config summonLightningGolemEnableWrath"]}
+  - {id: herald-ash-zealotry-anger, role: support, providers: ["Aura group candidates Herald of Ash / Zealotry / Anger (pin false, reservation vs ManaUnreserved >= 0); Herald of Ash overkill burn: lone boss = 0, pack scenario only (hoaOverkill)"]}
+  - {id: elemental-overload, role: support, providers: ["keystone candidate (not pinned by the seed): PoB assumes 100% uptime, the note's model gives 70% at 5% crit and 1 hit per cast"]}
+  - {id: mind-over-matter, role: enabler, providers: ["main route to the max-hit goals (seed: Mind over Matter is not forbidden); needs unreserved mana"]}
+  - {id: energy-shield-hybrid, role: enabler, providers: ["user hybrid: Life > 3,000 and ES > 1,100; Chaos Inoculation and Eldritch Battery forbidden"]}
+  - {id: armour-phys-max-hit, role: support, providers: ["armour toward PhysicalMaximumHitTaken >= 7,000 at a 4,100 pool (note: about 24.8k armour alone)"]}
+  - {id: flat-physical-damage-reduction, role: support, providers: ["flat physical damage reduction toward the 7,000 goal"]}
+  - {id: physical-taken-as-elemental, role: support, providers: ["phys taken as elemental toward the 7,000 goal"]}
+  - {id: guard-skills, role: support, providers: ["guard skill absorb for the max hit (one guard only; PoB keeps the first guard in pairs() order)"]}
+  - {id: determination-grace, role: support, providers: ["Determination (armour) / Grace; competes for reservation with the aura group"]}
+  - {id: max-resistances, role: support, providers: ["75% elemental resistance goal; max resistance lifts the elemental max hits (16,000 goal)"]}
+  - {id: elementalist-aegis-bastion, role: support, providers: ["Bastion of Elements 4917: declined by the user 2026-10-25 (kept Shaper of Storms)"]}
+  - {id: block, role: support, providers: ["Titanium Spirit Shield in the seed rares"]}
+  - {id: spell-suppression, role: support, providers: ["no ascendancy node; gear and tree only"]}
+  - {id: endurance-charges, role: support, providers: ["when-hit uptime assumption (note)"]}
+  - {id: recovery, role: support, providers: ["life regeneration and ES recharge for sustained damage, not for the single-hit max hit goal"]}
+uncovered:
+  - "Fireball part 2 'Explosion' (skill_part 2): which part represents the directly hit boss (seed VERIFY); not in TotalDPS at part 1"
+  - "Fireball 1 + E model for walls, adds and Mapping (GMP spread angle not verified, batch 1b)"
+  - "Heart of Destruction Convergence (conditionConvergence): PoB makes it a permanent 30% more, real uptime <= 50% and only vs unique enemies; left unticked"
+  - "Mastermind of Discord 61259: path node only, no exposure source on Fireball"
+  - "Chaos resistance 0% goal (Amethyst Ring implicits, Chaos Golem)"
+```
+
 User examples (not in a seed): returning-projectiles (Nimis, Returning Projectiles support), rampage (Bisco's Leash), flask-uptime.
 
 ```seed_mechanics

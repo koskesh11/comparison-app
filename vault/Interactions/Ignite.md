@@ -8,6 +8,8 @@ last_confirmed_patch: "3.29.x"
 
 Ignite is the fire damage-over-time ailment: 90% of the hit's flat fire damage per second for 4 s, strongest ignite only (no stacking) unless a source adds more. It is the opposite of a hit modifier: crit multiplier, penetration and double damage never reach it, the DoT multiplier does. PoB already turns ignite chance into expected stacks and adds the DPS to TotalDotDPS / CombinedDPS, so no uptime model is needed for the DPS itself; only the enemy-is-Ignited condition for payoff mods is a config tick. Related: [[Shock]], [[Damage type can ailment]], [[Elemental ailment count]], [[Scorch, Brittle and Sap]], [[Fight length]], gap [[Ailments from hits source damage]].
 
+Measured on the Fireball seed (scrapped Fireball build, Pinnacle boss, Fireball L20 with effective quality 30, PoB 2.67.2; tasks/reports/027-evidence/b1c-pob-fireball.md): TotalDPS 251,999.68 (hit only), IgniteDPS 33,468.58, FullDPS 285,468.27. The ignite comes from the gem alone (25% on hit, `base_chance_to_ignite_%`, Data/Skills/act_int.lua:5815-5817; poewiki Fireball rev 1698987: 25% at all gem levels since 3.16.0) and 100% on crit; with CritChance 21.15% that is 40.86% per hit (CalcOffence.lua:5014). The output key IgniteChance 89.35 is not the per-hit chance: it weights how likely the strongest ignite present is a crit ignite, because IgniteStackPotential is 8.22 (CalcOffence.lua:5183, calcAilmentDamage 4333-4339). FullDPS keeps only the best ignite across groups (Calcs.lua:265-268), and no config box is needed for the ignite itself.
+
 Pipeline: [[Damage calculation#Ailments from hits]] and [[Damage calculation#Damage over time]] - ignite starts from the unmitigated flat fire damage after conversion and scales with the DoT multiplier pool, so it works for a build with big flat damage and DoT multiplier and does not for one that only has hit-only scaling (crit multiplier, penetration, double damage).
 
 ```interaction
@@ -65,13 +67,15 @@ uptime:
     config: {conditionEnemyIgnited: "model: u from the boss hit rate, chance and 4 s duration; crit builds have 100% on crit", ailmentMode: "AVERAGE unless the build ignites only with crits"}
     reasoning: "one target, so the ignite is up as long as one ignite lands per 4 s; the roll average (50%, or toward the top when stack potential > 1) is PoB's, the real strongest-ignite roll is not verified; fight length decides how much of the 4 s ramp counts"
     source: "Modules/CalcOffence.lua:5073-5081; vault Interactions/Fight length"
-seeds: []
+seeds: [Fireball]
 sources:
   - {ref: "https://www.poewiki.net/wiki/Ignite (rev 1598418, 2025-12-18)", kind: wiki, patch: "3.29"}
   - {ref: "https://www.poewiki.net/wiki/Ailment (rev 1673310, 2026-07-11)", kind: wiki, patch: "3.29"}
   - {ref: "https://www.poewiki.net/wiki/Version_3.29.0 (rev 1699085): Voracious Flame; Version_3.26.0 (rev 1674253): Shaper of Flames; Version_3.25.0 (rev 1698361): Oath of Summer", kind: wiki, patch: "3.29"}
   - {ref: "PoB Modules/CalcOffence.lua:4240-4262,5017-5081,5184-5186,5221-5246,6252-6256; Modules/Data.lua:261,266-267; Modules/CalcSetup.lua:604; Modules/ConfigOptions.lua:210,1348,1878,1881; Modules/ModParser.lua:2237,2796,2810,3036,3531,3697; Data/ModCache.lua:14351,22783 (PoB 2.67.2)", kind: pob, patch: "3.29"}
   - {ref: "vault/Gaps/Ailments from hits source damage.md and vault/Interactions/Damage calculation.md", kind: pob, patch: "3.29"}
+  - {ref: "tasks/reports/027-evidence/b1c-pob-fireball.md (Fireball seed ignite measure; PoB Modules/CalcOffence.lua:4333-4339,5014,5183; Modules/Calcs.lua:265-268; Data/Skills/act_int.lua:5815-5817)", kind: pob, patch: "3.29"}
+  - {ref: "https://www.poewiki.net/wiki/Fireball (rev 1698987)", kind: wiki, patch: "3.29"}
 not_verified:
   - "the in-game roll of the strongest ignite: PoB takes 50% of the damage range (or a top-shifted value when stack potential > 1); the wiki only says the strongest ignite deals damage"
   - "whether the 3.29.0 keystone Voracious Flame stacks with Emberwake in game (PoB adds +1 each; no wiki text yet, the Ignite page predates 3.29.0)"

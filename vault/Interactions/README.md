@@ -113,6 +113,8 @@ Other notes of task 027 (written in parallel; ids): coc-trigger, frenzy-charges,
 
 Batch 1 (task 027): armour-phys-max-hit ("Armour and physical max hit"), spell-suppression ("Spell suppression"), block ("Block"), max-resistances ("Max resistances"), mind-over-matter ("Mind over Matter"), elementalist-aegis-bastion ("Primal Aegis and Bastion of Elements"), energy-shield-hybrid ("Energy shield and hybrid"), recovery ("Recovery"), spell-projectile-supports ("Spell projectile supports"), elemental-overload ("Elemental Overload"), herald-ash-zealotry-anger ("Herald of Ash, Zealotry and Anger"), penetration ("Penetration"). Batch 2-4 entries are added by the orchestrator at merge.
 
+Batch 1c (task 027): offensive-utility-flasks ("Offensive utility flasks"), defensive-utility-flasks ("Defensive utility flasks"), life-mana-flasks ("Life and mana flasks"), elemental-ailment-immunity ("Elemental ailment immunity"), bleed-poison-cb-immunity ("Bleed, poison and corrupted blood immunity"), stun ("Stun"). Herald of Ash overkill is a section of herald-ash-zealotry-anger; Fireball is a section of [[Seeds-as-mechanics]].
+
 All 24 ids: freeze, chill, shatter, shock, damage-type-can-ailment, elemental-ailment-count, exposure, enemy-ailment-threshold, coc-trigger, frenzy-charges, power-charges, spell-impale, curse-limit, skill-cost-from-es, max-res-equalise, golem-buffs, arcane-surge, projectile-hits-single-target, returning-projectiles, rampage, flask-uptime, channelling, consecrated-ground, fight-length.
 
 ## Backlog of candidate mechanics (no note yet)
