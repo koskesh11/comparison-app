@@ -84,7 +84,11 @@ LEAD_NOTE = """## How you delegate
   (user, 2026-10-25, task 033, supersedes: "If Codex is at its usage limit")
 - A lead writes no code itself: it plans, splits the work into disjoint file lists, dispatches, verifies and
   commits. The only exception is a fix of at most 10 changed lines found during verification, named in the report.
-  (orchestrator, 2026-10-25, task 033)"""
+  (orchestrator, 2026-10-25, task 033)
+- A specialist call that comes back "interrupted" together with a session restart (new scratchpad id) was cut off
+  by the user's /clear, not refused: compare the briefed files' modification times with the dispatch time, then
+  re-dispatch once on your own with the same brief. Stop and report if it was interrupted without a restart or for
+  the second time. (orchestrator, 2026-10-26, task 035)"""
 
 SPECIALIST_NOTE = """## How you work
 - You are dispatched by your department lead. Do exactly the task you were given, then report back concisely:

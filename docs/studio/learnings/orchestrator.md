@@ -28,6 +28,9 @@ Process lessons only (game facts go to the vault). Format: date · task · trigg
 - 2026-10-25 (task 021, user correction): did not tell the user "/clear now" after GATE 1, the eng review or GATE 2,
   because background agents were running. Agents write their reports to files, so a resume point naming those files
   makes /clear safe. Lesson: after every gate or task, write the resume point and say "/clear now", even while agents run.
+  Amended 2026-10-26 (task 035, 2nd occurrence): a /clear keeps a running lead alive but cancels its in-flight
+  specialist calls ("interrupted"), and the lead then stops BLOCKED → leads now re-dispatch once on their own after a
+  restart-interrupt (LEAD_NOTE in tools/make_agents.py) · promoted.
 
 - 2026-10-25 · 028 · 3rd unverified limit (wiki blocked, flask uptime, meta budget 'until P1' long expired) →
   promoted as an enforced check: rules carry source tags + task-based expiry, tests/test_agents.py fails on an
