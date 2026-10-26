@@ -32,3 +32,15 @@ Already in the agent prompts (tools/make_agents.py); kept for the record, not co
 - 2026-10-24 (user correction): interaction specialists unused since 10-23 (leads did the research themselves under the
   token cap "do small items yourself, max 2") → user unhappy: specialised knowledge never called on → routing table
   in interactions-lead (game facts → owning specialist, up to 4 in parallel, every map row names its source) · promoted.
+- 2026-10-26 · 027 (user correction 02:2x) · a headless removal delta was stated as a game fact (EK hit chance) → name
+  the item source, PoB's single-enemy model and what PoB keeps after a removal (2c: emptied slot keeps its gems,
+  CalcSetup.lua:1605-1608; ticked flasks stay on) · promoted.
+- 2026-10-26 · 027-1d/3d · tree.lua:59355 given to the wrong notable; Cospri "unparsed" read from the range text
+  "(80-120)%" (recurs the 10-25 "quote the exact ModCache form") → cite the rolled-value ModCache line and the ["name"]
+  line above a quoted tree.lua line · promoted.
+- 2026-10-26 · 027-3d · engine-path claim ("only P2 reaches cantMeasure") without tracing the item kind's branch → cite
+  the deciding audit.py line for that branch (unique / crafted / plain).
+- 2026-10-26 · 027-4e · curator blamed another note for problems=1 (its own pipeline_step ["none"]) → run the validator
+  yourself and grep its output for the new note names before accepting a curator reply.
+- 2026-10-26 · 027-2c · saved partial brief named no item list, so the resumed lane rebuilt its pick list → before
+  saving work as partial, write the exact item list and every output file into the brief.

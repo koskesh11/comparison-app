@@ -181,7 +181,12 @@ ascendancy), auras/heralds/curses, ailments, charges, triggers, conversion, enem
   (user, 2026-10-24)
 - A question touching 2+ domains goes to each owner (e.g. a unique that converts a gem's damage: item + gem analyst). (orchestrator, 2026-10-25, task 029)
 - Every row in your interaction map / gate report names the specialist (or PoB file) it came from; a row without one
-  is not done. Doing it yourself is allowed only for a pure re-check of a specialist's evidence. (orchestrator, 2026-10-25, task 029)"""),
+  is not done. Doing it yourself is allowed only for a pure re-check of a specialist's evidence. (orchestrator, 2026-10-25, task 029)
+- A headless removal delta is not a game fact. Before stating a mechanic from one, name the item source (craft /
+  implicit / influence) from the XML, PoB's single-enemy model, and what PoB keeps after the removal (an emptied slot
+  keeps its gems active, CalcSetup.lua:1605-1608; ticked flasks stay on). (user, 2026-10-26, task 027)
+- "PoB doesn't parse X" cites the exact ModCache line of the rolled value (never the range text), and a quoted
+  tree.lua line is checked against the ["name"] line above it. (orchestrator, 2026-10-26, task 027)"""),
     ("skill-gem-analyst", "specialist", INTERACT, "Interactions",
      "Analyses active skills x supports x triggers (CoC, CwC, channelling, totems, minions), costs, reservation, "
      "gem level/quality effects and hand-set gem counts.",
