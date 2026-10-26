@@ -68,3 +68,6 @@ Already in the agent prompts (tools/make_agents.py); kept for the record, not co
 - 2026-10-26 · 035 (user reveal 2, tanky) · the GATE 1 layer list covered only skill groups, so block 25/8 and 0 ES
   regen went unquestioned (tanky 50/36 block, 150 ES/s) → one row per defensive mechanic with saved PoB numbers;
   check whether PoB sets a condition itself (EO) before the tick rule · promoted (rule extended).
+- 2026-10-26 · 027-5c (user correction) · Ungil's Harmony's no-crit-multi line was called "worth 0 with Perfect Agony";
+  it is a downside that has NO EFFECT there (same flag), so it costs nothing → phrase a redundant downside as "no
+  effect / costs nothing", never "worth nothing" (failure mode 8: a downside's real cost depends on the build) · active.
