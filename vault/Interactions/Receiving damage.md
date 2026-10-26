@@ -60,6 +60,8 @@ Wiki step: 6.4 Resistance (attacker penetration applied here). Quote (Resistance
 
 PoB: Modules/CalcDefence.lua:580-630, 1747-1752, 2005-2023 - MATCH. resMult = 1 - (resist - enemyPen)/100; enemy pen comes from config enemy<Type>Pen; hit resist (ResistWhenHit) and DoT resist (ResistOverTime) can differ.
 
+Map modifiers: [[Map modifiers]] lower the player's maximum resistances at this step.
+
 Why it matters for building: Resistance comes before armour: armour sees the resisted damage (CalcDefence.lua:2030). Caps live in [[Defences#Resistance caps]].
 
 ## Armour and damage reduction
@@ -85,6 +87,8 @@ Wiki step: 7 Modifying damage taken. Quote (Receiving damage rev 1702582 (no ver
 > Flat modifiers are applied first, then the sum of all increases/reductions, and lastly all more or less multipliers independently
 
 PoB: Modules/CalcDefence.lua:1905-1960, 2009, 2102-2111 - MATCH. TakenHit = max(damage x baseMult + takenFlat, 0) x takenMult x spellSuppressMult (+ impale); flat taken is read at 2009. The offensive-side counterpart (enemy flat taken) is the OMITS in [[Damage calculation#Damage taken]].
+
+Map modifiers: [[Map modifiers]] raise what is taken here through monster damage, curses on the player and Rust.
 
 Why it matters for building: Reduced damage taken is additive across sources, 'less' is multiplicative: stack different kinds.
 
@@ -189,6 +193,8 @@ Wiki step: Recovery page (not in the order list). Quote (Recovery rev 1618351; L
 PoB: Modules/CalcDefence.lua:2904-2966 (EHP outputs contain no recovery) - OMITS. TotalEHP and NumberOfDamagingHits ignore regeneration, leech, flasks and recovery speed (gain-on-block / suppress is included, 2804-2837).
 
 Gap: [[EHP ignores recovery]].
+
+Map modifiers: [[Map modifiers]] cut recovery here (Smothering, Stasis).
 
 Why it matters for building: Two builds with equal EHP differ hugely if one out-recovers DoT; judge deficits by duration, not by pool size.
 

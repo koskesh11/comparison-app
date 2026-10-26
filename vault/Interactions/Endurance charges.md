@@ -74,7 +74,7 @@ sources:
   - {ref: "PoB TreeData/3_29/tree.lua:15353-15387, 15676-15685, 52760-52773; Data/Uniques/{boots,amulet,jewel,helmet,body,shield}.lua", kind: pob, patch: "3.29"}
 not_verified:
   - "wiki Endurance charge page lists the player bonus through a cargo query; the query result (4% / 4% / +3) was read via the cargo API, the rendered page text itself carries no numbers"
-  - "whether ModCache entries with leftover text (for example ModCache.lua:7223 for the Unflinching text, value 25 on EnduranceChargesMax) are applied by PoB; not run"
+  - "ANSWERED (task 027 lane 5a): ModCache entries with leftover text (for example ModCache.lua:7222-7224 for the Unflinching text, value 25 on EnduranceChargesMax) are NOT applied: Classes/PassiveTree.lua:860-862 adds a line's mods only when `not mod.extra`, and the live parse drops Unflinching lines 2 and 3 (b1d-pca-parse.md:860-873; tasks/reports/027-evidence/b5a-taa-jb.md section 1). Verified by chain, not measured on a Juggernaut build (none exists)"
   - "Replica Badge of the Brotherhood and Ahn's Heritage current-league obtainability (not checked)"
   - "kill rate in maps and hit rate of a pinnacle boss on the player (no source)"
   - "Monster-side charges (15% additional physical DR and +15% elemental resistances per charge, wiki) are not configurable in PoB as far as read; not traced"

@@ -51,7 +51,7 @@ sources:
   - {ref: "https://www.poewiki.net/wiki/Like_Clockwork (rev 1619150; 3.28.0 40 -> 50%)", kind: wiki, patch: "3.28.0"}
 not_verified:
   - "pairing of two different notables (code-read only, not probed)"
-  - "the seven hidden-ascendancy notable variants (Nine Lives, Harness the Void, Fury of Nature, Fatal Flourish, Indomitable Resolve, Searing Purity, Unleashed Potential; Uber Exarch / Uber Eater drops, wiki 3.18.0): whether Generated.lua rolls them is not checked"
+  - "the six hidden-ascendancy notable variants other than Unleashed Potential (Nine Lives, Harness the Void, Fury of Nature, Fatal Flourish, Indomitable Resolve, Searing Purity; Uber Exarch / Uber Eater drops, wiki 3.18.0): whether Generated.lua rolls them is not checked. CLOSED for Unleashed Potential (hidden Scion node 19355): the live data.uniques.generated holds 19 Scion variants per jewel including 'Variant: (Scion) Unleashed Potential', each with 'Requires Class Scion' and 'Allocates <name> if you have the matching modifier on Forbidden Flesh/Flame' (PoB 2.67.2, Data/Uniques/Special/Generated.lua:549-592; evidence tasks/reports/027-evidence/b5a-pca-asc.md section 2b; see [[Ascendant ascendancy]])"
   - "whether PoB uses the enemy half of Like Clockwork (10% reduced cooldown recovery on nearby enemies); no calc reader was searched"
   - "trade price and availability of a matching pair for a given notable (not a PoB question)"
   - "whether the EK pasted jewels (no variant lines in the build XML) round-trip through the item DB variants: Generated.lua writes 'Requires Class' + 'Allocates' per variant, the XML holds the resolved lines"
