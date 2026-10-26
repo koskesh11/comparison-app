@@ -35,7 +35,7 @@ providers:
   - {kind: unique, name: "Vixen's Entrapment", slot: gloves, role: enables, target: enemy, text: "additional curse; also triggers a Socketed Curse Spell", source: "PoB Data/Uniques/gloves.lua:194", pob: full}
   - {kind: unique, name: "Doedre's Damning", slot: ring, role: enables, target: enemy, text: "additional curse (variant 2); Replica -1", source: "PoB Data/Uniques/ring.lua:453; wiki Curse", pob: full}
   - {kind: unique, name: "Doedre's Skin", slot: body, role: enables, target: enemy, text: "Hexes from Socketed Skills can apply 5 additional Curses (bypasses the limit)", source: "PoB Data/Uniques/body.lua:615; ModParser.lua:5347", pob: full}
-  - {kind: unique, name: "Sentari's Answer", slot: shield, role: enables, target: enemy, text: "curse on block, ignores the limit", source: "PoB Data/Uniques/shield.lua:777-779", pob: full}
+  - {kind: unique, name: "Sentari's Answer", slot: shield, role: enables, target: enemy, text: "curse on block, ignores the limit (all three lines unparsed in PoB: ModCache.lua:14868-14878 map to nil; corrected task 027 batch 3b)", source: "PoB Data/Uniques/shield.lua:777-779; Data/ModCache.lua:14868-14878", pob: none}
   - {kind: support, name: "Blasphemy", slot: any, role: scales, target: enemy, text: "hex becomes an aura; curse auras override on-hit/triggered curses when the limit is full; -25% curse effect final", source: "PoB sup_int.lua:364-412; wiki Curse rev 1675786", pob: partial}
   - {kind: support, name: "Power Charge On Critical", slot: any, role: sustains, target: self, text: "feeds charges but the limit reads MAX charges, not current", source: "skill-gem-analyst; CalcPerform.lua:3216", pob: full}
 makes_redundant:
@@ -44,7 +44,7 @@ conflicts:
   - {with: "Anathema with 0 maximum Power Charges (CI/charge-less builds)", effect: "curse limit 0: casting a curse applies nothing", source: "wiki Curse rev 1675786"}
   - {with: "Hex Master (keystone)", effect: "Your Hexes have infinite Duration, 20% less Effect of your Curses", source: "tree-ascendancy-analyst; TREE L63127"}
 conditions:
-  - {text: "marks are limited to one per target even with additional curse limit and are not covered by the curse limit", source: "wiki Curse rev 1675786"}
+  - {text: "marks: one per target. CONFLICTING READINGS: (A) wiki Curse rev 1675786 as read in batch 1: not covered by the curse limit; (B) [[Assassin's Mark]] (batch 3b): wiki Mark rev 1647869 and PoB CalcPerform.lua:3226-3270 put the Mark in a curse slot (EK limit 2 = Mark + Vulnerability). Open, see Assassin's Mark note", source: "wiki Curse rev 1675786; wiki Mark rev 1647869; CalcPerform.lua:3226-3270"}
   - {text: "theoretical maximum limit 10", source: "wiki Curse rev 1675786"}
 uptime:
   Mapping:       {value: always, config: {}, reasoning: "Static: Anathema reads max power charges (PowerChargesMax from tree/items), works without the usePowerCharges tick", source: "build-strategist table; CalcPerform.lua:3216"}
