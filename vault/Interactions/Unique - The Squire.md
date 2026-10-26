@@ -7,7 +7,7 @@ last_confirmed_patch: "3.29.x"
 ---
 
 The Squire is a 3-socket shield whose socketed support gems also support the skill in the main hand (stat support_gems_socketed_in_off_hand_also_support_main_hand_skills). For a build that is three extra support sockets for the main-hand skill without a 6L chest, plus block, armour/evasion and support quality.
-In PoB the supports of the group slotted to the shield are added to the skill slotted in Weapon 1 only (CalcSetup.lua:1815-1830); a body-armour skill gets nothing. It cannot be used with a two-handed main hand.
+In PoB the supports of the group slotted to the shield are added to the skill slotted in Weapon 1 only (CalcSetup.lua:1815-1830); a body-armour skill gets nothing: both golden builds keep their main skill in the body group, so as built the Squire adds 0 to it (PoB swap delta, b5c-ia3.md section 2 row R2 = R1). It cannot be used with a two-handed main hand.
 3.29.0 removed "All Sockets are White" (wiki rev 1677261, existing copies keep it). PoB keeps both through its two variants, but its Foulborn map still holds the removed mod (see open questions).
 Uniques are packages: every line is valued, including the downside that is the point (none in the text; the constraint is structural).
 
@@ -20,10 +20,10 @@ family: resource
 pipeline_step: ["Damage calculation#More and less", "Receiving damage#Block"]
 pipeline_why: "the cross-linked supports are ordinary support gems on the main-hand skill (more / less pool); the block line acts in the block step after all mitigation"
 target: self
-related: [block]
+related: [block, cross-slot-linked-supports]
 pob:
   measured: partial
-  how: "ModParser.lua:3426 creates LinkedSupport {targetSlotName='Weapon 1'} from the line (ModCache.lua:21788). CalcSetup.lua:1594-1597 builds crossLinkedSupportGroups[Weapon 2] = {'Weapon 1'}; CalcSetup.lua:1815-1830 adds the supports of every socket group slotted to the shield to the displayGemList / appliedSupportList of the skill in slot Weapon 1. Read, not run. Socket colour not checked by PoB's link logic. Other lines are plain parses (ModCache lines in providers). Removal delta not measured (no headless run)."
+  how: "ModParser.lua:3426 creates LinkedSupport {targetSlotName='Weapon 1'} from the line (ModCache.lua:21788). CalcSetup.lua:1594-1597 builds crossLinkedSupportGroups[Weapon 2] = {'Weapon 1'}; CalcSetup.lua:1815-1830 adds the supports of every socket group slotted to the shield to the displayGemList / appliedSupportList of the skill in slot Weapon 1. Also run: the supports reach a skill in a Weapon 1 group (R3 vs R4) and a main-hand item-granted skill (Balefire / Scorching Ray), see package.removal. The cross-linked supports are ordinary supports, so the matching-socket +10% quality applies to them by their socket colour (Added Cold Damage q37 = 20 + Squire 7 + 10 on a G socket, b5c-ia3.md section 2). Other lines are plain parses (ModCache lines in providers)."
   config: []
   unparsed: ["The Squire (variant Pre 3.29.0): 'All Sockets are White' -> ModCache.lua:13660 parses to {} (display only)"]
 model: null
@@ -42,7 +42,7 @@ package:
   slot: "Shield (off-hand)"
   base: "Elegant Round Shield (same base as The Oppressor)"
   variant: "Current; a 'Pre 3.29.0' variant exists"
-  removal: "NOT MEASURED"
+  removal: "PoB swap/removal deltas (b5c-ia3.md section 2, re-run identical in b5c-ia4.md section 5), golden build Worb (skill Winter Orb, Pinnacle / Mapping; replaced shield: Vengeance Chant, Titanium Spirit Shield, 27% cold damage, +108 life): (a) whole swap with the main skill left in the body group (R1 vs R0): Winter Orb TotalDPS -2.4% / -2.4% (1,343,498 -> 1,310,904; 1,934,211 -> 1,887,287), TotalEHP -26.2% / -35.1% (76,837 -> 56,723; 81,163 -> 52,707), block 44 -> 34; (b) the three shield supports (Increased Critical Strikes, Increased Critical Damage, Added Cold Damage, gem level 20) change NOTHING for the body-slot Winter Orb (R2 = R1), as built; (c) the same skill moved into a Weapon 1 group (setup change, not the user build): Squire group enabled vs disabled (R3 vs R4) Winter Orb TotalDPS +134.7% / +137.5% (896,796 vs 382,055; 1,291,133 vs 543,555) and FullDPS +134.7% / +137.5%; the same three supports linked directly (R5 control, 880,232) leave the Squire's own part at +1.9% (+7 quality on supports, +10 matching socket on Added Cold Damage); R3-R5 lack the body group's Focused/Infused Channelling and Arcane Surge, so compare only inside R3-R5. Golden build CoC EK Assa (skill Ethereal Knives, CoC-triggered; replaced shield: Phoenix Mark, Titanium Spirit Shield): shield swap alone leaves Ethereal Knives TotalDPS unchanged (7,728,445 / 7,331,707) with TotalEHP 145,259 -> 75,095 (-48.3%) Pinnacle and 71,911 -> 40,671 (-43.4%) Mapping; with Ethereal Knives moved alone into a Weapon 1 group (no longer CoC-triggered, Speed 2.8 not 8.9, so NOT the real build) the group adds +92.7% / +102.2% (1,266,878 vs 657,302; 1,238,441 vs 612,524), own part +1.4%; the EK 'old group re-filled' row is an artefact (Pride, Clarity, Enlighten lost). Item-granted main-hand skill (Worb with Balefire sceptre, Scorching Ray, PoB swap, no DPS number): receives the Squire's three supports (q7 more than the gem) and only Arcane Surge without the Squire group. Headless deltas, not game facts."
   downsides_that_are_the_point: ["none among the lines; structural: the shield cannot be used with a two-handed weapon (wiki rev 1677261); since 3.29.0 a new drop has random socket colours (colour requirements matter on the shield)"]
   foulborn: "3.29: replaces +(3-5)% Chance to Block with 'Ignore Attribute Requirements of Socketed Gems' and +(5-8)% quality with '+1 to Level of Socketed Gems' (wiki rev 1677261); PoB Data/ModFoulbornMap.jsonc:565-568 still maps the REMOVED original AllSocketsAreWhiteUniqueShieldStrDex7_ -> NoAttributeRequirements (pre-3.29 pairing) and has no block-chance replacement; wiki: legacy Foulborn can have both block and ignore requirements"
   obtainability: "cargo drop_enabled 1, is_drop_restricted 0, drop_level null (base item level applies, NOT VERIFIED how), req 70, release 3.16.0; wiki rev 1677261: Tainted Mythic Orb grants The Squire or The Oppressor ('The Oppressor is much more common'); 8 The Shieldbearer, or 3 Akil's Prophecy for a random two-implicit corrupted Elegant Round Shield; Foulborn via Genesis Tree / Grasping Coffers (wiki rev 1702126); patch 3.29"
@@ -64,10 +64,11 @@ sources:
   - {ref: "tasks/reports/027-evidence/b2c-item-analyst-leaguestart.md", kind: discovery, patch: "3.29"}
 not_verified:
   - "NOT VERIFIED: link layout of 'Has 3 Sockets' (the PoB item text needs 'Sockets:' with hyphens; the unique DB line is only 'Has 3 Sockets')"
-  - "NOT VERIFIED: whether skills granted by the weapon itself (not by gems) receive the shield supports in PoB (wiki says yes; the loop at CalcSetup.lua:1815 walks gems of groups slotted to the item; not tested)"
+  - "Item-granted main-hand skills: PoB gives them the supports (CalcSetup.lua:833 and 1480 set the group slot to the granting slot; run: Scorching Ray from Balefire, b5c-ia3.md section 2); wiki rev 1677261: 'includes both Skills from Gems or Skills granted by items'. PoB also gives that skill the Weapon 1 group's own supports, which in the game needs those gems socketed in the weapon: NOT VERIFIED against the game"
   - "NOT VERIFIED: the exact Foulborn pairing in 3.29 for PoB users (PoB's map is stale)"
-  - "NOT VERIFIED: removal delta (no headless run); Genesis Tree / Foulborn route in the running league"
-  - "No interaction note exists for LinkedSupport / gem links; [[block]] carries only the block line"
+  - "NOT VERIFIED: Genesis Tree / Foulborn route in the running league; the Pre 3.29.0 (all white) and Foulborn variants were not run; the real drop's socket colours and links (PoB forces 3 linked G sockets, Item.lua:2640-2661)"
+  - "NOT VERIFIED: whether Faster Attacks (an attack support) listed on Frostbite / Frostblink after the swap is filtered later in PoB (no DPS effect seen); EK shield-swap EHP loss includes the Phoenix Mark line 'Socketed Gems have 20% increased Reservation Efficiency' (ManaUnreserved 107 -> 32, still positive)"
+  - "The cross-slot link itself is described in [[cross-slot-linked-supports]]; [[block]] carries only the block line"
 open_questions:
   - "PoB ModFoulbornMap.jsonc:565-568 still maps the removed mod 'All Sockets are White' (3.29.0 removed it, wiki rev 1677261): trust the wiki pairing for Foulborn Squire?"
 ```
