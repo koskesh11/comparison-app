@@ -61,3 +61,7 @@ Already in the agent prompts (tools/make_agents.py); kept for the record, not co
 - 2026-10-26 · 035 (user questioned it) · GATE 1 said "EK keeps the channelling box because Cyclone channels"; PoB shows
   "Channeling for # seconds" only when a mod uses the ChannellingTime multiplier (ConfigOptions.lua:1274 ifMult) →
   before claiming a config box applies, quote that option's ifMult/ifCond/ifSkill and check it for the build · active.
+- 2026-10-26 · 027-5b · RECURRED (3rd time): specialists wrote 6 files into the PoB install via relative paths despite
+  the rule → prompts did not hold; code guard task 037 (Python write refused inside the PoB folder) · fix in code.
+- 2026-10-26 · 027-5b · a curator broke YAML with nested double quotes and blamed another note → report the validator
+  note count before/after; single quotes inside double-quoted YAML values · active.
