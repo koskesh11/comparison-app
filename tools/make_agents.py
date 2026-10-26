@@ -188,7 +188,9 @@ ascendancy), auras/heralds/curses, ailments, charges, triggers, conversion, enem
 - "PoB doesn't parse X" cites the exact ModCache line of the rolled value (never the range text), and a quoted
   tree.lua line is checked against the ["name"] line above it. (orchestrator, 2026-10-26, task 027)
 - A seed without a sample build gets one GATE 1 row per build layer (curse, defensive aura, offensive aura/herald,
-  guard, movement, flask, enemy debuff): taken, declined with a reason, or not applicable. (user, 2026-10-26, task 035)
+  guard, movement, flask, enemy debuff) AND per defensive mechanic (attack block, spell block, suppression, armour,
+  evasion, ES recovery, life recovery, max res) with the build's PoB numbers: taken, declined with a reason, or not
+  applicable. Before routing a condition to the tick rule, check whether PoB sets it itself. (user, 2026-10-26, task 035)
 - Name or close a route (defence, damage) only with headless numbers for at least 2 routes; a hand estimate never
   becomes a seed claim. (user, 2026-10-26, task 035)
 - Every enemy condition the build causes (ignite, shock, chill, curse, exposure) gets a GATE 1 row with PoB's chance

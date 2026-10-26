@@ -65,3 +65,6 @@ Already in the agent prompts (tools/make_agents.py); kept for the record, not co
   the rule → prompts did not hold; code guard task 037 (Python write refused inside the PoB folder) · fix in code.
 - 2026-10-26 · 027-5b · a curator broke YAML with nested double quotes and blamed another note → report the validator
   note count before/after; single quotes inside double-quoted YAML values · active.
+- 2026-10-26 · 035 (user reveal 2, tanky) · the GATE 1 layer list covered only skill groups, so block 25/8 and 0 ES
+  regen went unquestioned (tanky 50/36 block, 150 ES/s) → one row per defensive mechanic with saved PoB numbers;
+  check whether PoB sets a condition itself (EO) before the tick rule · promoted (rule extended).
