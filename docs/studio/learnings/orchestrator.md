@@ -116,3 +116,6 @@ Already in the agent prompts (tools/make_agents.py); kept for the record, not co
   long ... what exactly does take 45 minutes?" → a time box is an estimate built from the work (rounds of reading,
   lookups, one PoB script, writing; PoB itself is seconds), never a generous cap; deliver the expert idea first and the
   measured numbers second → check: each brief's time box states its basis.
+- 2026-10-26 · 042 · RECURRED (from 035): I wrote log times from a guessed clock ("16:0x", "about 28 minutes"); the real
+  time was 15:45 and the plan took about 7 minutes, so I told the user it was "overdue" when it wasn't → run `date` before
+  every log entry and before any claim about elapsed time → promote at the 035 retro (second occurrence).
