@@ -56,8 +56,6 @@ http://127.0.0.1:8765 in your browser. Pick a build and run the audit.
 - `vault/` - Obsidian notes (Rules, Models, Scenarios, Gaps) for mechanics PoB does not model. Each note has a
   machine-readable block the engine reads.
 - `tests/` - unit and integration tests. `tools/` - test runner and project scripts.
-- `tasks/`, `docs/studio/` and `.claude/` hold the AI-assisted development process: Claude Code agents with review
-  and test gates. Contributors do not need it, and running the app does not need it.
 
 ## Contributing
 

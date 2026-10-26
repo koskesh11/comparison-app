@@ -8,3 +8,13 @@ __pycache__/
 secrets/
 logs/
 *.log
+# AI-assisted development workflow: kept on the developer's machine, not published
+tasks/
+docs/studio/
+.claude/
+tools/make_agents.py
+tools/link_skills.py
+tools/token_usage.py
+tools/hooks/
+tests/test_agents.py
+tests/test_guard_readonly.py
