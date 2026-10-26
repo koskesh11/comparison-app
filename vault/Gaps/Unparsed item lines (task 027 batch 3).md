@@ -10,34 +10,50 @@ last_confirmed_patch: "3.29.x"
 # They are not "wasted": PoB just has no number for them. Substrings are exact lines from Data/Uniques or Data/ModFoulbornMap.lua.
 patterns:
   - match: "ignoring Curse Limit"
-    why: "curse applied on block / when hit that ignores the curse limit (Sentari's Answer 3 lines, Ylfeban's Trickery current variant): PoB leaves the line unparsed (Data/ModCache.lua:14864-14879 nil), so the curse and its effect are not in any number and the curse limit is unaffected"
+    why: "curse applied on block / when hit that ignores the curse limit (Sentari's Answer 3 lines, Ylfeban's Trickery current variant): PoB leaves the line unparsed, so the curse and its effect are not in any number and the curse limit is unaffected"
   - match: "Curse Enemies with Socketed Hex Curse Gem on Hit"
-    why: "Mark of Submission: the line parses to an EMPTY mod list (Data/ModCache.lua:14876), so the socketed hex is applied on hit in the game but PoB values it only if the hex is set up in the skills tab"
+    why: "Mark of Submission: the line parses to an EMPTY mod list, so the socketed hex is applied on hit in the game but PoB values it only if the hex is set up in the skills tab"
   - match: "Lightning Bolt on Melee Hit with this Weapon"
-    why: "Foulborn Mjolner: Trigger Level 20 Lightning Bolt on Melee Hit; PoB leaves the line unparsed (Data/ModCache.lua:22216 nil), so there is no trigger and no Lightning Bolt in PoB; the base Mjolner socket trigger it replaces is modelled"
+    why: "Foulborn Mjolner: Trigger Level 20 Lightning Bolt on Melee Hit; PoB leaves the line unparsed, so there is no trigger and no Lightning Bolt in PoB; the base Mjolner socket trigger it replaces is modelled"
   - match: "Socketed Lightning Spells have no Cost if Triggered"
-    why: "Mjolner: the text is unparsed (Data/ModCache.lua:21742 nil) but PoB already makes the triggered spell free through the hidden support (Data/Skills/other.lua:2756-2775, no_cost at :2770, manaMultiplier -100 at :2773; Modules/CalcActiveSkill.lua:523-524), so removing the line shows no change and nothing is lost"
+    why: "Mjolner: the text is unparsed but PoB already makes the triggered spell free through the hidden support, so removing the line shows no change and nothing is lost"
   - match: "chance to gain a Power Charge when you Cast a Curse Spell"
-    why: "Anathema: power charge generation is not parsed (Data/ModCache.lua:5193, 6365 nil); PoB assumes max charges only when 'use power charges' is ticked, so the charge source itself has no value"
+    why: "Anathema: power charge generation is not parsed; PoB assumes max charges only when 'use power charges' is ticked, so the charge source itself has no value"
   - match: "Power Charge on Killing a Frozen Enemy"
-    why: "Tulborn / Tulfall and the Foulborn ring mod: power charge on kill is not parsed (Data/ModCache.lua:7308, 10118, 16241 nil); PoB assumes max charges only when 'use power charges' is ticked, so the charge source has no value"
+    why: "Tulborn / Tulfall and the Foulborn ring mod: power charge on kill is not parsed; PoB assumes max charges only when 'use power charges' is ticked, so the charge source has no value"
   - match: "Power Charge when you Hit a Frozen Enemy"
-    why: "Replica Tulfall: power charge on hitting a frozen enemy is not parsed (Data/ModCache.lua:10120 nil); same as the kill version"
+    why: "Replica Tulfall: power charge on hitting a frozen enemy is not parsed; same as the kill version"
   - match: "Power Charge after Spending a total of 200 Mana"
-    why: "Cane of Unravelling and the Foulborn Tulborn mod (same line as the Forbidden Power ascendancy node): not parsed (Data/ModCache.lua:16217 nil), so no charge is generated in PoB"
+    why: "Cane of Unravelling and the Foulborn Tulborn mod (same line as the Forbidden Power ascendancy node): not parsed, so no charge is generated in PoB"
   - match: "Cover Enemies in Ash when they Hit you"
-    why: "Xoph's Heart variant 1 (Pre 3.21.0, Data/Uniques/amulet.lua:1343) and Xoph's Blood (amulet.lua:1357): unparsed (Data/ModCache.lua:14803 nil); enemies covered in ash take 20% increased Fire Damage and move 20% slower, which PoB only counts through the config box 'Is the enemy covered in Ash?' (Modules/ConfigOptions.lua:2006-2007), never from this line; on Xoph's Blood the Avatar of Fire half parses (amulet.lua:1358). Current Xoph's Heart has 'Nearby Enemies are Covered in Ash' instead, which PoB parses (Modules/ModParser.lua:4337, ModCache.lua:18335), so it is not a gap there"
+    why: "Xoph's Heart variant 1 and Xoph's Blood: unparsed; enemies covered in ash take 20% increased Fire Damage and move 20% slower, which PoB only counts through the config box 'Is the enemy covered in Ash?', never from this line; on Xoph's Blood the Avatar of Fire half parses. Current Xoph's Heart has 'Nearby Enemies are Covered in Ash' instead, which PoB parses, so it is not a gap there"
   - match: "Skeletons Cover Enemies in Ash on Hit"
-    why: "Earendel's Embrace: minion line unparsed (Data/ModCache.lua:22000 nil); Covered in Ash is only counted through the config box (Modules/ConfigOptions.lua:2006-2007); the 'Summoned Skeletons have Avatar of Fire' half parses"
+    why: "Earendel's Embrace: minion line unparsed; Covered in Ash is only counted through the config box; the 'Summoned Skeletons have Avatar of Fire' half parses"
   - match: "Zombies Cover Enemies in Ash on Hit"
-    why: "Replica Earendel's Embrace: minion line unparsed (Data/ModCache.lua:18874 nil); Covered in Ash is only counted through the config box (Modules/ConfigOptions.lua:2006-2007)"
+    why: "Replica Earendel's Embrace: minion line unparsed; Covered in Ash is only counted through the config box"
   - match: "Cannot be used with Chaos Inoculation"
-    why: "Midnight Bargain: restriction line unparsed (Data/ModCache.lua:14596-14597 nil); PoB does not stop you wearing it with Chaos Inoculation (the game does), and still values the Life reservation line"
+    why: "Midnight Bargain: restriction line unparsed; PoB does not stop you wearing it with Chaos Inoculation (the game does), and still values the Life reservation line"
   - match: "chance to Aggravate Bleeding"
-    why: "Foulborn Rigwald's Quills (Data/ModFoulbornMap.lua:516, not in Data/Uniques) and any item with this mod: PoB parses it to an empty mod list with leftover text (Data/ModCache.lua:8081, 8696, 9220, 9620, 10074 are the (30-50)% rolls), so Aggravate has no value. PoB has no Aggravate mechanic: Modules/ModParser.lua:2327 (Crimson Dance line) only sets Condition:CannotAggravate, which nothing reads. The 'x3' is the enemy-moving bleed bonus (Modules/CalcSetup.lua:639). Whether an Aggravated bleed uses the moving rate is NOT VERIFIED (game rule, not PoB)"
+    why: "Foulborn Rigwald's Quills and any item with this mod: PoB parses it to an empty mod list with leftover text, so Aggravate has no value. PoB has no Aggravate mechanic: the Crimson Dance line only sets a condition that nothing reads. The 'x3' is the enemy-moving bleed bonus. Whether an Aggravated bleed uses the moving rate is NOT VERIFIED (game rule, not PoB)"
   - match: "Your Mark Transfers to another Enemy"
-    why: "Mercenary's Lot: unparsed (Data/ModCache.lua:23077 nil); the transfer to another enemy when the marked one dies has no value in PoB, the other lines of the item parse"
+    why: "Mercenary's Lot: unparsed; the transfer to another enemy when the marked one dies has no value in PoB, the other lines of the item parse"
 ```
+
+**Evidence per pattern (PoB source lines, kept out of the player text; moved 2026-10-26, task 027 merge).**
+- "ignoring Curse Limit": Data/ModCache.lua:14864-14879 nil
+- "Curse Enemies with Socketed Hex Curse Gem on Hit": Data/ModCache.lua:14876
+- "Lightning Bolt on Melee Hit with this Weapon": Data/ModCache.lua:22216 nil
+- "Socketed Lightning Spells have no Cost if Triggered": Data/ModCache.lua:21742 nil; Data/Skills/other.lua:2756-2775, no_cost at :2770, manaMultiplier -100 at :2773; Modules/CalcActiveSkill.lua:523-524
+- "chance to gain a Power Charge when you Cast a Curse Spell": Data/ModCache.lua:5193, 6365 nil
+- "Power Charge on Killing a Frozen Enemy": Data/ModCache.lua:7308, 10118, 16241 nil
+- "Power Charge when you Hit a Frozen Enemy": Data/ModCache.lua:10120 nil
+- "Power Charge after Spending a total of 200 Mana": Data/ModCache.lua:16217 nil
+- "Cover Enemies in Ash when they Hit you": Pre 3.21.0, Data/Uniques/amulet.lua:1343; amulet.lua:1357; Data/ModCache.lua:14803 nil; Modules/ConfigOptions.lua:2006-2007; amulet.lua:1358; Modules/ModParser.lua:4337, ModCache.lua:18335
+- "Skeletons Cover Enemies in Ash on Hit": Data/ModCache.lua:22000 nil; Modules/ConfigOptions.lua:2006-2007
+- "Zombies Cover Enemies in Ash on Hit": Data/ModCache.lua:18874 nil; Modules/ConfigOptions.lua:2006-2007
+- "Cannot be used with Chaos Inoculation": Data/ModCache.lua:14596-14597 nil
+- "chance to Aggravate Bleeding": Data/ModCache.lua:8081, 8696, 9220, 9620, 10074 are the (30-50)% rolls; Modules/ModParser.lua:2327 (Crimson Dance line) only sets Condition:CannotAggravate, which nothing reads; Data/ModFoulbornMap.lua:516, not in Data/Uniques; Modules/CalcSetup.lua:639
+- "Your Mark Transfers to another Enemy": Data/ModCache.lua:23077 nil
 
 Each pattern relabels an item line with a matching text as 'can't measure' in the audit, but in practice almost none reach the patterns. Engine check: a line whose mod list is nil, or that PoB parsed with leftover text (`modLine.extra`), is flagged unsupported (PoB Classes/Item.lua:1325, 1344, 1352; engine/audit.lua:318) and goes to the 'unparsed' group (engine/audit.py:332-334) BEFORE the gap patterns are consulted, so patterns for such lines change nothing in the audit. Only P2 (Mark of Submission, empty list without leftover, ModCache.lua:14876) reaches them; as an uncrafted unique it lands in the 'uniquePackage' group with the pattern text as the reason (engine/audit.py:331, 336-338), NOT in 'cantMeasure' (:339-341, non-unique or crafted lines only). Audit match = case-insensitive substring on the item line (engine/audit.py:324). The guide check reads ALL patterns (engine/guide_interactions.py:93-107 and 124, casefold substring on item / flask / jewel mods). Loader: engine/vault.py:37-44. Verified headless? No: all evidence is Data/ModCache.lua, Data/Uniques and the engine source (read-only).
 

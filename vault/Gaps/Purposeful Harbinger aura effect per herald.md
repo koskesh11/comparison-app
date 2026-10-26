@@ -9,8 +9,11 @@ last_confirmed_patch: "3.29.x"
 # Purposeful Harbinger: PoB's patterns end in "up to N%", this line says "up to a maximum of N%", so it parses to nothing.
 patterns:
   - match: "for each Herald affecting you, up to a maximum of"
-    why: "PoB adds 0 aura effect for this line (Data/ModCache.lua:14324 stores {nil, <line>}); the real effect is +8% increased aura effect on you per Herald affecting you, max +40%. A build with Herald(s) in the aura slot is under-counted; add it by hand or do not credit it, label it 'not counted by PoB'"
+    why: "PoB adds 0 aura effect for this line; the real effect is +8% increased aura effect on you per Herald affecting you, max +40%. A build with Herald(s) in the aura slot is under-counted; add it by hand or do not credit it, label it 'not counted by PoB'"
 ```
+
+**Evidence per pattern (PoB source lines, kept out of the player text; moved 2026-10-26, task 027 merge).**
+- "for each Herald affecting you, up to a maximum of": Data/ModCache.lua:14324 stores {nil, <line>}
 
 Research: [[Aura effect and aura count]]. PoB paths are relative to `%APPDATA%\Path of Building Community`.
 

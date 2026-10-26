@@ -19,9 +19,16 @@ Rule: value these nodes by their counted lines only and list the dropped line as
 ```gap
 # PoB leaves these chain / fork / range lines unparsed or half-parsed. The audit shows them as "can't measure, check yourself", never as wasted.
 patterns:
-  - { match: "each remaining Chain",                  why: "Follow-Through: damage per remaining chain; the line has leftover text and PoB drops it (ModCache.lua:18719, 23175)" }
-  - { match: "when Forking",                          why: "Split Shot / Greater Fork: chance for an additional projectile when forking; leftover text, dropped (ModCache.lua:18763)" }
-  - { match: "when colliding with terrain",           why: "Ricochet: chance to chain from terrain; leftover text, dropped (ModCache.lua:18758)" }
-  - { match: "Chaining range",                        why: "chain distance is not modelled (ModCache.lua:5259, 8196: empty mod list)" }
-  - { match: "Fork angle",                            why: "fork angle is not modelled; PoB maps the line to ProjectileCount INC with leftover text and drops it (ModCache.lua:10274, 10408)" }
+  - { match: "each remaining Chain",                  why: "Follow-Through: damage per remaining chain; the line has leftover text and PoB drops it" }
+  - { match: "when Forking",                          why: "Split Shot / Greater Fork: chance for an additional projectile when forking; leftover text, dropped" }
+  - { match: "when colliding with terrain",           why: "Ricochet: chance to chain from terrain; leftover text, dropped" }
+  - { match: "Chaining range",                        why: "chain distance is not modelled" }
+  - { match: "Fork angle",                            why: "fork angle is not modelled; PoB maps the line to ProjectileCount INC with leftover text and drops it" }
 ```
+
+**Evidence per pattern (PoB source lines, kept out of the player text; moved 2026-10-26, task 027 merge).**
+- "each remaining Chain": ModCache.lua:18719, 23175
+- "when Forking": ModCache.lua:18763
+- "when colliding with terrain": ModCache.lua:18758
+- "Chaining range": ModCache.lua:5259, 8196: empty mod list
+- "Fork angle": ModCache.lua:10274, 10408

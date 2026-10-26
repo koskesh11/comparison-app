@@ -20,8 +20,11 @@ patterns:
   - { match: "Charge Recovery",              slot: "Flask", why: "PoB assumes 100% flask uptime" }
   - { match: "Maximum Charges",              slot: "Flask", why: "PoB assumes 100% flask uptime" }
   - { match: "Grants Level",                                why: "granted skill: PoB only values it if the skill is set up in the skills tab" }
-  - { match: "Modifier magnitudes",                         why: "PoB applies it when the item loads by scaling the item's other lines (Classes/Item.lua:1206); removing this line alone shows no change" }
+  - { match: "Modifier magnitudes",                         why: "PoB applies it when the item loads by scaling the item's other lines; removing this line alone shows no change" }
   - { match: "Creates Consecrated Ground",                  why: "PoB gives the line no value; it only feeds the config 'Are you on Consecrated Ground?'. Pinnacle Boss turns that on when the build has this source (regen, e.g. FR CoC v4 ES regen 1,266.5 -> 2,250.6/s)" }
 ```
+
+**Evidence per pattern (PoB source lines, kept out of the player text; moved 2026-10-26, task 027 merge).**
+- "Modifier magnitudes": Classes/Item.lua:1206
 
 Add patterns here when the audit flags something as wasted that actually matters in game.
