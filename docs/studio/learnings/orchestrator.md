@@ -75,3 +75,7 @@ Already in the agent prompts (tools/make_agents.py); kept for the record, not co
 - 2026-10-26 · 027 (blind-test reveal) · my 02:2x summary said "EK hit chance" for a number measured on Cyclone (the
   attack that triggers EK) → the user rejected a correct finding; in summaries name the skill each number belongs to
   (trigger source vs triggered spell).
+- 2026-10-26 · 035 · the 11:4x/11:5x log stamps were estimates, an hour ahead of the real clock (curator commit
+  10:51) → take the time from `date +%H:%M` before writing a log entry.
+- 2026-10-26 · 040 · Read can't rasterize PDFs here (no poppler) → check print layout with an Edge headless screenshot
+  of the HTML framed at 794x1123 px per page; count pages via `/Type /Page` in the PDF.
