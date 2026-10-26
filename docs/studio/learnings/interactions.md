@@ -58,3 +58,6 @@ Already in the agent prompts (tools/make_agents.py); kept for the record, not co
   check line endings with `git ls-files --eol`; never `sed -i` on a CRLF note · active.
 - 2026-10-26 · 027-5a · a sample with FullDPS 0 (all groups includeInFullDPS=false) hid every delta → measure the main
   skill's TotalDPS there · active.
+- 2026-10-26 · 035 (user questioned it) · GATE 1 said "EK keeps the channelling box because Cyclone channels"; PoB shows
+  "Channeling for # seconds" only when a mod uses the ChannellingTime multiplier (ConfigOptions.lua:1274 ifMult) →
+  before claiming a config box applies, quote that option's ifMult/ifCond/ifSkill and check it for the build · active.
