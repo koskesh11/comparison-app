@@ -72,3 +72,6 @@ Already in the agent prompts (tools/make_agents.py); kept for the record, not co
 - 2026-10-26 · 027 · RECURRED (user correction): the 029 fix changed only where NEW worktrees go; wt-021, wt-021-m2 and
   wt-027 (created 10-24) stayed on the Desktop → moved with `git worktree move`; when a location rule changes, migrate
   the existing items too; `git worktree list` check at session start and before every report · promoted (task 027).
+- 2026-10-26 · 027 (blind-test reveal) · my 02:2x summary said "EK hit chance" for a number measured on Cyclone (the
+  attack that triggers EK) → the user rejected a correct finding; in summaries name the skill each number belongs to
+  (trigger source vs triggered spell).
