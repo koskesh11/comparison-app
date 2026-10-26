@@ -7,14 +7,14 @@ last_confirmed_patch: "3.29.x"
 ---
 
 Kalandra's Touch copies the opposite ring. The copy itself is in [[Unique - Kalandra's Touch]]; this note is the other half: how conditions that look at the rings, at an item count, at an influence count or at a corrupted count read a copy. PoB hard-codes the copy by item name (CalcSetup.lua:1189-1227), copies every non-SocketedIn mod, adds the other ring's corrupted and influence flags to the item multipliers and adds +1 to the other ring's base-type counter.
-PoB and the wiki agree on the count conditions (influence, corrupted) and disagree on one: the Evasion and Energy Shield Mastery "both Equipped Rings have an Explicit Evasion Modifier" (PoB true, wiki: does not apply). The wiki claim has no cited source, so the engine must not silently pick either (see open questions).
+PoB and the wiki agree on the count conditions (influence, corrupted) and disagree on one: the Evasion and Energy Shield Mastery "both Equipped Rings have an Explicit Evasion Modifier" (PoB true, wiki: does not apply). RESOLVED (user, 2026-10-26): PoB is correct - the copied ring counts as a second ring with an explicit Evasion modifier, so the Evasion and Energy Shield Mastery applies (+376 ES measured); the wiki footnote (rev 1627114, uncited) is not followed.
 Why it matters for building: a copied ring is a second full instance of every line, a second Hunter/Crusader/Shaper/Elder/corrupted item for count thresholds (Bound By Destiny, Shadowstitch, Corruption's Embrace), and a second base-type ring for Esh of the Storm and Tul of the Blizzard; whether the game does the same for each of these is the open part.
 
 Pipeline: [[Damage calculation#Flat damage]] - the copied ring's damage lines enter the same pools as the original's; [[Defences#Resistance caps]] - copied resistances count towards the cap; [[Defences#Energy shield]] - the mastery condition below adds an increased maximum energy shield term
 
 ```interaction
 id: ring-copy
-mechanic: "Kalandra's Touch reflects the opposite ring: PoB copies its mods and properties; conditions on 'both rings', ring base type, influence count and corrupted count read the copy as a second instance of that ring (the Evasion and Energy Shield Mastery is the one case where the wiki says the game does not)"
+mechanic: "Kalandra's Touch reflects the opposite ring: PoB copies its mods and properties; conditions on 'both rings', ring base type, influence count and corrupted count read the copy as a second instance of that ring (the Evasion and Energy Shield Mastery is the one case where the wiki says the game does not; the user decided for PoB, 2026-10-26)"
 family: resource
 pipeline_step: ["Damage calculation#Flat damage", "Defences#Resistance caps", "Defences#Energy shield"]
 pipeline_why: "the copy adds ordinary mods to the item mod database at gear aggregation, so they act in the same pools as the original ring's mods; the conditions below only decide whether ring-count or item-count lines are switched on"
@@ -36,9 +36,9 @@ conflicts:
 conditions:
   - text: "'20% increased Maximum Energy Shield if both Equipped Left and Right Rings have an Explicit Evasion Modifier' - Evasion and Energy Shield Mastery, effect 47151 on mastery nodes 11032 (name tree.lua:71504, line :71529) and 1215 (name :77800, line :77825)"
     pob_reading: "TRUE with Kalandra's Touch + one ring that has an explicit evasion line, in either slot order; false when that ring has no evasion line or the other slot is empty. ItemCondition bothSlots, itemSlot ring, searchCond 'explicit evasion' (ModCache.lua:6565; ModParser.lua:1632-1633); ModStore.lua:701-702 replaces KT by the other ring in both slots, KT's own text is never searched. PoB removal/swap delta on Winter Orb Elementalist (3.26 sample), main skill Winter Orb (gem count 5), synthetic test rings (E = +80 Evasion Rating rare, N = ES-only rare), mastery 1215 allocated: E + KT gives ES 7,448 -> 7,824 (+376) and +20 to the increased-ES sum, FullDPS +61,008 (Pinnacle) / +77,177 (Mapping), TotalEHP +994 / +3,880; identical to the control with two real evasion rings (E + E2); E + N and N + KT give 0. Re-run with PoB's own rebuild order identical (b5c-ia4.md 2)."
-    wiki_reading: "NOT applied: 'Kalandra's Touch reflecting a ring does not count as the item itself gaining modifiers ... the mastery does not apply when Kalandra's Touch is reflecting a ring with an evasion modifier' (footnote 'Modifiers not gained', rev 1627114, no inline citation; first appears rev 1389818 on 2023-11-03, moved into a footnote rev 1438733). The footnote quotes the pre-3.23.0 mastery wording ('Evasion Modifiers'); 3.23.0 changed it to 'Explicit', so whether the claim was tested before or after is unknown."
+    wiki_reading: "NOT FOLLOWED (user decision 2026-10-26). NOT applied: 'Kalandra's Touch reflecting a ring does not count as the item itself gaining modifiers ... the mastery does not apply when Kalandra's Touch is reflecting a ring with an evasion modifier' (footnote 'Modifiers not gained', rev 1627114, no inline citation; first appears rev 1389818 on 2023-11-03, moved into a footnote rev 1438733). The footnote quotes the pre-3.23.0 mastery wording ('Evasion Modifiers'); 3.23.0 changed it to 'Explicit', so whether the claim was tested before or after is unknown."
     agree: false
-    direction: "PoB overstates against the wiki: ES +376 and the FullDPS/EHP rows above are PoB-only if the wiki is right"
+    direction: "RESOLVED (user, 2026-10-26): PoB is correct - the copied ring counts as a second ring with an explicit Evasion modifier, so the Evasion and Energy Shield Mastery applies (+376 ES measured); the wiki footnote (rev 1627114, uncited) is not followed; the ES +376 and the FullDPS/EHP rows above stand"
     source: "b5c-ia1.md 4; b5c-ia4.md 2; b5c-mr.md C4; ModStore.lua:698-705; tree.lua:71529, 77825"
   - text: "'Your Hits ignore Enemy Monster Lightning Resistances if all Equipped Rings are Synaptic Rings' - Esh of the Storm (Breachlord bloodline notable, node 6344, tree.lua:15504, name :15497)"
     pob_reading: "TRUE with a Synaptic Ring + KT: SynapticRingEquipped = 2 (the real ring counts 1 at CalcSetup.lua:1304-1306, the copy adds +1 at :1216-1220); MultiplierThreshold 2 (ModCache.lua:23048). Live in b5c-pca.md C with the Synaptic ring + KT: 2; Synaptic + Synaptic: 2; Synaptic + other ring: 1. KT's own base ('Ring', ring.lua:1639) is counted under its own key, not Synaptic."
@@ -79,14 +79,11 @@ sources:
   - {ref: "PoB Modules/CalcSetup.lua, Classes/ModStore.lua, Modules/ModParser.lua, Data/ModCache.lua, TreeData/3_29/tree.lua, Data/Uniques/ring.lua", kind: pob, patch: "3.29"}
   - {ref: "tasks/reports/027-evidence/b5c-pca.md C, b5c-mr.md C, b5c-ia1.md 2-4, b5c-ia4.md", kind: discovery, patch: "3.29"}
 not_verified:
-  - "NOT VERIFIED: game behaviour of the Evasion and Energy Shield Mastery with Kalandra's Touch (the wiki footnote has no cited source; PoB says true; no game test)"
   - "NOT VERIFIED: Esh of the Storm and Tul of the Blizzard with Kalandra's Touch in the game (PoB counts KT as the other ring's base, CalcSetup.lua:1216-1220; wiki silent)"
   - "NOT VERIFIED: a Bound By Destiny 'N Hunter Items are Equipped' threshold reached through the copy in the game (PoB counts it; the wiki test only covers Shaper counts on The Eternity Shroud)"
   - "NOT VERIFIED: 'Left Ring slot:' / 'Right Ring slot:' lines on a copy - whether PoB doubles or drops them (copy reads slotModList[KT slot], CalcSetup.lua:1193; not run)"
   - "NOT VERIFIED: a corrupted Kalandra's Touch itself in PoB (code reading of CalcSetup.lua:1292-1297 only)"
   - "NOT VERIFIED: Mark of the Shaper / Mark of the Elder with KT as the opposite ring (code trace only)"
   - "Test rings in the mastery row are synthetic (no claim that '+X to Evasion Rating' is a rollable ring mod); all deltas are PoB removal/swap deltas on two sample builds, not game facts"
-open_questions:
-  - "CONFLICT PoB vs wiki: should the engine treat 'both Equipped Rings have an Explicit Evasion Modifier' as satisfied by Kalandra's Touch + an evasion ring (PoB: yes, ES +376 on the Winter Orb Elementalist sample) or not (wiki rev 1627114: no, uncited)? Until a game test exists the value of the mastery with Kalandra's Touch is only an upper bound."
-  - "Does your build have this mastery allocated (nodes 11032 / 1215) together with Kalandra's Touch? If so, can you test whether the 20% increased maximum Energy Shield shows in game?"
+open_questions: []
 ```

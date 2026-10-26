@@ -6,7 +6,7 @@ source: "task 027 batch 2c item-analyst-fr.md (removal delta, seed AutoBuilder/F
 last_confirmed_patch: "3.29.x"
 ---
 
-Package note for Mageblood (Heavy Belt) in the FR v4 seed. The point of the item is "Leftmost 4 Magic Utility Flasks constantly apply their Flask Effects to you": four utility flasks (Quicksilver, Bismuth, Sapphire, Topaz in the seed) are on all the time, at the price that they cannot be used or removed. The belt also carries Strength, Dexterity and fire and cold resistance. The audit blind spot (PoB re-adds the saved flasks) is in the gap note [[Mageblood flasks]], not repeated here. Per-line values are NOT MEASURED: the evidence has only the whole-item removal.
+Package note for Mageblood (Heavy Belt) in the FR v4 seed. The point of the item is "Leftmost 4 Magic Utility Flasks constantly apply their Flask Effects to you": four utility flasks (Quicksilver, Bismuth, Sapphire, Topaz in the seed) are on all the time, at the price that they cannot be used or removed. DECIDED (user, 2026-10-26): with Mageblood the magic utility flask effects are permanent, so they get no flask-uptime model (100% uptime). Without Mageblood the same flasks need normal flask uptime ([[Flask uptime]]: PoB tooltip as the floor plus crit and kill charges as a labelled model), so Mageblood's removal delta is the flask effects at 100% minus the same effects at that normal uptime; PoB's in-memory removal (-0.0001%) shows none of it because every Flask slot stays ticked (NOT MEASURED). The belt also carries Strength, Dexterity and fire and cold resistance. The audit blind spot (PoB re-adds the saved flasks) is in the gap note [[Mageblood flasks]], not repeated here. Per-line values are NOT MEASURED: the evidence has only the whole-item removal.
 Flask mechanics: [[Flask uptime]], [[Offensive utility flasks]], [[Defensive utility flasks]].
 
 Pipeline: [[Receiving damage#Resistances]] - the always-on flask effects (and the belt's own fire and cold resistance) enter as ordinary modifiers; the per-flask pipeline steps are NOT VERIFIED (flask effect values were not read).
@@ -33,7 +33,7 @@ package:
   base: "Heavy Belt"
   xml_item_id: 1
   variant: "none (no Variant lines in the XML); XML wording 'Leftmost 4' = top roll of PoB's (2-4) (belt.lua:551); the +35 Strength line is the XML's single implicit (Implicits: 1)"
-  removal: "FullDPS -0.0001% (57,001,026 -> 57,000,967), Cyclone -0.04%, Dex 128 -> 85 leaves the Dex requirement of 6 gems unmet - in-memory removal; PoB keeps the emptied slot's gems active and keeps applying all 5 flasks, so the in-game loss is larger"
+  removal: "FullDPS -0.0001% (57,001,026 -> 57,000,967), Cyclone -0.04%, Dex 128 -> 85 leaves the Dex requirement of 6 gems unmet - in-memory removal; PoB keeps the emptied slot's gems active and keeps applying all 5 flasks, so the in-game loss is larger: without Mageblood the 4 flasks fall back to normal flask uptime (vault Flask uptime), so the true delta is their effects at 100% minus their effects at that uptime (user decision 2026-10-26; not measured)"
   lost_with_item:
     - "the four always-on utility flasks (Quicksilver, Bismuth, Sapphire, Topaz in the seed): not in PoB's number, since PoB applies them whether ticked or not"
     - "Str 159 -> 126, Dex 128 -> 85: Dex requirement of 6 gems unmet (Cyclone 98, Arctic Armour 98, Withering Step 98, Temporal Chains 100, Greater Volley 111, Mark On Hit 111)"
@@ -56,8 +56,8 @@ conditions:
   - {text: "Only MAGIC utility flasks count; the leftmost N in slot order are chosen, so flask slot order decides which flasks are permanent", source: "Modules/CalcPerform.lua:1578-1599; vault Gaps/Mageblood flasks.md"}
   - {text: "Audit caveat: PoB re-adds each saved flask from itemsTab.items, so a calc override of a Mageblood flask does not replace it; test by swapping the flask in place", source: "Modules/CalcPerform.lua:1582-1593; vault Gaps/Mageblood flasks.md"}
 uptime:
-  Mapping:       {value: always, config: {}, reasoning: "constantly applied by the item text; PoB applies the 4 magic utility flasks without any tick", source: "Data/Uniques/belt.lua:551; Modules/CalcPerform.lua:1578-1599"}
-  Pinnacle Boss: {value: always, config: {}, reasoning: "same; PoB also keeps all 5 flasks on (every Flask slot ticked) so the number does not show the real loss", source: "Modules/CalcPerform.lua:1578-1599; item-analyst-fr.md"}
+  Mapping:       {value: always, config: {}, reasoning: "constantly applied by the item text; PoB applies the 4 magic utility flasks without any tick; 100% uptime, no flask-uptime model (user decision 2026-10-26)", source: "Data/Uniques/belt.lua:551; Modules/CalcPerform.lua:1578-1599"}
+  Pinnacle Boss: {value: always, config: {}, reasoning: "same, 100% uptime (user decision 2026-10-26); PoB also keeps all 5 flasks on (every Flask slot ticked) so the removal number does not show the real loss, which is the flasks at 100% minus the flasks at normal flask uptime without Mageblood", source: "Modules/CalcPerform.lua:1578-1599; item-analyst-fr.md"}
 seeds: [FR]
 sources:
   - {ref: "tasks/reports/027-evidence/partial/b2c/item-analyst-fr.md (removal deltas, Mageblood)", kind: pob, patch: "3.29"}
@@ -67,5 +67,6 @@ not_verified:
   - "What each of the four flasks is worth (flask effect values not read; names from the removal-delta text)"
   - "Obtainability, price, wiki revision"
 open_questions:
+  - "DECIDED (user, 2026-10-26): Mageblood's magic utility flasks are permanent, so no flask-uptime model is used for them (100%); without Mageblood the same flasks use the normal Flask uptime model, which is what the removal delta must compare against"
   - "Which four flasks should be the leftmost? The generator needs the user's preference between the seed's Quicksilver / Bismuth / Sapphire / Topaz and offensive options."
 ```

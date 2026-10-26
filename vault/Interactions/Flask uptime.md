@@ -6,7 +6,7 @@ source: "wiki Flask rev 1697263; PoB 2.67.2 ItemsTab.lua:4784-4857, CalcPerform.
 last_confirmed_patch: "3.29.x"
 ---
 
-How often a flask is actually on. PoB treats a flask as on or off (a checkbox); Mageblood forces the leftmost magic utility flasks on. PoB's own flask-tooltip uptime (ItemsTab.lua:4830-4857) counts timed charge generation only, so it is a floor: it ignores charges on critical strike and on kill. Use PoB's number as the floor; add crit and kill charges as a labelled model. Mageblood flasks need no model (always on); see [[Mageblood flasks]].
+How often a flask is actually on. PoB treats a flask as on or off (a checkbox); Mageblood forces the leftmost magic utility flasks on. PoB's own flask-tooltip uptime (ItemsTab.lua:4830-4857) counts timed charge generation only, so it is a floor: it ignores charges on critical strike and on kill. Use PoB's number as the floor; add crit and kill charges as a labelled model. Mageblood flasks need no model (always on, 100%; DECIDED by the user 2026-10-26); without Mageblood the same flasks use this note's model, so a Mageblood removal compares 100% against this uptime; see [[Mageblood flasks]] and [[Unique - Mageblood]].
 
 Pipeline: none - no damage/defence step: a flask only times effects whose own lines act in their usual step (increased, more, resistance, recovery); this note decides how long they are up, not where they act
 

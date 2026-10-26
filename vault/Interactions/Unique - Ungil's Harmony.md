@@ -7,9 +7,9 @@ last_confirmed_patch: "3.29.x"
 ---
 
 Ungil's Harmony gives (250-350)% increased Global Critical Strike Chance and makes critical strikes deal no extra damage (flag NoCritMultiplier, CritMultiplier forced to 1 at CalcOffence.lua:3204-3205). For a build that is crit chance as a product: trigger rate (CoC), "crit recently" conditions, crit-gated ailments, or damage that is not a hit.
-On a build that scales crit multiplier it is a pure loss (hit damage x4 when the flag is lifted, see removal). In the four measured sample builds the no-crit-multiplier line is worth 0.0%: Perfect Agony (node 23407) is allocated in all four and sets the same flag. The 82-91% figure in the vault perfect-agony note belongs to Perfect Agony, not to Ungil's Harmony.
+On a build that scales crit multiplier it is a pure loss (hit damage x4 when the flag is lifted, see removal). The no-crit-multiplier line is a DOWNSIDE. In the four measured sample builds it has no effect / costs nothing with Perfect Agony: Perfect Agony (node 23407) is allocated in all four and already sets the same flag (removal delta 0.0%), so Ungil's other lines count in full; the 82-91% belongs to Perfect Agony (vault perfect-agony note), not to Ungil's Harmony (user correction 2026-10-26).
 All four samples are CoC (Cast on Critical Strike) + Perfect Agony poison builds; there is no non-CoC sample. What the item gives them is crit chance for the CoC trigger rate and crit-gated poison, not damage per hit.
-Uniques are packages: every line is valued, including the downside that is the point (no crit multiplier).
+Uniques are packages: every line is valued, including the downside (no crit multiplier), which has no effect / costs nothing with Perfect Agony.
 
 Pipeline: [[Damage calculation#Critical strike]] - crit chance up, multiplier forced to 1
 
@@ -23,7 +23,7 @@ target: self
 related: [critical-strike-chance, critical-strike-multiplier, perfect-agony, coc-trigger, lucky-critical-strikes]
 pob:
   measured: full
-  how: "Data/ModCache.lua:23021 parses 'Your Critical Strikes do not deal extra Damage' to flag NoCritMultiplier (ModParser.lua:3563); Modules/CalcOffence.lua:3204-3205 `if skillModList:Flag(cfg,'NoCritMultiplier') then output.CritMultiplier = 1`. Crit chance is the generic CritChance INC (ModCache.lua:8469, 8828). Wiki rev 1536199: each hit still calculates crit multiplier normally including conditional stats but cannot deal extra damage. Measured on 4 CoC + Perfect Agony samples (package.removal, b5c-ia2.md): the flag line is 0.0% in all four because node 23407 sets NoCritMultiplier too (sources read with skillModList:Tabulate FLAG NoCritMultiplier: the item and Tree:23407)."
+  how: "Data/ModCache.lua:23021 parses 'Your Critical Strikes do not deal extra Damage' to flag NoCritMultiplier (ModParser.lua:3563); Modules/CalcOffence.lua:3204-3205 `if skillModList:Flag(cfg,'NoCritMultiplier') then output.CritMultiplier = 1`. Crit chance is the generic CritChance INC (ModCache.lua:8469, 8828). Wiki rev 1536199: each hit still calculates crit multiplier normally including conditional stats but cannot deal extra damage. Measured on 4 CoC + Perfect Agony samples (package.removal, b5c-ia2.md): the flag line (a downside) has no effect / costs nothing with Perfect Agony in all four (removal delta 0.0%) because node 23407 sets NoCritMultiplier too (sources read with skillModList:Tabulate FLAG NoCritMultiplier: the item and Tree:23407)."
   config: []
   unparsed: []
 model: null

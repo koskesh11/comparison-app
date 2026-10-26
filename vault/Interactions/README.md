@@ -133,8 +133,9 @@ Batch 5c 2026-10-26 (task 027): battlemage ("Battlemage"), cross-slot-linked-sup
 
 Batch 2c finish 2026-10-26 (task 027, merged by the orchestrator; files "Unique - <Name>.md"): unique-anathema, unique-badge-of-the-brotherhood, unique-circle-of-guilt, unique-entropic-devastation, unique-eye-of-malice, unique-foulborn-three-dragons, unique-kalandras-touch, unique-mageblood, unique-mystic-refractor, unique-nyctas-lantern, unique-ralakeshs-impatience, unique-tabula-rasa, unique-the-light-of-meaning, unique-the-squire, unique-the-taming, unique-ungils-harmony, unique-whispers-of-infinity, unique-willclash. Seeds: EK 4, FR 4, Worb 4; league start 6 (NOT MEASURED headless: Tabula Rasa, The Squire, Nycta's Lantern, Kalandra's Touch, Ungil's Harmony, Willclash).
 
+User decisions 2026-10-26 (task 027): new note rage ("Rage": half of maximum Rage with a reliable source). Marked DECIDED/RESOLVED (user): Brutal Fervour always Leeching (Slayer, Leech), First to Strike always-on Intimidate (Champion, Intimidate and Unnerve), map curses at PoB's level 10/15 (Map modifiers), Mystic Refractor without overlap model, +3 projectiles as a clear stat (Refractor, Clear), Mageblood flasks 100% (Mageblood, Flask uptime, Gaps/Mageblood flasks), Kalandra's Touch mastery per PoB (Kalandra's Touch, Ring copy). Grading rule: a fully parsed line worth 0% until a config value is set is graded pob: config (re-graded Berserker Crave and Rite, Juggernaut Unrelenting, Necromancer Essence Glutton, Plaguebringer, Corpse Pact, Trickster Heartstopper).
+
 ## Backlog of candidate mechanics (no note yet)
 
 - ailment-effect-from-crit: Critical Mastery 9986 "50% increased Effect of non-Damaging Ailments you inflict with Critical Strikes" (in Worb); removed by Elemental Overload ("Ailments never count as being from Critical Strikes").
 - elusive: Assassin Mistwalker and Badge of the Brotherhood (EK seed).
-- rage: Berserker and Ascendant Rage (PoB takes Rage from multiplierRage, ConfigOptions.lua:1073, and does not model the gain cooldown or the decay; source tasks/reports/027-evidence/b5a-taa-jb.md).
