@@ -29,7 +29,7 @@ pob:
     - "Eye of Malice: PoB handles both exposure-on-hit lines (ModParser.lua:848-851) and the resist INC (4847-4850); no red line"
 model: null
 providers:
-  # seed: Worb
+  # seed: Worb day-1 poe.ninja snapshot (Frost Bomb is NOT in Worb.xml; lead re-check batch 3c)
   - {kind: gem, name: "Frost Bomb", slot: any, role: applies, target: enemy, text: "L20: Cold Exposure -15% cold res (GlobalEffect Debuff 'Frost Bomb', 5 s debuff from pulses); also 25% chance to freeze and -75% life regeneration on enemies; counted automatically by PoB", source: "Data/Skills/act_int.lua:7756,7768-7771; Modules/CalcPerform.lua:3629-3657", pob: full}
   - {kind: mastery, name: "Cold Mastery (effect 13267)", slot: tree, role: applies, target: enemy, text: "10% Chance to Inflict Cold Exposure on Hit with Cold Damage (applies -10% Cold Res for 4 s); Worb day-1 snapshot uses node 60170 -> 13267, user's Worb.xml uses effect 26782 (frozen seconds) instead", source: "TreeData/3_29/tree.lua:54766", pob: config}
   - {kind: notable, name: "Heraldry", slot: tree, role: applies, target: enemy, text: "Cold/Fire/Lightning Exposure while affected by Herald of Ice/Ash/Thunder (Worb runs Herald of Ice)", source: "TreeData/3_29/tree.lua:87855 (node 28551)", pob: config, requires: [Herald of Ice]}

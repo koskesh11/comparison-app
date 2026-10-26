@@ -65,7 +65,7 @@ not_verified:
   - "wiki formula text says the calculation neglects accuracy; PoB multiplies the lucky chance by AccuracyHitChance for attacks: wiki Accuracy confirms the second check, but whether the lucky re-roll happens before or after that check is not stated (PoB: luck first, then accuracy)"
   - "Calculated Risk wording on the live wiki/passive list (the 3.29 tree data is the only source read)"
   - "the 3_28_alternate tree (alternate ascendancies) also contains 'Your Critical Strike Chance is Lucky' nodes (tree.lua:13741, 40062); the main 3_29 tree has only Calculated Risk (grep)"
-  - "Focus cooldown and uptime for the Focused providers; Low Life threshold (35%) handling in PoB was not traced"
+  - "Focus cooldown and uptime for the Focused providers; Low Life threshold: 50% since 3.14.0, PoB Data.lua:240 / CalcPerform.lua:570 (see [[Pain Attunement]]); the old 35% value is outdated"
   - "obtainability of Relic of the Pact, Hyperboreus, the veiled belt suffix and the Brutal Restraint Asenath seed (not checked)"
   - "whether 'Enemies' Damage with Critical Strikes against you is Lucky' matters for EHP (PoB does not parse it)"
 open_questions:
