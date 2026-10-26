@@ -31,6 +31,9 @@ Process lessons only (game facts go to the vault). Format: date · task · trigg
   Amended 2026-10-26 (task 035, 2nd occurrence): a /clear keeps a running lead alive but cancels its in-flight
   specialist calls ("interrupted"), and the lead then stops BLOCKED → leads now re-dispatch once on their own after a
   restart-interrupt (LEAD_NOTE in tools/make_agents.py) · promoted.
+- 2026-10-26 (task 035/041, own gate failure): committed and pushed a make_agents.py rule without running its tests.
+  The word "once" tripped test_agents' rule hygiene (TEMPORARY_RE), and main stayed red for about an hour → after
+  any edit to make_agents.py, run `python tools/run_tests.py --files tests/test_agents.py` before committing · active.
 
 - 2026-10-25 · 028 · 3rd unverified limit (wiki blocked, flask uptime, meta budget 'until P1' long expired) →
   promoted as an enforced check: rules carry source tags + task-based expiry, tests/test_agents.py fails on an

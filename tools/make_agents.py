@@ -87,7 +87,7 @@ LEAD_NOTE = """## How you delegate
   (orchestrator, 2026-10-25, task 033)
 - A specialist call that comes back "interrupted" together with a session restart (new scratchpad id) was cut off
   by the user's /clear, not refused: compare the briefed files' modification times with the dispatch time, then
-  re-dispatch once on your own with the same brief. Stop and report if it was interrupted without a restart or for
+  re-dispatch it one time on your own with the same brief. Stop and report if it was interrupted without a restart or for
   the second time. (orchestrator, 2026-10-26, task 035)"""
 
 SPECIALIST_NOTE = """## How you work
