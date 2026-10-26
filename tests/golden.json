@@ -1,7 +1,7 @@
 {
  "schema": 1,
  "meta": {
-  "pinnedAt": "2026-10-26T15:35:57",
+  "pinnedAt": "2026-10-26T16:04:35",
   "pinnedBy": "tests/pin_golden.py",
   "python": "3.14.6",
   "offlineLeague": "Allflame",
@@ -113,6 +113,7 @@
   "Rules/Attribute requirements must be met.md": "b74481b149d38a6aebc2e87c6810bcb551a1ea5b0f3860062a666dcecd52a80a",
   "Rules/CoC requires 100% crit and hit.md": "6b721a0246be42396224ea87c27f05cbab402264c731715910d61a643c175258",
   "Rules/CwDT only supports gems up to its level cap.md": "a7af61560f5b670b84992bea36f685957d2a23d3aa984ddb17085c9a526427f5",
+  "Rules/League-start shell before tree.md": "b15b351ae54b835b6424c1315d51b80ce60dbbebc2d07e242fc4e3e89ec9f14f",
   "Rules/Mastery needs a notable in its cluster.md": "cad4695bea06c595f9c719463992a14e3e0f9a669a9c41fefff6fc1b5d5e1950",
   "Rules/Models round down.md": "d158be87c51ed09a85823503dfcf3ef4159476c417e0df49f5662e2348c351c6",
   "Rules/Reservation must fit the pool.md": "d01c34bdbab270b059c6cf5e61779f7da7dbdcaf40379982aa4d31684d805063",
@@ -208,6 +209,7 @@
       "Attribute requirements must be met",
       "CoC requires 100% crit and hit",
       "CwDT only supports gems up to its level cap",
+      "League-start shell before tree",
       "Mastery needs a notable in its cluster",
       "Models round down",
       "Reservation must fit the pool",
@@ -724,6 +726,7 @@
       "Attribute requirements must be met",
       "CoC requires 100% crit and hit",
       "CwDT only supports gems up to its level cap",
+      "League-start shell before tree",
       "Mastery needs a notable in its cluster",
       "Models round down",
       "Reservation must fit the pool",
@@ -4607,7 +4610,7 @@
  ],
  "determinism": {
   "method": "each build loaded twice in fresh PobEngine instances (same process), full snapshot diffed with exact float equality; cross-process: every test_golden run re-loads and compares",
-  "checkedAt": "2026-10-26T15:36:40",
+  "checkedAt": "2026-10-26T16:05:28",
   "differences": {
    "audit:EK": [],
    "audit:Worb": [],
@@ -4722,7 +4725,7 @@
  ],
  "runEquivalence": {
   "build": "EK",
-  "runSeconds": 82.5,
+  "runSeconds": 96.2,
   "differences": {
    "disabledSkills": [],
    "scenario": [
@@ -4740,7 +4743,7 @@
    "reservation": []
   },
   "equal": false,
-  "checkedAt": "2026-10-26T15:38:05"
+  "checkedAt": "2026-10-26T16:07:07"
  },
  "perf": {
   "date": "2026-10-22T01:15:50",
