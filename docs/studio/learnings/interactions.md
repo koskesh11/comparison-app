@@ -54,3 +54,7 @@ Already in the agent prompts (tools/make_agents.py); kept for the record, not co
   condition, conditional candidates tested with it, crit label from PoB's crit share · promoted.
 - 2026-10-26 · 035 · Added Fire Damage scored exactly 0 for Fireball (no physical damage) yet stayed in the 6-link →
   flag a candidate that scores 0 for its skill as dead · active (engine check in the 035 loop-2 spec).
+- 2026-10-26 · 027-5a · a `$'\r'` brief check gave a false positive and a curator's `sed -i` turned a CRLF note into LF →
+  check line endings with `git ls-files --eol`; never `sed -i` on a CRLF note · active.
+- 2026-10-26 · 027-5a · a sample with FullDPS 0 (all groups includeInFullDPS=false) hid every delta → measure the main
+  skill's TotalDPS there · active.
