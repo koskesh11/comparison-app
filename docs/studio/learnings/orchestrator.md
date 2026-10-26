@@ -97,3 +97,22 @@ Already in the agent prompts (tools/make_agents.py); kept for the record, not co
   10:51) → take the time from `date +%H:%M` before writing a log entry.
 - 2026-10-26 · 040 · Read can't rasterize PDFs here (no poppler) → check print layout with an Edge headless screenshot
   of the HTML framed at 794x1123 px per page; count pages via `/Type /Page` in the PDF.
+- 2026-10-26 · 035 (meeting, user instruction) · The user had to ask the probing questions himself. He wants the
+  orchestrator to ask them unprompted ("so you can make these kind of decisions ... yourself in the future"). Before
+  accepting a plan, a result or a long run, ask:
+  (a) Baseline: what did a human with PoB do in 2 minutes that we didn't? (Q1, Q6)
+  (b) Cost: which calls exactly, how many, and which are waste? One PoB answer is about 18 ms, so a long run means
+      too many or wrong questions, not slow PoB. (Q4-Q6)
+  (c) Knowledge: if PoB is not the bottleneck, which question did our knowledge fail to ask? (Q6)
+  (d) Use: which code reads the new knowledge? Research that nothing reads is not done. (Q7)
+  (e) Learned, not patched: which check without hard-coded names, plus a blind test, stops a repeat? (Q2)
+  (f) Time: what does each proposed change cost in build time? (Q3)
+  → check: plan reviews and result reports answer (a)-(f), one line each · promote at the 035 retro.
+- 2026-10-26 · 035 (lead, Q7) · The 162-note interaction database (027) was never read by the engine. 027 was
+  research-only by design, and its engine step waited for an unrelated merge (021) for three days → a research task
+  ships a minimal engine read path in the same task → check: every vault-research card names its first engine
+  consumer and a test that the engine loads the notes · promote at the 035 retro.
+- 2026-10-26 · 042 (user correction) · I gave the 042 build plan a 45-minute time box; the user: "45 minutes is way too
+  long ... what exactly does take 45 minutes?" → a time box is an estimate built from the work (rounds of reading,
+  lookups, one PoB script, writing; PoB itself is seconds), never a generous cap; deliver the expert idea first and the
+  measured numbers second → check: each brief's time box states its basis.
