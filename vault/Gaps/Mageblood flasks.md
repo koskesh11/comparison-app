@@ -31,4 +31,6 @@ PoB paths are relative to `%APPDATA%\Path of Building Community`.
 
 **Working method (verified headless):** replace `build.itemsTab.items[id]` in place, calculate, restore. That is an engine fix for engineering; these patterns only relabel lines that show no change.
 
+**User decision (2026-10-26):** Mageblood's magic utility flask effects are permanent, so they get no flask-uptime model (100%). Without Mageblood the same flasks need normal uptime (vault Interactions/Flask uptime), so the removal delta for Mageblood is the flask effects at 100% minus the same effects at that uptime; PoB's removal shows about 0% because it keeps the ticked flasks on.
+
 **Side effect:** the patterns apply to every build, also without Mageblood. A flask line with "increased effect" or "during Effect" that shows no change is then labelled "can't measure" with Mageblood wording instead of "wasted". Remove the two flask patterns once the engine fix lands.
