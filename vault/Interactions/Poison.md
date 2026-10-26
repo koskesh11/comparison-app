@@ -29,7 +29,7 @@ pob:
   unparsed: []
 model: null
 providers:
-  - {kind: unique, name: "Cospri's Will", slot: "Body Armour", role: applies, target: enemy, text: "Always Poison on Hit against Cursed Enemies (variants 1, 3); 60% chance against Cursed Enemies (variant 2); needs a curse on the enemy", source: "Data/Uniques/body.lua:290-293", pob: full, variant: "variants 1 and 3"}
+  - {kind: unique, name: "Cospri's Will", slot: "Body Armour", role: applies, target: enemy, text: "Always Poison on Hit against Cursed Enemies (variants 1, 3); 60% chance against Cursed Enemies (variant 2); needs a curse on the enemy", source: "Data/Uniques/body.lua:290-293", pob: full, variant: "variants 1 and 3", payoff_of: [conditionEnemyCursed]}
   - {kind: unique, name: "Snakebite", slot: Gloves, role: applies, target: enemy, text: "Attacks have 60% chance to Poison while at maximum Frenzy Charges (variants 2, 3); +5% to Damage over Time Multiplier for Poison per Frenzy Charge (variant 3); attacks only", source: "Data/Uniques/gloves.lua:1106-1108", pob: full, variant: "variants 2 and 3"}
   - {kind: unique, name: "Betrayal's Sting", slot: Ring, role: scales, target: enemy, text: "(25-40)% chance to inflict an additional Poison on the same Target when you inflict Poison", source: "Data/Uniques/ring.lua:1654; Modules/CalcOffence.lua:4720-4723 (AdditionalPoisonChance, capped at +1)", pob: full}
   - {kind: unique, name: "Fleshrender", slot: Sword, role: scales, target: enemy, text: "Inflict (2-3) additional Poisons on the same Target; Cannot Poison Enemies with at least 12 Poisons on them", source: "Data/Uniques/sword.lua:104-105; Modules/CalcOffence.lua:4720-4745 (PoisonStackLimit)", pob: full}

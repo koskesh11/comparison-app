@@ -67,7 +67,7 @@ open_questions: ["..."]            # questions only the user can answer
 - `target` (note and provider): `enemy` or `self`. A line such as Berek's Pass "+5000 Armour while Frozen" is target `self`, not a freeze payoff on enemies.
 - `pob.measured`: full (PoB computes it), partial, config (only through a config tick or a hand-set value), none.
 - `pob.config[].class`: a = sourced by gear or gem, b = scenario, c = hand-set.
-- provider `kind`: unique, foulborn, gem, support, keystone, notable, mastery, ascendancy, tattoo, runegraft, mod, flask, jewel. Optional keys: `variant` (the item variant, or for a Foulborn / mastery option the replaced line), `requires: [...]`.
+- provider `kind`: unique, foulborn, gem, support, keystone, notable, mastery, ascendancy, tattoo, runegraft, mod, flask, jewel. Optional keys: `payoff_of: [config var, ...]` (the provider gains when that PoB config condition is up, e.g. Immolate Support `payoff_of: [conditionEnemyIgnited, conditionEnemyBurning]`; each entry is a `var` from PoB Modules/ConfigOptions.lua; task 035 D1), `variant` (the item variant, or for a Foulborn / mastery option the replaced line), `requires: [...]`.
 - provider `role`: enables, applies, scales, abuses, sustains, blocks.
 - provider `pob`: full (PoB parses and counts it), partial, config (counted only with a config tick), none (unparsed or not modelled).
 - `uptime[scenario].value`: always, high, partial, low, none, pob (use PoB's own number), model (the `model:` above decides).
