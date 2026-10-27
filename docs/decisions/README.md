@@ -42,3 +42,4 @@ session in which the owner made the call.
 | [020](020-pob-numbers-shown-as-pob-shows-them.md) | PoB's numbers are shown the way PoB shows them | number formatting |
 | [021](021-the-checks-and-their-tools.md) | The checks and their tools | src/, tests, hook, merge |
 | [022](022-mapping-keeps-pinnacle.md) | The Mapping scenario keeps the boss box at Pinnacle | scenario picker |
+| [023](023-chain-reads-the-calcs-tab.md) | The chain reads PoB's Calcs tab, pointed at the main skill | damage chain |
