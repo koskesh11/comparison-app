@@ -111,7 +111,17 @@ CHECKS = [
     Check(
         "M2",
         "tests and coverage (M4-M7, M10, M11)",
-        tool("pytest", "-q", "-n", "auto", "--cov=autobuilder", "--cov-report=term", "--cov-fail-under=80"),
+        tool(
+            "pytest",
+            "-q",
+            "-n",
+            "auto",
+            "--dist",
+            "loadgroup",
+            "--cov=autobuilder",
+            "--cov-report=term",
+            "--cov-fail-under=80",
+        ),
         full=True,
     ),
     Check("M3", "test tree", testtree.check, full=True),

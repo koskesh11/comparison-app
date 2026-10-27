@@ -53,7 +53,9 @@ packages = ["autobuilder"]
 [tool.pytest.ini_options]
 testpaths = ["tests/autobuilder", "tests/architecture", "tests/checks"]
 pythonpath = ["src", "tools"]
-addopts = "--strict-markers --import-mode=importlib"
+# No faulthandler: LuaJIT raises every Lua error as a Windows SEH exception and catches it itself, and faulthandler
+# prints each one as a fatal exception (task 105). A real crash still fails the run.
+addopts = "--strict-markers --import-mode=importlib -p no:faulthandler"
 markers = [
     "pob: boots Path of Building (needs the PoB install)",
     "owner: reads the owner's builds folder",

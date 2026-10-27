@@ -46,6 +46,14 @@ def test_lua_rules_report_globals_loads_duplicates_and_mismatches(tmp_path: Path
     ]
 
 
+def test_lua_rules_allow_a_host_function_only_in_its_own_file(tmp_path: Path, write: Write) -> None:
+    write("src/autobuilder/pob/lua/boot.lua", "function GetUserPath() return dir end\n")
+    write("src/autobuilder/pob/lua/build.lua", "function GetUserPath() return elsewhere end\n")
+    assert lua_rules.check(tmp_path) == [
+        "src/autobuilder/pob/lua/build.lua:1: global function `GetUserPath`; make it local or register it"
+    ]
+
+
 def test_lua_syntax_reports_a_file_that_does_not_compile(tmp_path: Path, write: Write) -> None:
     write("src/autobuilder/pob/lua/good.lua", "local x = 1\nreturn x\n")
     write("src/autobuilder/pob/lua/bad.lua", "local x = = 1\n")
@@ -98,7 +106,7 @@ def test_testtree_requires_mirrored_and_guard_tests_and_honest_markers(tmp_path:
         write(test, "")
     write("src/autobuilder/pob/lua_host.py", "")
     write("src/autobuilder/pob/endpoints.py", "")
-    write("tests/autobuilder/pob/test_endpoints.py", "def test_x(pob_session):\n    PobSession()\n")
+    write("tests/autobuilder/pob/test_endpoints.py", "def test_x(pob_session):\n    open_session(paths)\n")
     problems = testtree.check(tmp_path)
     assert problems == [
         "tests/autobuilder/pob/test_write_guard.py: missing (required with src/autobuilder/pob/lua_host.py, M11)",
