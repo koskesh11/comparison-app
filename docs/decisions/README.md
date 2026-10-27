@@ -40,3 +40,4 @@ session in which the owner made the call.
 | [018](018-m1-builds-as-saved.md) | Milestone 1 uses both builds exactly as saved | analyzer M1, src/ tests |
 | [019](019-worth-column-after-m1.md) | The worth column and the config ranking come after milestone 1 | analyzer M1 |
 | [020](020-pob-numbers-shown-as-pob-shows-them.md) | PoB's numbers are shown the way PoB shows them | number formatting |
+| [021](021-the-checks-and-their-tools.md) | The checks and their tools | src/, tests, hook, merge |

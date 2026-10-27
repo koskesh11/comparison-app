@@ -10,15 +10,14 @@ number is PoB's or comes from a verified mechanics note.
 ## Where it stands
 - The first app (`engine/`, `gui/`) is frozen and runnable as reference: it audits one build through PoB headless and
   has an early guide check against a pobb.in build. Its generator is frozen on git tags (decision 002).
-- The analyzer is not built yet. Its code goes into `src/`, which does not exist yet (decision 004).
+- The analyzer is not built yet. Its code goes into `src/` (decision 004); the folders exist and every code rule
+  is a check (docs/ARCHITECTURE.md, decision 021).
 - The damage-chain mockup with real PoB numbers is approved (decision 009).
 - The review of the code that carries over is done (task 102): 26 of engine/'s 51 files carry a piece into `src/`,
   12 pieces as they are and 29 rewritten; the rest stays in engine/ as reference.
 
 ## Next, in this order
-1. The checks for `src/`: linter, import rule, size check, commit hook, local merge script, architecture checklist,
-   the `src/` folder names, `vault/` renamed to `mechanics/` (decisions 006, 013).
-2. Milestone 1.
+1. Milestone 1.
 
 ## Milestone 1
 Done when:
