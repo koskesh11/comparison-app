@@ -1,0 +1,3 @@
+#!/bin/sh
+# Fast checks before every commit (decision 006; docs/ARCHITECTURE.md, "Checks"). Installed by tools/install_hooks.py.
+python tools/check.py || { echo "commit refused: fix the failed checks above (python tools/check.py)"; exit 1; }

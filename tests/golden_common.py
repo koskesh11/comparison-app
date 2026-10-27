@@ -19,7 +19,7 @@ from unittest import mock
 TESTS_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = TESTS_DIR.parent
 ENGINE_DIR = PROJECT_ROOT / "engine"
-VAULT_DIR = PROJECT_ROOT / "vault"
+VAULT_DIR = PROJECT_ROOT / "mechanics"
 GOLDEN_PATH = Path(os.environ.get("GOLDEN_JSON") or TESTS_DIR / "golden.json").resolve()  # env: negative tests
 BUILDS_DIR = Path.home() / "Documents" / "Path of Building" / "Builds"
 POB_INSTALL = Path(os.environ["APPDATA"]) / "Path of Building Community"

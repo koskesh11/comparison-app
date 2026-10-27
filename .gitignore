@@ -15,3 +15,6 @@ tasks/
 docs/history/
 tools/hooks/
 tests/test_guard_readonly.py
+# the dev tools (task 104): python -m venv .venv, then pip install --group dev
+.venv/
+.coverage

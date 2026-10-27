@@ -6,7 +6,7 @@ from pathlib import Path
 
 import yaml
 
-VAULT_DIR = Path(__file__).resolve().parent.parent / "vault"
+VAULT_DIR = Path(__file__).resolve().parent.parent / "mechanics"
 FRONTMATTER = re.compile(r"\A---\n(.*?)\n---\n", re.DOTALL)
 RULE_BLOCK = re.compile(r"```rule\n(.*?)```", re.DOTALL)
 
