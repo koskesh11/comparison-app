@@ -22,6 +22,12 @@ def test_checklist_needs_every_item_answered_and_no_no() -> None:
     ]
 
 
+def test_the_merge_refuses_the_venv_python(tmp_path: Path) -> None:
+    """Task 105: run with .venv's Python, the first app's tests failed on a missing package (yaml)."""
+    assert merge_to_main.in_venv(tmp_path, str(tmp_path / ".venv"))
+    assert not merge_to_main.in_venv(tmp_path, str(tmp_path / "Python314"))
+
+
 def test_export_holds_tracked_files_only(
     git_repo: Path, run_git: Git, tmp_path_factory: pytest.TempPathFactory
 ) -> None:
