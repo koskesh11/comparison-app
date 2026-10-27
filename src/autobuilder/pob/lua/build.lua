@@ -116,24 +116,61 @@ local function scalars(tbl)
 	return copy
 end
 
--- What tests/autobuilder/pob/test_every_endpoint_restores.py compares (M6): every number of PoB's main output, the
--- config inputs and placeholders (the boss box sets placeholders of other boxes, ConfigOptions.lua:2086-2100), and
--- the main skill selection.
-Rpc.register("build.state", function()
-	local build = openBuild()
+-- The main group's skill selection, the sidebar's and the Calcs tab's own (CalcsTab.lua:46-92).
+local function selection(build)
 	local group = build.skillsTab.socketGroupList[build.mainSocketGroup]
+	local skill = group and group.displaySkillList and group.displaySkillList[group.mainActiveSkill or 1]
+	local source = skill and skill.activeEffect.srcInstance or {}
 	return {
-		output = numbers(build.calcsTab.mainOutput, "", {}, STATE_DEPTH),
-		config = scalars(build.configTab.input),
-		placeholder = scalars(build.configTab.placeholder),
 		mainSocketGroup = build.mainSocketGroup,
 		mainActiveSkill = group and group.mainActiveSkill,
+		mainActiveSkillCalcs = group and group.mainActiveSkillCalcs,
+		skillPart = source.skillPart, skillPartCalcs = source.skillPartCalcs,
+		skillStageCount = source.skillStageCount, skillStageCountCalcs = source.skillStageCountCalcs,
+		skillMineCount = source.skillMineCount, skillMineCountCalcs = source.skillMineCountCalcs,
+	}
+end
+
+-- What tests/autobuilder/pob/test_every_endpoint_restores.py compares (M6): every number of both PoB calculations
+-- (the sidebar's and the Calcs tab's), the config inputs and placeholders (the boss box sets placeholders of other
+-- boxes, ConfigOptions.lua:2086-2100), the Calcs tab's inputs and the main group's skill selection.
+Rpc.register("build.state", function()
+	local build = openBuild()
+	return {
+		output = numbers(build.calcsTab.mainOutput, "", {}, STATE_DEPTH),
+		calcsOutput = numbers(build.calcsTab.calcsOutput, "", {}, STATE_DEPTH),
+		config = scalars(build.configTab.input),
+		placeholder = scalars(build.configTab.placeholder),
+		calcs = scalars(build.calcsTab.input),
+		selection = selection(build),
 	}
 end)
 
-return {
-	open = openBuild,
-	recalculate = recalculate,
-	summary = summary,
-	forget = function() loaded = false end, -- the build's state is unknown: reads refuse until the next load
-}
+-- Runs read(build) with every change applied and the build recalculated once, then undoes the changes newest first
+-- and recalculates, on every path (the first app's guide.lua:188-207 shape). A change is a function(build) that
+-- applies itself and returns its undo. If undoing fails, no build counts as open: its state is unknown.
+local function withChanges(changes, read)
+	local build = openBuild()
+	local undos = {}
+	local ok, result = xpcall(function()
+		for _, change in ipairs(changes) do
+			undos[#undos + 1] = change(build)
+		end
+		recalculate(build)
+		return read(build)
+	end, Rpc.asError)
+	local restored, problem = xpcall(function()
+		for index = #undos, 1, -1 do
+			undos[index](build)
+		end
+		recalculate(build)
+	end, Rpc.asError)
+	if not restored then
+		loaded = false
+		Rpc.fail("BuildNotRestored", "PoB could not put the build back, load it again: " .. tostring(problem.message))
+	end
+	if not ok then error(result, 0) end
+	return result
+end
+
+return { open = openBuild, summary = summary, withChanges = withChanges }

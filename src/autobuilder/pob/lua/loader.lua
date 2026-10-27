@@ -18,5 +18,6 @@ sandbox.seal() -- PoB is loaded: hide the debug functions that would reach the s
 local dkjson = require("dkjson")
 local Rpc = run("rpc.lua", dkjson)
 local Build = run("build.lua", Rpc, host)
-run("analysis/scenario.lua", Rpc, Build)
+local Scenario = run("analysis/scenario.lua", Rpc, Build)
+run("analysis/chain.lua", Rpc, Build, Scenario)
 return Rpc.dispatch

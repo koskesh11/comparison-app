@@ -14,6 +14,7 @@ class Endpoint(StrEnum):
     BUILD_SUMMARY = "build.summary"
     BUILD_STATE = "build.state"
     ANALYSIS_SUMMARY = "analysis.summary"
+    ANALYSIS_CHAIN = "analysis.chain"
 
 
 class Effect(StrEnum):
@@ -29,6 +30,7 @@ EFFECTS: Mapping[Endpoint, Effect] = {
     Endpoint.BUILD_SUMMARY: Effect.READ,
     Endpoint.BUILD_STATE: Effect.READ,
     Endpoint.ANALYSIS_SUMMARY: Effect.TEMPORARY,
+    Endpoint.ANALYSIS_CHAIN: Effect.TEMPORARY,
 }
 
 

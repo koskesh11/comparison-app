@@ -36,9 +36,16 @@ def summary_without_a_boss(session: PobSession) -> tuple[Any, Any]:
     return session.call(Endpoint.ANALYSIS_SUMMARY, {"boss": "None"}), session.call(Endpoint.BUILD_SUMMARY)
 
 
+def chain_without_a_boss(session: PobSession) -> tuple[Any, Any]:
+    return session.call(Endpoint.ANALYSIS_CHAIN, {"boss": "None"}), session.call(
+        Endpoint.ANALYSIS_CHAIN, {"boss": "Pinnacle"}
+    )
+
+
 # Endpoint -> (its reply while the build is changed, the same read of the build as saved)
 TEMPORARY_CASES: dict[Endpoint, Callable[[PobSession], tuple[Any, Any]]] = {
     Endpoint.ANALYSIS_SUMMARY: summary_without_a_boss,
+    Endpoint.ANALYSIS_CHAIN: chain_without_a_boss,
 }
 
 
