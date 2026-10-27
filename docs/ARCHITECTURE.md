@@ -22,9 +22,12 @@ One way only (task 102, cross-area section 3): Python loads PoB's own `lua51.dll
 `pob/lua_host.py`. At boot, fixed Lua files load in a fixed order (`pob/lua/loader.lua`). After that every request is
 `call(name, payload)`: the name is looked up in one Lua table filled by `Rpc.register`, the JSON payload is pushed as
 bytes, and the call runs under `lua_pcall`. Every reply is an `{ok, value, error}` envelope with inf, NaN and missing
-values written out (S12). An endpoint that changes the build applies the change, recalculates in PoB's own order
-(wipe the cache, update socket groups, recalculate: PoB Modules/Build.lua:1258-1266), reads, and undoes the change on
-every path. No Lua is ever built from Python strings (check F6).
+values written out (S12). An endpoint that changes the build applies the change, recalculates, reads, and undoes the
+change with another recalculation on every path, errors included (`pob/lua/analysis/scenario.lua`). `recalculate()` in
+`pob/lua/build.lua` is PoB's own: it flags the build and runs one frame, whose build step wipes the cache, updates the
+socket groups, rebuilds the output and refreshes the stat list and the config tab's calculator (PoB
+Modules/Build.lua:1258-1273); an error PoB catches inside the frame becomes a Lua error. No Lua is ever built from
+Python strings (check F6).
 
 ## Endpoints
 Every Lua function src/ may call. A name is registered once in Lua (`Rpc.register`), listed in
@@ -34,7 +37,8 @@ Every Lua function src/ may call. A name is registered once in Lua (`Rpc.registe
 |---|---|---|
 | `build.load` | opens a build from its XML text; returns its summary; a build PoB cannot open fails and leaves none open | replaces it |
 | `build.summary` | name, class, level, main skill and 16 of PoB's output numbers | no |
-| `build.state` | every number of PoB's main output, the config inputs, the main skill selection (what M6 compares) | no |
+| `build.state` | every number of PoB's main output, the config inputs and placeholders, the main skill selection (what M6 compares) | no |
+| `analysis.summary` | the summary under a scenario: sets "Is the enemy a Boss?" (`boss`, one of PoB's values), recalculates in PoB's order, reads | temporary: put back and recalculated before it returns, also on error |
 
 ## Checks
 `python tools/check.py` runs the fast checks (the commit hook runs them too); `--full` adds the merge checks, which

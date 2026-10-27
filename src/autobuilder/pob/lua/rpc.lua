@@ -52,7 +52,9 @@ local function encode(envelope)
 	return dkjson.encode(writable(envelope, {}))
 end
 
-local function asError(err)
+-- Any Lua error as an error table, with the traceback taken where it was raised; an xpcall handler, also for the
+-- endpoint files that undo a change before they pass the error on.
+function Rpc.asError(err)
 	if type(err) == "table" and type(err.kind) == "string" then return err end
 	local message = tostring(err)
 	return { kind = "LuaError", message = message, traceback = traceback(message, 2) }
@@ -67,7 +69,7 @@ function Rpc.dispatch(name, requestText)
 		local request, _, problem = dkjson.decode(requestText, 1, nil)
 		if problem or type(request) ~= "table" then Rpc.fail("BadRequest", "the request is not a JSON object") end
 		return encode({ ok = true, value = handler(request) })
-	end, asError)
+	end, Rpc.asError)
 	if ok then return reply end
 	return encode({ ok = false, error = reply })
 end

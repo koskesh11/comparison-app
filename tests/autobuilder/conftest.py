@@ -49,6 +49,7 @@ def changed(before: dict[str, tuple[int, int]], after: dict[str, tuple[int, int]
     return sorted(name for name in before.keys() | after.keys() if before.get(name) != after.get(name))
 
 
+@pytest.hookimpl(tryfirst=True)  # before xdist's own hook, which turns the marker into the group
 def pytest_collection_modifyitems(items: list[pytest.Item]) -> None:
     for item in items:
         if item.get_closest_marker("pob"):

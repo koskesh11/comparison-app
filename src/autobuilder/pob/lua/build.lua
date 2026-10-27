@@ -1,6 +1,7 @@
 -- The build endpoints (docs/ARCHITECTURE.md, "Endpoints"): open a build from its XML text, read its summary and its
 -- whole state. Rewrites the first app's engine/pob_headless.lua:75-112, which never looked at PoB's error prompt: a
 -- broken file "loaded" and showed the previous build's numbers under the new name (task 102, area A, measured).
+-- Returns what the other endpoint files share: the open build, recalculate(), the summary.
 local Rpc, host = ...
 
 -- The summary's PoB output keys (the first app's summaryJSON, pob_headless.lua:87-93).
@@ -30,6 +31,22 @@ end
 local function openBuild()
 	if not loaded then Rpc.fail("NoBuild", "no build is open: none was loaded yet, or the last load failed") end
 	return main.modes.BUILD
+end
+
+-- PoB's own recalculation, as the GUI runs it after any change: flag the build and run one frame. The frame's build
+-- step (Build.lua:1258-1273) wipes the global calculation cache, updates the socket groups, rebuilds the output,
+-- refreshes the stat list (which sorts SkillDPS, Build.lua:1934) and the config tab's calculator. Calling those
+-- steps by hand skipped the last two (measured on CoC EK Assa: SkillDPS came back in another order). No path of the
+-- first app did the first three (task 102, area A Q5). Every change to a build goes through here.
+local function recalculate(build)
+	launch.promptMsg = nil
+	build.buildFlag = true
+	host.frame()
+	-- PoB catches an error inside a frame and shows it as a prompt (Launch.lua:112-118).
+	local prompt = launch.promptMsg
+	launch.promptMsg = nil
+	if prompt then error("PoB failed to recalculate: " .. promptText(prompt), 0) end
+	if build.buildFlag or main.modes.BUILD ~= build then error("PoB did not recalculate the build", 0) end
 end
 
 local function mainSkillName(build)
@@ -91,19 +108,32 @@ Rpc.register("build.summary", function()
 	return summary(openBuild())
 end)
 
+local function scalars(tbl)
+	local copy = {}
+	for key, value in pairs(tbl) do
+		if type(value) ~= "table" then copy[key] = value end
+	end
+	return copy
+end
+
 -- What tests/autobuilder/pob/test_every_endpoint_restores.py compares (M6): every number of PoB's main output, the
--- config inputs and the main skill selection.
+-- config inputs and placeholders (the boss box sets placeholders of other boxes, ConfigOptions.lua:2086-2100), and
+-- the main skill selection.
 Rpc.register("build.state", function()
 	local build = openBuild()
-	local config = {}
-	for key, value in pairs(build.configTab.input) do
-		if type(value) ~= "table" then config[key] = value end
-	end
 	local group = build.skillsTab.socketGroupList[build.mainSocketGroup]
 	return {
 		output = numbers(build.calcsTab.mainOutput, "", {}, STATE_DEPTH),
-		config = config,
+		config = scalars(build.configTab.input),
+		placeholder = scalars(build.configTab.placeholder),
 		mainSocketGroup = build.mainSocketGroup,
 		mainActiveSkill = group and group.mainActiveSkill,
 	}
 end)
+
+return {
+	open = openBuild,
+	recalculate = recalculate,
+	summary = summary,
+	forget = function() loaded = false end, -- the build's state is unknown: reads refuse until the next load
+}
