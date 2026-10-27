@@ -8,7 +8,8 @@ the test.
 - Comes from PoB output or a mechanics note, and says which (docs/decisions/013). No hand-made estimate.
 - Names the skill it belongs to: a trigger source (Cyclone) and the spell it triggers (Ethereal Knives) are different
   numbers.
-- Is rounded down where the game rounds down.
+- Is shown the way PoB shows it when it comes from PoB; a number the app works out itself is rounded down where
+  the game rounds down (docs/decisions/020).
 - Shows trade-offs (DPS, EHP, mana margin, comfort), not a verdict.
 
 ## Failure modes

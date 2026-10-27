@@ -2,7 +2,7 @@
 
 - Date: 2026-10-27 (grilling rounds 13-16)
 - Decided by: owner; layout details proposed by Claude and approved
-- Status: accepted
+- Status: accepted; the worth column waits until after milestone 1 (019)
 - Scope: the analyzer's main view
 
 ## Context
