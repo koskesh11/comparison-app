@@ -83,7 +83,8 @@ layout and checks report.
 - The reference builds (decision 014) are committed byte for byte in `tests/autobuilder/fixtures/builds/`.
 - pytest runs without faulthandler: LuaJIT raises each Lua error as a Windows SEH exception, which faulthandler would
   print as fatal although LuaJIT catches it.
-- No network outside `tests/autobuilder/intake/`. The PoB install and the owner's builds are listed before and after
+- No network outside `tests/autobuilder/intake/`, and none inside it either: the pobb.in code takes its opener as an
+  argument, and the intake tests pass a fake that records each request. The PoB install and the owner's builds are listed before and after
   every PoB run; a change outside `Builds\AutoBuilder\` fails the run.
 - `tests/checks/` tests the checks themselves: each plants a violation and expects the check to report it.
 - The first app's tests stay in `tests/*.py` and run with `python tools/run_tests.py` (frozen, decision 004).

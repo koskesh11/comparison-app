@@ -5,6 +5,26 @@ class AutobuilderError(Exception):
     """Base of every error the app expects and can explain."""
 
 
+class InvalidInput(AutobuilderError):
+    """Something the owner typed or picked cannot be used; `str(error)` says what, for the page."""
+
+
+class BadLink(InvalidInput):
+    """Not a pobb.in build link."""
+
+
+class Unreadable(InvalidInput):
+    """The pasted code or the file is not a Path of Building build."""
+
+
+class TooLarge(InvalidInput):
+    """The code or the build inside it is over the size limit."""
+
+
+class FetchFailed(AutobuilderError):
+    """pobb.in was unreachable, too slow, or answered with an error."""
+
+
 class PobNotInstalled(AutobuilderError):
     """Path of Building is not in the folder the settings name."""
 
