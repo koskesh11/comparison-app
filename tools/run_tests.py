@@ -27,7 +27,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SAFETY_TESTS = ("test_gui_safety", "test_guard_readonly", "test_agents")
+SAFETY_TESTS = ("test_gui_safety", "test_guard_readonly")
 GOLDEN_TEST = "test_golden"
 POB_MODULE = "pobhost"        # a test that reaches this module loads PoB's lua51.dll in-process
 VAULT_MODULE = "vault"
@@ -136,8 +136,6 @@ def reasons_for(rel: str, test: str, graph: dict, reach: set[str]) -> str | None
         return f"vault loaded through {VAULT_MODULE}"
     if rel.startswith("gui/") and GUI_PATTERN.search(_own_text(graph, test)):
         return "read by this test"
-    if rel.startswith((".claude/agents/", "tools/make_agents")) and test == "test_agents":
-        return "checked by test_agents"
     if rel == "tests/golden.json" and test == GOLDEN_TEST:
         return "baseline of test_golden"
     if suffix in (".py", ".lua", ".json") and not rel.startswith("tests/") and p.name in _own_text(graph, test):

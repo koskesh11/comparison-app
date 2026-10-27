@@ -1,7 +1,7 @@
 # Target software design for PoB Autobuilder
 
 Date: 2026-10-27. Status: proposal for the owner's review; no code has been changed. Baseline: `main` at 4caf626.
-Inputs: `docs/designs/design-audit-2026-10-26.md` (the problems), `docs/designs/codebase-strategy.md` (the decisions), and
+Inputs: `docs/designs/design-audit-2026-10-26.md` (the problems), `docs/decisions/` (the decisions), and
 a read of the code: all Lua and the Python of `engine/` that matters here (the frozen modules and the diff modules were
 skimmed), `gui/index.html`, `tools/run_tests.py`, and the structure and headers of `tests/`.
 
@@ -232,7 +232,7 @@ design keeps each one and says where it lives.
 
 | Stays | Why it stays | Where it lives after |
 |---|---|---|
-| The product decisions of `codebase-strategy.md`: analyzer first, generator frozen, AI-workflow files unpublished, restructure rather than rewrite | they are yours; this design only carries them out | unchanged |
+| The product decisions (`docs/decisions/` 001-004): analyzer first, generator frozen, AI-workflow files unpublished, restructure rather than rewrite | they are yours; this design only carries them out | unchanged |
 | The calculation logic: snapshot diff, rules, costs, scoring, models, part variants, availability, ranking | it works and is tested; moving it is the point, rewriting it is not | `compare/`, `analysis/` |
 | "Every number is PoB's": PoB runs in-process through its own `lua51.dll`, and Python only composes PoB's outputs | the project's best habit; also the reason for the golden tests | `pob/` |
 | The local server's security: Host and Origin checks, a per-run token compared in constant time, anti-framing, no-store, 64 KB body cap, builds confined to the Builds folder, stable non-leaking error bodies, log redaction | strong already; covered by tests | `app/security.py`, `app/errors.py`, `intake/library.py`, `app/logging_setup.py` |

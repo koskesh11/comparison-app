@@ -1,6 +1,6 @@
 # Software design audit (2026-10-26)
 
-Read-only audit of `main` at 4caf626 for the analyzer refocus (see `docs/designs/codebase-strategy.md`). Out of scope: `tasks/`, `docs/studio/`, `.claude/` and the frozen generator branches. References are `file:line` from the repo root; line counts come from the files (±1).
+Read-only audit of `main` at 4caf626 for the analyzer refocus (see `docs/decisions/`). Out of scope: `tasks/`, `docs/studio/`, `.claude/` and the frozen generator branches. References are `file:line` from the repo root; line counts come from the files (±1).
 
 ## Summary
 
