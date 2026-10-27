@@ -1,0 +1,13 @@
+# Line endings (task 104, tool fix T1): text files are stored and checked out with LF; tools/checks/eol.py checks it.
+* text=auto eol=lf
+*.bat text eol=crlf
+
+# Kept byte for byte: the frozen first app (decision 004) and the notes, whose bytes tests/golden.json pins
+# (tests/golden_common.py engine_fingerprint, vault_fingerprint). The notes join the LF rule when src/ first reads them.
+/engine/** -text
+/gui/** -text
+/tests/*.py -text
+/tests/*.json -text
+/tests/fixtures/** -text
+/vault/** -text
+/mechanics/** -text
