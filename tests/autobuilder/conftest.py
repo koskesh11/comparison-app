@@ -84,6 +84,14 @@ def pob_session(pob_paths: PobPaths) -> Iterator[PobSession]:
 
 
 @pytest.fixture(scope="session")
+def owner_builds() -> Path:
+    """The owner's PoB Builds folder, read only; tests that use it are marked `owner`."""
+    if not builds_folder().is_dir():
+        pytest.skip(f"needs the owner's builds in {builds_folder()}")
+    return builds_folder()
+
+
+@pytest.fixture(scope="session")
 def reference_xml() -> dict[str, str]:
     return {name: (REFERENCE_BUILDS / file).read_text(encoding="utf-8") for name, file in REFERENCE_FILES.items()}
 
