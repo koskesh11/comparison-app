@@ -2,7 +2,7 @@
 
 - Date: 2026-10-27 (grilling rounds 7, 13, 14)
 - Decided by: owner
-- Status: accepted; sorting config differences by their effect waits until after milestone 1 (019)
+- Status: accepted; sorting config differences by their effect waits until after milestone 1 (019); Mapping's box value: 022
 - Scope: the analyzer's scenario picker and config handling
 
 ## Context
