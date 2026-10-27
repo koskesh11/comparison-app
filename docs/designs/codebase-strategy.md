@@ -222,23 +222,350 @@ These answers revise decision 1 and the audience:
 - **Target design written and split:** docs/designs/target-design.md (main, 279 lines) plus target-design/*.md. A
   walkthrough with the owner is in progress: lesson 1 (layers), lesson 2 (folders), intake/, league/, compare/.
 
-## RESUME POINT (2026-10-27, owner going to sleep)
+## Grilling session, round 13 (2026-10-27, first daily review; nothing ran overnight)
 
-1. Start of the next session = the first daily review meeting. Nothing has run overnight yet; the experiment runner
-   doesn't exist. So: a short recap, then continue.
-2. Continue the design walkthrough. The owner chooses between:
-   - (a) designing `compare/vectors.py` together (the vector catalogue: own base / flat / conversion split, defence
-     vectors, which difference belongs to which vector; needs his game knowledge);
-   - (b) touring the remaining folders (`analysis/`, `pob/`, `app/`, `web/`).
-   Then: section 9's open questions (product questions only, asked neutrally) and the yes/no on the migration order
-   (target-design/migration.md).
-3. The 3.30 patch notes come when the owner has them: check them against the mechanics notes, exam and glossary.
-4. Still uncommitted (the owner hasn't asked for a commit):
-   - docs/designs/codebase-strategy.md, design-audit-2026-10-26.md, target-design.md, target-design/;
-   - vault/Exam.md, vault/Glossary.md.
-5. Not built yet: an independent review of the target design (planned before any code moves).
+- **The vectors are the terms of the damage calculation, whatever the source.** Indigon's "increased damage per mana
+  spent" and 600 % increased spell damage from gear are both just "increased". What counts: increased, more, increased
+  damage taken, flat damage, penetration, resistance reduction, and so on.
+- **The view, for now, is a table:** one row per term. Columns: my build | the target build | the difference | where the
+  difference comes from (the list of sources). "Just to see precisely how it looks."
+- **"No effect" values stay**, listed in a table of their own, all of them; the rules come later. Overcapped resistances
+  are not useless: some mods scale with overcap (e.g. body armours with crit chance per overcapped lightning resistance).
+- **One-to-one comparison first.** The multi-build comparison comes right after and is high on the agenda.
+- **Scenario picker like PoB's:** Standard Boss, Pinnacle Boss, Uber Pinnacle Boss, plus Mapping. (PoB's box "Is the
+  enemy a Boss?" offers No / Standard Boss / Guardian/Pinnacle Boss / Uber Pinnacle Boss, default Pinnacle:
+  Modules/ConfigOptions.lua:2086.)
+- **Different config settings between the two builds are pointed out in the UI** ("the target has other settings than
+  yours").
+- **Test builds:** "yes, make it public" (meaning to be confirmed in round 14).
+- Decided by Claude: imported targets stay in `Builds\AutoBuilder\imports` (the owner opens them in PoB); the frozen
+  features are kept as the git tag plus one README sentence.
 
-## Target layout (proposed; an engineering review checks it before the first move)
+## Grilling session, round 14
+
+- **Test builds:** EK, Worb and copies of these builds may be committed. The repo stays completely private.
+- **Rows come from the official damage calculation:** PoB's Calcs tab and its breakdowns, cross-checked against the PoE
+  wiki's damage calculation page. Claude derives them and checks that PoB covers everything the wiki lists.
+- **The model is PoB's Calcs tab, "Skill Hit Damage" section** (owner's screenshots of his Fireball, skill part
+  Projectile): the app compares that page for both builds and shows the differences. Hit damage only. The visual design
+  is Claude's proposal; the owner reviews it.
+  - Fact (Claude): the Calcs row "Total Increased" shows generic Damage under "All Types" (308 %) and the type's own
+    plus elemental under the type (Fire 426 %). The hit multiplies by 1 + (308 + 426) / 100 = 8.34, as the hover shows;
+    "More" multiplies 1.27 × 1.40 = 1.778 (Modules/CalcSections.lua:164-178). Added damage is scaled by damage
+    effectiveness, the skill's base is not: 1,883 + 308 × 4.80 = 3,361.4.
+- **Sources:** for every value that differs, all sources one click away. Example: mine adds 308–471 fire, the target
+  adds 1,000–2,000: why does the target have so much more?
+- **Difference column:** both the raw gap and what it is worth in DPS (PoB recalculation).
+- **Scenario:** sets only "Is the enemy a Boss?" for both builds; every other box stays each build's own and is checked
+  against the scenario. Default: Pinnacle Boss.
+- **Draft notes:** only verified notes change numbers. A draft is shown next to the number as "if this note is right: X".
+
+## Grilling session, round 15 (2026-10-27)
+
+- **Q1 layout: yes, the damage chain.** "Then we fix other things along the way." The design test is whether a human
+  can understand it. The owner asked for an example with real data.
+- **Example built** (Claude, 2026-10-27): a clickable mockup with real PoB 2.67.2 numbers, Worb vs pobb.in/v8XfQn1yFnAs,
+  Pinnacle Boss, Winter Orb part 1: https://claude.ai/artifact/Reo6j5waAVyfGARJ9Bmtpj. The data comes from PoB's own
+  hover breakdown, `actor.breakdown[damageType]` (CalcOffence.lua:3360-3610), dumped by a scratch script (chain.lua).
+  The steps multiply to ×2.06; PoB's totals give ×2.07 (2,967,940 / 1,435,204), and the 0.3 % gap sits in the summed
+  increased rows. Findings it showed: Focused Channelling counts 0 % on Worb (no channelling time set; target 3 s)
+  = +60 %; Winter Orb gem level 22 vs 24 = +19 %; Worb has more increased (1,014 % vs 886 %); the target counts the
+  enemy as Ignited, Scorched and Unnerved; Eye of Malice turns −27 % into −40 % enemy resistance in PoB.
+- **Mockup verdict (owner):** "This looks fantastic. This is exactly how I envisioned it to look like." Functionally
+  right ("functional, it's exactly what I wanted it to be"); colors and visual design get reworked later.
+
+## Grilling session, round 16 (2026-10-27, owner on lunch break)
+
+- **Row order:** yes. PoB's calculation order, with the biggest-first chips on top.
+- **Skill parts and skill settings** (Fireball projectile / explosion, Bladefall blade count): compare with the settings
+  saved in the two PoBs, exactly as they are. Do not model situations such as a boss next to a wall, where a pierced
+  projectile hits the wall and the explosion shotguns. How these skills behave gets discussed later. OPEN (round 17):
+  when the two settings differ, does each build keep its own and the difference gets flagged, or is your build
+  recalculated with the target's setting?
+- **No throwaway prototype.** "I wouldn't want you to do work that gets thrown away." The chain is built for real, in
+  the new structure. The mockup and its scratch script are the reference.
+- **Folder tour: later today.** Also later today, together: an architecture review of the whole project. Go through
+  every file (how it's written, the logic behind it), look at it critically, and decide how much a restructure makes
+  sense.
+- **Skill settings must match (round 17, owner):** "You cannot just compare pineapples to beans." If the skill's own
+  settings differ (Fireball on projectile vs explosion, Bladefall blade count), flag it immediately and tell the user
+  that the skill settings differ. Example to detect: Lightning Strike (or Smite) can double hit at the right distance,
+  so some PoBs carry the main skill twice, one copy set to the strike part and one to the projectile part. That must be
+  flagged too. From a skill-setup point of view both builds have to be the same.
+- **After the flag (round 18, owner: "for now, we can do that"):** the chain is hidden; one button recalculates your
+  build in memory with the target's skill setting (your file is never changed). This will change as interactions and
+  knowledge grow. In about nine months Claude should make these calls on its own, so the rule gets evaluated over time.
+- **Owner's expectation:** Claude knows what good software looks like (e.g. a clean pipeline) and gives him
+  instructions on it. Where Claude doesn't know something, it says where he is wrong and why. He pasted a conversation
+  with another AI (layers, separation of concerns, one-way dependencies, anti-corruption layer for PoB, strangler fig,
+  architecture tests, CI). Claude's assessment: standard knowledge and right for us, except the parts that assume we
+  own the math (PoB is the math), millions of calculations per second, CQRS, and swapping PoB out (YAGNI). Root cause
+  admitted: the rules were known but never enforced by tools, so feature pressure won. Fix: enforce them with tests and
+  CI (import rules, size limits, linter, type checker).
+- **What "sound" means (owner, round 18):** a way to enforce all these rules and practices in this project at all
+  times, always. The software will grow, especially when build creation starts in about six months, with agents
+  running at the same time. Clean architecture, development and data design are paramount. When the app is good
+  enough, the owner presents it to the community: "I don't want to be called a shit developer again."
+- **Fact (2026-10-27):** today nothing enforces them. There is no .github/workflows, no pre-commit config, no
+  pyproject/linter/type-checker config and no git hooks; only Claude's own hooks (guard_readonly.py). OPEN (round 19):
+  how enforcement works. Once settled, write the rule into tools/make_agents.py (project rule on rule changes).
+
+## Grilling session, round 19 (2026-10-27, owner back to work mid-round)
+
+- **Q1 (tools enforce):** the owner is not confident. "Rules are rules", with no exceptions in Claude's logic; can a
+  situation occur that breaks a rule set for everything? He asked for an alternative. Claude's answer (given in chat,
+  not yet discussed): checks are defaults, not laws. Every check gets a written escape hatch: an exemption in the code
+  with its reason (as linters do with `# noqa`), listed and counted, and every new exemption is checked in review. Limits
+  (e.g. 800 lines) can be changed by decision. The weaker alternative is "warn, don't block". Recommendation: block by
+  default, exemptions allowed only with a written reason.
+- **Q2 (where it blocks):** the owner expects slower development and much higher token use, and asked for an
+  alternative. Claude's answer: the checks are programs, not AI. They cost no tokens; tokens are spent only when an
+  agent fixes a failure, which is cheaper now than later. Alternative: fast checks (linter, imports, sizes: seconds)
+  on commit; slow ones (type checker, full tests, about 70 s) only when merging into main, through a local merge
+  script. GitHub checks wait until before going public. Recommendation: that alternative.
+- **Q3 (ratchet):** the owner asked whether it is normal and best practice; he doesn't know it. Claude's answer: it is
+  a technique, not a tool, and the standard way to adopt checks in existing code. Examples: SonarQube's "Clean as You
+  Code" (only new code must pass), PHPStan's and detekt's baseline files. Today's violations go on a list, a check
+  fails only on new ones, and the list may only shrink.
+- **Q4 (checklist + cold review):** yes.
+
+## Grilling session, round 20 (2026-10-27)
+
+- **Q2 (fast checks on commit, full checks in a local merge script, GitHub checks before going public):** yes.
+- **Q3 (ratchet):** yes.
+- **No human reviewer exists.** "I don't have a friend that does it right now. I have nobody participating in this
+  project. No developer." The cold review is done by a fresh AI reviewer with no project history. It gets only the repo
+  and must explain the structure and run the tests. Never plan around a developer friend again.
+- **Q1 (block by default, written exemptions):** the owner asked what "limits change only when you decide" means.
+  Re-asked in round 21.
+- **Q5 (review format):** the owner asked whether Claude has enough context to judge each file. Answered and re-asked in
+  round 21.
+- Tests folder (owner's question): 47 tracked files in one flat folder: 30 tests, 5 helpers, 4 scripts that are not
+  tests (pin_golden, record_guide_snapshots, perf_baseline, spike_guide_compare) and 7 data files. Test names carry
+  process words (gate2, gate4_*). The golden tests need PoB and the owner's builds.
+- **Restart? (owner, round 20):** "I'm getting the impression that it might be a good idea to restart this whole project
+  new and fresh." Claude's view: not from zero, because the PoB bridge, the write guards, the server security and the
+  importer are the parts the 2026-10-26 audit says to keep, each paid for with bugs. Proposed alternative: a new repo
+  with the target layout and every check on from the first commit, porting in only what the analyzer needs (about
+  2,000 of the 9,280 engine lines, with their tests). The rest stays in the old repo as reference and is ported only
+  when a feature needs it. OPEN (round 21).
+
+## Grilling session, round 21 (2026-10-27)
+
+- **Limits are Claude's to manage (owner):** "I am not sure if there is any cases or circumstances where a file should be
+  more than 400 lines. This is an architectural question ... something I would expect you to manage and give me
+  recommendations on." Claude's rule: hand-written source never goes over 400 lines, with no exemptions; a file that
+  needs more is doing two jobs and gets split. Only files we don't write are exempt, each listed with its reason:
+  vendor files (engine/_SimpleGraphic.def.lua, 516 lines, PoB's runtime API definitions; HeadlessWrapper.upstream.lua),
+  generated files and data (golden.json, fixtures). Claude changes limits and reports the change.
+- **Owner's concern about the review:** can Claude handle 9,280 engine lines (399 KB, roughly 110,000 tokens) at once,
+  when the context between every line matters? Claude's answer: loading it is possible, but attention to detail drops
+  when a context is that full, so the review does not depend on it. Strategy: (1) a map built by tools, not by reading
+  (imports, the calls across files, the Python-Lua calls, each file's public functions); (2) one reviewer per area
+  (about 1,000-2,500 lines) with the map and the neighbours' interfaces; (3) a cross-area pass over the map and the area
+  reports, not the code; (4) every verdict cites file:line and is checked by re-opening the lines. OPEN (round 22).
+- **Owner asked what a new repo adds.** Claude's answer, which revises its round 20 recommendation: the benefit is
+  "carry over only what's needed, checked at the door", and that works in this repo too (a new `src/` folder where
+  every check applies; `engine/` frozen as reference, deleted file by file, and an import rule stops `src/` importing
+  it). A new repo adds only a clean history and no old branches or worktrees. The history can be made clean once, when
+  going public. Same repo keeps the studio tooling, worktrees, the engine\cache junction and the golden tests working
+  without re-pointing. OPEN (round 22): carry over yes/no, and where.
+
+## Grilling session, round 22 (2026-10-27)
+
+- **Decision 4 changes (Q6a, yes):** carry over only what the analyzer needs; every piece passes all checks on the way in.
+- **Q6b:** in this repo, with a full backup first (owner: "make a clone of this entire project ... with a date stamp. So
+  we have a backup if anything goes wrong"). Done in task 044: `old-project-2026-10-27/`, read-only, ignored by git.
+- **Q5 (review method: map, one reviewer per area, cross-area pass, claims checked):** yes.
+- Decided by Claude: the ratchet (Q3) is only needed if old code is checked; `engine/` is frozen and unchecked, `src/`
+  is clean from its first file, so no baseline list is kept.
+- Fact for the importer: PoB itself downloads pobb.in builds from `pobb.in/pob/<id>` (Modules/BuildSiteTools.lua:29);
+  pobb.in's robots.txt (fetched 2026-10-27) disallows `/pob/` and `/*/raw$` for crawlers alike. OPEN (round 23).
+
+## Grilling session, round 23 (2026-10-27)
+
+- **Q7 (old app frozen and runnable, features come back only when the analyzer needs them):** yes. The owner asked how
+  hard bringing an old feature back is; answer in round 24's message (port with its tests, cost depends on how tied it is
+  to `Auditor` and the Lua string protocol).
+- **Q8 (first milestone):** yes, "those four points are exactly valid": loads your build plus a target (pobb.in link or
+  pasted code), shows the damage chain like the mockup, flags skill-setting and config differences, all checks green and
+  the cold AI review passes.
+- **Later requirement (owner, with a screenshot of mockup row 8 "Critical strikes"):** item detail behind a source. The
+  row "Crit multi: Cobalt Jewels (2)" shows only the gap (— vs 34). Hovering it should show the target's actual jewels
+  (the items and their mods), because the owner has no crit-multi Cobalt Jewels and wants to see what the target uses.
+  Not part of milestone 1.
+- **Q9 (pobb.in import: PoB's own address `pobb.in/pob/<id>`, one request per pasted link, never bulk, pasted codes
+  accepted):** yes.
+- **New request: one folder per project.** "Take the entirety of this project, everything that is inside pob
+  autobuilder folder, and put it into a new folder inside pob autobuilder. Excluding the old project ... call this
+  project comparison app or something like that ... a clean distinction between this project that we are advancing
+  with and the old project." Task 045 moves the repo to `Desktop\pob-autobuilder\comparison-app\`, next to
+  `old-project-2026-10-27\` (result and evidence in tasks/archive/045-move-into-comparison-app.md).
+
+## Grilling session, round 24 (2026-10-27, in comparison-app)
+
+- **Merge the frozen generator?** Claude's evaluation: no, now or later. Task 035 stopped mid-gates (early GATE 2 NOT
+  PASS: 2 HIGH, 17 MEDIUM); the generated Fireball wears a 173-Str body armour at 74 Str (PoB reports requirements, the
+  generator never read them); 13 code files over 400 lines; it added a second way of calling PoB (a JSON bridge on top
+  of `pobhost.run`, which evaluates Lua source built as text). What must be right first is the PoB access layer, which
+  the analyzer and a later generator both sit on. Owner: not now; first do the grilling decisions, then go through the
+  code that is not frozen.
+- **Owner confirmed the summary** ("do whatever we discuss in this grilling session first"). Task 101 wrote the rules
+  into tools/make_agents.py, tagged the frozen heads (`frozen/generator-035`, `-t14`, `-tree`, round 13's "git tag")
+  and parked the 9 tasks that waited for the generator (038's PoB recalculation finding goes into the carry-over review).
+- **Open for the owner:** "private for good" (rounds 2, 14) vs presenting it to the community when good enough
+  (round 18). The rules keep the "before going public" steps planned and leave the decision to him.
+
+## Grilling session, round 25 (2026-10-27): order of work after milestone 1
+
+The owner's ranking ("this is the order in which I want you to structure whatever we do after milestone 1"):
+1. Alternative scaling vectors, the marginal value of each vector, build-enabling items.
+2. Defence vectors, other skills, minions, damage over time.
+3. Sustainability checks (flask charges, charge sources) and on-hit uptime (hits/s × chance against the duration).
+4. Hovering a source shows the target's actual items and mods (the Cobalt Jewels example, round 23).
+5. The in-app chat box on the owner's Claude subscription: speech-to-text, and typed text too.
+6. Comparing many builds (revises round 13, where it came right after the one-to-one comparison).
+
+The exam and the glossary are ongoing and not ranked. Written into tools/make_agents.py (Project facts, task 101).
+
+## Grilling session, round 26 (2026-10-27): what we use from the old project's way of working
+
+Trigger: in task 102 Claude dispatched the old studio's review-lead and engineering-lead without explaining them. Owner:
+"Right now, everything goes on hold. The old structure with the old departments, I was not aware that you're going to
+reuse that." Root: `.claude/settings.json` (`"agent": "orchestrator"`) starts every session as the old studio's
+orchestrator (30 roles generated by tools/make_agents.py); it came along with the move into comparison-app and task 101
+kept it without asking. Also came along: 343 skills linked into `.claude/skills/` by tools/link_skills.py (from the
+superpowers, ECC and skills-CLI plugin folders), the read-only guard hook, the lessons files (docs/studio/learnings/),
+tools/run_tests.py and tools/token_usage.py. All of these are git-ignored; there is no CLAUDE.md.
+
+- **Q1 (who does the work): (b).** One Claude session works directly with the owner. Fresh AI reviewers are started only
+  where the owner decided: the per-area review (round 21) and the cold review at milestones. No departments, no
+  orchestrator hierarchy.
+- **Q2 (no hidden agents): yes.** Any new kind of agent or role needs the owner's yes once; every agent Claude starts is
+  named in the message before it runs (which, what for, time box).
+- **Q3 (read-only guard hook): yes, keep it** (blocks edits to the PoB install and Documents\Path of Building).
+- **Q4 (task 102's partial results): yes.** The map, the six area reports and the layout/checks draft stay as input;
+  the cross-area pass and the line re-check resume after this grilling, done the Q1 way.
+- Q5-Q11 (rules file, lessons, task files/gates, reviewer role, worktrees, skills, tools) were withdrawn unanswered:
+  the owner set a principle first (round 27).
+
+## Grilling session, round 27 (2026-10-27): "a fresh run"
+
+- **Owner's statement:** "To be honest, I want to get rid of the structure that we had in the old project. This is a
+  fresh run. Keep that in mind. And grill on that statement."
+- **Q1 (what "structure" covers):** Claude evaluates whether anything old can be used at all, the AI studio included
+  (rules, lessons, task process, skills, worktrees, old planning docs). Owner: "I'm not keen in keeping any of it."
+- **Q2 (nothing old carries by default; archived, not deleted):** yes.
+- **Q3 (project memory):** keep "short answers". The 19-slide deck "can be deleted entirely ... It's very outdated."
+  Whether "rules live only in tools/make_agents.py" makes sense: Claude decides from a design standpoint.
+- **Q4 (machine-wide setup: ECC rules, superpowers, global agents, own skills):** Claude evaluates how much sense keeping
+  them makes.
+- **Owner's goal for the restructuring:** "my first and foremost biggest goal with this restructuring is to have good
+  design. This also holds true for rules and decisions and how everything is located. And how things will be accessed."
+- Evaluation written: docs/designs/old-project-evaluation-2026-10-27.md (round 28 asks on it).
+
+## Grilling session, round 28 (2026-10-27): on the evaluation
+
+- **Q1 (drop the old way of working except a fresh reviewer, the task card + log + resume point, dated decisions, the
+  guard hook; triage the 56 lessons once):** owner asked "is that good design?" Answered and re-asked in round 29.
+- **Q2 (eight old rules come back: evidence rule, failure modes 1-9 as the analyzer-output checklist, PoB install and
+  builds read-only, trade-offs not verdicts, every number traceable, PoE rounds down, Worb + CoC EK Assa as reference
+  builds, PoE wiki via curl):** yes.
+- **Q3 (one home per kind of rule: checks; ARCHITECTURE + decisions/; ROADMAP; short private CLAUDE.md; settings deny +
+  hook; mechanics/; tasks/; private history. The strategy doc becomes history):** yes.
+- **Q4 (ECC rules/agents stay installed, the checks and CLAUDE.md override them here; superpowers and the sales,
+  marketing, cowork plugins off for this project if Claude Code allows it per project, checked first; only grilling
+  by default):** yes.
+
+## Grilling session, round 29 (2026-10-27)
+
+- Claude's answer to "is that good design?": the fresh reviewer, dated decision records and the guard hook are; the
+  task file and the lessons triage as first proposed were not (task files grew into 400-line histories; routing facts
+  to CLAUDE.md keeps a lessons store under another name).
+- **Q1 (revised):** yes. Keep a fresh reviewer, the task card with one overwritten resume point and a short log (done
+  tasks move to tasks/done/), dated decision records, the guard hook. No lessons store: every correction goes to the
+  home of its kind (game fact -> mechanics/ note, code rule -> check, design choice -> decision record, how Claude works
+  -> CLAUDE.md); a tool fact gets fixed, not written down. The 56 old lessons are routed that way once, then archived.
+  Everything else is dropped.
+- **Q2 (reviewer role):** yes. One read-only reviewer definition in the project, the evidence rule in every brief; the
+  cold reviewer gets a clean copy of the repo only.
+- **Q3 (order):** yes. (1) restructure the way of working, (2) task 102 resumes with fresh reviewers in the new role,
+  (3) the checks for src/.
+- Decided by Claude: the archived studio goes to docs/history/ (the private history home from round 28 Q3), not a new
+  top-level folder.
+
+## RESUME POINT (current, 2026-10-27 after round 29)
+
+The owner confirmed the shared understanding of rounds 26-29 ("yes"). Next: task 103 (tasks/103-fresh-run-way-of-working.md),
+then task 102 resumes, then the checks for src/. Already done: `"agent": "orchestrator"` removed from .claude/settings.json
+(sessions start as plain Claude; deny rules and the guard hook kept); the old deck deleted; project memory reset to
+"short answers".
+
+## RESUME POINT (superseded, 2026-10-27 after round 25)
+
+0. The owner restarts the session (the new rules load only in a new session).
+1. Carry-over review of the code that is not frozen, with the round 21 method: first a tool-built map of engine/ (imports,
+   cross-file calls, Python-Lua calls, public functions), then the carry-over set for milestone 1 with one reviewer per
+   area, the cross-area pass, claims re-checked. Inputs: docs/designs/design-audit-2026-10-26.md, task 038 (PoB
+   recalculation order), the round 24 note on the two PoB call formats.
+2. Then the checks for src/ (linter, import rule, size check, pre-commit hook, local merge script, architecture
+   checklist) and the src/ folder names (the "Target layout" below predates src/ and says knowledge/ where round 12 says
+   mechanics/).
+
+## RESUME POINT (superseded, 2026-10-27 after round 23)
+
+0. Open VS Code / Claude Code in `C:\Users\7800x3D\Desktop\pob-autobuilder\comparison-app` (task 045 moved the repo).
+1. The grilling frontier is empty after round 23 (enforcement, review method, carry-over in this repo, old app frozen,
+   milestone 1, pobb.in import: all settled). The summary was sent to the owner; waiting for his confirmation that it is
+   a shared understanding. Nothing below runs before that yes.
+2. After the frontier is empty and the owner confirms: write the enforcement rules into tools/make_agents.py with
+   source tags (checks block; limits are Claude's, no exemptions for hand-written code; only vendor/generated/data
+   exempt with reasons; fast checks on commit, full checks in a local merge script, GitHub checks before going public;
+   architecture checklist on every merge; cold AI review at each milestone and before going public; never write into
+   `old-project-*`), run `python tools/make_agents.py .`, tell the owner to restart.
+3. Then the review of the carry-over set (method from round 21), then the first moves into `src/`.
+
+## RESUME POINT (superseded, 2026-10-27, owner at work)
+
+1. Round 19: get the owner's yes/no on Claude's answers to Q1 (block by default, written exemptions), Q2 (fast checks on
+   commit, full checks at merge through a local script, GitHub later) and Q3 (ratchet). Q4 is answered (yes).
+2. Then write the enforcement rules into tools/make_agents.py with source tags and run `python tools/make_agents.py .`
+   (tell the owner to restart the session afterwards).
+3. Later today: the folder tour, then the file-by-file architecture review with the owner, which decides the
+   restructure. Start from docs/designs/design-audit-2026-10-26.md and target-design.md.
+4. The mockup: https://claude.ai/artifact/Reo6j5waAVyfGARJ9Bmtpj (private; the owner may share it with a friend via
+   Share). Its data script: chain.lua and run_chain.py in session scratchpad 41a1396e-.../scratchpad.
+5. This file is uncommitted (rounds 13-19).
+- **Priority restated:** "I am still very keen on the architecture and the development design." The Reddit developers
+  called the project "utterly garbage" and "horrid". The goal: the software is sound from a developer and architecture
+  standpoint, with a clear structure and good development ethics. OPEN (round 17): how we know it is sound (done-when).
+
+## RESUME POINT (2026-10-27, after the round 15 mockup)
+
+0. NEXT (later on 2026-10-27): ask the round 17 question (skill setting differences, see round 16; recommended: each
+   build keeps its own setting and the difference shows in the settings box with its worth). Then the folder tour and
+   the file-by-file architecture review with the owner, which decides the restructure. The items below are older;
+   round 15 is answered.
+1. Original round 15 text (answered in rounds 15 and 16):
+   - Q1 Layout: a "damage chain", one row per step of PoB's hover breakdown (base from gem, added per type,
+     x damage effectiveness, increased all+type, more all x type, effective DPS mod (pen / res / taken), crit,
+     casts per second), columns You | Target | Gap | Worth (PoB) | sources drawer; one chain per damage type,
+     types under 3 % folded; small gaps grouped. Alternative: PoB Calcs mirror with "you / target" in every cell.
+     [yes, damage chain]
+   - Q2 Skill part (Fireball: Projectile / Explosion): compare the part the owner's build has selected on both
+     builds, flag when the target saved another part, switch to compare the other. [yes]
+   - Q3 Throwaway prototype of the table with real numbers before the restructure: Worb vs the guide
+     (pobb.in/v8XfQn1yFnAs, hand-compared 2026-10-26). [yes]
+   - Q4 Skip the folder tour; explain each folder at its migration step. [yes]
+2. Decided by Claude in round 15: a different main skill on the target -> warn and let the owner pick the target's
+   skill group.
+3. After the grilling: the independent review of the target design (before any code moves), then the yes/no on the
+   migration order (target-design/migration.md); fold rounds 13-15 into target-design (scenario picker with 4 entries,
+   draft notes off, "no effect" table kept, one-to-one first, vector table instead of the vector catalogue).
+4. The 3.30 patch notes come when the owner has them: check them against the mechanics notes, exam and glossary.
+5. Uncommitted: this file (rounds 13-15). The owner hasn't asked for a commit.
+
+## Target layout (proposed 2026-10-26; superseded in part: rounds 21-22 carry code into src/ instead of moving files, round 12 names the knowledge folder mechanics/)
 
 ```
 app/        local web server and its API (today: engine/server.py and the *_routes.py files)
@@ -251,7 +578,7 @@ tests/      tests, mirroring the folders above
 docs/       README, ARCHITECTURE (one diagram), DECISIONS (why Python, why local, why mechanics notes)
 ```
 
-## Order of work
+## Order of work (2026-10-26; superseded by rounds 21-24, see the current RESUME POINT)
 
 1. Write ARCHITECTURE.md and DECISIONS.md for the code as it is today. No code changes.
 2. Move files into the target folders one area at a time. Tests pass after every step, and the app is tried by hand.
