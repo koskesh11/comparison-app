@@ -43,7 +43,7 @@ class SessionPool[T: Closeable]:
     def _close_session(session: T) -> None:
         try:
             session.close()
-        except Exception:  # closing must not hide the error that made us close; logged
+        except BaseException:  # closing must not hide the error that made us close; logged
             LOG.exception("failed to close a PoB session")
 
     def _get_entry(self) -> tuple[int, T | None]:
@@ -78,7 +78,7 @@ class SessionPool[T: Closeable]:
                 return
             try:
                 replacement = self._factory(slot)
-            except Exception:  # the slot stays dead and the next lease retries; logged
+            except BaseException:  # the slot stays dead and the next lease retries; logged
                 LOG.exception("failed to start a replacement PoB session")
                 self._queue.put_nowait((slot, None))
             else:

@@ -67,10 +67,10 @@ local function numbers(tbl, prefix, into, depth)
 end
 
 Rpc.register("build.load", function(request)
+	loaded = false -- every failure below, the request's own included, leaves no build open
 	if type(request.xml) ~= "string" or type(request.name) ~= "string" then
 		Rpc.fail("BadRequest", "build.load needs the build's xml and name as text")
 	end
-	loaded = false
 	-- PoB reports a bad build only through its prompt (Build.lua:2222-2236) and keeps the first prompt until it is
 	-- dismissed (Launch.lua:382), so an old one would hide this load's result.
 	launch.promptMsg = nil
@@ -82,8 +82,9 @@ Rpc.register("build.load", function(request)
 	-- A dialog means PoB stopped half way, for example to convert a build made for an older game version
 	-- (Build.lua:104-108).
 	if main.popups[1] then Rpc.fail("BuildNotLoaded", "PoB opened a dialog instead of the build") end
+	local opened = summary(main.modes.BUILD)
 	loaded = true
-	return summary(main.modes.BUILD)
+	return opened
 end)
 
 Rpc.register("build.summary", function()

@@ -26,6 +26,13 @@ def test_non_finite_numbers_arrive_as_floats(probe_rpc: LuaHost) -> None:
     assert value["nested"]["deeper"]["value"] == -math.inf
 
 
+def test_finite_numbers_arrive_as_the_same_double(probe_rpc: LuaHost) -> None:
+    """dkjson alone keeps 14 digits (dkjson.lua:201-203): 3.9999999999999996 would arrive as 4 and floor to 4."""
+    value = ask(probe_rpc, "probe.numbers")
+    assert (value["almostFour"], value["long"], value["sum"]) == (3.9999999999999996, 7176019.123456789, 0.1 + 0.2)
+    assert (value["tiny"], value["level"], math.floor(value["almostFour"])) == (5e-324, 98, 3)
+
+
 def test_a_missing_value_is_a_missing_key(probe_rpc: LuaHost) -> None:
     assert ask(probe_rpc, "probe.echo", {"keep": 1, "gone": None}) == {"keep": 1}
     assert ask(probe_rpc, "probe.nothing") is None

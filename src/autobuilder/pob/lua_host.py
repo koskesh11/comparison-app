@@ -51,12 +51,16 @@ class LuaHost:
 
     def __init__(self, dll: Path) -> None:
         self._dll_dir = os.add_dll_directory(str(dll.parent))
-        self._lua = _bind(ctypes.CDLL(str(dll)))
+        try:
+            self._lua = _bind(ctypes.CDLL(str(dll)))
+            state = self._lua.luaL_newstate()
+            if not state:
+                raise PobError("could not create a Lua state")
+        except BaseException:
+            self._dll_dir.close()
+            raise
         self._lock = threading.Lock()
         self._dispatcher: int | None = None
-        state = self._lua.luaL_newstate()
-        if not state:
-            raise PobError("could not create a Lua state")
         self._state: int | None = state
         self._lua.luaL_openlibs(state)
         # Keep Lua's own traceback function: the boot later hides most of the debug library (sandbox.lua seal).
@@ -127,8 +131,11 @@ class LuaHost:
     def _run(self, path: Path, args: tuple[str, ...]) -> tuple[int, int]:
         """Load a file and call it with `args`; its first result stays on top of the stack."""
         state = self._open()
+        try:
+            source = path.read_bytes()
+        except OSError as error:
+            raise PobError(f"cannot read {path}: {error}") from error
         base = self._prepare(state)
-        source = path.read_bytes()
         if self._lua.luaL_loadbuffer(state, source, len(source), f"@{path.name}".encode()) != 0:
             message = self._text(state, -1) or "unreadable load error"
             self._lua.lua_settop(state, base)
@@ -146,8 +153,9 @@ class LuaHost:
                 kind = self._lua.lua_typename(state, self._lua.lua_type(state, -1)).decode()
                 message = f"a Lua error that is not text (a {kind})"
             self._lua.lua_settop(state, base)
-            first, _, rest = message.partition("\n")
-            raise PobError(first, traceback=rest or None)
+            # debug.traceback appends "\nstack traceback:..." to the message; the message itself may span lines.
+            text, marker, stack = message.rpartition("\nstack traceback:")
+            raise PobError(text, traceback=marker.lstrip("\n") + stack) if marker else PobError(message)
 
     def _bytes(self, state: int, index: int) -> bytes | None:
         if self._lua.lua_type(state, index) != LUA_TSTRING:

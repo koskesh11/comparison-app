@@ -66,6 +66,25 @@ def test_a_failed_replacement_leaves_a_slot_the_next_lease_retries() -> None:
     pool.close()
 
 
+def test_an_interrupted_replacement_still_gives_the_slot_back() -> None:
+    """Ctrl+C while a replacement boots: the slot returns dead, so the next lease starts a session (no endless wait)."""
+    calls = {"count": 0}
+
+    def factory(slot: int) -> FakeSession:
+        calls["count"] += 1
+        if calls["count"] == 2:
+            raise KeyboardInterrupt
+        return FakeSession(slot)
+
+    pool = SessionPool(1, factory)
+    with pytest.raises(RuntimeError, match="body failed"), pool.lease():
+        raise RuntimeError("body failed")
+    with pool.lease() as session:
+        assert not session.closed
+    assert calls["count"] == 3
+    pool.close()
+
+
 def test_closing_with_a_leased_session_closes_it_on_return() -> None:
     pool = SessionPool(1, FakeSession)
     with pool.lease() as session:

@@ -82,10 +82,18 @@ class PobSession:
         return BuildSummary.from_wire(self.call(Endpoint.BUILD_SUMMARY))
 
 
+def _overlap(first: Path, second: Path) -> bool:
+    one, two = (Path(os.path.normcase(os.path.abspath(folder))) for folder in (first, second))
+    return one.is_relative_to(two) or two.is_relative_to(one)
+
+
 def check_paths(paths: PobPaths) -> None:
-    """Absolute folders (the boot moves the process into PoB's) and a PoB install in `pob_dir`."""
+    """Absolute folders (the boot moves the process into PoB's), a PoB install in `pob_dir`, and the two folders the
+    sandbox lets PoB write to (sandbox.lua) apart from the install. Settings keeps them out of the owner's builds."""
     if not all(folder.is_absolute() for folder in (paths.pob_dir, paths.user_dir, paths.write_root)):
         raise ValueError(f"PoB paths must be absolute: {paths}")
+    if _overlap(paths.user_dir, paths.pob_dir) or _overlap(paths.write_root, paths.pob_dir):
+        raise ValueError(f"PoB's user data and write root must be outside its install and not contain it: {paths}")
     missing = [name for name in INSTALL_FILES if not (paths.pob_dir / name).is_file()]
     if missing:
         raise PobNotInstalled(f"Path of Building not found in {paths.pob_dir} (missing {', '.join(missing)})")

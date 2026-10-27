@@ -115,3 +115,13 @@ def test_testtree_requires_mirrored_and_guard_tests_and_honest_markers(tmp_path:
         "tests/autobuilder/pob/test_endpoints.py: uses PoB but is not marked pytest.mark.pob",
         "tests/autobuilder/pob/test_endpoints.py: boots its own PoB; use the shared pob_session fixture (S6)",
     ]
+
+
+def test_testtree_counts_a_bare_host_started_with_the_loader_as_a_pob_boot(tmp_path: Path, write: Write) -> None:
+    for test in testtree.REQUIRED:
+        write(test, "")
+    write("tests/autobuilder/pob/test_host.py", "import pytest\npytest.mark.pob\nLuaHost(dll)\n")
+    write("tests/autobuilder/pob/test_boot.py", "import pytest\npytest.mark.pob\nLuaHost(dll).start(LOADER)\n")
+    assert testtree.check(tmp_path) == [
+        "tests/autobuilder/pob/test_boot.py: boots its own PoB; use the shared pob_session fixture (S6)"
+    ]

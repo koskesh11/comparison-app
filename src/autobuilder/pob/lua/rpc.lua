@@ -3,6 +3,8 @@
 -- A request is one JSON object. A reply is an envelope: {ok = true, value = ...} or
 -- {ok = false, error = {kind, message, traceback}}. inf, -inf and NaN are written as the JSON words Infinity,
 -- -Infinity and NaN, which pob/wire.py reads as numbers (S12); dkjson alone writes them as null (dkjson.lua:293-295).
+-- Every other number is written with 17 significant digits, so Python gets PoB's exact double: dkjson alone keeps 14
+-- (tostring, dkjson.lua:201-203), and 3.9999999999999996 would arrive as 4.
 local dkjson = ...
 local traceback = debug.traceback
 
@@ -26,13 +28,13 @@ local function word(text)
 	return setmetatable({}, { __tojson = function() return text end })
 end
 
--- A copy of `value` that dkjson can write as it is: non-finite numbers become their JSON words.
+-- A copy of `value` that dkjson can write as it is: every number becomes its exact JSON text.
 local function writable(value, seen)
 	if type(value) == "number" then
 		if value ~= value then return word("NaN") end
 		if value == math.huge then return word("Infinity") end
 		if value == -math.huge then return word("-Infinity") end
-		return value
+		return word(string.format("%.17g", value))
 	end
 	if type(value) ~= "table" then return value end
 	if seen[value] then error("the reply contains a table inside itself", 0) end

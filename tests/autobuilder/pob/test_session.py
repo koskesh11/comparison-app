@@ -19,7 +19,18 @@ def test_paths_must_be_absolute_and_hold_pob(tmp_path: Path) -> None:
     with pytest.raises(ValueError, match="must be absolute"):
         check_paths(PobPaths(Path("relative"), tmp_path, tmp_path))
     with pytest.raises(PobNotInstalled, match=r"missing Launch\.lua, lua51\.dll"):
-        check_paths(PobPaths(tmp_path, tmp_path / "user", tmp_path / "out"))
+        check_paths(PobPaths(tmp_path, tmp_path.parent / "user", tmp_path.parent / "out"))
+
+
+@pytest.mark.parametrize(
+    ("user", "root"),
+    [("install/user", "out"), ("user", "install"), ("user", "INSTALL/Builds"), ("user", ".")],
+    ids=["user data inside", "write root is the install", "write root inside", "write root contains the install"],
+)
+def test_the_folders_pob_may_write_stay_out_of_its_install(tmp_path: Path, user: str, root: str) -> None:
+    """The sandbox lets PoB write anywhere under these two folders (sandbox.lua:44-54)."""
+    with pytest.raises(ValueError, match="outside its install"):
+        check_paths(PobPaths(tmp_path / "install", tmp_path / user, tmp_path / root))
 
 
 def test_a_summary_keeps_only_the_stats_pob_computed() -> None:
@@ -70,6 +81,11 @@ def test_each_failed_load_reports_its_own_error(pob_session: PobSession, referen
     assert pob_session.load_build(reference_xml["CoC EK Assa"], "CoC EK Assa").build_name == "CoC EK Assa"
 
 
-def test_a_load_needs_xml_and_a_name_as_text(pob_session: PobSession) -> None:
+def test_a_refused_load_request_also_leaves_no_build_open(
+    pob_session: PobSession, reference_xml: dict[str, str]
+) -> None:
+    pob_session.load_build(reference_xml["Worb"], "Worb")
     with pytest.raises(PobError, match="needs the build's xml and name"):
         pob_session.load_build(None, "x")  # type: ignore[arg-type]
+    with pytest.raises(NoBuildLoaded):
+        pob_session.summary()

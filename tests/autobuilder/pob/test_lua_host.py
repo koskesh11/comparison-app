@@ -40,6 +40,20 @@ def test_a_lua_error_has_its_message_and_a_traceback(bare_lua: LuaHost, tmp_path
     assert caught.value.traceback is not None and caught.value.traceback.startswith("stack traceback:")
 
 
+def test_a_message_over_several_lines_stays_whole(bare_lua: LuaHost, tmp_path: Path) -> None:
+    # PoB's startup prompt starts with "^1Error:\n\n" (Launch.lua:384); its reason is on the later lines.
+    with pytest.raises(PobError) as caught:
+        bare_lua.run_file(lua_file(tmp_path, "error('PoB startup failed: Error:\\n\\nthe real reason', 0)\n"))
+    assert caught.value.message == "PoB startup failed: Error:\n\nthe real reason"
+    assert caught.value.traceback is not None and caught.value.traceback.startswith("stack traceback:")
+
+
+def test_a_missing_file_is_a_pob_error_and_leaves_the_stack_alone(bare_lua: LuaHost, tmp_path: Path) -> None:
+    with pytest.raises(PobError, match="cannot read"):
+        bare_lua.run_file(tmp_path / "missing.lua")
+    assert bare_lua.run_file(lua_file(tmp_path, "return tostring(select('#', ...))\n")) == "0"
+
+
 def test_an_error_that_is_not_text_says_what_it_was(bare_lua: LuaHost, tmp_path: Path) -> None:
     # The first app turned this into LuaError(None) (pobhost.py:148, measured by area A).
     with pytest.raises(PobError, match=r"^a Lua error that is not text \(a table\)$"):
