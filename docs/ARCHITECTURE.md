@@ -32,6 +32,9 @@ Every Lua function src/ may call. A name is registered once in Lua (`Rpc.registe
 
 | name | does | changes the build? |
 |---|---|---|
+| `build.load` | opens a build from its XML text; returns its summary; a build PoB cannot open fails and leaves none open | replaces it |
+| `build.summary` | name, class, level, main skill and 16 of PoB's output numbers | no |
+| `build.state` | every number of PoB's main output, the config inputs, the main skill selection (what M6 compares) | no |
 
 ## Checks
 `python tools/check.py` runs the fast checks (the commit hook runs them too); `--full` adds the merge checks, which
@@ -70,7 +73,12 @@ layout and checks report.
 ## Tests
 - `tests/autobuilder/` mirrors `src/autobuilder/`: `src/autobuilder/a/b.py` is tested in `tests/autobuilder/a/test_b.py`.
 - Markers: `pob` (boots PoB), `owner` (reads the owner's builds), `slow`. A test that needs PoB uses the shared
-  `pob_session` fixture (one PoB per run); it skips cleanly when PoB is not installed.
+  `pob_session` fixture (one PoB per run; every `pob` test runs on one xdist worker, `--dist loadgroup`); it skips
+  cleanly when PoB is not installed. The PoB layer's own tests also use `bare_lua`, a Lua state on PoB's DLL without
+  PoB, and Lua probe files in `tests/autobuilder/pob/lua/`.
+- The reference builds (decision 014) are committed byte for byte in `tests/autobuilder/fixtures/builds/`.
+- pytest runs without faulthandler: LuaJIT raises each Lua error as a Windows SEH exception, which faulthandler would
+  print as fatal although LuaJIT catches it.
 - No network outside `tests/autobuilder/intake/`. The PoB install and the owner's builds are listed before and after
   every PoB run; a change outside `Builds\AutoBuilder\` fails the run.
 - `tests/checks/` tests the checks themselves: each plants a violation and expects the check to report it.

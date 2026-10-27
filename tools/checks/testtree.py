@@ -17,7 +17,9 @@ REQUIRED_WITH = {  # src/autobuilder module -> tests that must exist as soon as 
 }
 USES_POB = re.compile(r"\bpob_session\b|autobuilder\.pob\.(session|lua_host)\b")
 USES_OWNER_BUILDS = re.compile(r"\bowner_builds\b|Path of Building[/\\]+Builds")
-BOOTS_POB = re.compile(r"\b(PobSession|LuaHost)\(")
+# Booting PoB in a test: a session, or a bare LuaHost started with PoB's loader. A bare LuaHost alone (Lua's standard
+# libraries, no PoB) is allowed: the host's own tests need one.
+BOOTS_POB = re.compile(r"\b(PobSession|start_session|open_session)\(|\bLOADER\b|loader\.lua")
 
 
 def required(root: Path) -> list[str]:
