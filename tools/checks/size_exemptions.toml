@@ -1,0 +1,4 @@
+# Files we do not write, exempt from the 400-line limit (tools/checks/sizes.py). Each entry needs a reason.
+# [[exempt]]
+# path = "src/autobuilder/pob/lua/vendor/_SimpleGraphic.def.lua"
+# reason = "PoB's runtime API stub, copied from PoB (vendor/README.md names the source)"

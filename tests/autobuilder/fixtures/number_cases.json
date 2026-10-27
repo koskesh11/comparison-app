@@ -1,0 +1,4 @@
+{
+  "about": "Number cases recorded from real PoB output (tests/autobuilder/test_number_cases.py, M4). Each case: value (a number, or the strings \"inf\", \"-inf\", \"nan\", or null for missing), rule (pob | floor, decision 020), precision, shown (the text PoB or the game shows), source (the PoB build and output key it came from).",
+  "cases": []
+}
