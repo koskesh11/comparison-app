@@ -2,7 +2,7 @@
 
 - Date: 2026-10-27 (grilling rounds 14, 28)
 - Decided by: owner
-- Status: accepted
+- Status: accepted; the Worb settings line is set aside for src/ until leaving skills out comes back (018)
 - Scope: tests and fixtures
 
 ## Decision
