@@ -6,13 +6,13 @@
   the checks for src/ Lua do not apply to them.
 """
 
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from pathlib import Path
 
 import pytest
 
 from autobuilder.pob.lua_host import LuaHost
-from autobuilder.pob.session import LUA_DIR
+from autobuilder.pob.session import LUA_DIR, PobSession
 
 PROBES = Path(__file__).parent / "lua"
 
@@ -22,6 +22,17 @@ def bare_lua(pob_dir: Path) -> Iterator[LuaHost]:
     host = LuaHost(pob_dir / "lua51.dll")
     yield host
     host.close()
+
+
+@pytest.fixture
+def fail_output(pob_session: PobSession) -> Iterator[Callable[[int], None]]:
+    """Arms the open build's next `count` BuildOutput calls to raise (lua/fail_output.lua); disarmed after the test."""
+
+    def arm(count: int) -> None:
+        pob_session._host.run_file(PROBES / "fail_output.lua", str(count))  # the probe needs the session's state
+
+    yield arm
+    arm(0)
 
 
 @pytest.fixture

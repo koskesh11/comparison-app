@@ -54,8 +54,15 @@ def run(command: list[str], cwd: Path, env: dict[str, str] | None = None) -> boo
     return subprocess.run(command, cwd=cwd, env=env, timeout=TIMEOUT, check=False).returncode == 0
 
 
+def in_venv(root: Path, prefix: str = sys.prefix) -> bool:
+    """The repo's .venv holds only the dev tools; the first app's tests need the system Python's packages."""
+    return Path(prefix).resolve() == (root / ".venv").resolve()
+
+
 def preconditions(root: Path, branch: str) -> list[str]:
     problems = []
+    if in_venv(root):
+        problems.append("run it with the system Python (`python tools/merge_to_main.py ...`), not the .venv one")
     if git(root, "branch", "--show-current").strip() != branch:
         problems.append(f"switch to {branch} first: the old tests run on the checked-out branch")
     if git(root, "status", "--porcelain", "--untracked-files=no").strip():

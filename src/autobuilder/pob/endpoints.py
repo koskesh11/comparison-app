@@ -13,12 +13,14 @@ class Endpoint(StrEnum):
     BUILD_LOAD = "build.load"
     BUILD_SUMMARY = "build.summary"
     BUILD_STATE = "build.state"
+    ANALYSIS_SUMMARY = "analysis.summary"
 
 
 class Effect(StrEnum):
     """What an endpoint does to the loaded build."""
 
     READ = "read"  # changes nothing
+    TEMPORARY = "temporary"  # changes the build, reads, and undoes the change before it returns, also on error
     REPLACE = "replace"  # replaces the loaded build; after a failed load no build is loaded
 
 
@@ -26,6 +28,7 @@ EFFECTS: Mapping[Endpoint, Effect] = {
     Endpoint.BUILD_LOAD: Effect.REPLACE,
     Endpoint.BUILD_SUMMARY: Effect.READ,
     Endpoint.BUILD_STATE: Effect.READ,
+    Endpoint.ANALYSIS_SUMMARY: Effect.TEMPORARY,
 }
 
 

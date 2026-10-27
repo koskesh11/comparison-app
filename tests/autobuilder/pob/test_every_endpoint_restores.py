@@ -2,11 +2,14 @@
 
 The first app restored state by convention and two restores left stale numbers (task 102: audit.lua:386-390 kept
 FullDPS at the scenario value). The state compared is build.state: every number of PoB's main output, the config
-inputs and the main skill selection. Runs once per Endpoint member, by its effect:
+inputs and placeholders and the main skill selection. Runs once per Endpoint member, by its effect:
 - read: the state is the same after the call;
+- temporary: on both reference builds the reply differs from the same read of the build as saved (a restore of
+  unchanged state proves nothing), the state is the same afterwards, and again after PoB fails halfway (the next
+  BuildOutput raises, lua/fail_output.lua);
 - replace: a second build gives a different state (a restore of unchanged state proves nothing), a build PoB cannot
   open fails halfway and leaves none open, and loading the first build again gives its state back exactly.
-An endpoint without an effect, or a read endpoint without a request below, fails until its case is written.
+An endpoint without an effect, or without its case below, fails until the case is written.
 """
 
 import json
@@ -15,15 +18,27 @@ from typing import Any
 
 import pytest
 
-from autobuilder.errors import BuildLoadFailed, NoBuildLoaded
+from autobuilder.errors import BuildLoadFailed, NoBuildLoaded, PobError
 from autobuilder.pob.endpoints import EFFECTS, Effect, Endpoint
 from autobuilder.pob.session import PobSession
 
 pytestmark = pytest.mark.pob
 
+FailOutput = Callable[[int], None]
+
 READ_REQUESTS: dict[Endpoint, dict[str, Any]] = {
     Endpoint.BUILD_SUMMARY: {},
     Endpoint.BUILD_STATE: {},
+}
+
+
+def summary_without_a_boss(session: PobSession) -> tuple[Any, Any]:
+    return session.call(Endpoint.ANALYSIS_SUMMARY, {"boss": "None"}), session.call(Endpoint.BUILD_SUMMARY)
+
+
+# Endpoint -> (its reply while the build is changed, the same read of the build as saved)
+TEMPORARY_CASES: dict[Endpoint, Callable[[PobSession], tuple[Any, Any]]] = {
+    Endpoint.ANALYSIS_SUMMARY: summary_without_a_boss,
 }
 
 
@@ -55,17 +70,34 @@ def check_replace(session: PobSession, builds: dict[str, str], endpoint: Endpoin
     assert state(session) == worb
 
 
-CHECKS: dict[Effect, Callable[[PobSession, dict[str, str], Endpoint], None]] = {
-    Effect.READ: check_read,
-    Effect.REPLACE: check_replace,
+def check_temporary(session: PobSession, builds: dict[str, str], endpoint: Endpoint, fail: FailOutput) -> None:
+    case = TEMPORARY_CASES.get(endpoint)
+    if case is None:
+        pytest.fail(f"write the temporary case for {endpoint} in TEMPORARY_CASES")
+    for name, xml in builds.items():
+        session.load_build(xml, name)
+        before = state(session)
+        changed, saved = case(session)
+        assert changed != saved, f"{endpoint} on {name}: the change did not change the reply"
+        assert state(session) == before
+        fail(1)
+        with pytest.raises(PobError, match="forced failure in BuildOutput"):
+            case(session)
+        assert state(session) == before
+
+
+CHECKS: dict[Effect, Callable[[PobSession, dict[str, str], Endpoint, FailOutput], None]] = {
+    Effect.READ: lambda session, builds, endpoint, _: check_read(session, builds, endpoint),
+    Effect.TEMPORARY: check_temporary,
+    Effect.REPLACE: lambda session, builds, endpoint, _: check_replace(session, builds, endpoint),
 }
 
 
 @pytest.mark.parametrize("endpoint", list(Endpoint))
 def test_endpoint_leaves_the_build_as_its_effect_says(
-    pob_session: PobSession, reference_xml: dict[str, str], endpoint: Endpoint
+    pob_session: PobSession, reference_xml: dict[str, str], fail_output: FailOutput, endpoint: Endpoint
 ) -> None:
     effect = EFFECTS.get(endpoint)
     if effect is None:
         pytest.fail(f"{endpoint} has no effect in pob/endpoints.py EFFECTS")
-    CHECKS[effect](pob_session, reference_xml, endpoint)
+    CHECKS[effect](pob_session, reference_xml, endpoint, fail_output)
