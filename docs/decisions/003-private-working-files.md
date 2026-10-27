@@ -11,7 +11,9 @@ The first project's AI process files (task logs, agent prompts, lessons) buried 
 ## Decision
 These stay on the developer's machine and are git-ignored: the task cards (`tasks/`), Claude's settings, hook and
 reviewer definition (`.claude/`, `tools/hooks/`), the working agreement (`CLAUDE.md`) and the history
-(`docs/history/`: grilling transcripts, old plans, the archived AI studio of the first project). Everything a reader
+(`docs/history/`: this run's grilling transcript and evaluations). The first project's material (its AI studio, old
+plans, tasks 000-045) is not in the repo at all: it sits in `..\archives\`, next to the repo (owner, 2026-10-27).
+Everything a reader
 needs to understand the code is published: decisions (this folder), the roadmap, the checks, the analyzer checklist and
 the mechanics notes.
 

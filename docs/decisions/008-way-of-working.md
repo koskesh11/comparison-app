@@ -26,16 +26,19 @@ decisions and how everything is located, and how things will be accessed."
   | Game knowledge, glossary, exam | the mechanics notes (vault/, renamed mechanics/ later) |
   | Judging the analyzer's output | docs/analyzer-checklist.md (017) |
   | Task cards and logs | tasks/ (private) |
-  | History | docs/history/ (private) |
+  | History of this run | docs/history/ (private) |
+  | The first project | ..\archives\ (outside the repo) |
 
 - No lessons store. A correction goes to the home of its kind; a tool problem gets fixed, not written down.
 - Task cards: Start / Goal / Done when / Not / Mode, one resume point that is overwritten, a short log. Finished cards
   move to tasks/done/.
 - Machine-wide tools: the ECC rules and agents stay installed; this project's checks and CLAUDE.md override them here.
-  The sales, marketing and cowork plugins are off for this project. Superpowers' skills are no longer linked here; its
-  session-start message comes from the user-level settings, which a project cannot switch off (task 103). Of the
-  personal skills, only grilling is used by default, others on request.
+  The sales, marketing and cowork plugins are off for this project (enabledPlugins in .claude/settings.json).
+  Superpowers is off too: its skills are no longer linked here, and its session-start hook in the user-level settings
+  skips this project (a project cannot switch off a user-level hook, so the owner had the skip added there, task 103).
+  Of the personal skills, only grilling is used by default, others on request.
 
 ## Consequences
-- The first project's studio is archived in docs/history/studio-2026-10-27/ (task 103); nothing from it carries over
-  unless decided in this run.
+- The first project's studio, old plans and tasks are archived outside the repo, in `..\archives\` (the
+  `pob-autobuilder` folder; its README lists the contents). Nothing from it carries over unless decided in this run,
+  but it may hold something we need: look there before rebuilding an old piece from scratch.
