@@ -9,5 +9,4 @@
 /tests/*.py -text
 /tests/*.json -text
 /tests/fixtures/** -text
-/vault/** -text
 /mechanics/** -text

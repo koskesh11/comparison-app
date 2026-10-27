@@ -31,7 +31,7 @@ SAFETY_TESTS = ("test_gui_safety", "test_guard_readonly")
 GOLDEN_TEST = "test_golden"
 POB_MODULE = "pobhost"        # a test that reaches this module loads PoB's lua51.dll in-process
 VAULT_MODULE = "vault"
-IGNORED_PREFIXES = ("vault/.obsidian/",)   # Obsidian window state, not vault content
+IGNORED_PREFIXES = ("mechanics/.obsidian/",)   # Obsidian window state, not note content
 CODE_DIRS = ("engine", "tests", "tools", "tools/hooks")
 MAX_WORKERS = 12              # total parallel test processes (16 CPU threads leave room for the OS)
 MAX_HEAVY_WORKERS = 8          # PoB-loading processes at once
@@ -132,7 +132,7 @@ def reasons_for(rel: str, test: str, graph: dict, reach: set[str]) -> str | None
         return f"Lua runs inside PoB, which this test drives via {POB_MODULE}"
     if rel.startswith(IGNORED_PREFIXES):
         return None
-    if rel.startswith("vault/") and VAULT_MODULE in reach:
+    if rel.startswith("mechanics/") and VAULT_MODULE in reach:
         return f"vault loaded through {VAULT_MODULE}"
     if rel.startswith("gui/") and GUI_PATTERN.search(_own_text(graph, test)):
         return "read by this test"
