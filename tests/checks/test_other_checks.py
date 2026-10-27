@@ -5,9 +5,10 @@ from collections.abc import Callable
 from pathlib import Path
 
 import pytest
+from checks.common import Skip
 
 from checks import lua_rules, lua_syntax, notes, testtree, web
-from checks.common import Skip
+
 Write = Callable[[str, str], Path]
 
 ENUM = 'from enum import StrEnum\n\n\nclass Endpoint(StrEnum):\n    CHAIN = "analysis.chain"\n'
@@ -17,7 +18,10 @@ DOC = "# Architecture\n\n## Endpoints\n| name | does |\n|---|---|\n| `analysis.c
 def test_lua_rules_pass_when_lua_enum_and_doc_agree(tmp_path: Path, write: Write) -> None:
     write("src/autobuilder/pob/endpoints.py", ENUM)
     write("docs/ARCHITECTURE.md", DOC)
-    write("src/autobuilder/pob/lua/analysis/chain.lua", 'local function chain() end\nRpc.register("analysis.chain", chain)\n')
+    write(
+        "src/autobuilder/pob/lua/analysis/chain.lua",
+        'local function chain() end\nRpc.register("analysis.chain", chain)\n',
+    )
     write("src/autobuilder/pob/lua/loader.lua", 'dofile("x.lua")\n')
     write("src/autobuilder/pob/lua/vendor/stub.lua", "function GlobalFromPoB() end\n")
     assert lua_rules.check(tmp_path) == []
@@ -26,15 +30,20 @@ def test_lua_rules_pass_when_lua_enum_and_doc_agree(tmp_path: Path, write: Write
 def test_lua_rules_report_globals_loads_duplicates_and_mismatches(tmp_path: Path, write: Write) -> None:
     write("src/autobuilder/pob/endpoints.py", ENUM)
     write("docs/ARCHITECTURE.md", DOC)
-    write("src/autobuilder/pob/lua/analysis/chain.lua",
-          'function chainJSON() end\nhelper = function() end\ndofile("other.lua")\n'
-          'Rpc.register("analysis.chain", f)\nRpc.register("analysis.chain", g)\nRpc.register("compare.target", h)\n')
+    write(
+        "src/autobuilder/pob/lua/analysis/chain.lua",
+        'function chainJSON() end\nhelper = function() end\ndofile("other.lua")\n'
+        'Rpc.register("analysis.chain", f)\nRpc.register("analysis.chain", g)\nRpc.register("compare.target", h)\n',
+    )
     problems = [p.split(": ", 1)[-1] for p in lua_rules.check(tmp_path)]
     assert problems == [
-        "global function `chainJSON`; make it local or register it", "global function `helper`; make it local or register it",
-        "loads code outside loader.lua", "endpoint `analysis.chain` is registered twice",
+        "global function `chainJSON`; make it local or register it",
+        "global function `helper`; make it local or register it",
+        "loads code outside loader.lua",
+        "endpoint `analysis.chain` is registered twice",
         "endpoint `compare.target` is registered in Lua but missing from the Endpoint enum",
-        "endpoint `compare.target` is registered in Lua but missing from docs/ARCHITECTURE.md Endpoints"]
+        "endpoint `compare.target` is registered in Lua but missing from docs/ARCHITECTURE.md Endpoints",
+    ]
 
 
 def test_lua_syntax_reports_a_file_that_does_not_compile(tmp_path: Path, write: Write) -> None:
@@ -53,15 +62,20 @@ def test_lua_syntax_reports_a_file_that_does_not_compile(tmp_path: Path, write: 
 
 
 def test_web_reports_inline_code_and_a_script_that_does_not_parse(tmp_path: Path, write: Write) -> None:
-    write("web/index.html", '<script src="js/main.js"></script>\n<script>alert(1)</script>\n<p style="x" onclick="y">\n')
+    write(
+        "web/index.html", '<script src="js/main.js"></script>\n<script>alert(1)</script>\n<p style="x" onclick="y">\n'
+    )
     write("web/js/main.js", "export const ok = 1;\n")
     write("web/js/bad.js", "const = ;\n")
     try:
         problems = web.check(tmp_path)
     except Skip as reason:
         pytest.skip(str(reason))
-    assert problems[:3] == ["web/index.html:2: inline script", "web/index.html:3: style attribute",
-                            "web/index.html:3: event handler attribute"]
+    assert problems[:3] == [
+        "web/index.html:2: inline script",
+        "web/index.html:3: style attribute",
+        "web/index.html:3: event handler attribute",
+    ]
     assert len(problems) == 4 and problems[3].startswith("web/js/bad.js: ")
 
 
@@ -75,7 +89,8 @@ def test_notes_report_missing_front_matter_status_and_blocks(tmp_path: Path, wri
     assert notes.check(tmp_path) == [
         "mechanics/Gaps/Odd.md: status is 'maybe', expected draft or verified",
         "mechanics/Interactions/Bare.md: no front matter (--- ... ---) at the top",
-        "mechanics/Rules/Two.md: needs exactly one ```rule block"]
+        "mechanics/Rules/Two.md: needs exactly one ```rule block",
+    ]
 
 
 def test_testtree_requires_mirrored_and_guard_tests_and_honest_markers(tmp_path: Path, write: Write) -> None:
@@ -90,4 +105,5 @@ def test_testtree_requires_mirrored_and_guard_tests_and_honest_markers(tmp_path:
         "tests/autobuilder/pob/test_write_sandbox.py: missing (required with src/autobuilder/pob/lua_host.py, M11)",
         "src/autobuilder/pob/lua_host.py: no test file tests/autobuilder/pob/test_lua_host.py",
         "tests/autobuilder/pob/test_endpoints.py: uses PoB but is not marked pytest.mark.pob",
-        "tests/autobuilder/pob/test_endpoints.py: boots its own PoB; use the shared pob_session fixture (S6)"]
+        "tests/autobuilder/pob/test_endpoints.py: boots its own PoB; use the shared pob_session fixture (S6)",
+    ]

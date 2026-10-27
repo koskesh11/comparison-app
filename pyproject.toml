@@ -23,15 +23,20 @@ dev = [
 line-length = 120
 target-version = "py312"
 src = ["src", "tests"]
-# Only new code is checked (decision 006); the frozen first app and its tests are not.
-extend-exclude = ["engine", "gui", "tests/*.py", "tests/fixtures", "tools/run_tests.py", "tools/hooks",
-                  "mechanics", "docs", "tasks"]
+# Only new code is checked (decision 006); the frozen first app and its tests are not. Ruff's `*` also crosses
+# folders, so the first app's test files are named one by one; tests/autobuilder, tests/checks stay in scope.
+extend-exclude = [
+    "engine", "gui", "mechanics", "docs", "tasks", "tools/run_tests.py", "tools/hooks", "tests/fixtures",
+    "tests/test_*.py", "tests/__init__.py", "tests/evidence_checks.py", "tests/golden_common.py",
+    "tests/guide_apply_testlib.py", "tests/guide_check_testlib.py", "tests/guide_testlib.py", "tests/perf_baseline.py",
+    "tests/pin_golden.py", "tests/record_guide_snapshots.py", "tests/spike_guide_compare.py",
+]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP", "SIM", "C90", "PL", "RUF", "S", "T20", "TID", "BLE"]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**" = ["S101", "PLR2004"]
+"tests/**" = ["S101", "PLR2004", "S603", "S607"]
 "tools/**" = ["T201", "S603", "S607"]
 
 [tool.ruff.lint.mccabe]

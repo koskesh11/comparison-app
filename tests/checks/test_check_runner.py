@@ -19,12 +19,20 @@ def _crashes(_root: Path) -> list[str]:
     raise ValueError("boom")
 
 
-def test_summary_names_every_failure(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str],
-                                     tmp_path: Path) -> None:
-    monkeypatch.setattr(check, "CHECKS", [
-        check.Check("X1", "passes", lambda _root: []), check.Check("X2", "fails", _fails),
-        check.Check("X3", "skips", _skips), check.Check("X4", "crashes", _crashes),
-        check.Check("X5", "only full", _fails, full=True)])
+def test_summary_names_every_failure(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str], tmp_path: Path
+) -> None:
+    monkeypatch.setattr(
+        check,
+        "CHECKS",
+        [
+            check.Check("X1", "passes", lambda _root: []),
+            check.Check("X2", "fails", _fails),
+            check.Check("X3", "skips", _skips),
+            check.Check("X4", "crashes", _crashes),
+            check.Check("X5", "only full", _fails, full=True),
+        ],
+    )
     assert check.main([], root=tmp_path) == 1
     lines = capsys.readouterr().out.splitlines()
     assert [line[:4].strip() for line in lines if not line.startswith(" ")][:4] == ["X1", "X2", "X3", "X4"]
@@ -33,8 +41,9 @@ def test_summary_names_every_failure(monkeypatch: pytest.MonkeyPatch, capsys: py
     assert lines[-1] == "check: 2 FAILED (X2 fails, X4 crashes); 1 passed, 1 skipped"
 
 
-def test_all_green_returns_zero(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str],
-                                tmp_path: Path) -> None:
+def test_all_green_returns_zero(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str], tmp_path: Path
+) -> None:
     monkeypatch.setattr(check, "CHECKS", [check.Check("X1", "passes", lambda _root: [])])
     assert check.main([], root=tmp_path) == 0
     assert capsys.readouterr().out.splitlines()[-1] == "check: all 1 passed, 0 skipped"

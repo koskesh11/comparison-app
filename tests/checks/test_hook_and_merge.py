@@ -22,7 +22,9 @@ def test_checklist_needs_every_item_answered_and_no_no() -> None:
     ]
 
 
-def test_export_holds_tracked_files_only(git_repo: Path, run_git: Git, tmp_path_factory: pytest.TempPathFactory) -> None:
+def test_export_holds_tracked_files_only(
+    git_repo: Path, run_git: Git, tmp_path_factory: pytest.TempPathFactory
+) -> None:
     (git_repo / "tracked.txt").write_text("x\n")
     (git_repo / "untracked.txt").write_text("y\n")
     run_git(git_repo, "add", "tracked.txt")
@@ -40,6 +42,11 @@ def clone(tmp_path: Path, run_git: Git, monkeypatch: pytest.MonkeyPatch) -> Path
     subprocess.run(["git", "clone", "-q", "--local", str(REPO), str(target)], check=True, timeout=300)
     for args in (["config", "user.email", "t@example.invalid"], ["config", "user.name", "check test"]):
         run_git(target, *args)
+    current = subprocess.run(
+        ["git", "branch", "--show-current"], cwd=target, capture_output=True, text=True, check=True, timeout=60
+    ).stdout.strip()
+    if current != "main":  # a clone has only the checked-out branch; the merge needs main too
+        run_git(target, "branch", "main", "origin/main")
     monkeypatch.setenv("CHECK_VENV", str(REPO / ".venv"))
     return target
 
@@ -55,11 +62,20 @@ def test_the_hook_refuses_a_commit_with_a_failed_check(clone: Path, run_git: Git
     plant_long_file(clone)
     run_git(clone, "add", LONG_FILE)
     head = subprocess.run(["git", "rev-parse", "HEAD"], cwd=clone, capture_output=True, text=True, check=True).stdout
-    result = subprocess.run(["git", "commit", "-m", "planted"], cwd=clone, capture_output=True, text=True,
-                            timeout=300, env={**os.environ}, check=False)
+    result = subprocess.run(
+        ["git", "commit", "-m", "planted"],
+        cwd=clone,
+        capture_output=True,
+        text=True,
+        timeout=300,
+        env={**os.environ},
+        check=False,
+    )
     assert result.returncode != 0 and "F4 file sizes" in result.stdout + result.stderr
-    assert subprocess.run(["git", "rev-parse", "HEAD"], cwd=clone, capture_output=True, text=True,
-                          check=True).stdout == head
+    assert (
+        subprocess.run(["git", "rev-parse", "HEAD"], cwd=clone, capture_output=True, text=True, check=True).stdout
+        == head
+    )
 
 
 @pytest.mark.slow
@@ -68,11 +84,14 @@ def test_the_merge_script_refuses_a_branch_whose_checks_fail(clone: Path, run_gi
     plant_long_file(clone)
     run_git(clone, "add", LONG_FILE)
     run_git(clone, "commit", "-q", "-m", "planted")
-    main_before = subprocess.run(["git", "rev-parse", "main"], cwd=clone, capture_output=True, text=True,
-                                 check=True).stdout
+    main_before = subprocess.run(
+        ["git", "rev-parse", "main"], cwd=clone, capture_output=True, text=True, check=True
+    ).stdout
     checklist = (clone / merge_to_main.CHECKLIST).read_text(encoding="utf-8")
     message = tmp_path / "message.txt"
     message.write_text("merge\n\n" + "".join(f"{item}: n/a - test\n" for item in merge_to_main.ITEM.findall(checklist)))
     assert merge_to_main.merge("task-999-planted", message, root=clone) == 1
-    assert subprocess.run(["git", "rev-parse", "main"], cwd=clone, capture_output=True, text=True,
-                          check=True).stdout == main_before
+    assert (
+        subprocess.run(["git", "rev-parse", "main"], cwd=clone, capture_output=True, text=True, check=True).stdout
+        == main_before
+    )

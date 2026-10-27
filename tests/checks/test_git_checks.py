@@ -4,6 +4,7 @@ from collections.abc import Callable
 from pathlib import Path
 
 from checks import eol, git_state
+
 Write = Callable[[str, str], Path]
 Git = Callable[..., None]
 
