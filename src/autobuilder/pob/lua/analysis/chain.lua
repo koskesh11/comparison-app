@@ -183,5 +183,5 @@ local function readChain(build)
 end
 
 Rpc.register("analysis.chain", function(request)
-	return Build.withChanges({ Scenario.boss(request.boss), calcsOnSidebar }, readChain)
+	return Build.withChanges({ Scenario.boss(request.boss), calcsOnSidebar }, readChain, request.which)
 end)

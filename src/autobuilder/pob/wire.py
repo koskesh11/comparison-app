@@ -14,7 +14,9 @@ from autobuilder.errors import (
     BuildNotRestored,
     NoBuildLoaded,
     NoMainSkill,
+    NoTargetLoaded,
     PobError,
+    TargetLoadFailed,
     UnknownEndpoint,
 )
 
@@ -24,6 +26,8 @@ ERRORS: dict[str, type[PobError]] = {
     "NoBuild": NoBuildLoaded,
     "NoMainSkill": NoMainSkill,
     "BuildNotRestored": BuildNotRestored,
+    "TargetNotLoaded": TargetLoadFailed,
+    "NoTarget": NoTargetLoaded,
 }
 
 

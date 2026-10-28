@@ -15,6 +15,7 @@ local SUMMARY_STATS = {
 local STATE_DEPTH = 2 -- build.state reads numbers this many tables deep into PoB's main output
 
 local loaded = false -- a build is open and PoB reported no error for it; reads refuse otherwise
+local target = nil -- the target build, PoB's CompareEntry (compare/target.lua); nil when none is loaded
 
 -- PoB's error prompt (Launch.lua:381-388) without colour codes, the version line and the key help.
 local function promptText(message)
@@ -28,9 +29,22 @@ local function promptText(message)
 	return table.concat(lines, "\n")
 end
 
-local function openBuild()
+-- A build by its handle: "own" (or nil) is the build open in PoB's build mode, "target" the CompareEntry beside it.
+local function openBuild(which)
+	if which == "target" then
+		if not target then Rpc.fail("NoTarget", "no target is loaded: none was loaded yet, or the last load failed") end
+		return target
+	end
+	if which ~= nil and which ~= "own" then
+		Rpc.fail("BadRequest", "which is \"own\" or \"target\", got " .. tostring(which))
+	end
 	if not loaded then Rpc.fail("NoBuild", "no build is open: none was loaded yet, or the last load failed") end
 	return main.modes.BUILD
+end
+
+-- compare/target.lua sets the target after a load that succeeded and clears it on every other path.
+local function setTarget(entry)
+	target = entry
 end
 
 -- PoB's own recalculation, as the GUI runs it after any change: flag the build and run one frame. The frame's build
@@ -39,6 +53,12 @@ end
 -- steps by hand skipped the last two (measured on CoC EK Assa: SkillDPS came back in another order). No path of the
 -- first app did the first three (task 102, area A Q5). Every change to a build goes through here.
 local function recalculate(build)
+	if build == target then
+		-- The target is not in build mode, so no frame reaches it: PoB's compare tab recalculates an entry with
+		-- CompareEntry:Rebuild (CompareEntry.lua:250-256: global cache wipe, socket groups, BuildOutput).
+		build:Rebuild()
+		return
+	end
 	launch.promptMsg = nil
 	build.buildFlag = true
 	host.frame()
@@ -156,8 +176,8 @@ end
 -- What tests/autobuilder/pob/test_every_endpoint_restores.py compares (M6): every number of both PoB calculations
 -- (the sidebar's and the Calcs tab's), the config inputs and placeholders (the boss box sets placeholders of other
 -- boxes, ConfigOptions.lua:2086-2100), the Calcs tab's inputs and the fields of every skill group and gem.
-Rpc.register("build.state", function()
-	local build = openBuild()
+Rpc.register("build.state", function(request)
+	local build = openBuild(request.which)
 	return {
 		output = numbers(build.calcsTab.mainOutput, "", {}, STATE_DEPTH),
 		calcsOutput = numbers(build.calcsTab.calcsOutput, "", {}, STATE_DEPTH),
@@ -171,8 +191,8 @@ end)
 -- Runs read(build) with every change applied and the build recalculated once, then undoes the changes newest first
 -- and recalculates, on every path (the first app's guide.lua:188-207 shape). A change is a function(build) that
 -- applies itself and returns its undo. If undoing fails, no build counts as open: its state is unknown.
-local function withChanges(changes, read)
-	local build = openBuild()
+local function withChanges(changes, read, which)
+	local build = openBuild(which)
 	local undos = {}
 	local ok, result = xpcall(function()
 		for _, change in ipairs(changes) do
@@ -188,11 +208,13 @@ local function withChanges(changes, read)
 		recalculate(build)
 	end, Rpc.asError)
 	if not restored then
-		loaded = false
+		if build == target then target = nil else loaded = false end
 		Rpc.fail("BuildNotRestored", "PoB could not put the build back, load it again: " .. tostring(problem.message))
 	end
 	if not ok then error(result, 0) end
 	return result
 end
 
-return { open = openBuild, summary = summary, withChanges = withChanges, keepFields = keepFields }
+return {
+	open = openBuild, summary = summary, withChanges = withChanges, keepFields = keepFields, setTarget = setTarget,
+}

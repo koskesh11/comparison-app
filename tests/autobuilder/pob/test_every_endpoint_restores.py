@@ -19,7 +19,7 @@ from typing import Any
 
 import pytest
 
-from autobuilder.errors import BuildLoadFailed, NoBuildLoaded, PobError
+from autobuilder.errors import BuildLoadFailed, NoBuildLoaded, NoTargetLoaded, PobError, TargetLoadFailed
 from autobuilder.pob.endpoints import EFFECTS, Effect, Endpoint
 from autobuilder.pob.session import PobSession
 
@@ -50,9 +50,9 @@ TEMPORARY_CASES: dict[Endpoint, Callable[[PobSession], tuple[Any, Any]]] = {
 }
 
 
-def state(session: PobSession) -> str:
-    """The build's state as sorted JSON, so inf and NaN compare as themselves."""
-    return json.dumps(session.call(Endpoint.BUILD_STATE), sort_keys=True)
+def state(session: PobSession, which: str = "own") -> str:
+    """The build's (or the target's) state as sorted JSON, so inf and NaN compare as themselves."""
+    return json.dumps(session.call(Endpoint.BUILD_STATE, {"which": which}), sort_keys=True)
 
 
 def check_read(session: PobSession, builds: dict[str, str], endpoint: Endpoint) -> None:
@@ -94,10 +94,33 @@ def check_temporary(session: PobSession, builds: dict[str, str], endpoint: Endpo
         assert state(session) == before
 
 
+def check_target(session: PobSession, builds: dict[str, str], endpoint: Endpoint) -> None:
+    """The target comes and goes beside the build: the build's state never moves, a failed load leaves no target,
+    and loading the same target again gives its state back exactly."""
+    assert endpoint in (Endpoint.TARGET_LOAD, Endpoint.TARGET_RELEASE), f"write the target case for {endpoint}"
+    session.load_build(builds["Worb"], "Worb")
+    own = state(session)
+    session.call(Endpoint.TARGET_LOAD, {"xml": builds["CoC EK Assa"], "name": "CoC EK Assa"})
+    target = state(session, "target")
+    assert (state(session), target != own) == (own, True)
+    if endpoint is Endpoint.TARGET_LOAD:
+        with pytest.raises(TargetLoadFailed):
+            session.call(Endpoint.TARGET_LOAD, {"xml": builds["Worb"][:500], "name": "broken"})
+    else:
+        session.call(Endpoint.TARGET_RELEASE)
+    with pytest.raises(NoTargetLoaded):
+        state(session, "target")
+    assert state(session) == own
+    session.call(Endpoint.TARGET_LOAD, {"xml": builds["CoC EK Assa"], "name": "CoC EK Assa"})
+    assert state(session, "target") == target
+    session.call(Endpoint.TARGET_RELEASE)
+
+
 CHECKS: dict[Effect, Callable[[PobSession, dict[str, str], Endpoint, FailOutput], None]] = {
     Effect.READ: lambda session, builds, endpoint, _: check_read(session, builds, endpoint),
     Effect.TEMPORARY: check_temporary,
     Effect.REPLACE: lambda session, builds, endpoint, _: check_replace(session, builds, endpoint),
+    Effect.TARGET: lambda session, builds, endpoint, _: check_target(session, builds, endpoint),
 }
 
 

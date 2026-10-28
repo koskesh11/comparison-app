@@ -15,6 +15,8 @@ class Endpoint(StrEnum):
     BUILD_STATE = "build.state"
     ANALYSIS_SUMMARY = "analysis.summary"
     ANALYSIS_CHAIN = "analysis.chain"
+    TARGET_LOAD = "target.load"
+    TARGET_RELEASE = "target.release"
 
 
 class Effect(StrEnum):
@@ -23,6 +25,7 @@ class Effect(StrEnum):
     READ = "read"  # changes nothing
     TEMPORARY = "temporary"  # changes the build, reads, and undoes the change before it returns, also on error
     REPLACE = "replace"  # replaces the loaded build; after a failed load no build is loaded
+    TARGET = "target"  # loads or releases the target build beside it; the loaded build is unchanged
 
 
 EFFECTS: Mapping[Endpoint, Effect] = {
@@ -31,6 +34,8 @@ EFFECTS: Mapping[Endpoint, Effect] = {
     Endpoint.BUILD_STATE: Effect.READ,
     Endpoint.ANALYSIS_SUMMARY: Effect.TEMPORARY,
     Endpoint.ANALYSIS_CHAIN: Effect.TEMPORARY,
+    Endpoint.TARGET_LOAD: Effect.TARGET,
+    Endpoint.TARGET_RELEASE: Effect.TARGET,
 }
 
 
