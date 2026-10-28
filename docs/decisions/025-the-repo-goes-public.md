@@ -3,7 +3,7 @@
 - Date: 2026-10-28
 - Decided by: owner ("make this repo public, so he can have a look at the entire project"; history clean-up first)
 - Status: accepted
-- Scope: the GitHub repo koskesh11/pob-autobuilder
+- Scope: the GitHub repo koskesh11/comparison-app (renamed from pob-autobuilder on 2026-10-28, owner)
 
 ## Context
 Decision 005 left going public to the owner, with three steps planned before it: GitHub checks, history clean-up and a
