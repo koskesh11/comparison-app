@@ -30,6 +30,7 @@ FailOutput = Callable[[int], None]
 READ_REQUESTS: dict[Endpoint, dict[str, Any]] = {
     Endpoint.BUILD_SUMMARY: {},
     Endpoint.BUILD_STATE: {},
+    Endpoint.COMPARE_SNAPSHOT: {},
 }
 
 

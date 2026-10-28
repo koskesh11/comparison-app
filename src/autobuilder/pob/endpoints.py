@@ -17,6 +17,7 @@ class Endpoint(StrEnum):
     ANALYSIS_CHAIN = "analysis.chain"
     TARGET_LOAD = "target.load"
     TARGET_RELEASE = "target.release"
+    COMPARE_SNAPSHOT = "compare.snapshot"
 
 
 class Effect(StrEnum):
@@ -36,6 +37,7 @@ EFFECTS: Mapping[Endpoint, Effect] = {
     Endpoint.ANALYSIS_CHAIN: Effect.TEMPORARY,
     Endpoint.TARGET_LOAD: Effect.TARGET,
     Endpoint.TARGET_RELEASE: Effect.TARGET,
+    Endpoint.COMPARE_SNAPSHOT: Effect.READ,
 }
 
 

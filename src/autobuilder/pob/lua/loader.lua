@@ -21,4 +21,5 @@ local Build = run("build.lua", Rpc, host)
 local Scenario = run("analysis/scenario.lua", Rpc, Build)
 run("analysis/chain.lua", Rpc, Build, Scenario)
 run("compare/target.lua", Rpc, Build)
+run("compare/snapshot.lua", Rpc, Build)
 return Rpc.dispatch

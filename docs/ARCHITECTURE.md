@@ -42,6 +42,7 @@ Every Lua function src/ may call. A name is registered once in Lua (`Rpc.registe
 | `analysis.chain` | the damage chain of the build or the target (`which`: own, target) under a scenario (`boss`): the rows of PoB's Calcs sections Skill Hit Damage, Attack/Cast Rate, Crits and Accuracy for the main skill, each cell with PoB's text, its raw numbers and its sources, and the hit per hand for an attack (decision 023) | temporary: the boss box and the Calcs tab pointed at the sidebar, put back and recalculated |
 | `target.load` | opens the target build from its XML text as PoB's CompareEntry, beside the build; returns its summary; a target PoB cannot open fails and leaves none | the target only |
 | `target.release` | drops the target | the target only |
+| `compare.snapshot` | the skill settings of every group and gem (parts, stages, mines, minion, counts, the Calcs selection) every config box not at PoB's default, with PoB's set / unusable state, the number boxes the build can use left at 0, Custom Modifiers and config sets, of the build or the target (`which`) | no |
 
 ## Checks
 `python tools/check.py` runs the fast checks (the commit hook runs them too); `--full` adds the merge checks, which
