@@ -108,32 +108,91 @@ Rpc.register("build.summary", function()
 	return summary(openBuild())
 end)
 
+local SCALARS = { string = true, number = true, boolean = true }
+
 local function scalars(tbl)
 	local copy = {}
 	for key, value in pairs(tbl) do
-		if type(value) ~= "table" then copy[key] = value end
+		if SCALARS[type(value)] then copy[key] = value end
 	end
 	return copy
 end
 
--- What tests/autobuilder/pob/test_every_endpoint_restores.py compares (M6): every number of PoB's main output, the
--- config inputs and placeholders (the boss box sets placeholders of other boxes, ConfigOptions.lua:2086-2100), and
--- the main skill selection.
+-- Every field of every socket group and gem: the sidebar's skill selection and the Calcs tab's own among them
+-- (mainActiveSkill(Calcs), skillPart(Calcs), skillStageCount(Calcs), skillMinion(Calcs), ...; CalcsTab.lua:46-92,
+-- CompareEntry.lua:229-248), which PoB also writes while it recalculates (CalcActiveSkill.lua:251, 629, 697, 738, 926).
+local function skillFields(build)
+	local groups = {}
+	for index, group in ipairs(build.skillsTab.socketGroupList) do
+		local gems = {}
+		for gemIndex, gem in ipairs(group.gemList) do gems[gemIndex] = scalars(gem) end
+		groups[index] = { fields = scalars(group), gems = gems }
+	end
+	return { mainSocketGroup = build.mainSocketGroup, groups = groups }
+end
+
+-- A change's undo for fields it cannot list ahead: saves every field of each table that is not a table and returns
+-- the function that puts them back; a value written meanwhile is set back, a field added meanwhile is removed.
+local function keepFields(tables)
+	local saved = {}
+	for index, tbl in ipairs(tables) do
+		local copy = {}
+		for key, value in pairs(tbl) do
+			if type(value) ~= "table" then copy[key] = value end
+		end
+		saved[index] = copy
+	end
+	return function()
+		for index, tbl in ipairs(tables) do
+			local copy = saved[index]
+			for key, value in pairs(tbl) do
+				if type(value) ~= "table" and copy[key] == nil then tbl[key] = nil end
+			end
+			for key, value in pairs(copy) do tbl[key] = value end
+		end
+	end
+end
+
+-- What tests/autobuilder/pob/test_every_endpoint_restores.py compares (M6): every number of both PoB calculations
+-- (the sidebar's and the Calcs tab's), the config inputs and placeholders (the boss box sets placeholders of other
+-- boxes, ConfigOptions.lua:2086-2100), the Calcs tab's inputs and the fields of every skill group and gem.
 Rpc.register("build.state", function()
 	local build = openBuild()
-	local group = build.skillsTab.socketGroupList[build.mainSocketGroup]
 	return {
 		output = numbers(build.calcsTab.mainOutput, "", {}, STATE_DEPTH),
+		calcsOutput = numbers(build.calcsTab.calcsOutput, "", {}, STATE_DEPTH),
 		config = scalars(build.configTab.input),
 		placeholder = scalars(build.configTab.placeholder),
-		mainSocketGroup = build.mainSocketGroup,
-		mainActiveSkill = group and group.mainActiveSkill,
+		calcs = scalars(build.calcsTab.input),
+		skills = skillFields(build),
 	}
 end)
 
-return {
-	open = openBuild,
-	recalculate = recalculate,
-	summary = summary,
-	forget = function() loaded = false end, -- the build's state is unknown: reads refuse until the next load
-}
+-- Runs read(build) with every change applied and the build recalculated once, then undoes the changes newest first
+-- and recalculates, on every path (the first app's guide.lua:188-207 shape). A change is a function(build) that
+-- applies itself and returns its undo. If undoing fails, no build counts as open: its state is unknown.
+local function withChanges(changes, read)
+	local build = openBuild()
+	local undos = {}
+	local ok, result = xpcall(function()
+		for _, change in ipairs(changes) do
+			undos[#undos + 1] = change(build)
+		end
+		recalculate(build)
+		return read(build)
+	end, Rpc.asError)
+	local restored, problem = xpcall(function()
+		for index = #undos, 1, -1 do
+			undos[index](build)
+		end
+		recalculate(build)
+	end, Rpc.asError)
+	if not restored then
+		loaded = false
+		Rpc.fail("BuildNotRestored", "PoB could not put the build back, load it again: " .. tostring(problem.message))
+	end
+	if not ok then error(result, 0) end
+	return result
+end
+
+return { open = openBuild, summary = summary, withChanges = withChanges, keepFields = keepFields }

@@ -96,6 +96,22 @@ def reference_xml() -> dict[str, str]:
     return {name: (REFERENCE_BUILDS / file).read_text(encoding="utf-8") for name, file in REFERENCE_FILES.items()}
 
 
+def _edited(xml: str, old: str, new: str) -> str:
+    assert xml.count(old) == 1, f"the reference build changed: {old!r} is not there once"
+    return xml.replace(old, new)
+
+
+@pytest.fixture(scope="session")
+def variant_xml(reference_xml: dict[str, str]) -> dict[str, str]:
+    """CoC EK Assa with another main skill: an attack (Cyclone, the second active skill of group 1) and a minion
+    (Summon Stone Golem, group 7, a group the saved Calcs tab is not on, whose gem saves no skillMinionCalcs)."""
+    assa = reference_xml["CoC EK Assa"]
+    return {
+        "Cyclone": _edited(assa, 'slot="Body Armour" mainActiveSkill="1"', 'slot="Body Armour" mainActiveSkill="2"'),
+        "Stone Golem": _edited(assa, 'mainSocketGroup="1"', 'mainSocketGroup="7"'),
+    }
+
+
 @pytest.fixture(autouse=True)
 def no_network(request: pytest.FixtureRequest, monkeypatch: pytest.MonkeyPatch) -> None:
     if "intake" in request.path.parts:

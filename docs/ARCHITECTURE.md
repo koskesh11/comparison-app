@@ -37,8 +37,9 @@ Every Lua function src/ may call. A name is registered once in Lua (`Rpc.registe
 |---|---|---|
 | `build.load` | opens a build from its XML text; returns its summary; a build PoB cannot open fails and leaves none open | replaces it |
 | `build.summary` | name, class, level, main skill and 16 of PoB's output numbers | no |
-| `build.state` | every number of PoB's main output, the config inputs and placeholders, the main skill selection (what M6 compares) | no |
+| `build.state` | every number of both PoB calculations (the sidebar's and the Calcs tab's), the config inputs and placeholders, the Calcs tab's inputs, the fields of every skill group and gem (what M6 compares) | no |
 | `analysis.summary` | the summary under a scenario: sets "Is the enemy a Boss?" (`boss`, one of PoB's values), recalculates in PoB's order, reads | temporary: put back and recalculated before it returns, also on error |
+| `analysis.chain` | the damage chain under a scenario (`boss`): the rows of PoB's Calcs sections Skill Hit Damage, Attack/Cast Rate, Crits and Accuracy for the main skill, each cell with PoB's text, its raw numbers and its sources, and the hit per hand for an attack (decision 023) | temporary: the boss box and the Calcs tab pointed at the sidebar, put back and recalculated |
 
 ## Checks
 `python tools/check.py` runs the fast checks (the commit hook runs them too); `--full` adds the merge checks, which

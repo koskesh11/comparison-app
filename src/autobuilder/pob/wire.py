@@ -9,12 +9,21 @@ import json
 from collections.abc import Mapping
 from typing import Any
 
-from autobuilder.errors import BuildLoadFailed, NoBuildLoaded, PobError, UnknownEndpoint
+from autobuilder.errors import (
+    BuildLoadFailed,
+    BuildNotRestored,
+    NoBuildLoaded,
+    NoMainSkill,
+    PobError,
+    UnknownEndpoint,
+)
 
 ERRORS: dict[str, type[PobError]] = {
     "UnknownEndpoint": UnknownEndpoint,
     "BuildNotLoaded": BuildLoadFailed,
     "NoBuild": NoBuildLoaded,
+    "NoMainSkill": NoMainSkill,
+    "BuildNotRestored": BuildNotRestored,
 }
 
 
