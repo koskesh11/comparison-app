@@ -16,7 +16,12 @@ measure of a gap's size that uses only PoB's numbers.
   - more, effective DPS modifier, crit effect, hit rate or speed, chance to hit: the value as PoB shows it, as a
     multiplier (a "more" of 95 % is 1.95);
   - increased: `1 + increased / 100`, with the type's total as PoB adds it (All Types plus the type);
-  - base and added damage: the average of min and max.
+  - base damage: PoB shows no row for it, and a ratio of "Added Min/Max" alone would leave out the skill's own base.
+    The base step is the type's average hit ("Skill Hit Damage", min and max averaged) divided by its increased, more
+    and effective DPS factors: the rest of the hit, base, added x effectiveness, conversion and whatever else PoB
+    multiplies in. It is marked derived. Added Min and Max keep their rows for reading, without a gap;
+  - speed: "Hit Rate" where PoB shows it, else the casts, attacks or trigger rate per second (Worb: TotalDPS /
+    AverageHit = 1,435,203.8 / 222,512.2 = 6.45 = its Hit Rate, not its 9.57 casts per second).
 - A step with one cell per damage type is weighted by the type's share of your average hit (`Chain.hits`, PoB's
   `<Type>HitAverage`): `gap = sum(share x (ratio - 1))`. The share and the main damage type come from PoB's numbers.
 - The gap is arithmetic on two PoB numbers, not a recalculation. The page says so next to the 3 % group, and the worth
