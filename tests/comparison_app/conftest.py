@@ -123,14 +123,29 @@ def variant_xml(reference_xml: dict[str, str]) -> dict[str, str]:
 
 @pytest.fixture(autouse=True)
 def no_network(request: pytest.FixtureRequest, monkeypatch: pytest.MonkeyPatch) -> None:
+    """S2: no test reaches the network. tests/comparison_app/intake may (pobb.in, through its fake opener); the app's
+    server tests may connect to their own server on 127.0.0.1, nothing else."""
     if "intake" in request.path.parts:
         return
+    loopback_only = request.path.name == "test_server.py" and "app" in request.path.parts
+    connect, create_connection = socket.socket.connect, socket.create_connection
 
     def refuse(*_args: object, **_kwargs: object) -> None:
         raise OSError("tests do not use the network (S2); only tests/comparison_app/intake may")
 
-    monkeypatch.setattr(socket.socket, "connect", refuse)
-    monkeypatch.setattr(socket, "create_connection", refuse)
+    def own_server_only(self: socket.socket, address: object) -> None:
+        if loopback_only and isinstance(address, tuple) and address[0] == "127.0.0.1":
+            connect(self, address)
+            return
+        refuse()
+
+    def create_own(address: object, *args: object, **kwargs: object) -> socket.socket:
+        if loopback_only and isinstance(address, tuple) and address[0] == "127.0.0.1":
+            return create_connection(address, *args, **kwargs)  # type: ignore[arg-type]
+        raise OSError("tests do not use the network (S2); only tests/comparison_app/intake may")
+
+    monkeypatch.setattr(socket.socket, "connect", own_server_only)
+    monkeypatch.setattr(socket, "create_connection", create_own)
 
 
 @pytest.fixture(scope="session")
