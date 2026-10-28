@@ -25,6 +25,10 @@ class FetchFailed(AutobuilderError):
     """pobb.in was unreachable, too slow, or answered with an error."""
 
 
+class SetupProblem(AutobuilderError):
+    """The app's folders are not set up (a missing Builds folder, a relative path); `str(error)` says what to fix."""
+
+
 class PobNotInstalled(AutobuilderError):
     """Path of Building is not in the folder the settings name."""
 
