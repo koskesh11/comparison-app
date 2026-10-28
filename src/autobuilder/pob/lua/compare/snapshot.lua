@@ -33,6 +33,8 @@ local function activeSkills(group)
 		found[index] = {
 			name = effect.grantedEffect.name, gem = indexOf(group.gemList, effect.srcInstance),
 			part = skill.skillPart and parts and parts[skill.skillPart] and parts[skill.skillPart].name,
+			-- an unset stage count means this many (CalcActiveSkill.lua:649)
+			stagesMax = skill.skillData and skill.skillData.stagesMax,
 		}
 	end
 	return found

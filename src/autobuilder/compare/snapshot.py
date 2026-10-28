@@ -33,6 +33,7 @@ class ActiveSkill:
     name: str
     gem: int | None  # the gem it comes from, 1-based in the group's gem list
     part: str | None  # the part's name as PoB shows it
+    stages_max: float | None = None  # what an unset stage count means (CalcActiveSkill.lua:649)
 
 
 @dataclass(frozen=True)
@@ -103,7 +104,12 @@ def _group(index: int, data: object) -> Group:
     item = wire.table(data)
     fields = wire.table(item.get("fields"))
     skills = tuple(
-        ActiveSkill(str(skill["name"]), int(skill["gem"]) if skill.get("gem") else None, wire.text(skill.get("part")))
+        ActiveSkill(
+            str(skill["name"]),
+            int(skill["gem"]) if skill.get("gem") else None,
+            wire.text(skill.get("part")),
+            wire.number(skill.get("stagesMax")),
+        )
         for skill in (wire.table(raw) for raw in item.get("skills") or ())
     )
     return Group(

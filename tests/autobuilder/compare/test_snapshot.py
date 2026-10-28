@@ -33,7 +33,7 @@ def test_worbs_settings_are_pobs(session: PobSession, reference_xml: dict[str, s
     session.load_build(reference_xml["Worb"], "Worb")
     snapshot = read_snapshot(session)
     assert (snapshot.main_group, snapshot.calcs_skill_number) == (2, 1)
-    assert snapshot.main_skill() == ActiveSkill("Winter Orb", 2, "Channelling")
+    assert snapshot.main_skill() == ActiveSkill("Winter Orb", 2, "Channelling", 11)  # PoB's maximum; Worb saves 13
     orb = snapshot.groups[1].gems[1]
     assert (orb.name, orb.part, orb.stages, orb.count, orb.support) == ("Winter Orb", 1, 13, 5, False)
     assert snapshot.groups[1].gems[0].support is True  # Increased Critical Strikes
