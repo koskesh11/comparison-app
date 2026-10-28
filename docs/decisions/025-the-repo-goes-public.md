@@ -13,7 +13,7 @@ The owner wants a friend without Claude to see the project and the damage chain 
 ## Decision
 - The history was cleaned before the repo went public: `tasks/`, `.claude/`, `tools/hooks/`, `docs/history/` and
   `CLAUDE.md` were removed from every commit (git filter-repo, 2026-10-28); main's files were unchanged. The first
-  project's ten branches are deleted from GitHub. No secret and no personal e-mail was found in any commit (scanned
+  project's nine branches are deleted from GitHub. No secret and no personal e-mail was found in any commit (scanned
   2026-10-28; commits carry GitHub's noreply address). A backup bundle of the history before the clean-up stays on the
   owner's machine.
 - The mockup is published as an exported copy, `docs/mockup/damage-chain.html`, served by GitHub Pages (`.nojekyll`:
