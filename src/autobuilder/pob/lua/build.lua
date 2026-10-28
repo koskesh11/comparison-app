@@ -108,32 +108,54 @@ Rpc.register("build.summary", function()
 	return summary(openBuild())
 end)
 
+local SCALARS = { string = true, number = true, boolean = true }
+
 local function scalars(tbl)
 	local copy = {}
 	for key, value in pairs(tbl) do
-		if type(value) ~= "table" then copy[key] = value end
+		if SCALARS[type(value)] then copy[key] = value end
 	end
 	return copy
 end
 
--- The main group's skill selection, the sidebar's and the Calcs tab's own (CalcsTab.lua:46-92).
-local function selection(build)
-	local group = build.skillsTab.socketGroupList[build.mainSocketGroup]
-	local skill = group and group.displaySkillList and group.displaySkillList[group.mainActiveSkill or 1]
-	local source = skill and skill.activeEffect.srcInstance or {}
-	return {
-		mainSocketGroup = build.mainSocketGroup,
-		mainActiveSkill = group and group.mainActiveSkill,
-		mainActiveSkillCalcs = group and group.mainActiveSkillCalcs,
-		skillPart = source.skillPart, skillPartCalcs = source.skillPartCalcs,
-		skillStageCount = source.skillStageCount, skillStageCountCalcs = source.skillStageCountCalcs,
-		skillMineCount = source.skillMineCount, skillMineCountCalcs = source.skillMineCountCalcs,
-	}
+-- Every field of every socket group and gem: the sidebar's skill selection and the Calcs tab's own among them
+-- (mainActiveSkill(Calcs), skillPart(Calcs), skillStageCount(Calcs), skillMinion(Calcs), ...; CalcsTab.lua:46-92,
+-- CompareEntry.lua:229-248), which PoB also writes while it recalculates (CalcActiveSkill.lua:251, 629, 697, 738, 926).
+local function skillFields(build)
+	local groups = {}
+	for index, group in ipairs(build.skillsTab.socketGroupList) do
+		local gems = {}
+		for gemIndex, gem in ipairs(group.gemList) do gems[gemIndex] = scalars(gem) end
+		groups[index] = { fields = scalars(group), gems = gems }
+	end
+	return { mainSocketGroup = build.mainSocketGroup, groups = groups }
+end
+
+-- A change's undo for fields it cannot list ahead: saves every field of each table that is not a table and returns
+-- the function that puts them back; a value written meanwhile is set back, a field added meanwhile is removed.
+local function keepFields(tables)
+	local saved = {}
+	for index, tbl in ipairs(tables) do
+		local copy = {}
+		for key, value in pairs(tbl) do
+			if type(value) ~= "table" then copy[key] = value end
+		end
+		saved[index] = copy
+	end
+	return function()
+		for index, tbl in ipairs(tables) do
+			local copy = saved[index]
+			for key, value in pairs(tbl) do
+				if type(value) ~= "table" and copy[key] == nil then tbl[key] = nil end
+			end
+			for key, value in pairs(copy) do tbl[key] = value end
+		end
+	end
 end
 
 -- What tests/autobuilder/pob/test_every_endpoint_restores.py compares (M6): every number of both PoB calculations
 -- (the sidebar's and the Calcs tab's), the config inputs and placeholders (the boss box sets placeholders of other
--- boxes, ConfigOptions.lua:2086-2100), the Calcs tab's inputs and the main group's skill selection.
+-- boxes, ConfigOptions.lua:2086-2100), the Calcs tab's inputs and the fields of every skill group and gem.
 Rpc.register("build.state", function()
 	local build = openBuild()
 	return {
@@ -142,7 +164,7 @@ Rpc.register("build.state", function()
 		config = scalars(build.configTab.input),
 		placeholder = scalars(build.configTab.placeholder),
 		calcs = scalars(build.calcsTab.input),
-		selection = selection(build),
+		skills = skillFields(build),
 	}
 end)
 
@@ -173,4 +195,4 @@ local function withChanges(changes, read)
 	return result
 end
 
-return { open = openBuild, summary = summary, withChanges = withChanges }
+return { open = openBuild, summary = summary, withChanges = withChanges, keepFields = keepFields }

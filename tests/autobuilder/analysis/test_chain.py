@@ -8,8 +8,9 @@ import math
 
 import pytest
 
-from autobuilder.analysis.chain import Cell, Chain, SourceTable, SourceText, parse_chain, read_chain
+from autobuilder.analysis.chain import Cell, Chain, Hit, SourceTable, SourceText, parse_chain, read_chain
 from autobuilder.analysis.scenarios import Scenario
+from autobuilder.app.present.numbers import show
 from autobuilder.pob.endpoints import Endpoint
 from autobuilder.pob.session import PobSession
 
@@ -37,17 +38,17 @@ WIRE = {
             ],
         }
     ],
-    "hitByType": {"Cold": 45549.9, "Fire": 0},
+    "hits": [{"byType": {"Cold": 45549.9, "Fire": 0}, "AverageHit": 222512.2, "CritEffect": 4.885}],
     "totals": {"TotalDPS": 1435203.8, "Life": math.inf},
 }
 
 
 def test_the_wire_becomes_typed_records() -> None:
     chain = parse_chain(WIRE)
-    assert (chain.skill, chain.part, chain.hit_by_type, chain.totals) == (
+    assert (chain.skill, chain.part, chain.hits, chain.totals) == (
         "Winter Orb",
         None,
-        {"Cold": 45549.9},
+        (Hit(None, {"Cold": 45549.9}, 222512.2, 4.885),),
         {"TotalDPS": 1435203.8, "Life": math.inf},
     )
     (row,) = chain.rows
@@ -90,7 +91,21 @@ def test_worbs_chain_shows_the_mockups_numbers(pob_session: PobSession, referenc
         ("Hit Rate", None): "6.45",
     }
     assert {key: cell(chain, *key).text for key in shown} == shown
-    assert list(chain.hit_by_type) == ["Cold"]
+    (hit,) = chain.hits
+    assert (hit.hand, list(hit.by_type)) == (None, ["Cold"])
+
+
+@pytest.mark.pob
+def test_an_attack_has_its_hit_per_hand(pob_session: PobSession, variant_xml: dict[str, str]) -> None:
+    """PoB keeps an attack's hit per hand (output.MainHand, CalcOffence.lua:2017, 2179); the top level has none."""
+    pob_session.load_build(variant_xml["Cyclone"], "Cyclone")
+    chain = read_chain(pob_session, Scenario.PINNACLE_BOSS)
+    assert chain.skill == "Cyclone"
+    (hit,) = chain.hits  # one weapon attacks: no OH rows in PoB's Calcs tab
+    assert (hit.hand, list(hit.by_type)) == ("MainHand", ["Physical"])
+    assert hit.average_hit == cell(chain, "MH Average Hit", "All Types").values[0].value
+    assert hit.crit_effect == cell(chain, "MH Crit Effect Mod").values[0].value
+    assert hit.average_hit is not None and hit.average_hit > 0
 
 
 @pytest.mark.pob
@@ -104,16 +119,38 @@ def test_sources_are_pobs_popup_rows(pob_session: PobSession, reference_xml: dic
 
 
 @pytest.mark.pob
-@pytest.mark.parametrize("name", ["Worb", "CoC EK Assa"])
+@pytest.mark.parametrize("name", ["Worb", "CoC EK Assa", "Cyclone"])
 def test_the_calcs_tab_on_the_main_skill_gives_the_sidebars_numbers(
-    pob_session: PobSession, reference_xml: dict[str, str], name: str
+    pob_session: PobSession, reference_xml: dict[str, str], variant_xml: dict[str, str], name: str
 ) -> None:
     """Decision 023's premise: pointed at the main skill, the Calcs tab's calculation equals the sidebar's."""
-    pob_session.load_build(reference_xml[name], name)
+    pob_session.load_build({**reference_xml, **variant_xml}[name], name)
     chain = read_chain(pob_session, Scenario.PINNACLE_BOSS)
     sidebar = pob_session.call(Endpoint.ANALYSIS_SUMMARY, {"boss": "Pinnacle"})["stats"]
     for key in ("TotalDPS", "CritChance", "Speed", "HitChance", "FullDPS"):
         assert chain.totals[key] == sidebar[key], key
+
+
+@pytest.mark.pob
+@pytest.mark.parametrize("name", ["Worb", "CoC EK Assa", "Cyclone"])
+def test_every_cells_numbers_are_its_text(
+    pob_session: PobSession, reference_xml: dict[str, str], variant_xml: dict[str, str], name: str
+) -> None:
+    """A cell's raw numbers, shown with PoB's rule and the cell's precision, are its text, in order (a missing output
+    shows as 0, CalcFormat.lua:28-32). Card 109 groups the raw numbers: a wrong one must not hide behind right text."""
+    pob_session.load_build({**reference_xml, **variant_xml}[name], name)
+    wrong = []
+    for row in read_chain(pob_session, Scenario.PINNACLE_BOSS).rows:
+        for found in row.cells:
+            rest = found.text
+            for value in found.values:
+                shown = show(0.0 if value.value is None else value.value, rule="pob", precision=value.precision)
+                at = rest.find(shown)
+                if at < 0:
+                    wrong.append((row.label, found.column, found.text, value))
+                    break
+                rest = rest[at + len(shown) :]
+    assert wrong == []
 
 
 @pytest.mark.pob

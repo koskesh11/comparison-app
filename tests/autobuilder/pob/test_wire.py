@@ -6,7 +6,14 @@ from typing import Any
 
 import pytest
 
-from autobuilder.errors import BuildLoadFailed, NoBuildLoaded, PobError, UnknownEndpoint
+from autobuilder.errors import (
+    BuildLoadFailed,
+    BuildNotRestored,
+    NoBuildLoaded,
+    NoMainSkill,
+    PobError,
+    UnknownEndpoint,
+)
 from autobuilder.pob import wire
 from autobuilder.pob.endpoints import Endpoint
 from autobuilder.pob.lua_host import LuaHost
@@ -39,7 +46,14 @@ def test_a_missing_value_is_a_missing_key(probe_rpc: LuaHost) -> None:
 
 
 @pytest.mark.parametrize(
-    ("kind", "error"), [("NoBuild", NoBuildLoaded), ("BuildNotLoaded", BuildLoadFailed), ("Other", PobError)]
+    ("kind", "error"),
+    [
+        ("NoBuild", NoBuildLoaded),
+        ("BuildNotLoaded", BuildLoadFailed),
+        ("NoMainSkill", NoMainSkill),
+        ("BuildNotRestored", BuildNotRestored),
+        ("Other", PobError),
+    ],
 )
 def test_an_error_kind_becomes_its_error_class(probe_rpc: LuaHost, kind: str, error: type[PobError]) -> None:
     with pytest.raises(error, match=r"^why$") as caught:

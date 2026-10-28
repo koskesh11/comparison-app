@@ -48,3 +48,11 @@ class BuildLoadFailed(PobError):
 
 class NoBuildLoaded(PobError):
     """A read before any build was loaded, or after a load that failed."""
+
+
+class NoMainSkill(PobError):
+    """The build's sidebar has no main skill, so there is no damage chain to read."""
+
+
+class BuildNotRestored(PobError):
+    """PoB could not undo a temporary change; no build counts as loaded until it is loaded again."""

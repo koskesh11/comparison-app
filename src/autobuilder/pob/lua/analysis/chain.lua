@@ -8,36 +8,41 @@ local Rpc, Build, Scenario = ...
 -- Skill Hit Damage, Attack/Cast Rate, Crits, Accuracy (CalcSections.lua:105, 575, 605, 939).
 local SECTIONS = { "HitDamage", "Speed", "Crit", "HitChance" }
 local DAMAGE_TYPES = { "Physical", "Lightning", "Cold", "Fire", "Chaos" }
-local TOTALS = { "AverageHit", "AverageDamage", "TotalDPS", "Speed", "HitSpeed", "HitChance", "CritChance",
-	"CritMultiplier", "CritEffect" }
+-- An attack's hit is per hand (CalcOffence.lua:2017, 2052, 2179); these are combined into the top level for every skill
+-- (:2510-2513, :3959-3964).
+local TOTALS = { "AverageDamage", "TotalDPS", "Speed", "HitSpeed", "HitChance", "CritChance", "CritMultiplier" }
+local HANDS = { { output = "MainHand", flag = "weapon1Attack" }, { output = "OffHand", flag = "weapon2Attack" } }
+-- What CALCS mode reads from the Calcs fields for every skill, not only the main one (CalcActiveSkill.lua:623, 649, 925).
+local EVERY_SKILL = { skillStageCountCalcs = "skillStageCount", skillMineCountCalcs = "skillMineCount",
+	skillMinionSkillCalcs = "skillMinionSkill" }
 
 local function plain(text)
 	return (tostring(text):gsub("%^x%x%x%x%x%x%x", ""):gsub("%^%d", ""))
 end
 
--- The Calcs tab's selection pointed at the sidebar's main skill for one read (decision 023): the fields CALCS mode
--- reads instead of the sidebar's (CalcSetup.lua:564-567, 1585-1587, 1883; CalcActiveSkill.lua:251, 623, 649).
-local function calcsOnMainSkill(build)
-	local calcs = build.calcsTab.input
+-- The Calcs tab pointed at the sidebar for one read (decision 023): PoB's own pointing at the main skill (the compare
+-- tab's CompareEntry:SyncCalcsSkillSelection, CompareEntry.lua:229-248, which reads only the calcsTab, skillsTab and
+-- mainSocketGroup the open build has too), the sidebar's stage, mine and minion skill counts for every other skill,
+-- buff mode "effective" and the minion view off (CalcSetup.lua:564-567). The undo keeps every field of the Calcs inputs,
+-- groups and gems, also those the Calcs recalculation writes (CalcActiveSkill.lua:251, 697, 738, 926).
+local function calcsOnSidebar(build)
 	local group = build.skillsTab.socketGroupList[build.mainSocketGroup]
-	local skill = group and group.displaySkillList and group.displaySkillList[group.mainActiveSkill or 1]
-	if not skill then Rpc.fail("NoMainSkill", "the build has no main skill in its sidebar") end
-	local source = skill.activeEffect.srcInstance
-	local before = {
-		number = calcs.skill_number, mode = calcs.misc_buffMode, minion = calcs.showMinion,
-		active = group.mainActiveSkillCalcs, part = source.skillPartCalcs, stages = source.skillStageCountCalcs,
-		mines = source.skillMineCountCalcs,
-	}
-	calcs.skill_number, calcs.misc_buffMode, calcs.showMinion = build.mainSocketGroup, "EFFECTIVE", false
-	group.mainActiveSkillCalcs = group.mainActiveSkill
-	source.skillPartCalcs, source.skillStageCountCalcs = source.skillPart, source.skillStageCount
-	source.skillMineCountCalcs = source.skillMineCount
-	return function()
-		calcs.skill_number, calcs.misc_buffMode, calcs.showMinion = before.number, before.mode, before.minion
-		group.mainActiveSkillCalcs = before.active
-		source.skillPartCalcs, source.skillStageCountCalcs = before.part, before.stages
-		source.skillMineCountCalcs = before.mines
+	if not (group and group.displaySkillList and group.displaySkillList[group.mainActiveSkill or 1]) then
+		Rpc.fail("NoMainSkill", "the build has no main skill in its sidebar")
 	end
+	local calcs, tables = build.calcsTab.input, { build.calcsTab.input }
+	for _, each in ipairs(build.skillsTab.socketGroupList) do
+		tables[#tables + 1] = each
+		for _, gem in ipairs(each.gemList) do tables[#tables + 1] = gem end
+	end
+	local undo = Build.keepFields(tables)
+	if not common.classes.CompareEntry then LoadModule("Classes/CompareEntry") end
+	common.classes.CompareEntry.SyncCalcsSkillSelection(build)
+	for index = 2, #tables do
+		for calcsField, field in pairs(EVERY_SKILL) do tables[index][calcsField] = tables[index][field] end
+	end
+	calcs.misc_buffMode, calcs.showMinion = "EFFECTIVE", false
+	return undo
 end
 
 local function outputValue(output, key)
@@ -46,24 +51,19 @@ local function outputValue(output, key)
 	return output[key]
 end
 
--- The total a "{p:mod:i,j}" cell shows, before PoB rounds it: the same Combine as formatCalcStr
--- (CalcFormat.lua:34-71), which returns only the rounded text.
-local function modTotal(cell, indices, actor)
-	local first = cell[indices[1]]
-	if not first or not first.modType then return nil end
-	local total = first.modType == "MORE" and 1 or 0
-	for _, index in ipairs(indices) do
-		local data = cell[index]
-		if not data then break end
-		local cfg = (data.cfg and actor.mainSkill and actor.mainSkill[data.cfg .. "Cfg"]) or {}
-		local store = (data.enemy and actor.enemy and actor.enemy.modDB)
-			or (data.cfg and actor.mainSkill and actor.mainSkill.skillModList) or actor.modDB
-		if not store then break end
-		local names = type(data.modName) == "table" and data.modName or { data.modName }
-		local value = store:Combine(data.modType, cfg, unpack(names))
-		total = first.modType == "MORE" and total * value or total + value
+-- The total of one "{p:mod:i,j}" placeholder before PoB rounds it, from formatCalcStr itself: it hands the total to
+-- the global formatCalcVal to round (CalcFormat.lua:70), so a stand-in for that call records it. nil where PoB shows
+-- "?" (:39-41).
+local function modTotal(placeholder, cell, actor)
+	local pobsRound, total = formatCalcVal, nil
+	formatCalcVal = function(value, precision)
+		total = value
+		return pobsRound(value, precision)
 	end
-	return first.modType == "MORE" and (total - 1) * 100 or total
+	local ok, problem = pcall(formatCalcStr, placeholder, actor, cell)
+	formatCalcVal = pobsRound
+	if not ok then error(problem, 0) end
+	return total
 end
 
 -- The raw numbers behind a cell's text, with the precision PoB shows each at: output placeholders, then mod sums.
@@ -72,10 +72,8 @@ local function cellValues(cell, actor)
 	for precision, key in cell.format:gmatch("{(%d+):output:([%a%.:]+)}") do
 		values[#values + 1] = { key = key, value = outputValue(actor.output, key), precision = tonumber(precision) }
 	end
-	for precision, list in cell.format:gmatch("{(%d+):mod:([%d,]+)}") do
-		local indices = {}
-		for index in list:gmatch("%d+") do indices[#indices + 1] = tonumber(index) end
-		values[#values + 1] = { key = "mod", value = modTotal(cell, indices, actor), precision = tonumber(precision) }
+	for placeholder, precision in cell.format:gmatch("({(%d+):mod:[%d,]+})") do
+		values[#values + 1] = { key = "mod", value = modTotal(placeholder, cell, actor), precision = tonumber(precision) }
 	end
 	return values
 end
@@ -142,6 +140,24 @@ local function sectionRows(calcsTab, section, popup, actor)
 	return rows
 end
 
+-- The average hit per damage type, the average hit and the crit effect: per attacking hand for an attack (hand =
+-- "MainHand", "OffHand"), else once from the top level.
+local function hitOf(output, hand)
+	local byType = {}
+	for _, damageType in ipairs(DAMAGE_TYPES) do byType[damageType] = output[damageType .. "HitAverage"] end
+	return { hand = hand, byType = byType, AverageHit = output.AverageHit, CritEffect = output.CritEffect }
+end
+
+local function hits(actor)
+	local flags = actor.mainSkill.skillFlags
+	if not flags.attack then return { hitOf(actor.output) } end
+	local found = {}
+	for _, hand in ipairs(HANDS) do
+		if flags[hand.flag] then found[#found + 1] = hitOf(actor.output[hand.output], hand.output) end
+	end
+	return found
+end
+
 local function readChain(build)
 	local calcsTab = build.calcsTab
 	local actor = calcsTab.calcsEnv.player
@@ -155,18 +171,17 @@ local function readChain(build)
 			end
 		end
 	end
-	local hitByType, totals = {}, { FullDPS = calcsTab.mainOutput.FullDPS }
-	for _, damageType in ipairs(DAMAGE_TYPES) do hitByType[damageType] = actor.output[damageType .. "HitAverage"] end
+	local totals = { FullDPS = calcsTab.mainOutput.FullDPS }
 	for _, key in ipairs(TOTALS) do totals[key] = actor.output[key] end
 	local skill = actor.mainSkill
 	local part = skill.skillPart and skill.activeEffect.grantedEffect.parts
 		and skill.activeEffect.grantedEffect.parts[skill.skillPart]
 	return {
 		skill = skill.activeEffect.grantedEffect.name, part = part and part.name,
-		rows = rows, hitByType = hitByType, totals = totals,
+		rows = rows, hits = hits(actor), totals = totals,
 	}
 end
 
 Rpc.register("analysis.chain", function(request)
-	return Build.withChanges({ Scenario.boss(request.boss), calcsOnMainSkill }, readChain)
+	return Build.withChanges({ Scenario.boss(request.boss), calcsOnSidebar }, readChain)
 end)

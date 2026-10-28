@@ -21,6 +21,25 @@ point it elsewhere: Worb saves Calcs group 1 while its main skill is group 2.
 - Rows, cell text and sources are PoB's own: the Calcs sections, `CalcsTab:CheckFlag`, `formatCalcStr` and the
   `CalcBreakdownControl` popup; no PoB formula is copied.
 
+## Refined after the review (2026-10-28, tasks/reports/108-review.md)
+- The pointing is PoB's own: `CompareEntry:SyncCalcsSkillSelection` (CompareEntry.lua:229-248, the compare tab's),
+  which also copies the main skill's minion, minion item set and minion skill fields. No field list of ours to fall
+  behind PoB.
+- CALCS mode reads the Calcs stage, mine and minion-skill counts for every skill, not only the main one
+  (CalcActiveSkill.lua:623, 649, 925; the enemy's mine count is the max over all mine skills, :626). The chain copies
+  the sidebar's counts into them for every gem, so the premise "pointed at the main skill, the Calcs tab equals the
+  sidebar" holds for the whole build instead of only the main skill. Chosen over a flag: the chain is the sidebar's
+  build, and the flag "your Calcs tab follows another skill" (card 109) already covers what the owner sees in PoB.
+  The game effect on a build with a second mine or stage skill is unverified by output (no such reference build).
+- The undo saves every field (not a table) of the Calcs inputs, every group and every gem, and puts them back; build.state
+  compares the same fields, so M6 sees what PoB's Calcs recalculation writes (measured: Stone Golem as main skill
+  left `skillMinionCalcs` behind before this).
+- A cell's raw mod total comes from formatCalcStr itself: a stand-in for the global `formatCalcVal` it rounds with
+  (CalcFormat.lua:70) records the value, one placeholder per call. Nothing of formatCalcStr's math is copied.
+- An attack's hit (per-type average, AverageHit, CritEffect) is read per attacking hand (output.MainHand/OffHand,
+  CalcOffence.lua:2017, 2052, 2179); the totals are the top-level ones PoB combines for both hands (:2510-2513,
+  :3959-3964).
+
 ## Consequences
 - The chain shows the main skill with the numbers of PoB's Calcs tab. The flag "your Calcs tab follows another skill"
   (card 109) stays, because the owner may look at a different skill when he checks the chain in PoB.

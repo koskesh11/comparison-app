@@ -50,12 +50,22 @@ class Row:
 
 
 @dataclass(frozen=True)
+class Hit:
+    """One hit of the main skill: once for a spell, per attacking hand for an attack (PoB keeps those per hand)."""
+
+    hand: str | None  # "MainHand" or "OffHand" for an attack, None otherwise
+    by_type: Mapping[str, float]  # average non-crit hit per damage type; types with no hit are left out
+    average_hit: float | None  # crits included
+    crit_effect: float | None
+
+
+@dataclass(frozen=True)
 class Chain:
     skill: str
     part: str | None
     rows: tuple[Row, ...]
-    hit_by_type: Mapping[str, float]  # average non-crit hit per damage type; types with no hit are left out
-    totals: Mapping[str, float]  # AverageHit, TotalDPS, Speed, CritChance, ... and FullDPS (the sidebar's)
+    hits: tuple[Hit, ...]
+    totals: Mapping[str, float]  # TotalDPS, Speed, CritChance, ... (both hands combined) and FullDPS (the sidebar's)
 
 
 def _source(data: object) -> SourceText | SourceTable:
@@ -84,13 +94,20 @@ def _numbers(data: object) -> dict[str, float]:
     return {key: value for key, value in numbers.items() if value is not None}
 
 
+def _hit(data: object) -> Hit:
+    item = wire.table(data)
+    by_type = {key: value for key, value in _numbers(item.get("byType")).items() if value != 0}
+    average, effect = wire.number(item.get("AverageHit")), wire.number(item.get("CritEffect"))
+    return Hit(wire.text(item.get("hand")), by_type, average, effect)
+
+
 def parse_chain(data: object) -> Chain:
     item = wire.table(data)
     rows = tuple(
         Row(str(row["section"]), str(row["label"]), tuple(_cell(cell) for cell in row.get("cells") or ()))
         for row in (wire.table(raw) for raw in item.get("rows") or ())
     )
-    hits = {key: value for key, value in _numbers(item.get("hitByType")).items() if value != 0}
+    hits = tuple(_hit(hit) for hit in item.get("hits") or ())
     return Chain(str(item["skill"]), wire.text(item.get("part")), rows, hits, _numbers(item.get("totals")))
 
 

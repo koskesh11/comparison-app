@@ -39,6 +39,8 @@ def show(value: float | None, *, rule: str, precision: int) -> str:
         return "nan"
     if math.isinf(value):
         return "inf" if value > 0 else "-inf"
-    scale = 10**precision
-    rounded = math.floor(value * scale + (0.5 if rule == "pob" else 0)) / scale
+    scaled = value * 10**precision + (0.5 if rule == "pob" else 0)
+    if math.isinf(scaled):  # value x 10^p overflows: Lua's floor keeps inf, Python's raises
+        return "inf" if scaled > 0 else "-inf"
+    rounded = math.floor(scaled) / 10**precision
     return _thousands(_lua_tostring(rounded + 0.0))
