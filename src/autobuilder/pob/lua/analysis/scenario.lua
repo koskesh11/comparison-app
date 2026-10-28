@@ -35,7 +35,7 @@ local function boss(value)
 end
 
 Rpc.register("analysis.summary", function(request)
-	return Build.withChanges({ boss(request.boss) }, Build.summary)
+	return Build.withChanges({ boss(request.boss) }, Build.summary, request.which)
 end)
 
 return { boss = boss }

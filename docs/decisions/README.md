@@ -43,3 +43,4 @@ session in which the owner made the call.
 | [021](021-the-checks-and-their-tools.md) | The checks and their tools | src/, tests, hook, merge |
 | [022](022-mapping-keeps-pinnacle.md) | The Mapping scenario keeps the boss box at Pinnacle | scenario picker |
 | [023](023-chain-reads-the-calcs-tab.md) | The chain reads PoB's Calcs tab, pointed at the main skill | damage chain |
+| [024](024-gap-size-without-the-worth-column.md) | The size of a chain gap, before the worth column exists | damage chain |

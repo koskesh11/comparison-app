@@ -14,7 +14,9 @@ from autobuilder.errors import (
     BuildNotRestored,
     NoBuildLoaded,
     NoMainSkill,
+    NoTargetLoaded,
     PobError,
+    TargetLoadFailed,
     UnknownEndpoint,
 )
 
@@ -24,6 +26,8 @@ ERRORS: dict[str, type[PobError]] = {
     "NoBuild": NoBuildLoaded,
     "NoMainSkill": NoMainSkill,
     "BuildNotRestored": BuildNotRestored,
+    "TargetNotLoaded": TargetLoadFailed,
+    "NoTarget": NoTargetLoaded,
 }
 
 
@@ -67,6 +71,13 @@ def text(value: object) -> str | None:
     if value is None or isinstance(value, str):
         return value
     raise PobError(f"expected text from PoB, got {type(value).__name__}")
+
+
+def flag(value: object) -> bool | None:
+    """A PoB true/false; None when it is missing."""
+    if value is None or isinstance(value, bool):
+        return value
+    raise PobError(f"expected true or false from PoB, got {type(value).__name__}")
 
 
 def table(value: object) -> dict[str, Any]:

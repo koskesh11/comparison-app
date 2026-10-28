@@ -50,6 +50,14 @@ class NoBuildLoaded(PobError):
     """A read before any build was loaded, or after a load that failed."""
 
 
+class TargetLoadFailed(PobError):
+    """PoB could not open the target build."""
+
+
+class NoTargetLoaded(PobError):
+    """A read of the target before one was loaded, after a load that failed, or after it was released."""
+
+
 class NoMainSkill(PobError):
     """The build's sidebar has no main skill, so there is no damage chain to read."""
 

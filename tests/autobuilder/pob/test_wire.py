@@ -123,3 +123,9 @@ def test_real_pob_output_keeps_its_non_finite_numbers(
     output = pob_session.call(Endpoint.BUILD_STATE)["output"]
     assert all(isinstance(value, float | int) and not isinstance(value, bool) for value in output.values())
     assert {key: value for key, value in output.items() if not math.isfinite(value)} == NON_FINITE[name]
+
+
+def test_a_flag_is_true_false_or_missing() -> None:
+    assert (wire.flag(True), wire.flag(False), wire.flag(None)) == (True, False, None)
+    with pytest.raises(PobError, match="expected true or false"):
+        wire.flag(1)
