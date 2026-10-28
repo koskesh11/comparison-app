@@ -14,6 +14,7 @@ from comparison_app.app.present.numbers import show
 from comparison_app.pob.endpoints import Endpoint
 from comparison_app.pob.session import PobSession
 
+ALL_BUILDS = ("Worb", "CoC EK Assa", "Cyclone", "Elemental Hit Slayer", "Phys Dot Elementalist", "Winter Orb")
 WIRE = {
     "skill": "Winter Orb",
     "rows": [
@@ -119,12 +120,17 @@ def test_sources_are_pobs_popup_rows(pob_session: PobSession, reference_xml: dic
 
 
 @pytest.mark.pob
-@pytest.mark.parametrize("name", ["Worb", "CoC EK Assa", "Cyclone"])
+@pytest.mark.parametrize("name", [*ALL_BUILDS])
 def test_the_calcs_tab_on_the_main_skill_gives_the_sidebars_numbers(
-    pob_session: PobSession, reference_xml: dict[str, str], variant_xml: dict[str, str], name: str
+    pob_session: PobSession,
+    reference_xml: dict[str, str],
+    variant_xml: dict[str, str],
+    variety_xml: dict[str, str],
+    name: str,
 ) -> None:
-    """Decision 023's premise: pointed at the main skill, the Calcs tab's calculation equals the sidebar's."""
-    pob_session.load_build({**reference_xml, **variant_xml}[name], name)
+    """Decision 023's premise: pointed at the main skill, the Calcs tab's calculation equals the sidebar's (also on the
+    dual-wield Elemental Hit Slayer, whose Full DPS pass differs from its TotalDPS: FullDPS is compared to FullDPS)."""
+    pob_session.load_build({**reference_xml, **variant_xml, **variety_xml}[name], name)
     chain = read_chain(pob_session, Scenario.PINNACLE_BOSS)
     sidebar = pob_session.call(Endpoint.ANALYSIS_SUMMARY, {"boss": "Pinnacle"})["stats"]
     for key in ("TotalDPS", "CritChance", "Speed", "HitChance", "FullDPS"):
@@ -132,13 +138,17 @@ def test_the_calcs_tab_on_the_main_skill_gives_the_sidebars_numbers(
 
 
 @pytest.mark.pob
-@pytest.mark.parametrize("name", ["Worb", "CoC EK Assa", "Cyclone"])
+@pytest.mark.parametrize("name", [*ALL_BUILDS])
 def test_every_cells_numbers_are_its_text(
-    pob_session: PobSession, reference_xml: dict[str, str], variant_xml: dict[str, str], name: str
+    pob_session: PobSession,
+    reference_xml: dict[str, str],
+    variant_xml: dict[str, str],
+    variety_xml: dict[str, str],
+    name: str,
 ) -> None:
     """A cell's raw numbers, shown with PoB's rule and the cell's precision, are its text, in order (a missing output
     shows as 0, CalcFormat.lua:28-32). Card 109 groups the raw numbers: a wrong one must not hide behind right text."""
-    pob_session.load_build({**reference_xml, **variant_xml}[name], name)
+    pob_session.load_build({**reference_xml, **variant_xml, **variety_xml}[name], name)
     wrong = []
     for row in read_chain(pob_session, Scenario.PINNACLE_BOSS).rows:
         for found in row.cells:

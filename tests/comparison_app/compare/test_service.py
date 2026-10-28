@@ -1,9 +1,11 @@
 """Your build against a target (compare/service.py) on the reference builds: Worb against CoC EK Assa."""
 
 import pytest
+from tests.comparison_app.conftest import stages
 
 from comparison_app.analysis.chain import Cell, Chain, SourceTable, read_chain
 from comparison_app.analysis.scenarios import Scenario
+from comparison_app.compare.recalc import changes_to_match, recalculate
 from comparison_app.compare.service import CALCS_ELSEWHERE, TARGET_PARTY, compare
 from comparison_app.compare.skill_settings import Match
 from comparison_app.errors import NoTargetLoaded
@@ -59,3 +61,27 @@ def test_the_chain_shows_when_both_main_skills_are_set_up_alike(
     assert result.settings.match is Match.SAME
     assert result.table is not None and result.table.steps and result.table.chips == ()
     assert result.config.differences == ()
+
+
+# Neighbouring stages of the variety builds (decision 014, extended; 026): one pair per path through the comparison.
+STAGE_PAIRS = [
+    ("Elemental Hit Slayer", "Level 12", "Level 28", Match.DIFFERENT_SKILL),  # Spectral Throw, then Elemental Hit
+    ("Elemental Hit Slayer", "2 Stone 90", "4 Stone 95", Match.SETTINGS_DIFFER),  # Fire Attack, then Cold Attack
+    ("Winter Orb", "Nightmare Pinnacles", "Occultist Swap", Match.SAME),
+    ("Phys Dot Elementalist", "95", "Autobomber Swap", Match.SAME),  # a minion main skill: no hit, few rows
+]
+
+
+@pytest.mark.parametrize("pair", STAGE_PAIRS, ids=lambda pair: f"{pair[0]}: {pair[1]} -> {pair[2]}")
+def test_neighbouring_stages_of_a_build(
+    pob_session: PobSession, variety_xml: dict[str, str], pair: tuple[str, str, str, Match]
+) -> None:
+    build, first, second, match = pair
+    by_title = dict(stages(variety_xml[build]))
+    result = compare(pob_session, (by_title[first], first), (by_title[second], second), Scenario.PINNACLE_BOSS)
+    assert result.settings.match is match
+    assert (result.table is not None) == (match is Match.SAME)
+    if match is Match.SETTINGS_DIFFER:  # the button: your stage recalculated with the target's setting
+        changes = changes_to_match(result.settings, result.yours.snapshot, result.target.snapshot)
+        recalculated = recalculate(pob_session, Scenario.PINNACLE_BOSS, changes)
+        assert recalculated.chain.part == result.target.chain.part != result.yours.chain.part
