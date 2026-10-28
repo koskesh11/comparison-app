@@ -88,6 +88,16 @@ local function calcsOnMainSkill(build)
 		and (source.skillPartCalcs or 1) == (source.skillPart or 1)
 end
 
+-- PoB's Full DPS list: one row per skill, mirage, minion or damage over time it adds up (Calcs.lua:179, 217, 254,
+-- 309-349).
+local function skillDps(output)
+	local rows = {}
+	for index, skill in ipairs(output.SkillDPS or {}) do
+		rows[index] = { name = skill.name, dps = skill.dps, count = skill.count, part = skill.skillPart }
+	end
+	return rows
+end
+
 local function summary(build)
 	local output, stats = build.calcsTab.mainOutput, {}
 	for _, key in ipairs(SUMMARY_STATS) do
@@ -102,6 +112,7 @@ local function summary(build)
 		mainSkill = mainSkillName(build),
 		stats = stats,
 		calcsOnMainSkill = calcsOnMainSkill(build),
+		skillDps = skillDps(output),
 	}
 end
 

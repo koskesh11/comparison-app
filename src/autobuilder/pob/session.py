@@ -32,6 +32,24 @@ class PobPaths:
 
 
 @dataclass(frozen=True)
+class SkillDps:
+    """One row of PoB's Full DPS list (output.SkillDPS): a skill, mirage, minion or damage over time."""
+
+    name: str
+    part: str | None
+    count: float
+    dps: float
+
+    @classmethod
+    def from_wire(cls, value: object) -> "SkillDps":
+        data = wire.table(value)
+        part = wire.text(data.get("part"))
+        return cls(
+            str(data["name"]), part or None, wire.number(data.get("count")) or 1.0, wire.number(data.get("dps")) or 0.0
+        )
+
+
+@dataclass(frozen=True)
 class BuildSummary:
     """The build PoB has open (build.load, build.summary). A stat PoB did not compute is not in `stats`."""
 
@@ -44,6 +62,7 @@ class BuildSummary:
     stats: Mapping[str, float]
     calcs_on_main_skill: bool | None = None  # PoB's Calcs tab follows the sidebar's main skill, as saved (decision 023)
     uses_party: bool = False  # a target with party buffs saved, which PoB's CompareEntry leaves out (card 109)
+    skill_dps: tuple[SkillDps, ...] = ()  # PoB's Full DPS list; the sidebar sorts the build's own (Build.lua:1934)
 
     @classmethod
     def from_wire(cls, value: object) -> "BuildSummary":
@@ -59,6 +78,7 @@ class BuildSummary:
             stats={key: item for key, item in stats.items() if item is not None},
             calcs_on_main_skill=wire.flag(data.get("calcsOnMainSkill")),
             uses_party=wire.flag(data.get("usesParty")) or False,
+            skill_dps=tuple(SkillDps.from_wire(row) for row in data.get("skillDps") or ()),
         )
 
 
