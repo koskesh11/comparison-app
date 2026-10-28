@@ -19,4 +19,5 @@ the mechanics notes.
 
 ## Consequences
 - Published files never depend on a private one; a cold reviewer with a clean copy of the repo has all it needs (007).
-- The git history still contains old workflow files; it is cleaned once, before any going public (005).
+- The git history still contains old workflow files; it is cleaned once, before any going public (005). Done
+  2026-10-28, when the repo went public (025).

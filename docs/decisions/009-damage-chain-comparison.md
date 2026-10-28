@@ -9,7 +9,8 @@
 The owner's model is PoB's Calcs tab, section "Skill Hit Damage". A clickable mockup with real PoB 2.67.2 numbers (Worb
 against pobb.in/v8XfQn1yFnAs, Pinnacle Boss, Winter Orb part 1) was approved: "This is exactly how I envisioned it."
 Its data came from PoB's own hover breakdown, `actor.breakdown[damageType]` (CalcOffence.lua:3360-3610). The mockup
-lives at https://claude.ai/artifact/Reo6j5waAVyfGARJ9Bmtpj (private).
+lives at https://claude.ai/artifact/Reo6j5waAVyfGARJ9Bmtpj (private); an exported copy is docs/mockup/damage-chain.html
+(2026-10-28, decision 025).
 
 ## Decision
 - The vectors are the terms of the damage calculation, whatever their source: increased, more, added flat damage,
