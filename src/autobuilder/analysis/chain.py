@@ -7,12 +7,14 @@ is None.
 
 from collections.abc import Mapping
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Literal
 
 from autobuilder.analysis.scenarios import BOSS_BOX, Scenario
 from autobuilder.pob import wire
 from autobuilder.pob.endpoints import Endpoint
 from autobuilder.pob.session import PobSession
+
+Which = Literal["own", "target"]  # the build open in PoB, or the target beside it (compare/target.py)
 
 
 @dataclass(frozen=True)
@@ -111,6 +113,6 @@ def parse_chain(data: object) -> Chain:
     return Chain(str(item["skill"]), wire.text(item.get("part")), rows, hits, _numbers(item.get("totals")))
 
 
-def read_chain(session: PobSession, scenario: Scenario) -> Chain:
-    """The open build's chain under the scenario; the build is back as it was afterwards (M6)."""
-    return parse_chain(session.call(Endpoint.ANALYSIS_CHAIN, {"boss": BOSS_BOX[scenario]}))
+def read_chain(session: PobSession, scenario: Scenario, which: Which = "own") -> Chain:
+    """The chain of the open build or the target beside it, under the scenario; both are unchanged afterwards (M6)."""
+    return parse_chain(session.call(Endpoint.ANALYSIS_CHAIN, {"boss": BOSS_BOX[scenario], "which": which}))
