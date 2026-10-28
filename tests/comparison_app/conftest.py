@@ -10,6 +10,7 @@
 
 import os
 import socket
+import xml.etree.ElementTree as ET  # the committed test builds, not outside input
 from collections.abc import Iterator
 from pathlib import Path
 
@@ -21,6 +22,14 @@ POB_OWN_WRITES = ("Data/TimelessJewelData/",)
 OUTPUT_FOLDER = ("AutoBuilder/",)
 REFERENCE_BUILDS = Path(__file__).parent / "fixtures" / "builds"
 REFERENCE_FILES = {"Worb": "Worb.xml", "CoC EK Assa": "CoC EK Assa.xml"}
+VARIETY_FILES = {name: f"{name}.xml" for name in ("Elemental Hit Slayer", "Phys Dot Elementalist", "Winter Orb")}
+# The four sets of a PoB stage (loadout), switched together by title (Modules/Build.lua:359-416; decision 026)
+STAGE_SETS = (
+    ("Tree", "Spec", "activeSpec"),
+    ("Items", "ItemSet", "activeItemSet"),
+    ("Skills", "SkillSet", "activeSkillSet"),
+    ("Config", "ConfigSet", "activeConfigSet"),
+)
 
 
 def pob_install() -> Path:
@@ -122,3 +131,35 @@ def no_network(request: pytest.FixtureRequest, monkeypatch: pytest.MonkeyPatch) 
 
     monkeypatch.setattr(socket.socket, "connect", refuse)
     monkeypatch.setattr(socket, "create_connection", refuse)
+
+
+@pytest.fixture(scope="session")
+def variety_xml() -> dict[str, str]:
+    """The owner's variety builds (decision 014, extended 2026-10-28): dual wield, several damage types, minions."""
+    return {name: (REFERENCE_BUILDS / file).read_text(encoding="utf-8") for name, file in VARIETY_FILES.items()}
+
+
+def stages(xml: str) -> list[tuple[str, str]]:
+    """Each stage of a build as its own build: (title, XML with that stage's four sets active), in the tree's order.
+    A stage is a title all four sets share, as PoB pairs them (Modules/Build.lua:359-416)."""
+    root = ET.fromstring(xml)  # noqa: S314 - the committed test builds
+    titles: set[str | None] | None = None
+    for parent, child, _ in STAGE_SETS:
+        node = root.find(parent)
+        found = {each.get("title") for each in node.findall(child)} if node is not None else set()
+        titles = found if titles is None else titles & found
+    result = []
+    tree = root.find("Tree")
+    for spec in tree.findall("Spec") if tree is not None else []:
+        title = spec.get("title")
+        if not titles or title not in titles:
+            continue
+        copy = ET.fromstring(xml)  # noqa: S314 - the committed test builds
+        for parent, child, active in STAGE_SETS:
+            node = copy.find(parent)
+            assert node is not None
+            kids = node.findall(child)
+            index = next(i for i, kid in enumerate(kids) if kid.get("title") == title)
+            node.set(active, str(index + 1) if parent == "Tree" else str(kids[index].get("id")))
+        result.append((str(title), ET.tostring(copy, encoding="unicode")))
+    return result
