@@ -73,6 +73,13 @@ def text(value: object) -> str | None:
     raise PobError(f"expected text from PoB, got {type(value).__name__}")
 
 
+def flag(value: object) -> bool | None:
+    """A PoB true/false; None when it is missing."""
+    if value is None or isinstance(value, bool):
+        return value
+    raise PobError(f"expected true or false from PoB, got {type(value).__name__}")
+
+
 def table(value: object) -> dict[str, Any]:
     """A PoB table with text keys; dkjson writes an empty table as []."""
     if value == []:

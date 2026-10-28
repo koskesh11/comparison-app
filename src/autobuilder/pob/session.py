@@ -42,6 +42,8 @@ class BuildSummary:
     level: float | None
     main_skill: str | None
     stats: Mapping[str, float]
+    calcs_on_main_skill: bool | None = None  # PoB's Calcs tab follows the sidebar's main skill, as saved (decision 023)
+    uses_party: bool = False  # a target with party buffs saved, which PoB's CompareEntry leaves out (card 109)
 
     @classmethod
     def from_wire(cls, value: object) -> "BuildSummary":
@@ -55,6 +57,8 @@ class BuildSummary:
             level=wire.number(data.get("level")),
             main_skill=wire.text(data.get("mainSkill")),
             stats={key: item for key, item in stats.items() if item is not None},
+            calcs_on_main_skill=wire.flag(data.get("calcsOnMainSkill")),
+            uses_party=wire.flag(data.get("usesParty")) or False,
         )
 
 

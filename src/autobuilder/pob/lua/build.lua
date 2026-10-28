@@ -75,6 +75,19 @@ local function mainSkillName(build)
 	return skill and skill.activeEffect.grantedEffect.name or nil
 end
 
+-- Whether PoB's Calcs tab follows the sidebar's main skill as saved: its group, active skill and part (CalcSetup.lua
+-- :1585-1587, 1883; CalcActiveSkill.lua:251). The chain points it there for its read (decision 023); the owner may look
+-- at another skill when he opens the Calcs tab in PoB.
+local function calcsOnMainSkill(build)
+	local group = build.skillsTab.socketGroupList[build.mainSocketGroup]
+	if not group then return true end
+	local skill = group.displaySkillList and group.displaySkillList[group.mainActiveSkill or 1]
+	local source = skill and skill.activeEffect.srcInstance or {}
+	return (build.calcsTab.input.skill_number or 1) == build.mainSocketGroup
+		and (group.mainActiveSkillCalcs or 1) == (group.mainActiveSkill or 1)
+		and (source.skillPartCalcs or 1) == (source.skillPart or 1)
+end
+
 local function summary(build)
 	local output, stats = build.calcsTab.mainOutput, {}
 	for _, key in ipairs(SUMMARY_STATS) do
@@ -88,6 +101,7 @@ local function summary(build)
 		level = build.characterLevel,
 		mainSkill = mainSkillName(build),
 		stats = stats,
+		calcsOnMainSkill = calcsOnMainSkill(build),
 	}
 end
 

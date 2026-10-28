@@ -3,6 +3,21 @@
 -- the target in an implicit global. One target at a time; the other endpoints reach it as Build.open("target").
 local Rpc, Build = ...
 
+-- PoB saves party buffs as Party/ImportedBuffs text (PartyTab.lua:575-581) and reads only those back (:516-542). The
+-- entry's Party tab is a stub (CompareEntry.lua:107-111), so a target's saved party buffs are not in its numbers.
+local function usesParty(entry)
+	for _, section in ipairs(entry.xmlSectionList or {}) do
+		if section.elem == "Party" then
+			for _, node in ipairs(section) do
+				if type(node) == "table" and node.elem == "ImportedBuffs" and tostring(node[1] or ""):match("%S") then
+					return true
+				end
+			end
+		end
+	end
+	return false
+end
+
 Rpc.register("target.load", function(request)
 	Build.setTarget(nil) -- every failure below, the request's own included, leaves no target
 	if type(request.xml) ~= "string" or type(request.name) ~= "string" then
@@ -14,7 +29,9 @@ Rpc.register("target.load", function(request)
 		Rpc.fail("TargetNotLoaded", "PoB could not open the target build")
 	end
 	Build.setTarget(entry)
-	return Build.summary(entry)
+	local opened = Build.summary(entry)
+	opened.usesParty = usesParty(entry)
+	return opened
 end)
 
 Rpc.register("target.release", function()
