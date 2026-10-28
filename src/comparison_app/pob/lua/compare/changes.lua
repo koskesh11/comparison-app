@@ -2,7 +2,7 @@
 -- touched. Rewrites the first app's guide_changes.lua :1-152 and guide.lua :182-209: every change is one field PoB
 -- saves and loads (SkillsTab.lua:447-513; Build.lua's mainSocketGroup), set through Build.withChanges, so the build
 -- is recalculated in PoB's order and put back newest first on every path, errors included.
-local Rpc, Build, Scenario, Chain = ...
+local Rpc, Build, Scenario, Chain, Stages = ...
 
 -- ChangeKind (pob/endpoints.py) -> where the field lives and its name.
 local KINDS = {
@@ -28,7 +28,9 @@ local function target(build, change, kind)
 end
 
 -- One change: sets the field, returns its undo. A missing value unsets the field, as a box left empty in PoB does.
+-- "build.stage" switches all four sets of a stage instead (compare/stages.lua, decision 026).
 local function change(request)
+	if request.kind == "build.stage" then return Stages.stage(request.value) end
 	local kind = KINDS[request.kind]
 	if not kind then Rpc.fail("BadRequest", "unknown change kind " .. tostring(request.kind)) end
 	local value = request.value

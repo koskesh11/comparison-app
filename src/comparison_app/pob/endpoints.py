@@ -19,6 +19,8 @@ class Endpoint(StrEnum):
     TARGET_RELEASE = "target.release"
     COMPARE_SNAPSHOT = "compare.snapshot"
     COMPARE_CHAIN_WITH = "compare.chain_with"
+    BUILD_STAGES = "build.stages"
+    BUILD_SET_STAGE = "build.set_stage"
 
 
 class Effect(StrEnum):
@@ -28,6 +30,7 @@ class Effect(StrEnum):
     TEMPORARY = "temporary"  # changes the build, reads, and undoes the change before it returns, also on error
     REPLACE = "replace"  # replaces the loaded build; after a failed load no build is loaded
     TARGET = "target"  # loads or releases the target build beside it; the loaded build is unchanged
+    SWITCH = "switch"  # puts the loaded build on another stage; switching back to the saved stage gives the state back
 
 
 EFFECTS: Mapping[Endpoint, Effect] = {
@@ -40,6 +43,8 @@ EFFECTS: Mapping[Endpoint, Effect] = {
     Endpoint.TARGET_RELEASE: Effect.TARGET,
     Endpoint.COMPARE_SNAPSHOT: Effect.READ,
     Endpoint.COMPARE_CHAIN_WITH: Effect.TEMPORARY,
+    Endpoint.BUILD_STAGES: Effect.READ,
+    Endpoint.BUILD_SET_STAGE: Effect.SWITCH,
 }
 
 
@@ -59,3 +64,4 @@ class ChangeKind(StrEnum):
     GROUP_COUNT = "group.count"  # a group's count in Full DPS (Calcs.lua:119-120)
     MAIN_ACTIVE_SKILL = "group.main_active_skill"  # the group's active skill the sidebar shows
     MAIN_GROUP = "build.main_group"  # the sidebar's main skill group
+    STAGE = "build.stage"  # a stage (PoB loadout): tree, items, skills and config switched together (decision 026)

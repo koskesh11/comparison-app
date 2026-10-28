@@ -16,6 +16,7 @@ from comparison_app.compare.chain_table import build_table
 from comparison_app.compare.diff.context import ConfigReport, compare_config
 from comparison_app.compare.skill_settings import Match, SkillSettings, compare_settings
 from comparison_app.compare.snapshot import Snapshot, read_snapshot
+from comparison_app.compare.stages import ensure_stage
 from comparison_app.compare.target import open_target, release_target
 from comparison_app.compare.types import ChainTable
 from comparison_app.pob.session import BuildSummary, PobSession
@@ -66,11 +67,21 @@ def _warnings(yours: Side, target: Side) -> tuple[str, ...]:
     return tuple(found)
 
 
-def compare(session: PobSession, yours: tuple[str, str], target: tuple[str, str], scenario: Scenario) -> Comparison:
-    """`yours` and `target` are (XML text, name). Your build stays open afterwards; the target does not."""
+def compare(
+    session: PobSession,
+    yours: tuple[str, str],
+    target: tuple[str, str],
+    scenario: Scenario,
+    stages: tuple[str | None, str | None] = (None, None),
+) -> Comparison:
+    """`yours` and `target` are (XML text, name); `stages` the stage picked for each, None for the saved one (decision
+    026: a build saved with mixed stages raises MixedStages until a stage is picked). Your build stays open afterwards,
+    on the stage picked; the target does not."""
     opened_yours = open_build(session, *yours)
+    ensure_stage(session, "Your", stages[0])
     try:
         opened_target = open_target(session, *target)
+        ensure_stage(session, "The target's", stages[1], "target")
         mine = _side(session, opened_yours, scenario, "own")
         theirs = _side(session, opened_target, scenario, "target")
     finally:

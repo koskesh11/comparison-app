@@ -18,6 +18,7 @@ from collections.abc import Callable
 from typing import Any
 
 import pytest
+from tests.comparison_app.conftest import REFERENCE_BUILDS
 
 from comparison_app.errors import BuildLoadFailed, NoBuildLoaded, NoTargetLoaded, PobError, TargetLoadFailed
 from comparison_app.pob.endpoints import EFFECTS, Effect, Endpoint
@@ -31,6 +32,7 @@ READ_REQUESTS: dict[Endpoint, dict[str, Any]] = {
     Endpoint.BUILD_SUMMARY: {},
     Endpoint.BUILD_STATE: {},
     Endpoint.COMPARE_SNAPSHOT: {},
+    Endpoint.BUILD_STAGES: {},
 }
 
 
@@ -127,11 +129,23 @@ def check_target(session: PobSession, builds: dict[str, str], endpoint: Endpoint
     session.call(Endpoint.TARGET_RELEASE)
 
 
+def check_switch(session: PobSession, endpoint: Endpoint) -> None:
+    """A stage switch lasts (decision 026), and switching back to the saved stage gives the saved state back exactly."""
+    assert endpoint is Endpoint.BUILD_SET_STAGE, f"write the switch case for {endpoint}"
+    session.load_build((REFERENCE_BUILDS / "Elemental Hit Slayer.xml").read_text(encoding="utf-8"), "EHS")
+    saved = state(session)
+    session.call(Endpoint.BUILD_SET_STAGE, {"stage": "2 Stone 90"})
+    assert state(session) != saved
+    session.call(Endpoint.BUILD_SET_STAGE, {"stage": "4 Stone 95"})  # the saved stage
+    assert state(session) == saved
+
+
 CHECKS: dict[Effect, Callable[[PobSession, dict[str, str], Endpoint, FailOutput], None]] = {
     Effect.READ: lambda session, builds, endpoint, _: check_read(session, builds, endpoint),
     Effect.TEMPORARY: check_temporary,
     Effect.REPLACE: lambda session, builds, endpoint, _: check_replace(session, builds, endpoint),
     Effect.TARGET: lambda session, builds, endpoint, _: check_target(session, builds, endpoint),
+    Effect.SWITCH: lambda session, _builds, endpoint, _fail: check_switch(session, endpoint),
 }
 
 

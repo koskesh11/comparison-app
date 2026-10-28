@@ -58,6 +58,11 @@ class NoTargetLoaded(PobError):
     """A read of the target before one was loaded, after a load that failed, or after it was released."""
 
 
+class MixedStages(InvalidInput):
+    """A build saved with its tree, items, skills and config from different stages (decision 026): fix it in PoB, or
+    pick a stage; `str(error)` names the parts."""
+
+
 class NoMainSkill(PobError):
     """The build's sidebar has no main skill, so there is no damage chain to read."""
 

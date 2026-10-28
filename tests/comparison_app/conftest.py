@@ -146,12 +146,12 @@ def stages(xml: str) -> list[tuple[str, str]]:
     titles: set[str | None] | None = None
     for parent, child, _ in STAGE_SETS:
         node = root.find(parent)
-        found = {each.get("title") for each in node.findall(child)} if node is not None else set()
+        found = {each.get("title") or "Default" for each in node.findall(child)} if node is not None else set()
         titles = found if titles is None else titles & found
     result = []
     tree = root.find("Tree")
     for spec in tree.findall("Spec") if tree is not None else []:
-        title = spec.get("title")
+        title = spec.get("title") or "Default"  # PoB's name for an untitled set
         if not titles or title not in titles:
             continue
         copy = ET.fromstring(xml)  # noqa: S314 - the committed test builds
@@ -159,7 +159,7 @@ def stages(xml: str) -> list[tuple[str, str]]:
             node = copy.find(parent)
             assert node is not None
             kids = node.findall(child)
-            index = next(i for i, kid in enumerate(kids) if kid.get("title") == title)
+            index = next(i for i, kid in enumerate(kids) if (kid.get("title") or "Default") == title)
             node.set(active, str(index + 1) if parent == "Tree" else str(kids[index].get("id")))
         result.append((str(title), ET.tostring(copy, encoding="unicode")))
     return result
