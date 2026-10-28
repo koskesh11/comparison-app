@@ -7,15 +7,18 @@ from pathlib import Path
 from checks.common import SRC, SRC_TESTS, files, rel
 
 REQUIRED = {
-    "tests/autobuilder/test_number_cases.py": "M4: PoB edge cases (inf, NaN, missing) and the shared number formats",
-    "tests/autobuilder/test_golden_has_all_keys.py": "M5: every report key is in the golden snapshot",
-    "tests/autobuilder/pob/test_every_endpoint_restores.py": "M6: every endpoint leaves the build as it was (S13)",
-    "tests/autobuilder/compare/test_recalc_matches_apply.py": "M7: the in-memory button matches a saved change",
+    "tests/comparison_app/test_number_cases.py": "M4: PoB edge cases (inf, NaN, missing) and the shared number formats",
+    "tests/comparison_app/test_golden_has_all_keys.py": "M5: every report key is in the golden snapshot",
+    "tests/comparison_app/pob/test_every_endpoint_restores.py": "M6: every endpoint leaves the build as it was (S13)",
+    "tests/comparison_app/compare/test_recalc_matches_apply.py": "M7: the in-memory button matches a saved change",
 }
-REQUIRED_WITH = {  # src/autobuilder module -> tests that must exist as soon as it does
-    "pob/lua_host.py": ["tests/autobuilder/pob/test_write_guard.py", "tests/autobuilder/pob/test_write_sandbox.py"],
+REQUIRED_WITH = {  # src/comparison_app module -> tests that must exist as soon as it does
+    "pob/lua_host.py": [
+        "tests/comparison_app/pob/test_write_guard.py",
+        "tests/comparison_app/pob/test_write_sandbox.py",
+    ],
 }
-USES_POB = re.compile(r"\bpob_session\b|autobuilder\.pob\.(session|lua_host)\b")
+USES_POB = re.compile(r"\bpob_session\b|comparison_app\.pob\.(session|lua_host)\b")
 USES_OWNER_BUILDS = re.compile(r"\bowner_builds\b|Path of Building[/\\]+Builds")
 # Booting PoB in a test: a session, or a bare LuaHost started with PoB's loader. A bare LuaHost alone (Lua's standard
 # libraries, no PoB) is allowed: the host's own tests need one.

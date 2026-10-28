@@ -1,5 +1,5 @@
 [project]
-name = "autobuilder"
+name = "comparison_app"
 version = "0.1.0"
 description = "Path of Exile 1 build analyzer on top of the installed Path of Building"
 requires-python = ">=3.12"
@@ -24,7 +24,7 @@ line-length = 120
 target-version = "py312"
 src = ["src", "tests"]
 # Only new code is checked (decision 006); the frozen first app and its tests are not. Ruff's `*` also crosses
-# folders, so the first app's test files are named one by one; tests/autobuilder, tests/checks stay in scope.
+# folders, so the first app's test files are named one by one; tests/comparison_app, tests/checks stay in scope.
 extend-exclude = [
     "engine", "gui", "mechanics", "docs", "tasks", "tools/run_tests.py", "tools/hooks", "tests/fixtures",
     "tests/test_*.py", "tests/__init__.py", "tests/evidence_checks.py", "tests/golden_common.py",
@@ -48,10 +48,10 @@ max-statements = 50
 [tool.mypy]
 strict = true
 mypy_path = "src"
-packages = ["autobuilder"]
+packages = ["comparison_app"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests/autobuilder", "tests/architecture", "tests/checks"]
+testpaths = ["tests/comparison_app", "tests/architecture", "tests/checks"]
 pythonpath = ["src", "tools"]
 # No faulthandler: LuaJIT raises every Lua error as a Windows SEH exception and catches it itself, and faulthandler
 # prints each one as a fatal exception (task 105). A real crash still fails the run.
@@ -66,21 +66,21 @@ markers = [
 source = ["src"]
 
 [tool.importlinter]
-root_package = "autobuilder"
+root_package = "comparison_app"
 
 [[tool.importlinter.contracts]]
 name = "Rows point down: app > compare > analysis | intake > pob"
 type = "layers"
 layers = [
-    "autobuilder.app",
-    "autobuilder.compare",
-    "autobuilder.analysis | autobuilder.intake",
-    "autobuilder.pob",
+    "comparison_app.app",
+    "comparison_app.compare",
+    "comparison_app.analysis | comparison_app.intake",
+    "comparison_app.pob",
 ]
 
 [[tool.importlinter.contracts]]
 name = "The leaves import nothing else of the app"
 type = "forbidden"
-source_modules = ["autobuilder.errors", "autobuilder.progress"]
-forbidden_modules = ["autobuilder.app", "autobuilder.compare", "autobuilder.analysis", "autobuilder.intake",
-                     "autobuilder.pob"]
+source_modules = ["comparison_app.errors", "comparison_app.progress"]
+forbidden_modules = ["comparison_app.app", "comparison_app.compare", "comparison_app.analysis", "comparison_app.intake",
+                     "comparison_app.pob"]

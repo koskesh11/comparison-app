@@ -16,22 +16,22 @@ DOC = "# Architecture\n\n## Endpoints\n| name | does |\n|---|---|\n| `analysis.c
 
 
 def test_lua_rules_pass_when_lua_enum_and_doc_agree(tmp_path: Path, write: Write) -> None:
-    write("src/autobuilder/pob/endpoints.py", ENUM)
+    write("src/comparison_app/pob/endpoints.py", ENUM)
     write("docs/ARCHITECTURE.md", DOC)
     write(
-        "src/autobuilder/pob/lua/analysis/chain.lua",
+        "src/comparison_app/pob/lua/analysis/chain.lua",
         'local function chain() end\nRpc.register("analysis.chain", chain)\n',
     )
-    write("src/autobuilder/pob/lua/loader.lua", 'dofile("x.lua")\n')
-    write("src/autobuilder/pob/lua/vendor/stub.lua", "function GlobalFromPoB() end\n")
+    write("src/comparison_app/pob/lua/loader.lua", 'dofile("x.lua")\n')
+    write("src/comparison_app/pob/lua/vendor/stub.lua", "function GlobalFromPoB() end\n")
     assert lua_rules.check(tmp_path) == []
 
 
 def test_lua_rules_report_globals_loads_duplicates_and_mismatches(tmp_path: Path, write: Write) -> None:
-    write("src/autobuilder/pob/endpoints.py", ENUM)
+    write("src/comparison_app/pob/endpoints.py", ENUM)
     write("docs/ARCHITECTURE.md", DOC)
     write(
-        "src/autobuilder/pob/lua/analysis/chain.lua",
+        "src/comparison_app/pob/lua/analysis/chain.lua",
         'function chainJSON() end\nhelper = function() end\ndofile("other.lua")\n'
         'Rpc.register("analysis.chain", f)\nRpc.register("analysis.chain", g)\nRpc.register("compare.target", h)\n',
     )
@@ -47,16 +47,16 @@ def test_lua_rules_report_globals_loads_duplicates_and_mismatches(tmp_path: Path
 
 
 def test_lua_rules_allow_a_host_function_only_in_its_own_file(tmp_path: Path, write: Write) -> None:
-    write("src/autobuilder/pob/lua/boot.lua", "function GetUserPath() return dir end\n")
-    write("src/autobuilder/pob/lua/build.lua", "function GetUserPath() return elsewhere end\n")
+    write("src/comparison_app/pob/lua/boot.lua", "function GetUserPath() return dir end\n")
+    write("src/comparison_app/pob/lua/build.lua", "function GetUserPath() return elsewhere end\n")
     assert lua_rules.check(tmp_path) == [
-        "src/autobuilder/pob/lua/build.lua:1: global function `GetUserPath`; make it local or register it"
+        "src/comparison_app/pob/lua/build.lua:1: global function `GetUserPath`; make it local or register it"
     ]
 
 
 def test_lua_syntax_reports_a_file_that_does_not_compile(tmp_path: Path, write: Write) -> None:
-    write("src/autobuilder/pob/lua/good.lua", "local x = 1\nreturn x\n")
-    write("src/autobuilder/pob/lua/bad.lua", "local x = = 1\n")
+    write("src/comparison_app/pob/lua/good.lua", "local x = 1\nreturn x\n")
+    write("src/comparison_app/pob/lua/bad.lua", "local x = = 1\n")
     # LuaJIT raises its errors as Windows SEH exceptions (0xE24C4A00 + code) and catches them itself; faulthandler,
     # which pytest enables, would print each one as a fatal exception.
     faulthandler.disable()
@@ -66,7 +66,7 @@ def test_lua_syntax_reports_a_file_that_does_not_compile(tmp_path: Path, write: 
         pytest.skip(str(reason))
     finally:
         faulthandler.enable()
-    assert len(problems) == 1 and problems[0].startswith("src/autobuilder/pob/lua/bad.lua: bad.lua:1:")
+    assert len(problems) == 1 and problems[0].startswith("src/comparison_app/pob/lua/bad.lua: bad.lua:1:")
 
 
 def test_web_reports_inline_code_and_a_script_that_does_not_parse(tmp_path: Path, write: Write) -> None:
@@ -104,24 +104,25 @@ def test_notes_report_missing_front_matter_status_and_blocks(tmp_path: Path, wri
 def test_testtree_requires_mirrored_and_guard_tests_and_honest_markers(tmp_path: Path, write: Write) -> None:
     for test in testtree.REQUIRED:
         write(test, "")
-    write("src/autobuilder/pob/lua_host.py", "")
-    write("src/autobuilder/pob/endpoints.py", "")
-    write("tests/autobuilder/pob/test_endpoints.py", "def test_x(pob_session):\n    open_session(paths)\n")
+    write("src/comparison_app/pob/lua_host.py", "")
+    write("src/comparison_app/pob/endpoints.py", "")
+    write("tests/comparison_app/pob/test_endpoints.py", "def test_x(pob_session):\n    open_session(paths)\n")
     problems = testtree.check(tmp_path)
     assert problems == [
-        "tests/autobuilder/pob/test_write_guard.py: missing (required with src/autobuilder/pob/lua_host.py, M11)",
-        "tests/autobuilder/pob/test_write_sandbox.py: missing (required with src/autobuilder/pob/lua_host.py, M11)",
-        "src/autobuilder/pob/lua_host.py: no test file tests/autobuilder/pob/test_lua_host.py",
-        "tests/autobuilder/pob/test_endpoints.py: uses PoB but is not marked pytest.mark.pob",
-        "tests/autobuilder/pob/test_endpoints.py: boots its own PoB; use the shared pob_session fixture (S6)",
+        "tests/comparison_app/pob/test_write_guard.py: missing (required with src/comparison_app/pob/lua_host.py, M11)",
+        "tests/comparison_app/pob/test_write_sandbox.py: missing"
+        " (required with src/comparison_app/pob/lua_host.py, M11)",
+        "src/comparison_app/pob/lua_host.py: no test file tests/comparison_app/pob/test_lua_host.py",
+        "tests/comparison_app/pob/test_endpoints.py: uses PoB but is not marked pytest.mark.pob",
+        "tests/comparison_app/pob/test_endpoints.py: boots its own PoB; use the shared pob_session fixture (S6)",
     ]
 
 
 def test_testtree_counts_a_bare_host_started_with_the_loader_as_a_pob_boot(tmp_path: Path, write: Write) -> None:
     for test in testtree.REQUIRED:
         write(test, "")
-    write("tests/autobuilder/pob/test_host.py", "import pytest\npytest.mark.pob\nLuaHost(dll)\n")
-    write("tests/autobuilder/pob/test_boot.py", "import pytest\npytest.mark.pob\nLuaHost(dll).start(LOADER)\n")
+    write("tests/comparison_app/pob/test_host.py", "import pytest\npytest.mark.pob\nLuaHost(dll)\n")
+    write("tests/comparison_app/pob/test_boot.py", "import pytest\npytest.mark.pob\nLuaHost(dll).start(LOADER)\n")
     assert testtree.check(tmp_path) == [
-        "tests/autobuilder/pob/test_boot.py: boots its own PoB; use the shared pob_session fixture (S6)"
+        "tests/comparison_app/pob/test_boot.py: boots its own PoB; use the shared pob_session fixture (S6)"
     ]

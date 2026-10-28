@@ -14,7 +14,7 @@ from checks.common import SRC, SRC_TESTS, files, parse, rel, top_level_imports
 NETWORK = {"urllib", "urllib3", "http", "socket", "ssl", "requests", "httpx", "aiohttp", "ftplib", "smtplib"}
 NETWORK_FOLDERS = ("intake/", "league/", "app/")
 ENVIRONMENT_MODULES = {"app/settings.py"}
-SUBPROCESS_MODULES: dict[str, str] = {}  # module (relative to src/autobuilder) -> reason
+SUBPROCESS_MODULES: dict[str, str] = {}  # module (relative to src/comparison_app) -> reason
 PERSONAL = re.compile(r"[A-Za-z]:[\\/]Users[\\/]|7800x3D", re.IGNORECASE)
 TIMEOUT_CALLS = {"run", "call", "check_call", "check_output"}
 
