@@ -10,12 +10,21 @@ from comparison_app.compare.snapshot import ActiveSkill, Gem, Group, Snapshot
 from comparison_app.pob.endpoints import ChangeKind, Endpoint
 
 
-def orb(stages: float | None, part: float, count: float = 1, group_count: float | None = None) -> Snapshot:
+def orb(
+    stages: float | None, part: float, count: float = 1, group_count: float | None = None, max_stages: float = 11
+) -> Snapshot:
     gem = Gem("Winter Orb", False, True, 20, 20, count, part, stages, None, None, None)
     support = Gem("Focused Channelling", True, True, 20, 20, 1, None, None, None, None, None)
     names = {1: "Channelling", 2: "Release"}
     group = Group(
-        1, "Winter Orb", True, True, group_count, 1, (support, gem), (ActiveSkill("Winter Orb", 2, names[part], 11),)
+        1,
+        "Winter Orb",
+        True,
+        True,
+        group_count,
+        1,
+        (support, gem),
+        (ActiveSkill("Winter Orb", 2, names[part], max_stages),),
     )
     return Snapshot(1, 1, (group,), (), (), ("Default",), "Default")
 
@@ -27,6 +36,17 @@ def test_your_main_skill_is_set_to_the_targets_setting() -> None:
         Change(ChangeKind.SKILL_PART, 1, 2, 2),  # the part's index, on your Winter Orb (group 1, gem 2)
         Change(ChangeKind.STAGE_COUNT, 1, 2, 5),
         Change(ChangeKind.GROUP_COUNT, 1, None, 2),
+    )
+
+
+def test_the_button_copies_the_targets_effective_stage_count() -> None:
+    """Both stage boxes empty, but your Winter Orb has 13 stages at most (an enchant) and the target's 11: the empty
+    boxes differ as PoB applies them, so the button sets 11, not "empty" again (review 111, finding 2)."""
+    yours, target = orb(stages=None, part=1, max_stages=13), orb(stages=None, part=1, max_stages=11)
+    settings = compare_settings(yours, target)
+    assert (settings.differing, changes_to_match(settings, yours, target)) == (
+        ("stages",),
+        (Change(ChangeKind.STAGE_COUNT, 1, 2, 11),),
     )
 
 

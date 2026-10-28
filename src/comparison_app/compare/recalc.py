@@ -65,18 +65,28 @@ def _main_gem(snapshot: Snapshot) -> tuple[int, int, Gem] | None:
 
 
 def changes_to_match(settings: SkillSettings, yours: Snapshot, target: Snapshot) -> tuple[Change, ...]:
-    """Your main skill's differing settings set to the target's, for SETTINGS_DIFFER (decision 011's button)."""
+    """Your main skill's differing settings set to the target's, for SETTINGS_DIFFER (decision 011's button).
+
+    Each value is the target's setting as PoB applies it (skill_settings.Setup: an empty stage box is the skill's
+    maximum), so the change makes the two compare equal; only the part is copied as its index, the way PoB saves it."""
     mine, theirs = _main_gem(yours), _main_gem(target)
-    if settings.match is not Match.SETTINGS_DIFFER or mine is None or theirs is None:
+    wanted = settings.target
+    if settings.match is not Match.SETTINGS_DIFFER or mine is None or theirs is None or wanted is None:
         return ()
     group, gem, _ = mine
-    target_group = target.groups[theirs[0] - 1]
     changes = []
     for setting in settings.differing:
         kind = SETTING_KINDS[setting]
-        value = getattr(theirs[2], GEM_VALUES[kind]) if kind in GEM_VALUES else target_group.group_count
+        value = theirs[2].part if kind is ChangeKind.SKILL_PART else getattr(wanted, setting)
         changes.append(Change(kind, group, gem if kind in GEM_VALUES else None, value))
     return tuple(changes)
+
+
+def pick_target_skill(choice: tuple[int, int]) -> tuple[Change, Change]:
+    """The target's (group, active skill) the owner picked (skill_settings.target_choices), as two in-memory changes
+    on the target (which="target"): its main group and that group's active skill."""
+    group, skill = choice
+    return Change(ChangeKind.MAIN_GROUP, group, None, group), Change(ChangeKind.MAIN_ACTIVE_SKILL, group, None, skill)
 
 
 def _wire(change: Change) -> dict[str, object]:

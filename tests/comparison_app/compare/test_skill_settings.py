@@ -2,6 +2,8 @@
 
 import pytest
 
+from comparison_app.analysis.scenarios import Scenario
+from comparison_app.compare.recalc import pick_target_skill, recalculate
 from comparison_app.compare.skill_settings import Match, compare_settings
 from comparison_app.compare.snapshot import ActiveSkill, Gem, Group, Snapshot, read_snapshot
 from comparison_app.compare.target import open_target, release_target
@@ -42,7 +44,7 @@ def test_lightning_strike_twice_in_another_order_is_the_same_setup() -> None:
 
 def test_the_target_running_your_setup_in_another_group_offers_that_group() -> None:
     result = compare_settings(lightning_strike(1), lightning_strike(2))  # yours melee, the target's main projectile
-    assert (result.match, result.differing, result.target_groups) == (Match.OTHER_GROUP, ("part",), (1,))
+    assert (result.match, result.differing, result.target_choices) == (Match.OTHER_GROUP, ("part",), ((1, 1),))
 
 
 def test_different_settings_hide_the_chain() -> None:
@@ -67,20 +69,23 @@ def test_an_unset_stage_count_is_the_skills_maximum() -> None:
 def test_a_different_main_skill_warns_and_offers_the_targets_groups() -> None:
     target = snapshot(1, group(1, "Ethereal Knives"), group(2, "Winter Orb"))
     result = compare_settings(snapshot(1, group(1, "Winter Orb")), target)
-    assert (result.match, result.target_groups) == (Match.DIFFERENT_SKILL, (2,))
-    assert "Ethereal Knives" in result.message and "group(s) 2" in result.message
+    assert (result.match, result.target_choices) == (Match.DIFFERENT_SKILL, ((2, 1),))
+    assert "Ethereal Knives" in result.message and "group 2 (skill 1)" in result.message
 
 
 @pytest.mark.pob
 def test_one_real_pair(pob_session: PobSession, reference_xml: dict[str, str], variant_xml: dict[str, str]) -> None:
-    """CoC EK Assa against itself with Cyclone as main skill: group 1 holds both, so the target's group 1 is offered."""
+    """CoC EK Assa against itself with Cyclone as main skill. Group 1 holds both skills, so the offer names the skill
+    too (review 111, finding 1): picking it points the target at Ethereal Knives, in memory."""
     pob_session.load_build(reference_xml["CoC EK Assa"], "CoC EK Assa")
     yours = read_snapshot(pob_session)
     open_target(pob_session, variant_xml["Cyclone"], "Cyclone")
     try:
         target = read_snapshot(pob_session, "target")
+        assert compare_settings(yours, yours).match is Match.SAME
+        result = compare_settings(yours, target)
+        assert (result.match, result.target_choices) == (Match.DIFFERENT_SKILL, ((1, 1),))
+        picked = recalculate(pob_session, Scenario.PINNACLE_BOSS, pick_target_skill(result.target_choices[0]), "target")
+        assert picked.chain.skill == "Ethereal Knives"
     finally:
         release_target(pob_session)
-    assert compare_settings(yours, yours).match is Match.SAME
-    result = compare_settings(yours, target)
-    assert (result.match, result.target_groups) == (Match.DIFFERENT_SKILL, (1,))
