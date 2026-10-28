@@ -2,7 +2,8 @@
 
 Rewrites the first app's guide_diff.py :1-24, 36-148, which worked defaults out by hand: here a box counts as set
 when PoB says it is not at its default (GetDefaultState, ConfigTab.lua:941-948; pob/lua/compare/snapshot.lua), and a
-box one build leaves unset is at PoB's default there. Placeholders are not compared: PoB derives them from the boss
+box one build leaves unset is at PoB's default there; so is a box set in a build that cannot use it, so only boxes a
+build can use make a difference. Placeholders are not compared: PoB derives them from the boss
 box and other boxes, which are compared themselves. Not sorted by effect in milestone 1 (decision 019).
 """
 
@@ -45,6 +46,11 @@ def _set(snapshot: Snapshot) -> dict[str, ConfigBox]:
     return {box.var: box for box in snapshot.boxes if box.state in SET_STATES}
 
 
+def _effective(box: ConfigBox | None) -> object:
+    """What PoB uses: a box set in a build that cannot use it changes nothing there, as if it were at its default."""
+    return box.value if box is not None and box.state == "set" else None
+
+
 def _note(yours: ConfigBox | None, target: ConfigBox | None) -> str | None:
     cannot = [whose for whose, box in (("your", yours), ("the target's", target)) if box and box.state == "unusable"]
     if not cannot:
@@ -57,7 +63,7 @@ def _differences(yours: Snapshot, target: Snapshot) -> tuple[ConfigDifference, .
     found = []
     for var in mine.keys() | theirs.keys():
         box_yours, box_target = mine.get(var), theirs.get(var)
-        if var != SCENARIO_BOX and (box_yours and box_yours.value) == (box_target and box_target.value):
+        if var != SCENARIO_BOX and _effective(box_yours) == _effective(box_target):
             continue
         shown = box_yours or theirs[var]  # the var comes from one of the two
         note = SCENARIO_NOTE if var == SCENARIO_BOX else _note(box_yours, box_target)

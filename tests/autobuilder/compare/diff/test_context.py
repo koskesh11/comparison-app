@@ -33,9 +33,13 @@ def test_the_boss_box_is_set_by_the_scenario() -> None:
     assert [(each.var, each.note) for each in report.differences] == [("enemyIsBoss", SCENARIO_NOTE)]
 
 
+def test_a_box_only_a_build_that_cannot_use_it_sets_is_no_difference() -> None:
+    assert compare_config(snapshot(box("cyclone", True, 3, "unusable")), snapshot()).differences == ()
+
+
 def test_a_box_a_build_cannot_use_says_so() -> None:
-    report = compare_config(snapshot(box("cyclone", True, 3, "unusable")), snapshot())
-    (difference,) = report.differences
+    report = compare_config(snapshot(box("cyclone", True, 3, "unusable")), snapshot(box("cyclone", True, 3)))
+    (difference,) = report.differences  # it counts in the target, and is as if unset in yours
     assert difference.note is not None and difference.note.startswith("your build cannot use it")
 
 
