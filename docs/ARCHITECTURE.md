@@ -43,6 +43,7 @@ Every Lua function src/ may call. A name is registered once in Lua (`Rpc.registe
 | `target.load` | opens the target build from its XML text as PoB's CompareEntry, beside the build; returns its summary; a target PoB cannot open fails and leaves none | the target only |
 | `target.release` | drops the target | the target only |
 | `compare.snapshot` | the skill settings of every group and gem (parts, stages, mines, minion, counts, the Calcs selection) every config box not at PoB's default, with PoB's set / unusable state, the number boxes the build can use left at 0, Custom Modifiers and config sets, of the build or the target (`which`) | no |
+| `compare.chain_with` | the chain of the build or the target (`which`) under a scenario (`boss`) with skill-setting changes (`changes`: ChangeKind, group, gem, value) applied in memory, and every number of the sidebar's output after them (decision 011) | temporary: the changes, the boss box and the Calcs tab pointed at the sidebar, put back and recalculated |
 
 ## Checks
 `python tools/check.py` runs the fast checks (the commit hook runs them too); `--full` adds the merge checks, which
