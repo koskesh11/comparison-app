@@ -49,7 +49,7 @@ end
 Rpc.register("compare.chain_with", function(request)
 	local changes = {}
 	for index, each in ipairs(request.changes or {}) do changes[index] = change(each) end
-	changes[#changes + 1] = Scenario.boss(request.boss)
+	changes[#changes + 1] = Scenario.boss(request.boss, request.which)
 	changes[#changes + 1] = Chain.calcsOnSidebar
 	return Build.withChanges(changes, function(build)
 		return { chain = Chain.read(build), output = Build.outputNumbers(build.calcsTab.mainOutput) }

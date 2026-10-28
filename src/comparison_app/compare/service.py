@@ -69,8 +69,8 @@ def _warnings(yours: Side, target: Side) -> tuple[str, ...]:
 def compare(session: PobSession, yours: tuple[str, str], target: tuple[str, str], scenario: Scenario) -> Comparison:
     """`yours` and `target` are (XML text, name). Your build stays open afterwards; the target does not."""
     opened_yours = open_build(session, *yours)
-    opened_target = open_target(session, *target)
     try:
+        opened_target = open_target(session, *target)
         mine = _side(session, opened_yours, scenario, "own")
         theirs = _side(session, opened_target, scenario, "target")
     finally:
