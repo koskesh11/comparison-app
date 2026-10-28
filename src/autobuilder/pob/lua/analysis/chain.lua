@@ -83,6 +83,35 @@ local function textOf(value)
 	return nil
 end
 
+-- PoB sorts a source table by mod type, name and value (CalcBreakdownControl.lua:341-351) with Lua's table.sort,
+-- which is not stable: rows that tie come in no fixed order (measured: two of Worb's 32 % crit chance sources swap
+-- between two reads of the same build). Each run of tied rows is put in the order of its text, nothing else moves.
+local function tieKey(row)
+	return row.mod and table.concat({ tostring(row.mod.type), tostring(row.mod.name), tostring(row.value) }, "\0")
+end
+
+local function textKey(cells, columns)
+	local parts = {}
+	for index, column in ipairs(columns) do parts[index] = tostring(cells[column.key] or "") end
+	parts[#parts + 1] = tostring(cells.sourceId or "")
+	return table.concat(parts, "\0")
+end
+
+local function steadyTies(rows, ties, columns)
+	local first = 1
+	while first <= #rows do
+		local last = first
+		while ties[first] and last < #rows and ties[last + 1] == ties[first] do last = last + 1 end
+		if last > first then
+			local run = {}
+			for index = first, last do run[#run + 1] = rows[index] end
+			table.sort(run, function(a, b) return textKey(a, columns) < textKey(b, columns) end)
+			for index = first, last do rows[index] = run[index - first + 1] end
+		end
+		first = last + 1
+	end
+end
+
 -- PoB's hover popup for a cell, as data: text lines, and tables with their columns and rows.
 local function sources(popup, cell)
 	popup.sourceData = nil
@@ -94,7 +123,7 @@ local function sources(popup, cell)
 			for _, line in ipairs(section.lines) do lines[#lines + 1] = plain(line) end
 			found[#found + 1] = { kind = "text", lines = lines }
 		elseif section.type == "TABLE" then
-			local columns, rows = {}, {}
+			local columns, rows, ties = {}, {}, {}
 			for _, column in ipairs(section.colList) do columns[#columns + 1] = { key = column.key, label = column.label } end
 			for _, row in ipairs(section.rowList) do
 				local cells = {}
@@ -103,8 +132,9 @@ local function sources(popup, cell)
 					cells.value = type(row.value) == "number" and row.value or nil
 					cells.sourceId = row.mod.source
 				end
-				rows[#rows + 1] = cells
+				rows[#rows + 1], ties[#rows + 1] = cells, tieKey(row)
 			end
+			steadyTies(rows, ties, columns)
 			found[#found + 1] = { kind = "table", label = section.label, columns = columns, rows = rows }
 		end
 	end
