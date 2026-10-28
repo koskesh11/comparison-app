@@ -18,13 +18,15 @@ def summary(
 
 
 def test_the_header_shows_full_dps_when_pob_has_it() -> None:
-    assert header_dps(summary({"FullDPS": 10.0, "CombinedDPS": 3.0})) == header_dps(summary({"FullDPS": 10.0}))
+    assert header_dps(summary({"FullDPS": 10.0, "TotalDPS": 3.0})) == header_dps(summary({"FullDPS": 10.0}))
     assert header_dps(summary({"FullDPS": 10.0})).key == "FullDPS"
 
 
 def test_without_full_dps_the_header_shows_the_main_skill_and_says_so() -> None:
-    shown = header_dps(summary({"FullDPS": 0.0, "CombinedDPS": 3.0}))
-    assert (shown.key, shown.value) == ("CombinedDPS", 3.0)
+    # the checklist's failure mode 2: the main skill's TotalDPS, not CombinedDPS, which also counts its ignite and
+    # other damage over time (review 111, finding 4)
+    shown = header_dps(summary({"FullDPS": 0.0, "CombinedDPS": 5.0, "TotalDPS": 3.0}))
+    assert (shown.key, shown.value) == ("TotalDPS", 3.0)
     assert shown.warning is not None and "Cyclone" in shown.warning
     with pytest.raises(NoMainSkill):
         header_dps(summary({"FullDPS": 0.0}, main_skill=None))

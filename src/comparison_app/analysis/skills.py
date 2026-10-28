@@ -2,7 +2,7 @@
 :1-43; task 102 area B verdict: typed NoMainSkill instead of a bare StopIteration, no nan or inf change).
 
 The header shows PoB's FullDPS. A build with no skill group in Full DPS ("Include in Full DPS" unticked) has FullDPS 0;
-then it shows the main skill's CombinedDPS and says so.
+then it shows the main skill's TotalDPS and says so (docs/analyzer-checklist.md, failure mode 2).
 """
 
 import math
@@ -16,7 +16,7 @@ from comparison_app.pob.session import BuildSummary, PobSession, SkillDps
 
 @dataclass(frozen=True)
 class HeaderDps:
-    key: str  # the PoB output key shown: FullDPS or CombinedDPS
+    key: str  # the PoB output key shown: FullDPS, or the main skill's TotalDPS
     value: float | None
     warning: str | None
 
@@ -37,7 +37,7 @@ def header_dps(summary: BuildSummary) -> HeaderDps:
         "No skill group is in Full DPS ('Include in Full DPS' unticked): "
         f"the DPS shown is the main skill {summary.main_skill} only"
     )
-    return HeaderDps("CombinedDPS", summary.stats.get("CombinedDPS"), warning)
+    return HeaderDps("TotalDPS", summary.stats.get("TotalDPS"), warning)
 
 
 def skill_rows(summary: BuildSummary) -> tuple[SkillDps, ...]:
