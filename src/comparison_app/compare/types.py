@@ -21,12 +21,13 @@ class Step:
     gap: float | None  # decision 024: target factor / your factor - 1; None for a row that is no factor of the hit
     factors: tuple[tuple[str | None, float | None, float | None], ...] = ()  # (column, yours, target) the gap uses
     derived: bool = False  # the base step, which PoB shows no row for (decision 024): arithmetic on PoB's numbers
+    hand: str | None = None  # "MH" or "OH" for an attack's per-hand step, None for a step both hands share
 
 
 @dataclass(frozen=True)
 class SmallGaps:
     steps: tuple[Step, ...]  # every step whose gap is under 3 % either way (decision 009)
-    total: float  # the product of their factors minus one
+    total: float  # their factors multiplied, the two hands of a dual-wield attack averaged (decision 024), minus one
 
 
 @dataclass(frozen=True)

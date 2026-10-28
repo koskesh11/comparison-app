@@ -7,15 +7,17 @@ by its share of your hit. The base step is derived: PoB shows no row for it.
 """
 
 import math
-from collections.abc import Callable, Iterable, Mapping
+from collections.abc import Callable, Iterable, Mapping, Sequence
 
 from comparison_app.analysis.chain import Cell, Chain, Hit, Row
 from comparison_app.compare.types import ChainTable, Pair, SmallGaps, Step
 
 SMALL = 0.03  # decision 009: gaps under 3 % share one row
 ALL_TYPES = "All Types"
+MAIN_HAND = "MH "
 OFF_HAND = "OH "
-HAND_PREFIXES = ("MH ", OFF_HAND)
+HAND_PREFIXES = (MAIN_HAND, OFF_HAND)
+HANDS = {"MainHand": "MH", "OffHand": "OH"}  # Chain.hits hand -> the step's hand
 # Labels as PoB 2.67.2 writes them (tests/comparison_app/fixtures/recorded_chains.json), without the hand prefix.
 FACTOR_STEPS = {
     "Total Increased": "increased",
@@ -136,14 +138,33 @@ def _factor_rows(rows: Mapping[Key, Row]) -> dict[Key, Factors]:
     return {key: _factors(key[1], row) for key, row in rows.items() if key[1] in (*FACTOR_STEPS.values(), "speed")}
 
 
+def _hand(label: str) -> str | None:
+    return "MH" if label.startswith(MAIN_HAND) else "OH" if label.startswith(OFF_HAND) else None
+
+
 def _base_step(
-    hand: str, yours: Mapping[Key, Factors], target: Mapping[Key, Factors], shares: Mapping[str, float]
+    hand: str,
+    yours: Mapping[Key, Factors],
+    target: Mapping[Key, Factors],
+    shares: Mapping[str, float],
+    attack: bool,
 ) -> Step:
     mine = _base({key[1]: value for key, value in yours.items() if key[0] == hand})
     theirs = _base({key[1]: value for key, value in target.items() if key[0] == hand})
     label = f"{OFF_HAND}{BASE_LABEL}" if hand else BASE_LABEL
     gap = _gap(mine, theirs, shares) if mine and theirs else None
-    return Step("HitDamage", label, (), gap, factors=_side_by_side(mine, theirs), derived=True)
+    owner = "OH" if hand else "MH" if attack else None  # the main hand's base step has no prefix of its own
+    return Step("HitDamage", label, (), gap, factors=_side_by_side(mine, theirs), derived=True, hand=owner)
+
+
+def _small_total(small: Sequence[Step], hands: Sequence[str]) -> float:
+    """The small gaps together: shared steps multiplied, and for a dual-wield attack the two hands' products averaged,
+    as PoB averages the hands' damage ("skill alternates weapons", CalcOffence.lua:2068-2073)."""
+    shared = math.prod(1 + step.gap for step in small if step.hand is None and step.gap is not None)
+    per_hand = [
+        math.prod(1 + step.gap for step in small if step.hand == hand and step.gap is not None) for hand in hands
+    ]
+    return shared * (sum(per_hand) / len(per_hand) if per_hand else 1.0) - 1
 
 
 def _size(step: Step) -> float:
@@ -157,24 +178,26 @@ def build_table(yours: Chain, target: Chain) -> ChainTable:
     def shown(column: str | None) -> bool:
         return column is None or column == ALL_TYPES or column in hitting
 
+    hands = sorted({HANDS[hit.hand] for chain in (yours, target) for hit in chain.hits if hit.hand in HANDS})
     mine, theirs = _indexed(yours), _indexed(target)
     factors_yours, factors_target = _factor_rows(mine), _factor_rows(theirs)
     steps: list[Step] = []
     no_effect: list[Step] = []
     for key in list(mine) + [key for key in theirs if key not in mine]:
         if key[1] == "increased":  # the derived base step comes before the first scaling step
-            steps.append(_base_step(key[0], factors_yours, factors_target, shares))
+            steps.append(_base_step(key[0], factors_yours, factors_target, shares, bool(hands)))
         row_yours, row_target = mine.get(key), theirs.get(key)
         row = row_yours or theirs[key]
         both = key in factors_yours and key in factors_target
         gap = _gap(factors_yours[key], factors_target[key], shares) if both and key[1] not in NOT_A_FACTOR else None
         side = _side_by_side(factors_yours.get(key, {}), factors_target.get(key, {}))
-        steps.append(Step(row.section, row.label, _pairs(row_yours, row_target, shown), gap, factors=side))
+        cells = _pairs(row_yours, row_target, shown)
+        steps.append(Step(row.section, row.label, cells, gap, factors=side, hand=_hand(row.label)))
         unused = _pairs(row_yours, row_target, lambda column: not shown(column))
         if unused:
             no_effect.append(Step(row.section, row.label, unused, None))
     small = [step for step in steps if step.gap is not None and abs(step.gap) < SMALL]
     kept = tuple(step for step in steps if not any(step is each for each in small))
-    total = math.prod(1 + step.gap for step in small if step.gap is not None) - 1
+    total = _small_total(small, hands)
     chips = tuple(sorted((step for step in kept if step.gap is not None), key=_size, reverse=True))
     return ChainTable(kept, SmallGaps(tuple(small), total), tuple(no_effect), chips, shares)

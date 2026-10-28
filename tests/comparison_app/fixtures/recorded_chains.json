@@ -1,5 +1,5 @@
 {
- "about": "analysis.chain wire replies recorded from PoB 2.67.2 on 2026-10-28 (Pinnacle Boss), sources dropped to keep the file small; Cyclone is CoC EK Assa with Cyclone as main skill (conftest variant_xml). tests/comparison_app/compare/test_chain_table.py reads them.",
+ "about": "analysis.chain wire replies recorded from PoB 2.67.2 on 2026-10-28 (Pinnacle Boss), sources dropped to keep the file small; Cyclone is CoC EK Assa with Cyclone as main skill (conftest variant_xml); Elemental Hit Slayer is saved on '4 Stone 95' and dual wields. tests/autobuilder/compare/test_chain_table.py reads them.",
  "chains": {
   "Worb": {
    "hits": [
@@ -2042,6 +2042,1260 @@
     "HitChance": 100,
     "Speed": 8.9208,
     "TotalDPS": 62518.57305392161
+   }
+  },
+  "Elemental Hit Slayer": {
+   "hits": [
+    {
+     "AverageHit": 405916.02464148996,
+     "CritEffect": 3.2265649,
+     "byType": {
+      "Chaos": 0,
+      "Cold": 125804.38863680999,
+      "Fire": 0,
+      "Lightning": 0,
+      "Physical": 0
+     },
+     "hand": "MainHand"
+    },
+    {
+     "AverageHit": 363096.50232545106,
+     "CritEffect": 3.0794913999999998,
+     "byType": {
+      "Chaos": 0,
+      "Cold": 117907.94490462,
+      "Fire": 0,
+      "Lightning": 0,
+      "Physical": 0
+     },
+     "hand": "OffHand"
+    }
+   ],
+   "part": "Cold Attack",
+   "rows": [
+    {
+     "cells": [
+      {
+       "column": "Physical",
+       "sources": [],
+       "text": "0",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Lightning",
+       "sources": [],
+       "text": "108",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 108
+        }
+       ]
+      },
+      {
+       "column": "Cold",
+       "sources": [],
+       "text": "559",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 559
+        }
+       ]
+      },
+      {
+       "column": "Fire",
+       "sources": [],
+       "text": "686",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 686
+        }
+       ]
+      },
+      {
+       "column": "Chaos",
+       "sources": [],
+       "text": "0",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      }
+     ],
+     "label": "Added Min",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "Physical",
+       "sources": [],
+       "text": "0",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Lightning",
+       "sources": [],
+       "text": "2,097",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 2097
+        }
+       ]
+      },
+      {
+       "column": "Cold",
+       "sources": [],
+       "text": "1,039",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 1039
+        }
+       ]
+      },
+      {
+       "column": "Fire",
+       "sources": [],
+       "text": "1,274",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 1274
+        }
+       ]
+      },
+      {
+       "column": "Chaos",
+       "sources": [],
+       "text": "0",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      }
+     ],
+     "label": "Added Max",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "All Types",
+       "sources": [],
+       "text": "509%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 509
+        }
+       ]
+      },
+      {
+       "column": "Physical",
+       "sources": [],
+       "text": "32%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 32
+        }
+       ]
+      },
+      {
+       "column": "Lightning",
+       "sources": [],
+       "text": "293%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 293
+        }
+       ]
+      },
+      {
+       "column": "Cold",
+       "sources": [],
+       "text": "347%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 347
+        }
+       ]
+      },
+      {
+       "column": "Fire",
+       "sources": [],
+       "text": "293%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 293
+        }
+       ]
+      },
+      {
+       "column": "Chaos",
+       "sources": [],
+       "text": "0%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      }
+     ],
+     "label": "MH Total Increased",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "All Types",
+       "sources": [],
+       "text": "306%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 305.99999999999994
+        }
+       ]
+      },
+      {
+       "column": "Physical",
+       "sources": [],
+       "text": "0%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Lightning",
+       "sources": [],
+       "text": "118%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 118.00000000000001
+        }
+       ]
+      },
+      {
+       "column": "Cold",
+       "sources": [],
+       "text": "118%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 118.00000000000001
+        }
+       ]
+      },
+      {
+       "column": "Fire",
+       "sources": [],
+       "text": "118%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 118.00000000000001
+        }
+       ]
+      },
+      {
+       "column": "Chaos",
+       "sources": [],
+       "text": "0%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      }
+     ],
+     "label": "MH Total More",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "Physical",
+       "sources": [],
+       "text": "x 0",
+       "values": [
+        {
+         "key": "MainHand.PhysicalEffMult",
+         "precision": 3
+        }
+       ]
+      },
+      {
+       "column": "Lightning",
+       "sources": [],
+       "text": "x 0",
+       "values": [
+        {
+         "key": "MainHand.LightningEffMult",
+         "precision": 3
+        }
+       ]
+      },
+      {
+       "column": "Cold",
+       "sources": [],
+       "text": "x 1.406",
+       "values": [
+        {
+         "key": "MainHand.ColdEffMult",
+         "precision": 3,
+         "value": 1.4061000000000001
+        }
+       ]
+      },
+      {
+       "column": "Fire",
+       "sources": [],
+       "text": "x 0",
+       "values": [
+        {
+         "key": "MainHand.FireEffMult",
+         "precision": 3
+        }
+       ]
+      },
+      {
+       "column": "Chaos",
+       "sources": [],
+       "text": "x 0",
+       "values": [
+        {
+         "key": "MainHand.ChaosEffMult",
+         "precision": 3
+        }
+       ]
+      }
+     ],
+     "label": "MH Eff. DPS Mod",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "All Types",
+       "sources": [],
+       "text": "88,016 to 163,593",
+       "values": [
+        {
+         "key": "MainHand.TotalMin",
+         "precision": 0,
+         "value": 88015.52776926
+        },
+        {
+         "key": "MainHand.TotalMax",
+         "precision": 0,
+         "value": 163593.24950436
+        }
+       ]
+      },
+      {
+       "column": "Physical",
+       "sources": [],
+       "text": "0 to 0",
+       "values": [
+        {
+         "key": "MainHand.PhysicalMin",
+         "precision": 0,
+         "value": 0
+        },
+        {
+         "key": "MainHand.PhysicalMax",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Lightning",
+       "sources": [],
+       "text": "0 to 0",
+       "values": [
+        {
+         "key": "MainHand.LightningMin",
+         "precision": 0,
+         "value": 0
+        },
+        {
+         "key": "MainHand.LightningMax",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Cold",
+       "sources": [],
+       "text": "88,016 to 163,593",
+       "values": [
+        {
+         "key": "MainHand.ColdMin",
+         "precision": 0,
+         "value": 88015.52776926
+        },
+        {
+         "key": "MainHand.ColdMax",
+         "precision": 0,
+         "value": 163593.24950436
+        }
+       ]
+      },
+      {
+       "column": "Fire",
+       "sources": [],
+       "text": "0 to 0",
+       "values": [
+        {
+         "key": "MainHand.FireMin",
+         "precision": 0,
+         "value": 0
+        },
+        {
+         "key": "MainHand.FireMax",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Chaos",
+       "sources": [],
+       "text": "0 to 0",
+       "values": [
+        {
+         "key": "MainHand.ChaosMin",
+         "precision": 0,
+         "value": 0
+        },
+        {
+         "key": "MainHand.ChaosMax",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      }
+     ],
+     "label": "MH Hit Damage",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "All Types",
+       "sources": [],
+       "text": "405,916",
+       "values": [
+        {
+         "key": "MainHand.AverageHit",
+         "precision": 1,
+         "value": 405916.02464148996
+        }
+       ]
+      }
+     ],
+     "label": "MH Average Hit",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "All Types",
+       "sources": [],
+       "text": "449%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 449
+        }
+       ]
+      },
+      {
+       "column": "Physical",
+       "sources": [],
+       "text": "32%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 32
+        }
+       ]
+      },
+      {
+       "column": "Lightning",
+       "sources": [],
+       "text": "293%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 293
+        }
+       ]
+      },
+      {
+       "column": "Cold",
+       "sources": [],
+       "text": "347%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 347
+        }
+       ]
+      },
+      {
+       "column": "Fire",
+       "sources": [],
+       "text": "293%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 293
+        }
+       ]
+      },
+      {
+       "column": "Chaos",
+       "sources": [],
+       "text": "0%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      }
+     ],
+     "label": "OH Total Increased",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "All Types",
+       "sources": [],
+       "text": "306%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 305.99999999999994
+        }
+       ]
+      },
+      {
+       "column": "Physical",
+       "sources": [],
+       "text": "0%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Lightning",
+       "sources": [],
+       "text": "118%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 118.00000000000001
+        }
+       ]
+      },
+      {
+       "column": "Cold",
+       "sources": [],
+       "text": "118%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 118.00000000000001
+        }
+       ]
+      },
+      {
+       "column": "Fire",
+       "sources": [],
+       "text": "118%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 118.00000000000001
+        }
+       ]
+      },
+      {
+       "column": "Chaos",
+       "sources": [],
+       "text": "0%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      }
+     ],
+     "label": "OH Total More",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "Physical",
+       "sources": [],
+       "text": "x 0",
+       "values": [
+        {
+         "key": "OffHand.PhysicalEffMult",
+         "precision": 3
+        }
+       ]
+      },
+      {
+       "column": "Lightning",
+       "sources": [],
+       "text": "x 0",
+       "values": [
+        {
+         "key": "OffHand.LightningEffMult",
+         "precision": 3
+        }
+       ]
+      },
+      {
+       "column": "Cold",
+       "sources": [],
+       "text": "x 1.406",
+       "values": [
+        {
+         "key": "OffHand.ColdEffMult",
+         "precision": 3,
+         "value": 1.4061000000000001
+        }
+       ]
+      },
+      {
+       "column": "Fire",
+       "sources": [],
+       "text": "x 0",
+       "values": [
+        {
+         "key": "OffHand.FireEffMult",
+         "precision": 3
+        }
+       ]
+      },
+      {
+       "column": "Chaos",
+       "sources": [],
+       "text": "x 0",
+       "values": [
+        {
+         "key": "OffHand.ChaosEffMult",
+         "precision": 3
+        }
+       ]
+      }
+     ],
+     "label": "OH Eff. DPS Mod",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "All Types",
+       "sources": [],
+       "text": "82,491 to 153,325",
+       "values": [
+        {
+         "key": "OffHand.TotalMin",
+         "precision": 0,
+         "value": 82490.71536419999
+        },
+        {
+         "key": "OffHand.TotalMax",
+         "precision": 0,
+         "value": 153325.17444504
+        }
+       ]
+      },
+      {
+       "column": "Physical",
+       "sources": [],
+       "text": "0 to 0",
+       "values": [
+        {
+         "key": "OffHand.PhysicalMin",
+         "precision": 0,
+         "value": 0
+        },
+        {
+         "key": "OffHand.PhysicalMax",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Lightning",
+       "sources": [],
+       "text": "0 to 0",
+       "values": [
+        {
+         "key": "OffHand.LightningMin",
+         "precision": 0,
+         "value": 0
+        },
+        {
+         "key": "OffHand.LightningMax",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Cold",
+       "sources": [],
+       "text": "82,491 to 153,325",
+       "values": [
+        {
+         "key": "OffHand.ColdMin",
+         "precision": 0,
+         "value": 82490.71536419999
+        },
+        {
+         "key": "OffHand.ColdMax",
+         "precision": 0,
+         "value": 153325.17444504
+        }
+       ]
+      },
+      {
+       "column": "Fire",
+       "sources": [],
+       "text": "0 to 0",
+       "values": [
+        {
+         "key": "OffHand.FireMin",
+         "precision": 0,
+         "value": 0
+        },
+        {
+         "key": "OffHand.FireMax",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Chaos",
+       "sources": [],
+       "text": "0 to 0",
+       "values": [
+        {
+         "key": "OffHand.ChaosMin",
+         "precision": 0,
+         "value": 0
+        },
+        {
+         "key": "OffHand.ChaosMax",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      }
+     ],
+     "label": "OH Hit Damage",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "All Types",
+       "sources": [],
+       "text": "363,096.5",
+       "values": [
+        {
+         "key": "OffHand.AverageHit",
+         "precision": 1,
+         "value": 363096.50232545106
+        }
+       ]
+      }
+     ],
+     "label": "OH Average Hit",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "All Types",
+       "sources": [],
+       "text": "376,816.1",
+       "values": [
+        {
+         "key": "AverageDamage",
+         "precision": 1,
+         "value": 376816.1382138011
+        }
+       ]
+      }
+     ],
+     "label": "Average Damage",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "All Types",
+       "sources": [],
+       "text": "2,950,636.5",
+       "values": [
+        {
+         "key": "TotalDPS",
+         "precision": 1,
+         "value": 2950636.45258144
+        }
+       ]
+      }
+     ],
+     "label": "Skill DPS",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "172%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 172
+        }
+       ]
+      }
+     ],
+     "label": "MH Inc. Att. Speed",
+     "section": "Speed"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "20%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 19.999999999999996
+        }
+       ]
+      }
+     ],
+     "label": "MH More Att. Speed",
+     "section": "Speed"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "7.04",
+       "values": [
+        {
+         "key": "MainHand.Speed",
+         "precision": 2,
+         "value": 7.0416
+        }
+       ]
+      }
+     ],
+     "label": "MH Att. per second",
+     "section": "Speed"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "202%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 202
+        }
+       ]
+      }
+     ],
+     "label": "OH Inc. Att. Speed",
+     "section": "Speed"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "20%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 19.999999999999996
+        }
+       ]
+      }
+     ],
+     "label": "OH More Att. Speed",
+     "section": "Speed"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "8.82",
+       "values": [
+        {
+         "key": "OffHand.Speed",
+         "precision": 2,
+         "value": 8.818319999999998
+        }
+       ]
+      }
+     ],
+     "label": "OH Att. per second",
+     "section": "Speed"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "7.83",
+       "values": [
+        {
+         "key": "Speed",
+         "precision": 2,
+         "value": 7.830440772967329
+        }
+       ]
+      }
+     ],
+     "label": "Attacks per second",
+     "section": "Speed"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "0.13s",
+       "values": [
+        {
+         "key": "Time",
+         "precision": 2,
+         "value": 0.12770673184225517
+        }
+       ]
+      }
+     ],
+     "label": "Attack time",
+     "section": "Speed"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "722%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 722
+        }
+       ]
+      }
+     ],
+     "label": "MH Inc. Crit Chance",
+     "section": "Crit"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "85.31%",
+       "values": [
+        {
+         "key": "MainHand.CritChance",
+         "precision": 2,
+         "value": 85.309
+        }
+       ]
+      }
+     ],
+     "label": "MH Crit Chance",
+     "section": "Crit"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "x 3.61",
+       "values": [
+        {
+         "key": "MainHand.CritMultiplier",
+         "precision": 2,
+         "value": 3.61
+        }
+       ]
+      }
+     ],
+     "label": "MH Crit Multiplier",
+     "section": "Crit"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "x 3.227",
+       "values": [
+        {
+         "key": "MainHand.CritEffect",
+         "precision": 3,
+         "value": 3.2265649
+        }
+       ]
+      }
+     ],
+     "label": "MH Crit Effect Mod",
+     "section": "Crit"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "722%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 722
+        }
+       ]
+      }
+     ],
+     "label": "OH Inc. Crit Chance",
+     "section": "Crit"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "79.67%",
+       "values": [
+        {
+         "key": "OffHand.CritChance",
+         "precision": 2,
+         "value": 79.67399999999999
+        }
+       ]
+      }
+     ],
+     "label": "OH Crit Chance",
+     "section": "Crit"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "x 3.61",
+       "values": [
+        {
+         "key": "OffHand.CritMultiplier",
+         "precision": 2,
+         "value": 3.61
+        }
+       ]
+      }
+     ],
+     "label": "OH Crit Multiplier",
+     "section": "Crit"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "x 3.079",
+       "values": [
+        {
+         "key": "OffHand.CritEffect",
+         "precision": 3,
+         "value": 3.0794913999999998
+        }
+       ]
+      }
+     ],
+     "label": "OH Crit Effect Mod",
+     "section": "Crit"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "2,652",
+       "values": [
+        {
+         "key": "MainHand.Accuracy",
+         "precision": 0,
+         "value": 2652
+        }
+       ]
+      }
+     ],
+     "label": "MH Accuracy",
+     "section": "HitChance"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "98%",
+       "values": [
+        {
+         "key": "MainHand.AccuracyHitChance",
+         "precision": 0,
+         "value": 98
+        }
+       ]
+      }
+     ],
+     "label": "MH Chance to Hit",
+     "section": "HitChance"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "2,652",
+       "values": [
+        {
+         "key": "OffHand.Accuracy",
+         "precision": 0,
+         "value": 2652
+        }
+       ]
+      }
+     ],
+     "label": "OH Accuracy",
+     "section": "HitChance"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "98%",
+       "values": [
+        {
+         "key": "OffHand.AccuracyHitChance",
+         "precision": 0,
+         "value": 98
+        }
+       ]
+      }
+     ],
+     "label": "OH Chance to Hit",
+     "section": "HitChance"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "120%",
+       "values": [
+        {
+         "key": "BlindEffectMod",
+         "precision": 0,
+         "value": 120
+        }
+       ]
+      }
+     ],
+     "label": "Effect of Blind",
+     "section": "HitChance"
+    }
+   ],
+   "skill": "Elemental Hit",
+   "totals": {
+    "AverageDamage": 376816.1382138011,
+    "CritChance": 82.4915,
+    "CritMultiplier": 3.61,
+    "FullDPS": 2958194.800576128,
+    "HitChance": 98,
+    "Speed": 7.830440772967329,
+    "TotalDPS": 2950636.45258144
    }
   }
  }
