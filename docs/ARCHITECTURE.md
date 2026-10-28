@@ -103,3 +103,7 @@ python -m venv .venv
 python tools/install_hooks.py
 ```
 The dev tools are pinned in `pyproject.toml` (decision 021).
+
+Start the app with `python -m comparison_app` (src/ on the path): it checks the settings (app/settings.py: `POB_DIR`,
+`COMPARISON_APP_BUILDS_DIR`, `COMPARISON_APP_HOME`), writes a fresh token to `userdata/api-token`, logs to
+`userdata/logs/` and serves http://127.0.0.1:8765/; PoB starts on the first comparison.
