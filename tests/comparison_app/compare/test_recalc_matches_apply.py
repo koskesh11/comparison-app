@@ -12,6 +12,7 @@ import json
 import xml.etree.ElementTree as ET  # the committed reference builds, not outside input
 
 import pytest
+from tests.comparison_app.conftest import stages
 
 from comparison_app.analysis.scenarios import Scenario
 from comparison_app.compare.recalc import NOT_TESTED, Change, Recalculated, recalculate
@@ -42,11 +43,15 @@ CASES = {
     ChangeKind.GROUP_COUNT: ("CoC EK Assa", Change(ChangeKind.GROUP_COUNT, 1, None, 2)),
     ChangeKind.MAIN_ACTIVE_SKILL: ("CoC EK Assa", Change(ChangeKind.MAIN_ACTIVE_SKILL, 1, None, 2)),
     ChangeKind.MINION_SKILL: ("Stone Golem", Change(ChangeKind.MINION_SKILL, 7, 4, 2)),
+    # a stage (decision 026): the saved copy is the stage made from the file (conftest.stages)
+    ChangeKind.STAGE: ("Elemental Hit Slayer", Change(ChangeKind.STAGE, 1, None, "2 Stone 90")),
 }
 
 
 def saved_copy(xml: str, change: Change) -> str:
     """The build with the change made the way PoB saves it."""
+    if change.kind is ChangeKind.STAGE:
+        return dict(stages(xml))[str(change.value)]
     root = ET.fromstring(xml)  # noqa: S314 - the committed reference builds, not outside input
     if change.kind is ChangeKind.MAIN_GROUP:
         element = root.find("Build")
@@ -69,14 +74,18 @@ def shown(result: Recalculated) -> tuple[object, str]:
 
 @pytest.mark.parametrize("kind", list(ChangeKind))
 def test_in_memory_change_matches_a_saved_change(
-    pob_session: PobSession, reference_xml: dict[str, str], variant_xml: dict[str, str], kind: ChangeKind
+    pob_session: PobSession,
+    reference_xml: dict[str, str],
+    variant_xml: dict[str, str],
+    variety_xml: dict[str, str],
+    kind: ChangeKind,
 ) -> None:
     if kind in NOT_TESTED:
         pytest.skip(NOT_TESTED[kind])
     if kind not in CASES:
         pytest.fail(f"write the M7 case for {kind} in CASES, or its reason in recalc.NOT_TESTED")
     name, change = CASES[kind]
-    xml = {**reference_xml, **variant_xml}[name]
+    xml = {**reference_xml, **variant_xml, **variety_xml}[name]
     pob_session.load_build(xml, name)
     as_saved = shown(recalculate(pob_session, Scenario.PINNACLE_BOSS, []))
     in_memory = shown(recalculate(pob_session, Scenario.PINNACLE_BOSS, [change]))

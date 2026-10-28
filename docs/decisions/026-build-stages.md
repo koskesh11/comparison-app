@@ -24,5 +24,8 @@ Elementalist) is saved with a mix: tree "90 self cast", items, skills and config
 
 ## Consequences
 - Everything else in decision 018 holds: no leave-out, no models, the settings of the chosen stage as saved.
-- The target's stage switch runs on PoB's CompareEntry, which has the same four tabs; that it switches the same way is
-  to be confirmed when it is built (card 112).
+- The target's stage switch runs on PoB's CompareEntry, which has the same four tabs: confirmed in card 112 (own and
+  target list the same stages; 6 of 6 switches equal the stage made from the file).
+- Technical calls (Claude, card 112): the list and the active stage are PoB's own SyncLoadouts on a stand-in dropdown;
+  the set lookup is mirrored from PoB's dropdown callback (Build.lua:359-398), because PoB keeps it in a closure over the
+  main build; every recalculation lets PoB settle over up to 3 frames, because a set switch flags the build again.

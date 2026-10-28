@@ -44,6 +44,8 @@ Every Lua function src/ may call. A name is registered once in Lua (`Rpc.registe
 | `target.release` | drops the target | the target only |
 | `compare.snapshot` | the skill settings of every group and gem (parts, stages, mines, minion, counts, the Calcs selection) every config box not at PoB's default, with PoB's set / unusable state, the number boxes the build can use left at 0, Custom Modifiers and config sets, of the build or the target (`which`) | no |
 | `compare.chain_with` | the chain of the build or the target (`which`) under a scenario (`boss`) with skill-setting changes (`changes`: ChangeKind, group, gem, value) applied in memory, and every number of the sidebar's output after them (decision 011) | temporary: the changes, the boss box and the Calcs tab pointed at the sidebar, put back and recalculated |
+| `build.stages` | the stages (PoB loadouts) of the build or the target (`which`) as PoB lists them, the active one (none for a build saved with mixed stages, decision 026) and the four sets' active titles | no |
+| `build.set_stage` | puts the build or the target (`which`) on a stage (`stage`, a title from `build.stages`) with PoB's own set switches and leaves it there for the comparison's reads; the file is never written | switches: loading again or switching back gives the saved state |
 
 ## Checks
 `python tools/check.py` runs the fast checks (the commit hook runs them too); `--full` adds the merge checks, which
@@ -101,3 +103,7 @@ python -m venv .venv
 python tools/install_hooks.py
 ```
 The dev tools are pinned in `pyproject.toml` (decision 021).
+
+Start the app with `python -m comparison_app` (src/ on the path): it checks the settings (app/settings.py: `POB_DIR`,
+`COMPARISON_APP_BUILDS_DIR`, `COMPARISON_APP_HOME`), writes a fresh token to `userdata/api-token`, logs to
+`userdata/logs/` and serves http://127.0.0.1:8765/; PoB starts on the first comparison.

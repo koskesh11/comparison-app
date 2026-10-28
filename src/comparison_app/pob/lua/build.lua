@@ -52,6 +52,11 @@ end
 -- refreshes the stat list (which sorts SkillDPS, Build.lua:1934) and the config tab's calculator. Calling those
 -- steps by hand skipped the last two (measured on CoC EK Assa: SkillDPS came back in another order). No path of the
 -- first app did the first three (task 102, area A Q5). Every change to a build goes through here.
+-- Up to SETTLE_FRAMES frames let a change that PoB rebuilds in two steps settle, as the GUI's next frames would:
+-- switching item and skill sets, and switching them back, flags the build again during the first rebuild
+-- (compare/stages.lua). A build that has not settled after them still fails.
+local SETTLE_FRAMES = 3
+
 local function recalculate(build)
 	if build == target then
 		-- The target is not in build mode, so no frame reaches it: PoB's compare tab recalculates an entry with
@@ -61,11 +66,14 @@ local function recalculate(build)
 	end
 	launch.promptMsg = nil
 	build.buildFlag = true
-	host.frame()
-	-- PoB catches an error inside a frame and shows it as a prompt (Launch.lua:112-118).
-	local prompt = launch.promptMsg
-	launch.promptMsg = nil
-	if prompt then error("PoB failed to recalculate: " .. promptText(prompt), 0) end
+	for _ = 1, SETTLE_FRAMES do
+		host.frame()
+		-- PoB catches an error inside a frame and shows it as a prompt (Launch.lua:112-118).
+		local prompt = launch.promptMsg
+		launch.promptMsg = nil
+		if prompt then error("PoB failed to recalculate: " .. promptText(prompt), 0) end
+		if not build.buildFlag then break end
+	end
 	if build.buildFlag or main.modes.BUILD ~= build then error("PoB did not recalculate the build", 0) end
 end
 
@@ -242,6 +250,7 @@ end
 
 return {
 	open = openBuild, summary = summary, withChanges = withChanges, keepFields = keepFields, setTarget = setTarget,
+	recalculate = recalculate,
 	-- every number of a PoB output, as build.state reads it
 	outputNumbers = function(output) return numbers(output, "", {}, STATE_DEPTH) end,
 }

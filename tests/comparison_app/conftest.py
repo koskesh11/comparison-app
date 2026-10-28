@@ -123,14 +123,29 @@ def variant_xml(reference_xml: dict[str, str]) -> dict[str, str]:
 
 @pytest.fixture(autouse=True)
 def no_network(request: pytest.FixtureRequest, monkeypatch: pytest.MonkeyPatch) -> None:
+    """S2: no test reaches the network. tests/comparison_app/intake may (pobb.in, through its fake opener); the app's
+    server tests may connect to their own server on 127.0.0.1, nothing else."""
     if "intake" in request.path.parts:
         return
+    loopback_only = request.path.name == "test_server.py" and "app" in request.path.parts
+    connect, create_connection = socket.socket.connect, socket.create_connection
 
     def refuse(*_args: object, **_kwargs: object) -> None:
         raise OSError("tests do not use the network (S2); only tests/comparison_app/intake may")
 
-    monkeypatch.setattr(socket.socket, "connect", refuse)
-    monkeypatch.setattr(socket, "create_connection", refuse)
+    def own_server_only(self: socket.socket, address: object) -> None:
+        if loopback_only and isinstance(address, tuple) and address[0] == "127.0.0.1":
+            connect(self, address)
+            return
+        refuse()
+
+    def create_own(address: object, *args: object, **kwargs: object) -> socket.socket:
+        if loopback_only and isinstance(address, tuple) and address[0] == "127.0.0.1":
+            return create_connection(address, *args, **kwargs)  # type: ignore[arg-type]
+        raise OSError("tests do not use the network (S2); only tests/comparison_app/intake may")
+
+    monkeypatch.setattr(socket.socket, "connect", own_server_only)
+    monkeypatch.setattr(socket, "create_connection", create_own)
 
 
 @pytest.fixture(scope="session")
@@ -146,12 +161,12 @@ def stages(xml: str) -> list[tuple[str, str]]:
     titles: set[str | None] | None = None
     for parent, child, _ in STAGE_SETS:
         node = root.find(parent)
-        found = {each.get("title") for each in node.findall(child)} if node is not None else set()
+        found = {each.get("title") or "Default" for each in node.findall(child)} if node is not None else set()
         titles = found if titles is None else titles & found
     result = []
     tree = root.find("Tree")
     for spec in tree.findall("Spec") if tree is not None else []:
-        title = spec.get("title")
+        title = spec.get("title") or "Default"  # PoB's name for an untitled set
         if not titles or title not in titles:
             continue
         copy = ET.fromstring(xml)  # noqa: S314 - the committed test builds
@@ -159,7 +174,7 @@ def stages(xml: str) -> list[tuple[str, str]]:
             node = copy.find(parent)
             assert node is not None
             kids = node.findall(child)
-            index = next(i for i, kid in enumerate(kids) if kid.get("title") == title)
+            index = next(i for i, kid in enumerate(kids) if (kid.get("title") or "Default") == title)
             node.set(active, str(index + 1) if parent == "Tree" else str(kids[index].get("id")))
         result.append((str(title), ET.tostring(copy, encoding="unicode")))
     return result
