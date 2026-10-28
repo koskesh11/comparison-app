@@ -5,7 +5,9 @@
 local Rpc, Build = ...
 
 local CONFIG_OPTIONS = require("Modules.ConfigOptions") -- the list PoB's config tab is built from (ConfigTab.lua:12)
-local NUMBER_BOXES = { count = true, integer = true, float = true, countAllowZero = true } -- ConfigTab.lua:684
+-- Number boxes whose empty value is 0 (ConfigTab.lua:684). Not "countAllowZero": those are overrides, labelled
+-- "(if not maximum)", whose empty value is PoB's own (Inspiration Charges ConfigOptions.lua:939, Blood Charges :967).
+local NUMBER_BOXES = { count = true, integer = true, float = true }
 local GROUP_FIELDS = { "label", "displayLabel", "slot", "source", "enabled", "includeInFullDPS", "groupCount",
 	"mainActiveSkill", "mainActiveSkillCalcs" }
 local GEM_FIELDS = { "nameSpec", "enabled", "enableGlobal1", "enableGlobal2", "level", "quality", "count",

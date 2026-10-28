@@ -10,7 +10,7 @@ import pytest
 from comparison_app.analysis.chain import read_chain
 from comparison_app.analysis.scenarios import Scenario
 from comparison_app.compare.target import open_target, release_target
-from comparison_app.errors import NoTargetLoaded, TargetLoadFailed
+from comparison_app.errors import BuildLoadFailed, NoTargetLoaded, TargetLoadFailed
 from comparison_app.pob.session import PobSession
 
 pytestmark = pytest.mark.pob
@@ -35,6 +35,14 @@ def test_the_targets_chain_is_the_chain_of_the_same_build_as_yours(
     assert (opened.summary.main_skill, opened.sha256) == (yours.skill, hashlib.sha256(xml.encode()).hexdigest())
     assert read_chain(session, Scenario.PINNACLE_BOSS, "target") == yours
     assert read_chain(session, Scenario.PINNACLE_BOSS) == worb
+
+
+def test_the_target_is_read_with_no_build_of_yours_open(session: PobSession, reference_xml: dict[str, str]) -> None:
+    """The boss value is checked against the target's own box list, not your build's (review 111, finding 11)."""
+    with pytest.raises(BuildLoadFailed):
+        session.load_build(reference_xml["Worb"][:500], "broken")  # leaves no build of yours open
+    open_target(session, reference_xml["Worb"], "Worb")
+    assert read_chain(session, Scenario.PINNACLE_BOSS, "target").skill == "Winter Orb"
 
 
 def test_a_target_pob_cannot_open_leaves_none(session: PobSession, reference_xml: dict[str, str]) -> None:

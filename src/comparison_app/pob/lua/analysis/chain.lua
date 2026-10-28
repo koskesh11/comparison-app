@@ -213,5 +213,8 @@ local function readChain(build)
 end
 
 Rpc.register("analysis.chain", function(request)
-	return Build.withChanges({ Scenario.boss(request.boss), calcsOnSidebar }, readChain, request.which)
+	return Build.withChanges({ Scenario.boss(request.boss, request.which), calcsOnSidebar }, readChain, request.which)
 end)
+
+-- For compare/changes.lua: the same read with the owner's changes applied first.
+return { calcsOnSidebar = calcsOnSidebar, read = readChain }

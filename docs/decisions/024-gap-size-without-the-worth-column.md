@@ -31,4 +31,7 @@ measure of a gap's size that uses only PoB's numbers.
 - Steps that are not a factor (for example a crit chance below 100 % that feeds the crit effect) are grouped by the
   factor PoB derives from them (the crit effect), not by their own numbers; they keep their own rows for reading.
 - A gap is first-order: two gaps do not add up exactly to the DPS difference. The combined total of the 3 % group is
-  the product of its factors minus one, which is exact for the steps it holds.
+  the product of its factors minus one; for a dual-wield attack the two hands' products are averaged first, as PoB
+  averages the hands' damage (CalcOffence.lua:2068-2073; review 111, finding 3: multiplying both hands counted a 2 %
+  gap on each hand as 4 %). It is exact for one hand's steps; with two hands, speed steps are averaged too, where
+  PoB takes the harmonic mean, so the total stays first-order there.

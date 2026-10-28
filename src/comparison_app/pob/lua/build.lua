@@ -242,4 +242,6 @@ end
 
 return {
 	open = openBuild, summary = summary, withChanges = withChanges, keepFields = keepFields, setTarget = setTarget,
+	-- every number of a PoB output, as build.state reads it
+	outputNumbers = function(output) return numbers(output, "", {}, STATE_DEPTH) end,
 }

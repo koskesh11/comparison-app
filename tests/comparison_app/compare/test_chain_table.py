@@ -36,7 +36,7 @@ def test_a_build_against_itself_has_no_gap(chains: dict[str, Chain]) -> None:
     assert table.small.total == 0.0
 
 
-def edited(data: dict[str, Any], label: str, column: str, scale: float, add: float = 0.0) -> None:
+def edited(data: dict[str, Any], label: str, column: str | None, scale: float, add: float = 0.0) -> None:
     (row,) = [row for row in data["rows"] if row["label"] == label]
     (cell,) = [cell for cell in row["cells"] if cell.get("column") == column]
     for value in cell["values"]:
@@ -89,3 +89,18 @@ def test_a_spell_lines_up_with_an_attacks_main_hand(chains: dict[str, Chain]) ->
     speed = step(table, "Hit Rate")  # Worb's speed step; the target's is its main hand's attacks per second
     assert speed.gap is not None
     assert [each.label for each in every_step(table) if "Att. per second" in each.label] == []
+
+
+@pytest.mark.parametrize(("hands", "total"), [(("MH", "OH"), 0.02), (("MH",), 0.01)])
+def test_the_hands_of_a_dual_wield_attack_are_averaged(hands: tuple[str, ...], total: float) -> None:
+    """Elemental Hit Slayer dual wields and PoB averages the hands' damage (CalcOffence.lua:2068-2073): 2 % more crit
+    effect on both hands is 2 % in total, not 4 % (review 111, finding 3); on the main hand only it is about 1 %."""
+    data = json.loads(RECORDED.read_text(encoding="utf-8"))["chains"]["Elemental Hit Slayer"]
+    yours = parse_chain(data)
+    for hand in hands:
+        edited(data, f"{hand} Crit Effect Mod", None, 1.02)
+    table = build_table(yours, parse_chain(data))
+    assert {(each.label, each.hand) for each in table.small.steps if each.gap} == {
+        (f"{hand} Crit Effect Mod", hand) for hand in hands
+    }
+    assert table.small.total == pytest.approx(total)

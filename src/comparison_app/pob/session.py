@@ -44,9 +44,9 @@ class SkillDps:
     def from_wire(cls, value: object) -> "SkillDps":
         data = wire.table(value)
         part = wire.text(data.get("part"))
-        return cls(
-            str(data["name"]), part or None, wire.number(data.get("count")) or 1.0, wire.number(data.get("dps")) or 0.0
-        )
+        count, dps = wire.number(data.get("count")), wire.number(data.get("dps"))
+        # a count of 0 stays 0, as PoB keeps it (SkillsTab.lua:376, Calcs.lua:119-120); only a missing one is 1
+        return cls(str(data["name"]), part or None, 1.0 if count is None else count, 0.0 if dps is None else dps)
 
 
 @dataclass(frozen=True)

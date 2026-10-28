@@ -2,7 +2,7 @@
 
 - Date: 2026-10-27 (task 102 review)
 - Decided by: Claude (the owner said "just do"; he approved the task 102 report with this call in it)
-- Status: accepted
+- Status: accepted; the choice of stage is superseded by 026 (2026-10-28)
 - Scope: the analyzer in milestone 1, and the src/ tests that use the reference builds
 
 ## Context

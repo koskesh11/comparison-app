@@ -18,6 +18,7 @@ class Endpoint(StrEnum):
     TARGET_LOAD = "target.load"
     TARGET_RELEASE = "target.release"
     COMPARE_SNAPSHOT = "compare.snapshot"
+    COMPARE_CHAIN_WITH = "compare.chain_with"
 
 
 class Effect(StrEnum):
@@ -38,11 +39,23 @@ EFFECTS: Mapping[Endpoint, Effect] = {
     Endpoint.TARGET_LOAD: Effect.TARGET,
     Endpoint.TARGET_RELEASE: Effect.TARGET,
     Endpoint.COMPARE_SNAPSHOT: Effect.READ,
+    Endpoint.COMPARE_CHAIN_WITH: Effect.TEMPORARY,
 }
 
 
 class ChangeKind(StrEnum):
     """Reversible changes to a build in memory (the "recalculate with the target's setting" button, decision 011).
 
-    Empty until milestone 1 adds the first one; tests/comparison_app/compare/test_recalc_matches_apply.py runs each.
+    Each is one field PoB saves and loads (SkillsTab.lua:447-513; pob/lua/compare/changes.lua);
+    tests/comparison_app/compare/test_recalc_matches_apply.py runs each (M7).
     """
+
+    SKILL_PART = "gem.skill_part"  # a gem's skill part (Winter Orb channelling or release)
+    STAGE_COUNT = "gem.stage_count"
+    MINE_COUNT = "gem.mine_count"
+    MINION = "gem.minion"  # which minion a gem summons
+    MINION_SKILL = "gem.minion_skill"
+    GEM_COUNT = "gem.count"  # a gem's count in Full DPS
+    GROUP_COUNT = "group.count"  # a group's count in Full DPS (Calcs.lua:119-120)
+    MAIN_ACTIVE_SKILL = "group.main_active_skill"  # the group's active skill the sidebar shows
+    MAIN_GROUP = "build.main_group"  # the sidebar's main skill group

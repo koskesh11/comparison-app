@@ -44,10 +44,20 @@ def chain_without_a_boss(session: PobSession) -> tuple[Any, Any]:
     )
 
 
+def chain_with_a_change(session: PobSession) -> tuple[Any, Any]:
+    """The main group counted twice in Full DPS (both reference builds include it), against no change."""
+    main = session.call(Endpoint.COMPARE_SNAPSHOT)["mainSocketGroup"]
+    change = {"kind": "group.count", "group": main, "value": 2}
+    return session.call(Endpoint.COMPARE_CHAIN_WITH, {"boss": "Pinnacle", "changes": [change]}), session.call(
+        Endpoint.COMPARE_CHAIN_WITH, {"boss": "Pinnacle", "changes": []}
+    )
+
+
 # Endpoint -> (its reply while the build is changed, the same read of the build as saved)
 TEMPORARY_CASES: dict[Endpoint, Callable[[PobSession], tuple[Any, Any]]] = {
     Endpoint.ANALYSIS_SUMMARY: summary_without_a_boss,
     Endpoint.ANALYSIS_CHAIN: chain_without_a_boss,
+    Endpoint.COMPARE_CHAIN_WITH: chain_with_a_change,
 }
 
 

@@ -45,3 +45,4 @@ session in which the owner made the call.
 | [023](023-chain-reads-the-calcs-tab.md) | The chain reads PoB's Calcs tab, pointed at the main skill | damage chain |
 | [024](024-gap-size-without-the-worth-column.md) | The size of a chain gap, before the worth column exists | damage chain |
 | [025](025-the-repo-goes-public.md) | The repo goes public | the GitHub repo |
+| [026](026-build-stages.md) | Build stages: each build as saved, or a stage the owner picks | loading builds, the page |

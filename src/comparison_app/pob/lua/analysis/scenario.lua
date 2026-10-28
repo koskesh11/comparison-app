@@ -16,10 +16,11 @@ local function isBossValue(build, value)
 	return false
 end
 
--- The change that sets the box to `value`; its undo puts back exactly what was there (an unset box stays unset) and
--- lets PoB's BuildModList apply it again, which also resets the placeholders the box sets (ConfigOptions.lua:2086-2100).
-local function boss(value)
-	if type(value) ~= "string" or not isBossValue(Build.open(), value) then
+-- The change that sets the box to `value` on the build `which` names; its undo puts back exactly what was there (an
+-- unset box stays unset) and lets PoB's BuildModList apply it again, which also resets the placeholders the box sets
+-- (ConfigOptions.lua:2086-2100). The value is checked against that build's own box list.
+local function boss(value, which)
+	if type(value) ~= "string" or not isBossValue(Build.open(which), value) then
 		Rpc.fail("BadRequest", "the scenario needs one of PoB's values for " .. BOSS_BOX .. ", got " .. tostring(value))
 	end
 	return function(build)
@@ -35,7 +36,7 @@ local function boss(value)
 end
 
 Rpc.register("analysis.summary", function(request)
-	return Build.withChanges({ boss(request.boss) }, Build.summary, request.which)
+	return Build.withChanges({ boss(request.boss, request.which) }, Build.summary, request.which)
 end)
 
 return { boss = boss }

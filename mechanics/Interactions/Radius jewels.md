@@ -68,3 +68,18 @@ not_verified:
 open_questions:
   - "Light of Meaning is on Cold Damage (variant 10) in the Worb file while the DB default is Life: the variant costs 16.2% DPS vs +4.6% EHP in PoB. Is the Cold Damage roll intended (for example bought for DPS)? Only the user can say"
 ```
+
+## Owner, 2026-10-28: which points a jewel costs (draft, to verify)
+For tree suggestions that move at most 20 points (grilling 2026-10-28, docs/history), the owner says:
+- Nodes Unnatural Instinct grants without allocating them cost no points (PoB text: "Grants all bonuses of Unallocated
+  Small Passive Skills in Radius", Data/Uniques/jewel.lua:787-792).
+- Where Unnatural Instinct's radius overlaps The Light of Meaning's (especially Scion's start area), the nodes Unnatural
+  Instinct grants there also cost no points, and get The Light of Meaning's bonus.
+- Might of the Meek raises the effect of non-keystone passives in radius, but they must still be allocated, so they cost
+  points (jewel.lua:450-454).
+- Intuitive Leap and Thread of Hope let nodes be taken without a path, but every node taken costs a point
+  (jewel.lua:334-337, 776-781).
+
+Open check: this note records that PoB's Light of Meaning bonus counts *allocated* nodes in radius
+(CalcSetup.lua:848-849, above). Whether PoB gives the bonus to nodes Unnatural Instinct grants unallocated is not
+measured; if PoB's numbers disagree with the owner's second point, ask him (decision 013).

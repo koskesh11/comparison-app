@@ -24,6 +24,7 @@ class Match(StrEnum):
 @dataclass(frozen=True)
 class Setup:
     group: int
+    skill_index: int  # 1-based among the group's active skills, as PoB's mainActiveSkill counts them
     skill: str
     part: str | None
     stages: float | None  # as PoB applies it: unset is the maximum, more is cut to it (CalcActiveSkill.lua:649-651)
@@ -43,17 +44,20 @@ class SkillSettings:
     yours: Setup | None
     target: Setup | None
     differing: tuple[str, ...]  # the settings that differ between the two main setups (names from SETTINGS)
-    target_groups: tuple[int, ...]  # the target's groups the owner can pick (OTHER_GROUP, DIFFERENT_SKILL)
+    # (group, active skill) of the target the owner can pick (OTHER_GROUP, DIFFERENT_SKILL): a group can hold several
+    # active skills (CoC EK Assa's group 1: Ethereal Knives and Cyclone), so the group alone does not name one
+    target_choices: tuple[tuple[int, int], ...]
     message: str
 
 
-def _setup(group: Group, skill: ActiveSkill) -> Setup:
+def _setup(group: Group, index: int, skill: ActiveSkill) -> Setup:
     gem = group.gems[skill.gem - 1] if skill.gem and skill.gem <= len(group.gems) else None
     stages = gem.stages if gem and gem.stages is not None else skill.stages_max
     if stages is not None and skill.stages_max is not None:
         stages = min(stages, skill.stages_max)  # PoB applies at most the maximum (CalcActiveSkill.lua:651)
     return Setup(
         group.index,
+        index,
         skill.name,
         skill.part,
         stages,
@@ -67,18 +71,25 @@ def _setup(group: Group, skill: ActiveSkill) -> Setup:
 
 def _main(snapshot: Snapshot) -> Setup | None:
     skill = snapshot.main_skill()
-    return _setup(snapshot.groups[snapshot.main_group - 1], skill) if skill else None
+    if skill is None:
+        return None
+    group = snapshot.groups[snapshot.main_group - 1]
+    return _setup(group, group.main_active_skill, skill)
 
 
 def _setups(snapshot: Snapshot, name: str) -> list[Setup]:
     """Every setup of the skill in an enabled group."""
     return [
-        _setup(group, skill)
+        _setup(group, index, skill)
         for group in snapshot.groups
         if group.enabled
-        for skill in group.skills
+        for index, skill in enumerate(group.skills, start=1)
         if skill.name == name
     ]
+
+
+def _places(setups: list[Setup]) -> str:
+    return ", ".join(f"group {setup.group} (skill {setup.skill_index})" for setup in setups)
 
 
 def compare_settings(yours: Snapshot, target: Snapshot) -> SkillSettings:
@@ -86,17 +97,19 @@ def compare_settings(yours: Snapshot, target: Snapshot) -> SkillSettings:
     if mine is None or theirs is None:
         return SkillSettings(Match.DIFFERENT_SKILL, mine, theirs, (), (), "One of the builds has no main skill.")
     if mine.skill != theirs.skill:
-        groups = tuple(setup.group for setup in _setups(target, mine.skill))
-        where = f" It has {mine.skill} in group(s) {', '.join(map(str, groups))}." if groups else ""
-        message = f"The target's main skill is {theirs.skill}, yours is {mine.skill}.{where} Pick the target's group."
-        return SkillSettings(Match.DIFFERENT_SKILL, mine, theirs, (), groups, message)
+        found = _setups(target, mine.skill)
+        where = f" It has {mine.skill} in {_places(found)}." if found else ""
+        message = f"The target's main skill is {theirs.skill}, yours is {mine.skill}.{where} Pick the target's skill."
+        choices = tuple((setup.group, setup.skill_index) for setup in found)
+        return SkillSettings(Match.DIFFERENT_SKILL, mine, theirs, (), choices, message)
     differing = tuple(name for name in SETTINGS if getattr(mine, name) != getattr(theirs, name))
     if not differing:
         return SkillSettings(Match.SAME, mine, theirs, (), (), "")
-    same = [setup.group for setup in _setups(target, mine.skill) if setup.settings() == mine.settings()]
+    same = [setup for setup in _setups(target, mine.skill) if setup.settings() == mine.settings()]
     if same:
-        message = f"The target runs your {mine.skill} setup in group {same[0]}, not in its main group. Pick that group."
-        return SkillSettings(Match.OTHER_GROUP, mine, theirs, differing, tuple(same), message)
+        message = f"The target runs your {mine.skill} setup in {_places(same[:1])}, not as its main skill. Pick it."
+        choices = tuple((setup.group, setup.skill_index) for setup in same)
+        return SkillSettings(Match.OTHER_GROUP, mine, theirs, differing, choices, message)
     message = (
         f"{mine.skill} is set up differently ({', '.join(differing)}), so the chain would compare different things. "
         "Recalculate your build with the target's setting to see it."

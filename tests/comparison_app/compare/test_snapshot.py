@@ -60,3 +60,12 @@ def test_the_targets_snapshot_is_the_same_builds_own(session: PobSession, refere
     session.load_build(reference_xml["Worb"], "Worb")
     open_target(session, reference_xml["CoC EK Assa"], "CoC EK Assa")
     assert read_snapshot(session, "target") == yours
+
+
+def test_an_empty_override_box_is_not_left_at_zero(session: PobSession, variety_xml: dict[str, str]) -> None:
+    """Elemental Hit Slayer leaves "# of Inspiration Charges (if not maximum)" empty: PoB then uses the maximum, so it
+    is no "unset" box; "# of Enemies Killed Recently" empty is 0, so it is (ConfigOptions.lua:939, 1284)."""
+    session.load_build(variety_xml["Elemental Hit Slayer"], "Elemental Hit Slayer")
+    unset = {box.var for box in read_snapshot(session).boxes if box.state == "unset"}
+    assert "overrideInspirationCharges" not in unset
+    assert "multiplierKilledRecently" in unset
