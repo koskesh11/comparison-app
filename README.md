@@ -51,9 +51,9 @@ Some tests need a local PoB install and are skipped without one. Details: [docs/
 
 ## Layout
 
-- `src/autobuilder/` - the app: `pob/` (PoB and its Lua), `analysis/` (one build), `compare/` (two builds),
+- `src/comparison_app/` - the app: `pob/` (PoB and its Lua), `analysis/` (one build), `compare/` (two builds),
   `intake/` (loading builds), `app/` (presentation).
-- `tests/autobuilder/` - its tests; the two reference builds are in `tests/autobuilder/fixtures/builds/`.
+- `tests/comparison_app/` - its tests; the two reference builds are in `tests/comparison_app/fixtures/builds/`.
 - `docs/` - roadmap, decisions, architecture, how a report is judged, the mockup.
 - `mechanics/` - notes on game mechanics (an Obsidian vault).
 - `tools/` - the checks and the merge script.

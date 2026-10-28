@@ -1,0 +1,2048 @@
+{
+ "about": "analysis.chain wire replies recorded from PoB 2.67.2 on 2026-10-28 (Pinnacle Boss), sources dropped to keep the file small; Cyclone is CoC EK Assa with Cyclone as main skill (conftest variant_xml). tests/comparison_app/compare/test_chain_table.py reads them.",
+ "chains": {
+  "Worb": {
+   "hits": [
+    {
+     "AverageHit": 222512.22158069594,
+     "CritEffect": 4.885024,
+     "byType": {
+      "Chaos": 0,
+      "Cold": 45549.872749999995,
+      "Fire": 0,
+      "Lightning": 0,
+      "Physical": 0
+     }
+    }
+   ],
+   "part": "Channelling",
+   "rows": [
+    {
+     "cells": [
+      {
+       "column": "Physical",
+       "sources": [],
+       "text": "0",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Lightning",
+       "sources": [],
+       "text": "3",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 3
+        }
+       ]
+      },
+      {
+       "column": "Cold",
+       "sources": [],
+       "text": "40",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 40
+        }
+       ]
+      },
+      {
+       "column": "Fire",
+       "sources": [],
+       "text": "10",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 10
+        }
+       ]
+      },
+      {
+       "column": "Chaos",
+       "sources": [],
+       "text": "0",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      }
+     ],
+     "label": "Added Min",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "Physical",
+       "sources": [],
+       "text": "0",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Lightning",
+       "sources": [],
+       "text": "44",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 44
+        }
+       ]
+      },
+      {
+       "column": "Cold",
+       "sources": [],
+       "text": "61",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 61
+        }
+       ]
+      },
+      {
+       "column": "Fire",
+       "sources": [],
+       "text": "14",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 14
+        }
+       ]
+      },
+      {
+       "column": "Chaos",
+       "sources": [],
+       "text": "0",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      }
+     ],
+     "label": "Added Max",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "All Types",
+       "sources": [],
+       "text": "386%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 386
+        }
+       ]
+      },
+      {
+       "column": "Physical",
+       "sources": [],
+       "text": "0%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Lightning",
+       "sources": [],
+       "text": "207%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 207
+        }
+       ]
+      },
+      {
+       "column": "Cold",
+       "sources": [],
+       "text": "628%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 628
+        }
+       ]
+      },
+      {
+       "column": "Fire",
+       "sources": [],
+       "text": "240%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 240
+        }
+       ]
+      },
+      {
+       "column": "Chaos",
+       "sources": [],
+       "text": "0%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      }
+     ],
+     "label": "Total Increased",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "All Types",
+       "sources": [],
+       "text": "95%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 94.88000000000001
+        }
+       ]
+      },
+      {
+       "column": "Physical",
+       "sources": [],
+       "text": "0%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Lightning",
+       "sources": [],
+       "text": "0%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Cold",
+       "sources": [],
+       "text": "0%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Fire",
+       "sources": [],
+       "text": "0%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Chaos",
+       "sources": [],
+       "text": "0%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      }
+     ],
+     "label": "Total More",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "Physical",
+       "sources": [],
+       "text": "x 0",
+       "values": [
+        {
+         "key": "PhysicalEffMult",
+         "precision": 3
+        }
+       ]
+      },
+      {
+       "column": "Lightning",
+       "sources": [],
+       "text": "x 0",
+       "values": [
+        {
+         "key": "LightningEffMult",
+         "precision": 3
+        }
+       ]
+      },
+      {
+       "column": "Cold",
+       "sources": [],
+       "text": "x 3.599",
+       "values": [
+        {
+         "key": "ColdEffMult",
+         "precision": 3,
+         "value": 3.5994999999999995
+        }
+       ]
+      },
+      {
+       "column": "Fire",
+       "sources": [],
+       "text": "x 0",
+       "values": [
+        {
+         "key": "FireEffMult",
+         "precision": 3
+        }
+       ]
+      },
+      {
+       "column": "Chaos",
+       "sources": [],
+       "text": "x 0",
+       "values": [
+        {
+         "key": "ChaosEffMult",
+         "precision": 3
+        }
+       ]
+      }
+     ],
+     "label": "Effective DPS Mod",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "All Types",
+       "sources": [],
+       "text": "36,416 to 54,684",
+       "values": [
+        {
+         "key": "TotalMin",
+         "precision": 0,
+         "value": 36416.1415
+        },
+        {
+         "key": "TotalMax",
+         "precision": 0,
+         "value": 54683.60399999999
+        }
+       ]
+      },
+      {
+       "column": "Physical",
+       "sources": [],
+       "text": "0 to 0",
+       "values": [
+        {
+         "key": "PhysicalMin",
+         "precision": 0,
+         "value": 0
+        },
+        {
+         "key": "PhysicalMax",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Lightning",
+       "sources": [],
+       "text": "0 to 0",
+       "values": [
+        {
+         "key": "LightningMin",
+         "precision": 0,
+         "value": 0
+        },
+        {
+         "key": "LightningMax",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Cold",
+       "sources": [],
+       "text": "36,416 to 54,684",
+       "values": [
+        {
+         "key": "ColdMin",
+         "precision": 0,
+         "value": 36416.1415
+        },
+        {
+         "key": "ColdMax",
+         "precision": 0,
+         "value": 54683.60399999999
+        }
+       ]
+      },
+      {
+       "column": "Fire",
+       "sources": [],
+       "text": "0 to 0",
+       "values": [
+        {
+         "key": "FireMin",
+         "precision": 0,
+         "value": 0
+        },
+        {
+         "key": "FireMax",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Chaos",
+       "sources": [],
+       "text": "0 to 0",
+       "values": [
+        {
+         "key": "ChaosMin",
+         "precision": 0,
+         "value": 0
+        },
+        {
+         "key": "ChaosMax",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      }
+     ],
+     "label": "Skill Hit Damage",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "All Types",
+       "sources": [],
+       "text": "222,512.2",
+       "values": [
+        {
+         "key": "AverageHit",
+         "precision": 1,
+         "value": 222512.22158069594
+        }
+       ]
+      }
+     ],
+     "label": "Skill Average Hit",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "All Types",
+       "sources": [],
+       "text": "1,435,203.8",
+       "values": [
+        {
+         "key": "TotalDPS",
+         "precision": 1,
+         "value": 1435203.829195489
+        }
+       ]
+      }
+     ],
+     "label": "Skill DPS",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "130%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 130
+        }
+       ]
+      }
+     ],
+     "label": "Inc. Cast Speed",
+     "section": "Speed"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "0%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      }
+     ],
+     "label": "More Cast Speed",
+     "section": "Speed"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "9.57",
+       "values": [
+        {
+         "key": "Speed",
+         "precision": 2,
+         "value": 9.568
+        }
+       ]
+      }
+     ],
+     "label": "Casts per second",
+     "section": "Speed"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "0.1s",
+       "values": [
+        {
+         "key": "Time",
+         "precision": 2,
+         "value": 0.10451505016722408
+        }
+       ]
+      }
+     ],
+     "label": "Cast time",
+     "section": "Speed"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "6.45",
+       "values": [
+        {
+         "key": "HitSpeed",
+         "precision": 2,
+         "value": 6.45
+        }
+       ]
+      }
+     ],
+     "label": "Hit Rate",
+     "section": "Speed"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "883%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 883
+        }
+       ]
+      }
+     ],
+     "label": "Inc. Crit Chance",
+     "section": "Crit"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "93.39%",
+       "values": [
+        {
+         "key": "CritChance",
+         "precision": 2,
+         "value": 93.39
+        }
+       ]
+      }
+     ],
+     "label": "Crit Chance",
+     "section": "Crit"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "x 5.16",
+       "values": [
+        {
+         "key": "CritMultiplier",
+         "precision": 2,
+         "value": 5.16
+        }
+       ]
+      }
+     ],
+     "label": "Crit Multiplier",
+     "section": "Crit"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "x 4.885",
+       "values": [
+        {
+         "key": "CritEffect",
+         "precision": 3,
+         "value": 4.885024
+        }
+       ]
+      }
+     ],
+     "label": "Crit Effect Mod",
+     "section": "Crit"
+    }
+   ],
+   "skill": "Winter Orb",
+   "totals": {
+    "AverageDamage": 222512.22158069594,
+    "CritChance": 93.39,
+    "CritMultiplier": 5.16,
+    "FullDPS": 7176019.145977445,
+    "HitChance": 100,
+    "HitSpeed": 6.45,
+    "Speed": 9.568,
+    "TotalDPS": 1435203.829195489
+   }
+  },
+  "CoC EK Assa": {
+   "hits": [
+    {
+     "AverageHit": 865474.3914960001,
+     "CritEffect": 9.74,
+     "byType": {
+      "Chaos": 0,
+      "Cold": 0,
+      "Fire": 0,
+      "Lightning": 0,
+      "Physical": 88857.74040000001
+     }
+    }
+   ],
+   "rows": [
+    {
+     "cells": [
+      {
+       "column": "Physical",
+       "sources": [],
+       "text": "66",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 66
+        }
+       ]
+      },
+      {
+       "column": "Lightning",
+       "sources": [],
+       "text": "0",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Cold",
+       "sources": [],
+       "text": "0",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Fire",
+       "sources": [],
+       "text": "0",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Chaos",
+       "sources": [],
+       "text": "25",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 25
+        }
+       ]
+      }
+     ],
+     "label": "Added Min",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "Physical",
+       "sources": [],
+       "text": "77",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 77
+        }
+       ]
+      },
+      {
+       "column": "Lightning",
+       "sources": [],
+       "text": "0",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Cold",
+       "sources": [],
+       "text": "0",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Fire",
+       "sources": [],
+       "text": "0",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Chaos",
+       "sources": [],
+       "text": "33",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 33
+        }
+       ]
+      }
+     ],
+     "label": "Added Max",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "All Types",
+       "sources": [],
+       "text": "304%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 304
+        }
+       ]
+      },
+      {
+       "column": "Physical",
+       "sources": [],
+       "text": "307%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 307
+        }
+       ]
+      },
+      {
+       "column": "Lightning",
+       "sources": [],
+       "text": "-58%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": -58
+        }
+       ]
+      },
+      {
+       "column": "Cold",
+       "sources": [],
+       "text": "-58%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": -58
+        }
+       ]
+      },
+      {
+       "column": "Fire",
+       "sources": [],
+       "text": "-58%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": -58
+        }
+       ]
+      },
+      {
+       "column": "Chaos",
+       "sources": [],
+       "text": "0%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      }
+     ],
+     "label": "Total Increased",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "All Types",
+       "sources": [],
+       "text": "40%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 39.5
+        }
+       ]
+      },
+      {
+       "column": "Physical",
+       "sources": [],
+       "text": "67%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 66.8
+        }
+       ]
+      },
+      {
+       "column": "Lightning",
+       "sources": [],
+       "text": "0%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Cold",
+       "sources": [],
+       "text": "0%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Fire",
+       "sources": [],
+       "text": "0%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Chaos",
+       "sources": [],
+       "text": "0%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      }
+     ],
+     "label": "Total More",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "Physical",
+       "sources": [],
+       "text": "x 2.548",
+       "values": [
+        {
+         "key": "PhysicalEffMult",
+         "precision": 3,
+         "value": 2.5476
+        }
+       ]
+      },
+      {
+       "column": "Lightning",
+       "sources": [],
+       "text": "x 0",
+       "values": [
+        {
+         "key": "LightningEffMult",
+         "precision": 3
+        }
+       ]
+      },
+      {
+       "column": "Cold",
+       "sources": [],
+       "text": "x 0",
+       "values": [
+        {
+         "key": "ColdEffMult",
+         "precision": 3
+        }
+       ]
+      },
+      {
+       "column": "Fire",
+       "sources": [],
+       "text": "x 0",
+       "values": [
+        {
+         "key": "FireEffMult",
+         "precision": 3
+        }
+       ]
+      },
+      {
+       "column": "Chaos",
+       "sources": [],
+       "text": "x 0",
+       "values": [
+        {
+         "key": "ChaosEffMult",
+         "precision": 3
+        }
+       ]
+      }
+     ],
+     "label": "Effective DPS Mod",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "All Types",
+       "sources": [],
+       "text": "72,031 to 105,685",
+       "values": [
+        {
+         "key": "TotalMin",
+         "precision": 0,
+         "value": 72030.84240000001
+        },
+        {
+         "key": "TotalMax",
+         "precision": 0,
+         "value": 105684.63840000001
+        }
+       ]
+      },
+      {
+       "column": "Physical",
+       "sources": [],
+       "text": "72,031 to 105,685",
+       "values": [
+        {
+         "key": "PhysicalMin",
+         "precision": 0,
+         "value": 72030.84240000001
+        },
+        {
+         "key": "PhysicalMax",
+         "precision": 0,
+         "value": 105684.63840000001
+        }
+       ]
+      },
+      {
+       "column": "Lightning",
+       "sources": [],
+       "text": "0 to 0",
+       "values": [
+        {
+         "key": "LightningMin",
+         "precision": 0,
+         "value": 0
+        },
+        {
+         "key": "LightningMax",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Cold",
+       "sources": [],
+       "text": "0 to 0",
+       "values": [
+        {
+         "key": "ColdMin",
+         "precision": 0,
+         "value": 0
+        },
+        {
+         "key": "ColdMax",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Fire",
+       "sources": [],
+       "text": "0 to 0",
+       "values": [
+        {
+         "key": "FireMin",
+         "precision": 0,
+         "value": 0
+        },
+        {
+         "key": "FireMax",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Chaos",
+       "sources": [],
+       "text": "0 to 0",
+       "values": [
+        {
+         "key": "ChaosMin",
+         "precision": 0,
+         "value": 0
+        },
+        {
+         "key": "ChaosMax",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      }
+     ],
+     "label": "Skill Hit Damage",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "All Types",
+       "sources": [],
+       "text": "865,474.4",
+       "values": [
+        {
+         "key": "AverageHit",
+         "precision": 1,
+         "value": 865474.3914960001
+        }
+       ]
+      }
+     ],
+     "label": "Skill Average Hit",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "All Types",
+       "sources": [],
+       "text": "7,728,444.7",
+       "values": [
+        {
+         "key": "TotalDPS",
+         "precision": 1,
+         "value": 7728444.675609175
+        }
+       ]
+      }
+     ],
+     "label": "Skill DPS",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "10.1",
+       "values": [
+        {
+         "key": "TriggerRateCap",
+         "precision": 2,
+         "value": 10.1010101010101
+        }
+       ]
+      }
+     ],
+     "label": "Trigger Rate Cap",
+     "section": "Speed"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "8.92",
+       "values": [
+        {
+         "key": "EffectiveSourceRate",
+         "precision": 2,
+         "value": 8.9208
+        }
+       ]
+      }
+     ],
+     "label": "Eff. Source Rate",
+     "section": "Speed"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "8.93",
+       "values": [
+        {
+         "key": "SkillTriggerRate",
+         "precision": 2,
+         "value": 8.9297208
+        }
+       ]
+      }
+     ],
+     "label": "Skill Trigger Rate",
+     "section": "Speed"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "988%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 988
+        }
+       ]
+      }
+     ],
+     "label": "Inc. Crit Chance",
+     "section": "Crit"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "100%",
+       "values": [
+        {
+         "key": "CritChance",
+         "precision": 2,
+         "value": 100
+        }
+       ]
+      }
+     ],
+     "label": "Crit Chance",
+     "section": "Crit"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "x 9.74",
+       "values": [
+        {
+         "key": "CritMultiplier",
+         "precision": 2,
+         "value": 9.74
+        }
+       ]
+      }
+     ],
+     "label": "Crit Multiplier",
+     "section": "Crit"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "x 2",
+       "values": [
+        {
+         "key": "CritBifurcates",
+         "precision": 2,
+         "value": 2
+        }
+       ]
+      }
+     ],
+     "label": "Crit Bifurcates",
+     "section": "Crit"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "x 9.74",
+       "values": [
+        {
+         "key": "CritEffect",
+         "precision": 3,
+         "value": 9.74
+        }
+       ]
+      }
+     ],
+     "label": "Crit Effect Mod",
+     "section": "Crit"
+    }
+   ],
+   "skill": "Ethereal Knives",
+   "totals": {
+    "AverageDamage": 865474.3914960001,
+    "CritChance": 100,
+    "CritMultiplier": 9.74,
+    "FullDPS": 15136639.020573443,
+    "HitChance": 100,
+    "Speed": 8.9297208,
+    "TotalDPS": 7728444.675609175
+   }
+  },
+  "Cyclone": {
+   "hits": [
+    {
+     "AverageHit": 7008.180102000001,
+     "CritEffect": 4.970000000000001,
+     "byType": {
+      "Chaos": 0,
+      "Cold": 0,
+      "Fire": 0,
+      "Lightning": 0,
+      "Physical": 1410.0966
+     },
+     "hand": "MainHand"
+    }
+   ],
+   "rows": [
+    {
+     "cells": [
+      {
+       "column": "Physical",
+       "sources": [],
+       "text": "10",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 10
+        }
+       ]
+      },
+      {
+       "column": "Lightning",
+       "sources": [],
+       "text": "0",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Cold",
+       "sources": [],
+       "text": "0",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Fire",
+       "sources": [],
+       "text": "0",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Chaos",
+       "sources": [],
+       "text": "0",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      }
+     ],
+     "label": "Added Min",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "Physical",
+       "sources": [],
+       "text": "15",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 15
+        }
+       ]
+      },
+      {
+       "column": "Lightning",
+       "sources": [],
+       "text": "0",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Cold",
+       "sources": [],
+       "text": "0",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Fire",
+       "sources": [],
+       "text": "0",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Chaos",
+       "sources": [],
+       "text": "0",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      }
+     ],
+     "label": "Added Max",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "All Types",
+       "sources": [],
+       "text": "106%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 106
+        }
+       ]
+      },
+      {
+       "column": "Physical",
+       "sources": [],
+       "text": "342%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 342
+        }
+       ]
+      },
+      {
+       "column": "Lightning",
+       "sources": [],
+       "text": "-58%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": -58
+        }
+       ]
+      },
+      {
+       "column": "Cold",
+       "sources": [],
+       "text": "-58%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": -58
+        }
+       ]
+      },
+      {
+       "column": "Fire",
+       "sources": [],
+       "text": "-58%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": -58
+        }
+       ]
+      },
+      {
+       "column": "Chaos",
+       "sources": [],
+       "text": "0%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      }
+     ],
+     "label": "MH Total Increased",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "All Types",
+       "sources": [],
+       "text": "28%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 28.000000000000004
+        }
+       ]
+      },
+      {
+       "column": "Physical",
+       "sources": [],
+       "text": "67%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 66.8
+        }
+       ]
+      },
+      {
+       "column": "Lightning",
+       "sources": [],
+       "text": "0%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Cold",
+       "sources": [],
+       "text": "0%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Fire",
+       "sources": [],
+       "text": "0%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Chaos",
+       "sources": [],
+       "text": "0%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      }
+     ],
+     "label": "MH Total More",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "Physical",
+       "sources": [],
+       "text": "x 2.548",
+       "values": [
+        {
+         "key": "MainHand.PhysicalEffMult",
+         "precision": 3,
+         "value": 2.5476
+        }
+       ]
+      },
+      {
+       "column": "Lightning",
+       "sources": [],
+       "text": "x 0",
+       "values": [
+        {
+         "key": "MainHand.LightningEffMult",
+         "precision": 3
+        }
+       ]
+      },
+      {
+       "column": "Cold",
+       "sources": [],
+       "text": "x 0",
+       "values": [
+        {
+         "key": "MainHand.ColdEffMult",
+         "precision": 3
+        }
+       ]
+      },
+      {
+       "column": "Fire",
+       "sources": [],
+       "text": "x 0",
+       "values": [
+        {
+         "key": "MainHand.FireEffMult",
+         "precision": 3
+        }
+       ]
+      },
+      {
+       "column": "Chaos",
+       "sources": [],
+       "text": "x 0",
+       "values": [
+        {
+         "key": "MainHand.ChaosEffMult",
+         "precision": 3
+        }
+       ]
+      }
+     ],
+     "label": "MH Eff. DPS Mod",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "All Types",
+       "sources": [],
+       "text": "680 to 2,140",
+       "values": [
+        {
+         "key": "MainHand.TotalMin",
+         "precision": 0,
+         "value": 680.2092
+        },
+        {
+         "key": "MainHand.TotalMax",
+         "precision": 0,
+         "value": 2139.984
+        }
+       ]
+      },
+      {
+       "column": "Physical",
+       "sources": [],
+       "text": "680 to 2,140",
+       "values": [
+        {
+         "key": "MainHand.PhysicalMin",
+         "precision": 0,
+         "value": 680.2092
+        },
+        {
+         "key": "MainHand.PhysicalMax",
+         "precision": 0,
+         "value": 2139.984
+        }
+       ]
+      },
+      {
+       "column": "Lightning",
+       "sources": [],
+       "text": "0 to 0",
+       "values": [
+        {
+         "key": "MainHand.LightningMin",
+         "precision": 0,
+         "value": 0
+        },
+        {
+         "key": "MainHand.LightningMax",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Cold",
+       "sources": [],
+       "text": "0 to 0",
+       "values": [
+        {
+         "key": "MainHand.ColdMin",
+         "precision": 0,
+         "value": 0
+        },
+        {
+         "key": "MainHand.ColdMax",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Fire",
+       "sources": [],
+       "text": "0 to 0",
+       "values": [
+        {
+         "key": "MainHand.FireMin",
+         "precision": 0,
+         "value": 0
+        },
+        {
+         "key": "MainHand.FireMax",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      },
+      {
+       "column": "Chaos",
+       "sources": [],
+       "text": "0 to 0",
+       "values": [
+        {
+         "key": "MainHand.ChaosMin",
+         "precision": 0,
+         "value": 0
+        },
+        {
+         "key": "MainHand.ChaosMax",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      }
+     ],
+     "label": "MH Hit Damage",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "All Types",
+       "sources": [],
+       "text": "7,008.2",
+       "values": [
+        {
+         "key": "MainHand.AverageHit",
+         "precision": 1,
+         "value": 7008.180102000001
+        }
+       ]
+      }
+     ],
+     "label": "MH Average Hit",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "All Types",
+       "sources": [],
+       "text": "7,008.2",
+       "values": [
+        {
+         "key": "AverageDamage",
+         "precision": 1,
+         "value": 7008.180102000001
+        }
+       ]
+      }
+     ],
+     "label": "Average Damage",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "column": "All Types",
+       "sources": [],
+       "text": "62,518.6",
+       "values": [
+        {
+         "key": "TotalDPS",
+         "precision": 1,
+         "value": 62518.57305392161
+        }
+       ]
+      }
+     ],
+     "label": "Skill DPS",
+     "section": "HitDamage"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "68%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 68
+        }
+       ]
+      }
+     ],
+     "label": "MH Inc. Att. Speed",
+     "section": "Speed"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "0%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 0
+        }
+       ]
+      }
+     ],
+     "label": "MH More Att. Speed",
+     "section": "Speed"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "8.92",
+       "values": [
+        {
+         "key": "MainHand.Speed",
+         "precision": 2,
+         "value": 8.9208
+        }
+       ]
+      }
+     ],
+     "label": "MH Att. per second",
+     "section": "Speed"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "0.11s",
+       "values": [
+        {
+         "key": "Time",
+         "precision": 2,
+         "value": 0.11209756972468837
+        }
+       ]
+      }
+     ],
+     "label": "Attack time",
+     "section": "Speed"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "753%",
+       "values": [
+        {
+         "key": "mod",
+         "precision": 0,
+         "value": 753
+        }
+       ]
+      }
+     ],
+     "label": "MH Inc. Crit Chance",
+     "section": "Crit"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "100%",
+       "values": [
+        {
+         "key": "MainHand.CritChance",
+         "precision": 2,
+         "value": 100
+        }
+       ]
+      }
+     ],
+     "label": "MH Crit Chance",
+     "section": "Crit"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "x 4.97",
+       "values": [
+        {
+         "key": "MainHand.CritMultiplier",
+         "precision": 2,
+         "value": 4.970000000000001
+        }
+       ]
+      }
+     ],
+     "label": "MH Crit Multiplier",
+     "section": "Crit"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "x 4.97",
+       "values": [
+        {
+         "key": "MainHand.CritEffect",
+         "precision": 3,
+         "value": 4.970000000000001
+        }
+       ]
+      }
+     ],
+     "label": "MH Crit Effect Mod",
+     "section": "Crit"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "550",
+       "values": [
+        {
+         "key": "MainHand.Accuracy",
+         "precision": 0,
+         "value": 550
+        }
+       ]
+      }
+     ],
+     "label": "MH Accuracy",
+     "section": "HitChance"
+    },
+    {
+     "cells": [
+      {
+       "sources": [],
+       "text": "100%",
+       "values": [
+        {
+         "key": "MainHand.AccuracyHitChance",
+         "precision": 0,
+         "value": 100
+        }
+       ]
+      }
+     ],
+     "label": "MH Chance to Hit",
+     "section": "HitChance"
+    }
+   ],
+   "skill": "Cyclone",
+   "totals": {
+    "AverageDamage": 7008.180102000001,
+    "CritChance": 100,
+    "CritMultiplier": 4.970000000000001,
+    "FullDPS": 15136639.020573443,
+    "HitChance": 100,
+    "Speed": 8.9208,
+    "TotalDPS": 62518.57305392161
+   }
+  }
+ }
+}

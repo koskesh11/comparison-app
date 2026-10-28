@@ -12,4 +12,4 @@
 /mechanics/** -text
 
 # The reference builds exactly as PoB saved them (decision 014): their bytes are what PoB loads and what gets hashed.
-/tests/autobuilder/fixtures/builds/** -text
+/tests/comparison_app/fixtures/builds/** -text

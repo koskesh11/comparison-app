@@ -1,0 +1,208 @@
+{
+  "about": "Number cases recorded from real PoB output (tests/comparison_app/test_number_cases.py, M4). Each case: value (a number, or the strings \"inf\", \"-inf\", \"nan\", or null for missing), rule (pob | floor, decision 020), precision, shown (the text PoB or the game shows), source (the PoB build and output key it came from).",
+  "cases": [
+    {
+      "value": 1435203.829195489,
+      "rule": "pob",
+      "precision": 1,
+      "shown": "1,435,203.8",
+      "source": "Worb TotalDPS (Skill DPS row); PoB 2.67.2 formatCalcVal, recorded 2026-10-27"
+    },
+    {
+      "value": 222512.22158069594,
+      "rule": "pob",
+      "precision": 1,
+      "shown": "222,512.2",
+      "source": "Worb AverageHit; PoB 2.67.2 formatCalcVal, recorded 2026-10-27"
+    },
+    {
+      "value": 9.568,
+      "rule": "pob",
+      "precision": 2,
+      "shown": "9.57",
+      "source": "Worb Speed (casts per second); PoB 2.67.2 formatCalcVal, recorded 2026-10-27"
+    },
+    {
+      "value": 93.39,
+      "rule": "pob",
+      "precision": 2,
+      "shown": "93.39",
+      "source": "Worb CritChance; PoB 2.67.2 formatCalcVal, recorded 2026-10-27"
+    },
+    {
+      "value": 4.885024,
+      "rule": "pob",
+      "precision": 3,
+      "shown": "4.885",
+      "source": "Worb CritEffect; PoB 2.67.2 formatCalcVal, recorded 2026-10-27"
+    },
+    {
+      "value": 7728444.675609175,
+      "rule": "pob",
+      "precision": 1,
+      "shown": "7,728,444.7",
+      "source": "CoC EK Assa TotalDPS; PoB 2.67.2 formatCalcVal, recorded 2026-10-27"
+    },
+    {
+      "value": -58,
+      "rule": "pob",
+      "precision": 0,
+      "shown": "-58",
+      "source": "CoC EK Assa Total Increased Cold (a negative sum); PoB 2.67.2 formatCalcVal, recorded 2026-10-27"
+    },
+    {
+      "value": 100,
+      "rule": "pob",
+      "precision": 2,
+      "shown": "100",
+      "source": "CoC EK Assa CritChance: trailing zeros drop (Lua tostring); PoB 2.67.2 formatCalcVal, recorded 2026-10-27"
+    },
+    {
+      "value": "inf",
+      "rule": "pob",
+      "precision": 0,
+      "shown": "inf",
+      "source": "Worb EHPSurvivalTime, CoC ChaosMaximumHitTaken are inf; PoB 2.67.2 formatCalcVal, recorded 2026-10-27"
+    },
+    {
+      "value": "-inf",
+      "rule": "pob",
+      "precision": 0,
+      "shown": "-inf",
+      "source": "PoB 2.67.2 formatCalcVal, recorded 2026-10-27"
+    },
+    {
+      "value": "nan",
+      "rule": "pob",
+      "precision": 2,
+      "shown": "nan",
+      "source": "PoB 2.67.2 formatCalcVal, recorded 2026-10-27"
+    },
+    {
+      "value": -0.0,
+      "rule": "pob",
+      "precision": 0,
+      "shown": "0",
+      "source": "PoB 2.67.2 formatCalcVal, recorded 2026-10-27"
+    },
+    {
+      "value": -0.4,
+      "rule": "pob",
+      "precision": 0,
+      "shown": "0",
+      "source": "half up, not away from zero; PoB 2.67.2 formatCalcVal, recorded 2026-10-27"
+    },
+    {
+      "value": -0.5,
+      "rule": "pob",
+      "precision": 0,
+      "shown": "0",
+      "source": "PoB 2.67.2 formatCalcVal, recorded 2026-10-27"
+    },
+    {
+      "value": 0.5,
+      "rule": "pob",
+      "precision": 0,
+      "shown": "1",
+      "source": "PoB 2.67.2 formatCalcVal, recorded 2026-10-27"
+    },
+    {
+      "value": 2.5,
+      "rule": "pob",
+      "precision": 0,
+      "shown": "3",
+      "source": "half up, not to even; PoB 2.67.2 formatCalcVal, recorded 2026-10-27"
+    },
+    {
+      "value": 2.675,
+      "rule": "pob",
+      "precision": 2,
+      "shown": "2.68",
+      "source": "2.675 x 100 is exactly 267.5 in double precision; PoB 2.67.2 formatCalcVal, recorded 2026-10-27"
+    },
+    {
+      "value": 1.005,
+      "rule": "pob",
+      "precision": 2,
+      "shown": "1",
+      "source": "1.005 x 100 is just under 100.5; PoB 2.67.2 formatCalcVal, recorded 2026-10-27"
+    },
+    {
+      "value": 7.5757,
+      "rule": "pob",
+      "precision": 3,
+      "shown": "7.576",
+      "source": "a raw unrounded value (S12); PoB 2.67.2 formatCalcVal, recorded 2026-10-27"
+    },
+    {
+      "value": 1234.5,
+      "rule": "pob",
+      "precision": 0,
+      "shown": "1,235",
+      "source": "PoB 2.67.2 formatCalcVal, recorded 2026-10-27"
+    },
+    {
+      "value": -1234.5,
+      "rule": "pob",
+      "precision": 0,
+      "shown": "-1,234",
+      "source": "floor(x + 0.5) rounds -1234.5 up to -1234; PoB 2.67.2 formatCalcVal, recorded 2026-10-27"
+    },
+    {
+      "value": 0.30000000000000004,
+      "rule": "pob",
+      "precision": 1,
+      "shown": "0.3",
+      "source": "PoB 2.67.2 formatCalcVal, recorded 2026-10-27"
+    },
+    {
+      "value": 3.9999999999999996,
+      "rule": "pob",
+      "precision": 0,
+      "shown": "4",
+      "source": "needs 17 digits on the wire (rpc.lua); PoB 2.67.2 formatCalcVal, recorded 2026-10-27"
+    },
+    {
+      "value": 1e+21,
+      "rule": "pob",
+      "precision": 0,
+      "shown": "1e+21",
+      "source": "Lua's %.14g; PoB 2.67.2 formatCalcVal, recorded 2026-10-27"
+    },
+    {
+      "value": null,
+      "rule": "pob",
+      "precision": 0,
+      "shown": "—",
+      "source": "a value PoB did not compute: shown as missing, never as 0 (S12, app/present/numbers.py)"
+    },
+    {
+      "value": 4.9,
+      "rule": "floor",
+      "precision": 0,
+      "shown": "4",
+      "source": "a count the game rounds down, e.g. 4 hits (decision 020)"
+    },
+    {
+      "value": 3.9999999999999996,
+      "rule": "floor",
+      "precision": 0,
+      "shown": "3",
+      "source": "rounded down where PoB's own text would show 4 (decision 020)"
+    },
+    {
+      "value": -0.5,
+      "rule": "floor",
+      "precision": 0,
+      "shown": "-1",
+      "source": "rounded down is toward minus infinity (decision 020)"
+    },
+    {
+      "value": 1.5e+307,
+      "rule": "pob",
+      "precision": 2,
+      "shown": "inf",
+      "source": "value x 10^p overflows (task 108 review, LOW 7); PoB 2.67.2 formatCalcVal, recorded 2026-10-27"
+    }
+  ]
+}

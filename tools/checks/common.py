@@ -5,8 +5,8 @@ import subprocess
 from collections.abc import Iterable, Iterator
 from pathlib import Path
 
-SRC = Path("src/autobuilder")
-SRC_TESTS = Path("tests/autobuilder")
+SRC = Path("src/comparison_app")
+SRC_TESTS = Path("tests/comparison_app")
 NEW_TESTS = (SRC_TESTS, Path("tests/architecture"), Path("tests/checks"))
 NEW_TOOLS = (
     Path("tools/check.py"),

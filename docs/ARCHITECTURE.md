@@ -1,6 +1,6 @@
 # Architecture of src/
 
-The analyzer's code lives in `src/autobuilder/`. The first app (`engine/`, `gui/`) is frozen reference; code comes over
+The analyzer's code lives in `src/comparison_app/`. The first app (`engine/`, `gui/`) is frozen reference; code comes over
 only through the checks (decision 004). What carries over and why: the task 102 report (verdict per engine/ file).
 Every rule below that a program can check is a check (decision 006); this page says where each one lives.
 
@@ -69,25 +69,25 @@ layout and checks report.
 | M1 | types, strict | `mypy` |
 | M2 | all src/ tests, in parallel, with coverage of at least 80 % (M10) | `pytest -n auto --cov` |
 | M3 | test tree: mirrored test files, the guard tests (M4-M7, M11), honest markers, one PoB per run | `tools/checks/testtree.py` |
-| M4 | PoB edge cases and shared number formats | `tests/autobuilder/test_number_cases.py` |
-| M5 | every report key is in the golden snapshot | `tests/autobuilder/test_golden_has_all_keys.py` |
-| M6 | every endpoint leaves the build as it was | `tests/autobuilder/pob/test_every_endpoint_restores.py` |
-| M7 | the in-memory button matches a saved change | `tests/autobuilder/compare/test_recalc_matches_apply.py` |
+| M4 | PoB edge cases and shared number formats | `tests/comparison_app/test_number_cases.py` |
+| M5 | every report key is in the golden snapshot | `tests/comparison_app/test_golden_has_all_keys.py` |
+| M6 | every endpoint leaves the build as it was | `tests/comparison_app/pob/test_every_endpoint_restores.py` |
+| M7 | the in-memory button matches a saved change | `tests/comparison_app/compare/test_recalc_matches_apply.py` |
 | M8 | the full checks pass in a clean export (no git-ignored file needed) | `tools/merge_to_main.py` |
 | M9 | dead code and duplication | `vulture`, `pylint --enable=duplicate-code` |
 | M11 | nothing written outside Builds\AutoBuilder | write-guard tests, required with `pob/lua_host.py`; listing in `pob_session` |
 | M12 | the merge checklist | [ARCHITECTURE-CHECKLIST.md](ARCHITECTURE-CHECKLIST.md), answered in the merge commit |
 
 ## Tests
-- `tests/autobuilder/` mirrors `src/autobuilder/`: `src/autobuilder/a/b.py` is tested in `tests/autobuilder/a/test_b.py`.
+- `tests/comparison_app/` mirrors `src/comparison_app/`: `src/comparison_app/a/b.py` is tested in `tests/comparison_app/a/test_b.py`.
 - Markers: `pob` (boots PoB), `owner` (reads the owner's builds), `slow`. A test that needs PoB uses the shared
   `pob_session` fixture (one PoB per run; every `pob` test runs on one xdist worker, `--dist loadgroup`); it skips
   cleanly when PoB is not installed. The PoB layer's own tests also use `bare_lua`, a Lua state on PoB's DLL without
-  PoB, and Lua probe files in `tests/autobuilder/pob/lua/`.
-- The reference builds (decision 014) are committed byte for byte in `tests/autobuilder/fixtures/builds/`.
+  PoB, and Lua probe files in `tests/comparison_app/pob/lua/`.
+- The reference builds (decision 014) are committed byte for byte in `tests/comparison_app/fixtures/builds/`.
 - pytest runs without faulthandler: LuaJIT raises each Lua error as a Windows SEH exception, which faulthandler would
   print as fatal although LuaJIT catches it.
-- No network outside `tests/autobuilder/intake/`, and none inside it either: the pobb.in code takes its opener as an
+- No network outside `tests/comparison_app/intake/`, and none inside it either: the pobb.in code takes its opener as an
   argument, and the intake tests pass a fake that records each request. The PoB install and the owner's builds are listed before and after
   every PoB run; a change outside `Builds\AutoBuilder\` fails the run.
 - `tests/checks/` tests the checks themselves: each plants a violation and expects the check to report it.

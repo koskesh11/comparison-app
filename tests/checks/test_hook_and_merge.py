@@ -10,7 +10,7 @@ import pytest
 
 REPO = Path(__file__).resolve().parents[2]
 Git = Callable[..., None]
-LONG_FILE = "src/autobuilder/too_long.py"
+LONG_FILE = "src/comparison_app/too_long.py"
 CHECKLIST = "- A1 first item.\n- A2 second item.\n"
 
 
