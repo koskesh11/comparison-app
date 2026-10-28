@@ -56,7 +56,10 @@ class ConfigBox:
     type: str | None
     value: Any  # None when only a placeholder is set
     placeholder: Any
-    state: str  # PoB's: "set" (usable), "unusable" (set, the build cannot use it), "default" (only a placeholder)
+    # PoB's: "set" (usable), "unusable" (set, the build cannot use it), "default" (only a placeholder), "unset" (a
+    # number box the build can use, left at 0)
+    state: str
+    order: int  # its place in PoB's config list (ConfigOptions.lua)
 
 
 @dataclass(frozen=True)
@@ -134,6 +137,7 @@ def _box(data: object) -> ConfigBox:
         item.get("value"),
         item.get("placeholder"),
         str(item["state"]),
+        int(wire.number(item.get("order")) or 0),
     )
 
 

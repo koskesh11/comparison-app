@@ -5,6 +5,7 @@
 local Rpc, Build = ...
 
 local CONFIG_OPTIONS = require("Modules.ConfigOptions") -- the list PoB's config tab is built from (ConfigTab.lua:12)
+local NUMBER_BOXES = { count = true, integer = true, float = true, countAllowZero = true } -- ConfigTab.lua:684
 local GROUP_FIELDS = { "label", "displayLabel", "slot", "source", "enabled", "includeInFullDPS", "groupCount",
 	"mainActiveSkill", "mainActiveSkillCalcs" }
 local GEM_FIELDS = { "nameSpec", "enabled", "enableGlobal1", "enableGlobal2", "level", "quality", "count",
@@ -65,20 +66,37 @@ local function boxState(control, value, default)
 	return red > green and "unusable" or "set"
 end
 
--- Every config box that is not at PoB's default, in PoB's list order, with its section.
+-- At its default a box's shown function is PoB's own "the build can use it": ConfigTab.lua:712-719 reduces to the
+-- inner condition when the box is not set.
+local function shownAtDefault(control)
+	if not control then return false end
+	if type(control.shown) == "function" then return control.shown() == true end
+	return control.shown == true
+end
+
+-- A number box shown only when the build has modifiers that read its multiplier (ifMult), left at 0 with no
+-- placeholder: those modifiers count for nothing (decision 010's example, ConfigOptions.lua:1274).
+local function unsetMultiplier(entry, control, placeholder)
+	return entry.ifMult ~= nil and NUMBER_BOXES[entry.type] and placeholder == nil and shownAtDefault(control)
+end
+
+-- Every config box that is not at PoB's default, in PoB's list order (`order`), with its section; and the number boxes
+-- the build can use that are left at 0 (state "unset").
 local function config(configTab)
 	local set = configTab.configSets[configTab.activeConfigSetId]
 	local rows, section = {}, nil
-	for _, entry in ipairs(CONFIG_OPTIONS) do
+	for order, entry in ipairs(CONFIG_OPTIONS) do
 		if entry.section then section = entry.section end
 		if entry.var then
-			local value = set.input[entry.var]
+			local value, placeholder = set.input[entry.var], set.placeholder[entry.var]
+			local control = configTab.varControls[entry.var]
 			local default = configTab:GetDefaultState(entry.var, type(value))
-			local state = boxState(configTab.varControls[entry.var], value, default)
-			if state ~= "default" or set.placeholder[entry.var] ~= nil then
+			local state = boxState(control, value, default)
+			if state == "default" and unsetMultiplier(entry, control, placeholder) then state = "unset" end
+			if state ~= "default" or placeholder ~= nil then
 				rows[#rows + 1] = {
 					var = entry.var, section = section, label = type(entry.label) == "string" and entry.label or entry.var,
-					type = entry.type, value = value, placeholder = set.placeholder[entry.var], state = state,
+					type = entry.type, value = value, placeholder = placeholder, state = state, order = order,
 				}
 			end
 		end
@@ -90,7 +108,9 @@ local function config(configTab)
 		end
 	end
 	local titles = {}
-	for index, id in ipairs(configTab.configSetOrderList) do titles[index] = configTab.configSets[id].title or "Default" end
+	for index, id in ipairs(configTab.configSetOrderList) do
+		titles[index] = configTab.configSets[id].title or "Default"
+	end
 	return { rows = rows, customMods = custom, sets = titles, activeSet = set.title or "Default" }
 end
 

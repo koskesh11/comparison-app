@@ -5,6 +5,7 @@ import pytest
 from autobuilder.analysis.chain import Cell, Chain, SourceTable, read_chain
 from autobuilder.analysis.scenarios import Scenario
 from autobuilder.compare.service import CALCS_ELSEWHERE, TARGET_PARTY, compare
+from autobuilder.compare.skill_settings import Match
 from autobuilder.errors import NoTargetLoaded
 from autobuilder.pob.session import PobSession
 
@@ -42,7 +43,19 @@ def test_worb_against_coc_ek_assa(pob_session: PobSession, reference_xml: dict[s
     assert result.warnings == (CALCS_ELSEWHERE,)  # Worb saves its Calcs tab on group 1, its main skill is group 2
     assert TARGET_PARTY not in result.warnings
     assert (result.yours.dps.key, result.target.dps.key) == ("FullDPS", "FullDPS")
-    assert result.table.chips and result.table.steps
+    # two different main skills: the chain waits until the owner picks the target's group (decision 011)
+    assert (result.settings.match, result.table) == (Match.DIFFERENT_SKILL, None)
+    assert [each.box.var for each in result.config.looks_wrong] == ["multiplierChannelling"]
     assert first_difference(read_chain(pob_session, Scenario.PINNACLE_BOSS), result.yours.chain) is None  # unchanged
     with pytest.raises(NoTargetLoaded):
         read_chain(pob_session, Scenario.PINNACLE_BOSS, "target")
+
+
+def test_the_chain_shows_when_both_main_skills_are_set_up_alike(
+    pob_session: PobSession, reference_xml: dict[str, str]
+) -> None:
+    worb = (reference_xml["Worb"], "Worb")
+    result = compare(pob_session, worb, worb, Scenario.PINNACLE_BOSS)
+    assert result.settings.match is Match.SAME
+    assert result.table is not None and result.table.steps and result.table.chips == ()
+    assert result.config.differences == ()

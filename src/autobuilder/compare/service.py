@@ -1,5 +1,7 @@
 """Your build against a target in one PoB (card 109, decision 009): both opened as saved, both read under the same
-scenario, the chain side by side and the warnings that say where PoB's numbers here and the owner's PoB differ.
+scenario, the chain side by side and the warnings that say where PoB's numbers here and the owner's PoB differ. The
+chain is shown only when both main skills are set up alike (decision 011); the config differences come with it
+(decision 010).
 
 The target is PoB's CompareEntry beside your build (compare/target.py) and is released on every path.
 """
@@ -11,6 +13,9 @@ from autobuilder.analysis.scenarios import Scenario
 from autobuilder.analysis.session import OpenedBuild, open_build
 from autobuilder.analysis.skills import HeaderDps, header_dps, read_summary
 from autobuilder.compare.chain_table import build_table
+from autobuilder.compare.diff.context import ConfigReport, compare_config
+from autobuilder.compare.skill_settings import Match, SkillSettings, compare_settings
+from autobuilder.compare.snapshot import Snapshot, read_snapshot
 from autobuilder.compare.target import open_target, release_target
 from autobuilder.compare.types import ChainTable
 from autobuilder.pob.session import BuildSummary, PobSession
@@ -31,6 +36,7 @@ class Side:
     summary: BuildSummary  # under the scenario
     dps: HeaderDps
     chain: Chain
+    snapshot: Snapshot  # skill settings and config, as saved
 
 
 @dataclass(frozen=True)
@@ -38,13 +44,16 @@ class Comparison:
     scenario: Scenario
     yours: Side
     target: Side
-    table: ChainTable
+    settings: SkillSettings
+    table: ChainTable | None  # None until both main skills are set up alike (decision 011); settings says why
+    config: ConfigReport
     warnings: tuple[str, ...]
 
 
 def _side(session: PobSession, opened: OpenedBuild, scenario: Scenario, which: Which) -> Side:
     summary = read_summary(session, scenario, which)
-    return Side(opened, summary, header_dps(summary), read_chain(session, scenario, which))
+    chain = read_chain(session, scenario, which)
+    return Side(opened, summary, header_dps(summary), chain, read_snapshot(session, which))
 
 
 def _warnings(yours: Side, target: Side) -> tuple[str, ...]:
@@ -66,4 +75,7 @@ def compare(session: PobSession, yours: tuple[str, str], target: tuple[str, str]
         theirs = _side(session, opened_target, scenario, "target")
     finally:
         release_target(session)
-    return Comparison(scenario, mine, theirs, build_table(mine.chain, theirs.chain), _warnings(mine, theirs))
+    settings = compare_settings(mine.snapshot, theirs.snapshot)
+    table = build_table(mine.chain, theirs.chain) if settings.match is Match.SAME else None
+    config = compare_config(mine.snapshot, theirs.snapshot)
+    return Comparison(scenario, mine, theirs, settings, table, config, _warnings(mine, theirs))
